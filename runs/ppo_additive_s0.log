@@ -35,3 +35,8 @@ Info: (n_steps=512 and n_envs=7)
 [1500002] eval shielded clean=True lap=37.83999999999937 lam=0.06 | unshielded clean=True lap=37.199999999999385 prog=199
 == stage 2: 1000000 steps, shield=additive
 [1550001] eval shielded clean=False lap=None lam=0.21 | unshielded clean=True lap=36.99999999999939 prog=199
+[1600002] eval shielded clean=True lap=37.51999999999938 lam=0.07 | unshielded clean=True lap=36.87999999999939 prog=199
+[1650003] eval shielded clean=True lap=38.27999999999936 lam=0.03 | unshielded clean=True lap=37.91999999999937 prog=199
+[1700004] eval shielded clean=False lap=None lam=0.18 | unshielded clean=True lap=37.47999999999938 prog=199
+[1750005] eval shielded clean=True lap=37.95999999999937 lam=0.04 | unshielded clean=True lap=37.03999999999939 prog=199
+[1800006] eval shielded clean=True lap=37.75999999999937 lam=0.05 | unshielded clean=True lap=36.79999999999939 prog=199
