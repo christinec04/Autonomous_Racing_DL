@@ -44,7 +44,9 @@ race time collisions drop (0.36 / 10 laps) but 14 of 20 races end stuck: 4/20 fi
 18/20 and called the two complementary; that used the faulty "finished" metric and is withdrawn.)
 
 ## E9. PPO with the proposal's original additive shield
-`runs/ppo_additive_s0`.
+`runs/ppo_additive_s0`, raced with the same shield (`results/eval_ppo_additive_s0.json`). Training: 2286 crashes,
+no better than no shield. Race: 15/20 finished (nominal), 17/20 (randomised), 0.61 / 0.22 collisions per 10 laps,
+but 48.8 s clean laps and 0.55 passes per race: it learned to crawl. Ours (final): 16/20, 34.5 s, 2.95 passes.
 
 ## E10. Shield dropout
 `runs/ppo_shielddrop_s0`: shield on in 100% / 50% / 25% of episodes in stages 1 / 2 / 3. Question: can the policy

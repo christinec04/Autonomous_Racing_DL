@@ -1,12 +1,14 @@
 # Race results
 
-Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `eval_residual_apf_s0.json`, `eval_ppo_additive_s0.json`, `eval_ppo_noshield_s1.json`, `eval_ppo_shield_s1.json`. 20 races x 5 laps per controller, 3 opponents, DNF on first collision. Clean lap = mean over laps 2-5 (lap 1 is a standing start).
+Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `eval_residual_apf_s0.json`, `eval_ppo_shield_s1.json`, `eval_escape_v4.json`, `eval_ppo_additive_s0.json`. 20 races x 5 laps per controller, 3 opponents, DNF on first collision. Clean lap = mean over laps 2-5 (lap 1 is a standing start).
 
 ## nominal
 
 | controller | finished all 5 laps | stuck (no crash, stopped) | clean lap (s) | best lap | collisions / 10 laps (wall, car) | passes / race | overtake success | shield active | time > 90% grip | time > 15 deg slip |
 |---|---|---|---|---|---|---|---|---|---|---|
+| PPO + shield with deadlock escape (ours, final; v2 sim) | 16/20 | 0 | 34.47 | 32.64 | 0.44 (3, 1) | 2.95 | 86% (59/69) | 3% | 17.1% | 0.0% |
 | PPO + shield, original (ours) | 12/20 | 5 | 34.32 | 32.64 | 0.38 (0, 3) | 2.65 | 88% (53/60) | 6% | 16.7% | 0.0% |
+| PPO + shield, original, on v2 sim | 11/20 | 8 | 34.61 | 32.68 | 0.14 (0, 1) | 2.10 | 74% (42/57) | 8% | 16.7% | 0.0% |
 | PPO + shield, original, seed 1 | 1/20 | 15 | 32.71 | 31.16 | 1.31 (3, 1) | 1.75 | 70% (35/50) | 24% | 30.3% | 4.0% |
 | PPO, no shield | 1/20 | 1 | 36.82 | 28.24 | 5.53 (18, 0) | 1.05 | 72% (21/29) | 0% | 31.9% | 1.6% |
 | shield-trained PPO, shield removed | 5/20 | 0 | 34.94 | 32.44 | 4.72 (7, 8) | 1.00 | 62% (20/32) | 0% | 17.2% | 0.0% |
@@ -16,7 +18,7 @@ Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `ev
 | PPO + additive Eq.2/3 shield | 15/20 | 0 | 48.82 | 40.56 | 0.61 (2, 3) | 0.55 | 65% (11/17) | 8% | 8.8% | 0.2% |
 | PID + APF | 9/20 | 0 | 43.91 | 36.04 | 1.75 (4, 7) | 1.25 | 66% (25/38) | 93% | 2.5% | 0.6% |
 | Pure Pursuit | 0/20 | 0 | - | - | 61.35 (0, 20) | 0.00 | - (0/0) | 0% | 11.8% | 0.0% |
-| ppo@s1 | 3/20 | 0 | 35.42 | 32.88 | 3.33 (15, 2) | 2.25 | 82% (45/55) | 0% | 40.2% | 0.1% |
+| residual PPO + escape shield (v2 sim) | 2/20 | 15 | 102.09 | 31.36 | 0.52 (0, 3) | 1.70 | 94% (34/36) | 39% | 61.7% | 60.6% |
 
 Targets for PPO + shield, original (ours) (nominal):
 
@@ -33,6 +35,8 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 
 | vs | finished (0/1) | collided (0/1) | passes | laps completed | clean lap time |
 |---|---|---|---|---|---|
+| PPO + shield with deadlock escape (ours, final; v2 sim) | 0.178 | 0.696 | 0.59 | 0.337 | 0.535 |
+| PPO + shield, original, on v2 sim | 0.764 | 0.31 | 0.29 | 0.675 | 0.739 |
 | PPO + shield, original, seed 1 | 0.000262 | 0.696 | 0.0662 | 0.000563 | 0.00165 |
 | PPO, no shield | 0.000262 | 2.95e-06 | 0.00232 | 0.000921 | 0.793 |
 | shield-trained PPO, shield removed | 0.0282 | 0.000177 | 0.00233 | 0.00364 | 0.563 |
@@ -42,13 +46,15 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | PPO + additive Eq.2/3 shield | 0.325 | 0.447 | 0.000105 | 0.776 | 1.54e-06 |
 | PID + APF | 0.356 | 0.00926 | 0.00829 | 0.0859 | 2.16e-05 |
 | Pure Pursuit | 4.68e-05 | 8.64e-08 | 3.28e-07 | 6.8e-08 | - |
-| ppo@s1 | 0.0039 | 1.33e-05 | 0.482 | 0.00905 | 0.00204 |
+| residual PPO + escape shield (v2 sim) | 0.00113 | 1 | 0.0749 | 0.00306 | 0.00162 |
 
 ## randomized
 
 | controller | finished all 5 laps | stuck (no crash, stopped) | clean lap (s) | best lap | collisions / 10 laps (wall, car) | passes / race | overtake success | shield active | time > 90% grip | time > 15 deg slip |
 |---|---|---|---|---|---|---|---|---|---|---|
+| PPO + shield with deadlock escape (ours, final; v2 sim) | 14/20 | 0 | 34.36 | 32.40 | 0.75 (3, 3) | 2.60 | 75% (52/69) | 4% | 15.9% | 0.0% |
 | PPO + shield, original (ours) | 9/20 | 7 | 34.49 | 32.44 | 0.63 (2, 2) | 2.50 | 85% (50/59) | 10% | 14.6% | 0.9% |
+| PPO + shield, original, on v2 sim | 11/20 | 8 | 34.43 | 32.40 | 0.15 (0, 1) | 2.25 | 75% (45/60) | 9% | 14.2% | 0.0% |
 | PPO + shield, original, seed 1 | 0/20 | 14 | - | - | 3.36 (4, 2) | 1.15 | 72% (23/32) | 22% | 24.6% | 2.9% |
 | PPO, no shield | 1/20 | 0 | 35.71 | 26.88 | 6.75 (18, 1) | 1.10 | 79% (22/28) | 0% | 27.7% | 2.7% |
 | shield-trained PPO, shield removed | 6/20 | 0 | 34.51 | 32.24 | 3.54 (7, 7) | 1.45 | 69% (29/42) | 0% | 14.0% | 0.1% |
@@ -58,7 +64,7 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | PPO + additive Eq.2/3 shield | 17/20 | 1 | 46.81 | 40.48 | 0.22 (2, 0) | 0.90 | 86% (18/21) | 9% | 7.6% | 0.1% |
 | PID + APF | 12/20 | 0 | 44.02 | 35.48 | 1.18 (2, 6) | 1.40 | 70% (28/40) | 93% | 2.3% | 0.8% |
 | Pure Pursuit | 0/20 | 0 | - | - | 61.52 (0, 20) | 0.00 | - (0/0) | 0% | 8.5% | 0.0% |
-| ppo@s1 | 8/20 | 0 | 34.37 | 31.56 | 2.33 (9, 3) | 1.90 | 86% (38/44) | 0% | 32.9% | 0.9% |
+| residual PPO + escape shield (v2 sim) | 5/20 | 8 | 55.86 | 31.24 | 1.04 (5, 2) | 2.55 | 96% (51/53) | 26% | 30.1% | 27.1% |
 
 Targets for PPO + shield, original (ours) (randomized):
 
@@ -75,6 +81,8 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 
 | vs | finished (0/1) | collided (0/1) | passes | laps completed | clean lap time |
 |---|---|---|---|---|---|
+| PPO + shield with deadlock escape (ours, final; v2 sim) | 0.118 | 0.482 | 0.869 | 0.133 | 0.983 |
+| PPO + shield, original, on v2 sim | 0.543 | 0.164 | 0.651 | 0.617 | 1 |
 | PPO + shield, original, seed 1 | 0.000819 | 0.482 | 0.0111 | 0.00364 | - |
 | PPO, no shield | 0.00415 | 2.34e-06 | 0.0101 | 0.0207 | 0.202 |
 | shield-trained PPO, shield removed | 0.341 | 0.00179 | 0.0554 | 0.0439 | 0.183 |
@@ -84,4 +92,4 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | PPO + additive Eq.2/3 shield | 0.00926 | 0.394 | 0.00347 | 0.0764 | 3.11e-06 |
 | PID + APF | 0.356 | 0.178 | 0.0386 | 0.695 | 5.07e-05 |
 | Pure Pursuit | 0.000819 | 3.71e-07 | 1.05e-06 | 7.9e-08 | - |
-| ppo@s1 | 0.764 | 0.0113 | 0.265 | 0.351 | 0.163 |
+| residual PPO + escape shield (v2 sim) | 0.196 | 0.302 | 0.989 | 0.989 | 0.586 |

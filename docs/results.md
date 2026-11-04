@@ -13,6 +13,7 @@ Updated as runs finish. Raw tables: [results/summary.md](../results/summary.md) 
 | The shield lowers race collisions | seed 0: 0.38-0.44 vs 5.53 collisions / 10 laps without; across 2 seeds 0.85 (original) vs 4.43 |
 | The shield intervenes rarely once trained | 3-6% of race steps (seed 0), vs 93% for the always-on APF in PID+APF |
 | The deadlock escape removes stuck races | E19: seed 0 from 5-8 stuck to 0; 16/20 races finished (best of all controllers) |
+| Action-conditioned beats additive as a training shield | PPO trained with the proposal's additive shield: 15/20 finished but 48.8 s laps, 0.55 passes / race (timid); ours 16/20, 34.5 s, 2.95 passes |
 | Learned driving beats classical | seed 0 clean laps 34.5 s vs 43.9 s PID+APF; residual PPO 30.4 s |
 | Friction-limited tyres close the sliding loophole | stock tyres corner at 2.4 g; with ours, seed 0 spends 0% of race time above 15 deg slip |
 
