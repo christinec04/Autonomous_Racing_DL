@@ -1,0 +1,10 @@
+{
+ "git_commit": "afc94c8",
+ "git_dirty": [
+  "racing/train.py (committed later in d735552)"
+ ],
+ "command": "python -m racing.train --shield cond_fb_grip --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 0 --out runs/ppo_shield_s0",
+ "notes": "Stage 2/3 subprocesses re-imported code at spawn time and picked up the retuned PID opponents (curvature feed-forward, d735552). Stage 1 is solo, so unaffected.",
+ "status": "running",
+ "started": "2026-11-04"
+}
