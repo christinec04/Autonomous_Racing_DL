@@ -227,7 +227,7 @@ if __name__ == "__main__":
     ap.add_argument("--races", type=int, default=20)
     ap.add_argument("--laps", type=int, default=5)
     ap.add_argument("--procs", type=int, default=14)
-    ap.add_argument("--tire", default="saturated", choices=["saturated", "linear"])
+    ap.add_argument("--tire", default="saturated", choices=["saturated", "saturated_v2", "linear"])
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     models = dict(m.split("=", 1) for m in args.models)

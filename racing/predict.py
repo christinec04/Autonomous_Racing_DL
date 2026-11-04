@@ -20,14 +20,16 @@ from numba import njit
 
 from f1tenth_gym.envs.dynamic_models import vehicle_dynamics_st as _st_linear
 
-from .tires import vehicle_dynamics_st_sat as _st_sat
+from .tires import vehicle_dynamics_st_sat as _st_sat, vehicle_dynamics_st_sat2 as _st_sat2
 
 G = 9.81
 
 
 @njit(cache=True)
 def _f(x, u, sat, p):
-    if sat:
+    if sat == 2:
+        return _st_sat2(x, u, p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15])
+    if sat == 1:
         return _st_sat(x, u, p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15])
     return _st_linear(x, u, p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15])
 
@@ -124,7 +126,7 @@ def rollout_clearance(cands, x0, steer_buf0, p, sat, tcs, tcs_margin, fixed_dece
                 opp[o, 0] += ov * np.cos(opp[o, 2]) * dt
                 opp[o, 1] += ov * np.sin(opp[o, 2]) * dt
                 opp[o, 3] = ov
-            if abs(x[6]) > beta_max:  # loss of control counts as a violation
+            if abs(x[6]) > beta_max and x[3] > 1.0:  # loss of control counts as a violation (slip is meaningless when nearly stopped)
                 clear = min(clear, -1.0)
                 break
             if t % check_every == 0:

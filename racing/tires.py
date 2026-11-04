@@ -51,6 +51,52 @@ def vehicle_dynamics_st_sat(x, u_init, mu, C_Sf, C_Sr, lf, lr, h, m, I, s_min, s
         (Fyf + Fyr) / (m * V) - PSI_DOT])
 
 
+# v2 = v1 + two fixes for states after a spin (problem 24): the slip angle is wrapped to [-pi, pi], and at
+# low speed it relaxes to its kinematic value. Stock F1TENTH (and v1) keep e.g. -262 deg after a spin, so a parked
+# car moves sideways or spins in place when it restarts. Opt-in (tire="saturated_v2") so runs started earlier are
+# not changed mid-run.
+@njit(cache=True)
+def vehicle_dynamics_st_sat2(x, u_init, mu, C_Sf, C_Sr, lf, lr, h, m, I, s_min, s_max,
+                            sv_min, sv_max, v_switch, a_max, v_min, v_max):
+    DELTA = x[2]; V = x[3]; PSI = x[4]; PSI_DOT = x[5]
+    # wrap the slip angle (stock F1TENTH has this line commented out); unwrapped values after a spin give absurd
+    # tyre slip angles and the car keeps spinning in place
+    BETA = np.arctan2(np.sin(x[6]), np.cos(x[6]))
+    g = 9.81
+    STEER_VEL = _dm.steering_constraint(DELTA, u_init[0], s_min, s_max, sv_min, sv_max)
+    ACCL = _dm.accl_constraints(V, u_init[1], v_switch, a_max, v_min, v_max)
+    lwb = lf + lr
+    if V < 0.5:
+        BETA_HAT = np.arctan(np.tan(DELTA) * lr / lwb)
+        BETA_DOT = (1 / (1 + (np.tan(DELTA) * (lr / lwb)) ** 2)) * (lr / (lwb * np.cos(DELTA) ** 2)) * STEER_VEL
+        # Stock F1TENTH never resets the slip angle at low speed, so after a spin a parked car keeps e.g. -262 deg
+        # and moves sideways when it restarts. Relax it to the kinematic value (wrapped) instead.
+        err = BETA_HAT - BETA
+        err = np.arctan2(np.sin(err), np.cos(err))
+        BETA_DOT = BETA_DOT + 20.0 * err
+        return np.array([
+            V * np.cos(PSI + BETA_HAT), V * np.sin(PSI + BETA_HAT), STEER_VEL, ACCL,
+            V * np.cos(BETA_HAT) * np.tan(DELTA) / lwb,
+            (1 / lwb) * (ACCL * np.cos(BETA) * np.tan(DELTA) - V * np.sin(BETA) * np.tan(DELTA) * BETA_DOT
+                         + ((V * np.cos(BETA) * STEER_VEL) / (np.cos(DELTA) ** 2))),
+            BETA_DOT])
+    Fzf = m * (g * lr - ACCL * h) / lwb
+    Fzr = m * (g * lf + ACCL * h) / lwb
+    alpha_f = DELTA - BETA - lf * PSI_DOT / V
+    alpha_r = -BETA + lr * PSI_DOT / V
+    Fyf = mu * C_Sf * Fzf * alpha_f
+    Fyr = mu * C_Sr * Fzr * alpha_r
+    ax = ACCL / g
+    capf = np.sqrt(max((mu * Fzf) ** 2 - (Fzf * ax) ** 2, 0.0))
+    capr = np.sqrt(max((mu * Fzr) ** 2 - (Fzr * ax) ** 2, 0.0))
+    Fyf = min(max(Fyf, -capf), capf)
+    Fyr = min(max(Fyr, -capr), capr)
+    return np.array([
+        V * np.cos(PSI + BETA), V * np.sin(PSI + BETA), STEER_VEL, ACCL, PSI_DOT,
+        (lf * Fyf - lr * Fyr) / I,
+        (Fyf + Fyr) / (m * V) - PSI_DOT])
+
+
 _STOCK = _dm.vehicle_dynamics_st
 
 
@@ -58,6 +104,8 @@ def set_tire_model(kind: str = "saturated"):
     """Swap the ST dynamics used by F1TENTH Gym in this process."""
     if kind == "saturated":
         _dm.vehicle_dynamics_st = vehicle_dynamics_st_sat
+    elif kind == "saturated_v2":
+        _dm.vehicle_dynamics_st = vehicle_dynamics_st_sat2
     elif kind == "linear":
         _dm.vehicle_dynamics_st = _STOCK
     else:
