@@ -48,6 +48,8 @@ to `make_f110`. The centerline CSV drives progress, lap counting, opponents and 
 
 - Changing `racing/*.py` while a training run is going: SubprocVecEnv workers re-import the code when each curriculum
   stage starts. Behaviour-changing edits must be opt-in (new config flag, old default).
+- Never edit a queue or loop script (`scripts/queue_*.sh`, `autosync.sh`, `eval_daemon.sh`) while it is running:
+  bash reads scripts incrementally and dies or misbehaves. Stop it, edit, restart, or start a new script.
 - The F1TENTH lap counter and `done` flag are unreliable on this map; use `info["progress"]`.
 - Controllers tuned at 100 Hz can be unstable at the 25 Hz control rate.
 - Do not judge a shield by intervention count alone; check collisions in the stress test and on race day.

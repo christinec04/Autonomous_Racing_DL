@@ -232,3 +232,6 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     shield's loss-of-control check block every action from rest. Fixes: `tire="saturated_v2"` wraps the slip angle
     and relaxes it to its kinematic value at low speed (opt-in so running training is not changed); the
     loss-of-control check now only applies above 1 m/s. The escape manoeuvres also include reversing at 1 m/s.
+25. **Editing a queue script while bash was running it killed the queue.** Lane E waited in a loop; appending a
+    run by rewriting the file shifted bash's read offset and it died with a syntax error, so the timidity runs did
+    not start for about an hour. Restarted; rule: never edit a running queue script, start a new one instead.
