@@ -42,6 +42,7 @@ class EnvConfig:
     w3_shield: float = 0.1
     w4_collision: float = 10.0
     w5_pass: float = 2.0
+    w6_slip: float = 0.0  # optional: penalty per step for body slip beyond 0.15 rad (discourages sliding)
     shield: ShieldConfig = field(default_factory=ShieldConfig)
     curvature_preview: bool = False  # optional extra observation (experiment)
     # ResRace/RaceMOP-style residual policy: final = PID+APF base action + scale * policy action.
@@ -268,7 +269,8 @@ class RaceEnv(gym.Env):
         v_par = st[0, 3] * np.cos(self.hdg_err[0])
         collided = wall or car
         r = (c.w1_speed * v_par + c.w2_progress * dprog + c.w5_pass * passes
-             - c.w3_shield * lam - c.w4_collision * collided)
+             - c.w3_shield * lam - c.w4_collision * collided
+             - c.w6_slip * max(abs(np.arctan2(np.sin(st[0, 6]), np.cos(st[0, 6]))) - 0.15, 0.0))
         self.prev_action = self.to_normalized(a_final)
         terminated = collided
         # stuck (e.g. shield stopped the car and the policy does not recover): end the episode

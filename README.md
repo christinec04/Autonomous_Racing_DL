@@ -29,7 +29,11 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
   shielded races had actually ended *stuck* (the shield deadlocked). Finish counts above are corrected; the
   deadlock and its fix are documented in [docs/experiments.md](docs/experiments.md) (E19) and
   [PROGRESS.md](PROGRESS.md) (problems 22-24).
-- Seed 1 of the original shielded agent is much weaker (1/20 finished, 15 stuck): results vary a lot across seeds.
+- **Across seeds the picture is weaker than seed 0 alone** ([results/seed_summary.md](results/seed_summary.md),
+  2 seeds so far): final shield 8.5 +- 7.5 races finished, 2.67 +- 2.23 collisions / 10 laps; original shield
+  6.5 +- 5.5 finished (10 stuck on average), 0.85 collisions; no shield 2.0 +- 1.0 finished, 4.43 collisions.
+  Seed 1 learned a sliding driving style that the shield cannot reliably catch (E20). The shield consistently
+  lowers collisions versus no shield; how many races get finished depends strongly on the seed.
   Seeds 1-2, PPO with the proposal's additive shield, shield dropout, an improved-shield training run and two
   timidity fixes are in progress; live status in [RUNS.md](RUNS.md).
 - Running log of every step and every problem hit along the way: [PROGRESS.md](PROGRESS.md).
