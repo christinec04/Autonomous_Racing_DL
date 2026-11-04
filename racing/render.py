@@ -30,10 +30,10 @@ EGO, EGO_SHIELD, OPP, INK, SURF = "#2a78d6", "#e34948", "#8a8984", "#0b0b0b", "#
 L, W = DEFAULT_PARAMS["length"], DEFAULT_PARAMS["width"]
 
 
-def record(controller, model, seed, seconds, n_opp=3, solo=False):
+def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturated"):
     sh = SHIELD_FOR[controller]
     cfg = EnvConfig(n_opp=0 if solo else n_opp, random_start=not solo, shield=ShieldConfig(**sh),
-                    episode_time=seconds, seed=seed, residual=controller.startswith("ppo_residual"))
+                    episode_time=seconds, seed=seed, residual=controller.startswith("ppo_residual"), tire=tire)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0)
