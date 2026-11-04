@@ -1,12 +1,5 @@
 # APF-Shielded Deep RL for Autonomous Racing
 
-> **Correction (in progress):** earlier versions counted a race as "finished" whenever there was no collision.
-> Many shielded races actually ended *stuck* (the shield stopped the car and never let it go), so finish counts
-> for shielded controllers were overstated. Collision rates were correct. "Finished" now means all 5 laps
-> completed and stuck races are reported separately; a deadlock fix is being evaluated. Tables below are being
-> updated; see `results/summary.md` for the corrected numbers.
-
-
 A PPO agent races three PID / Pure Pursuit opponents on a Singapore-inspired street circuit in
 [F1TENTH Gym](https://github.com/f1tenth/f1tenth_gym). An artificial-potential-field (APF) safety shield sits
 between the policy and the car and steps in only when the policy's action is predicted to lead to a crash.
@@ -18,17 +11,27 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
 
 - Everything in the proposal runs end to end: track, opponents, classical baselines, shielded / unshielded PPO
   with the 3-stage curriculum, race-day evaluation with all six metrics, Mann-Whitney U tests.
-- Seed-0 race results (nominal, 20 races x 5 laps), full tables in [results/summary.md](results/summary.md):
+- Seed-0 race results (nominal, 20 races x 5 laps; "finished" = all 5 laps), full tables in
+  [results/summary.md](results/summary.md):
 
-  | controller | finished | clean lap | collisions / 10 laps | passes / race |
-  |---|---|---|---|---|
-  | **PPO + shield (ours)** | **17/20** | **34.3 s** | **0.38** | **2.65** |
-  | PPO, no shield | 2/20 | 36.8 s | 5.53 | 1.05 |
-  | PID + APF | 9/20 | 43.9 s | 1.75 | 1.25 |
-  | Pure Pursuit | 0/20 | - | 61 | 0 |
+  | controller | finished | stuck | clean lap | collisions / 10 laps | passes / race |
+  |---|---|---|---|---|---|
+  | **PPO + shield with deadlock escape (ours, final)** | **16/20** | **0** | 34.5 s | 0.44 | **2.95** |
+  | PPO + shield, original | 12/20 | 5 | 34.3 s | 0.38 | 2.65 |
+  | ResRace-style residual PPO | 9/20 | 0 | **30.4 s** | 1.77 | 2.75 |
+  | PID + APF | 9/20 | 0 | 43.9 s | 1.75 | 1.25 |
+  | PPO, no shield | 1/20 | 1 | 36.8 s | 5.53 | 1.05 |
+  | Pure Pursuit | 0/20 | 0 | - | 61 | 0 |
 
-- More seeds, a ResRace-style residual comparison, PPO with the proposal's original additive shield, and a
-  shield-dropout experiment are in progress; live status in [RUNS.md](RUNS.md).
+  The final row uses the post-spin-fixed simulator (`tire="saturated_v2"`); the others were raced on v1, which
+  differs only after a spin. A full re-evaluation of every controller on v2 is planned once training finishes.
+- **Correction:** earlier versions of this page counted a race as finished whenever there was no collision; many
+  shielded races had actually ended *stuck* (the shield deadlocked). Finish counts above are corrected; the
+  deadlock and its fix are documented in [docs/experiments.md](docs/experiments.md) (E19) and
+  [PROGRESS.md](PROGRESS.md) (problems 22-24).
+- Seed 1 of the original shielded agent is much weaker (1/20 finished, 15 stuck): results vary a lot across seeds.
+  Seeds 1-2, PPO with the proposal's additive shield, shield dropout, an improved-shield training run and two
+  timidity fixes are in progress; live status in [RUNS.md](RUNS.md).
 - Running log of every step and every problem hit along the way: [PROGRESS.md](PROGRESS.md).
 
 ## Quick start
@@ -38,7 +41,7 @@ python -m venv .venv
 .venv/Scripts/activate            # Windows (Git Bash); use .venv/bin/activate on Linux/macOS
 pip install -r requirements.txt
 python -m racing.track_gen        # builds maps/Singapore (already committed)
-python -m pytest -q tests         # 18 tests, ~20 s
+python -m pytest -q tests         # 23 tests, ~20 s
 
 # classical baselines in races
 python -m racing.evaluate --controllers pure_pursuit pid_apf --races 20 --out results/eval_baselines.json

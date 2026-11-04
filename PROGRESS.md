@@ -113,6 +113,9 @@ Crashes during training: stage 1 solo, ~0-5% of episodes with the shield vs 5-55
 with the shield vs 20-54% without.
 
 ## Step 4: race day, seed 0 (full tables: `results/summary.md`)
+> Corrected later (problem 22): the "finished" column below counted stuck races as finished. Corrected: ours 12/20
+> (5 stuck), no shield 1/20, unshielded + shield 1/20 (19 stuck), PID+APF 9/20. Collision numbers stand.
+
 Nominal, 20 races x 5 laps:
 
 | controller | finished | clean lap | collisions/10 laps | passes/race | overtake success | shield active |
@@ -139,8 +142,8 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
 
 ## Step 5: deeper comparisons and analysis (details: docs/experiments.md E8, E12-E17)
 - **ResRace-style residual PPO** (E8): fastest laps of any controller (30.4 s clean) but 9/20 finishes. With our
-  shield added at race time: 18/20 finishes, 32.7 s, 0.36 collisions / 10 laps, 43/43 overtakes. The shield
-  complements APF-residual policies rather than competing with them.
+  shield added at race time: 0.36 collisions / 10 laps but 14/20 races stuck (4/20 finished; first reported as
+  18/20 and "complementary" before the problem-22 fix; withdrawn).
 - **Shield settings with the trained agent** (E14, E15): a safety-vs-aggressiveness dial. Fixed reach and/or a
   10 cm margin remove most collisions (39/40 finishes for fixed + 10 cm) but cost passes and use the shield more.
 - **Training efficiency** (E16): same steps to the first unshielded clean lap (200k), but ~10x fewer crashes during
@@ -151,6 +154,13 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
   only 2% of those steps, so the policy is timid, not the shield. Two fixes queued (E18).
 - Tests: `tests/` (18), incl. predictor-vs-simulator agreement < 2 cm.
 - Automation: `scripts/eval_daemon.sh` races each run when it finishes; `scripts/autosync.sh` pushes every 20 min.
+
+## Step 6: stuck races, deadlock fix, final shield (E19)
+- "Finished" now means all 5 laps; stuck races (no progress for 5 s) are reported separately (problem 22).
+- Deadlocks diagnosed (wall deadlock, mutual deadlock with an opponent, post-spin simulator state; problems 23-24).
+- Escape rule v4 + `saturated_v2` simulator: seed 0 nominal 16/20 finished, 0 stuck, 0.44 collisions / 10 laps,
+  2.95 passes per race (best of every controller so far); randomised 14/20.
+- A policy trained from scratch with the final shield (`ppo_shield_v2esc_s0`) is queued.
 
 ## Problems encountered
 1. **F1TENTH map download.** Gym tries to download `Spielberg` on startup. Fixed by pointing its track loader at our `maps/`.
