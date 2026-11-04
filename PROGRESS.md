@@ -76,6 +76,42 @@ What this says about the feedback:
 - Comment 2 (grip vs fixed decel): no clear winner yet. The fixed 6 m/s^2 assumption is more conservative, which helps
   safety in traffic; grip-aware lets the car drive further on stock tyres. Revisit with the RL agent.
 
+## Step 3: baselines in races + PPO training
+Race protocol (`racing/evaluate.py`): 3 opponents (PID / Pure Pursuit, 0.5-0.75 of the speed profile, gap keeping),
+5 laps, DNF on first collision, 20 shared seeds, nominal and randomised (friction 0.85-1.15x, lidar noise).
+
+Metric targets (Introduction feedback; our proposed values, defined in `TARGETS`):
+
+| metric | target |
+|---|---|
+| clean-lap time vs PID+APF | <= 0.95x (>= 5% faster) |
+| collisions per 10 laps | <= 0.5 |
+| overtake success | >= 70% |
+| shield active on race day | <= 10% of steps |
+| time above 90% of mu*g | >= 10% (uses the grip) |
+| time above 15 deg body slip | <= 1% (no sliding exploit) |
+
+Classical baselines, 20 races x 5 laps (`results/eval_baselines.log`):
+
+| controller | finished | clean lap | collisions/10 laps | overtakes | APF active | grip>90% | slip>15 |
+|---|---|---|---|---|---|---|---|
+| Pure Pursuit (nominal) | 0/20 | - | 61 (all rear-ends) | 0 | - | 12% | 0% |
+| PID+APF (nominal) | 9/20 | 43.9 s (best 36.0) | 1.75 | 25/38 | 93% | 2.5% | 0.6% |
+| PID+APF (randomised) | 12/20 | 44.0 s (best 35.5) | 1.18 | 28/40 | 93% | 2.3% | 0.8% |
+
+PID+APF is "safe-ish but slow": the APF is on almost all the time and slows the car (Koren & Borenstein).
+
+PPO training (`racing/train.py`, SB3 PPO, 7 envs, 1.5M + 1M + 1M steps over the 3 stages). Two runs so far,
+seed 0: shield = action-conditioned fallback (grip reach) in every stage, and shield off in every stage
+(this is how the unshielded ablation is defined, Plan feedback). Curves: `results/training_curves.png`.
+
+Training efficiency, measured fairly (Plan feedback): every 50k steps the policy drives one solo lap *with the shield
+removed*. First clean unshielded lap: both runs at 200k steps, so the shield did not speed up learning to lap. It did
+speed up learning to lap *fast*: 34.9 s by 350k (shield) vs 38.3 s (no shield); by the end of stage 1 both reach ~32.5 s.
+
+Crashes during training: stage 1 solo, ~0-5% of episodes with the shield vs 5-55% without. Stage 2 traffic, 7-18%
+with the shield vs 20-54% without.
+
 ## Problems encountered
 1. **F1TENTH map download.** Gym tries to download `Spielberg` on startup. Fixed by pointing its track loader at our `maps/`.
 2. **Built-in lap counter is wrong** for our start position (it reported 60 s laps). We count laps from centerline progress.
@@ -105,3 +141,13 @@ What this says about the feedback:
     actions, so "safe now" did not imply "safe next step". The backup itself is now the first fallback candidate.
 12. **Spins counted as safe** if the spinning car did not touch a wall within the horizon. Predicted body slip > 20 deg
     now counts as a violation.
+13. **PID unstable at the 25 Hz control rate** (it was tuned at 100 Hz in step 1): it spun out at ~5 m/s on corner
+    entry; none of 81 gain settings worked. Rewritten as curvature feed-forward + PID on cross-track error + heading
+    error at the nearest point (`scripts/tune_pid.py`): laps cleanly at 35.3 s. Opponents use the same controller.
+14. **First PID+APF baseline crashed in 20/20 races** (APF gains too aggressive, car sliding 22% of the time). Grid-tuned
+    the APF gains (`scripts/tune_apf.py`) so the course baseline is fair.
+15. **Grip metric read > 100% of mu*g** because it used v*yaw_rate as lateral acceleration, which is wrong while sliding.
+    Now computed from the change of the velocity vector.
+16. **Trail braking spins the car** under the friction-circle tyres: braking moves load off the rear axle, the rear
+    saturates first. Traction control works on the whole-car friction circle, not per axle, so it does not prevent this;
+    controllers have to brake before turning in.
