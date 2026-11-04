@@ -8,10 +8,14 @@ from scipy.stats import mannwhitneyu
 from racing.evaluate import summarize, check_targets
 
 OURS = "ppo_apf"
-ORDER = ["ppo_apf", "ppo", "ppo@shieldtrained_noshield", "ppo_apf@noshieldtrained_withshield", "ppo_residual",
+ORDER = ["ppo_apf_esc@s0", "ppo_apf", "ppo_apf@s0v2", "ppo_apf@s1", "ppo", "ppo@shieldtrained_noshield", "ppo_apf@noshieldtrained_withshield", "ppo_residual",
          "ppo_residual_apf", "ppo_additive", "pid_apf", "pure_pursuit"]
 NAMES = {
-    "ppo_apf": "PPO + shield (ours)",
+    "ppo_apf_esc@s0": "PPO + shield with deadlock escape (ours, final; v2 sim)",
+    "ppo_apf": "PPO + shield, original (ours)",
+    "ppo_apf@s0v2": "PPO + shield, original, on v2 sim",
+    "ppo_apf@s1": "PPO + shield, original, seed 1",
+    "ppo_residual_apf_esc": "residual PPO + escape shield (v2 sim)",
     "ppo": "PPO, no shield",
     "ppo@shieldtrained_noshield": "shield-trained PPO, shield removed",
     "ppo_apf@noshieldtrained_withshield": "unshielded PPO + shield at race time",

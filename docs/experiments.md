@@ -1,11 +1,7 @@
 # Experiments
 
-> **Correction (in progress):** earlier versions counted a race as "finished" whenever there was no collision.
-> Many shielded races actually ended *stuck* (the shield stopped the car and never let it go), so finish counts
-> for shielded controllers were overstated. Collision rates were correct. "Finished" now means all 5 laps
-> completed and stuck races are reported separately; a deadlock fix is being evaluated. Tables below are being
-> updated; see `results/summary.md` for the corrected numbers.
-
+Finish counts in early entries were corrected after the stuck-race fix (PROGRESS.md problem 22): "finished"
+means all 5 laps; stuck races are counted separately.
 
 Each experiment: question, command, output, result. Status of training runs: [RUNS.md](../RUNS.md).
 
@@ -43,8 +39,9 @@ shield-trained policy raced without the shield, and the unshielded policy raced 
 `runs/ppo_residual_s0`: PPO residual (scale 0.3) on top of the tuned PID+APF controller. Tests the contribution
 statement: shield only when needed vs APF shaping every command. Raced alone (`results/eval_residual_s0.json`) and
 with our shield added at race time (`results/eval_residual_apf_s0.json`).
-Result: fastest clean laps of any controller (30.4 s) but only 9/20 finishes; with our shield on top 18/20 finishes,
-32.7 s laps, 0.36 collisions / 10 laps, 43/43 overtakes. The shield and the residual structure are complementary.
+Result: fastest clean laps of any controller (30.4 s) but only 9/20 finishes (11 crashes). With our shield added at
+race time collisions drop (0.36 / 10 laps) but 14 of 20 races end stuck: 4/20 finished. (An earlier version said
+18/20 and called the two complementary; that used the faulty "finished" metric and is withdrawn.)
 
 ## E9. PPO with the proposal's original additive shield
 `runs/ppo_additive_s0`.
@@ -141,9 +138,14 @@ Fix attempts (`ShieldConfig(escape=True)`, evaluated as `ppo_apf_esc`):
 | none | - | 12 / 5 / 3 | deadlocks |
 | v1 | allow 2 cm of clearance shrinkage near the margin | (not evaluated; unit test still deadlocked) | circle model reads negative clearance |
 | v2 | v1 + slow creep manoeuvres, whenever within 7 cm of anything | 7 / 0 / 13 | worse: the relaxed rule applied while driving and ratcheted the car into walls 2 cm per step |
-| v3 | v2, but only when nearly stopped (< 0.5 m/s) | running | |
+| v3 | v2, but only when nearly stopped (< 0.5 m/s) | 14 / 0 / 6 | deadlocks gone, some crashes |
+| v4 | v3 + reverse creep, on the post-spin-fixed simulator (`saturated_v2`, problem 24) | **16 / 0 / 4** | adopted as the final shield |
 
-Raw results: `results/eval_escape_v2.json`, `results/eval_escape_v3.json`.
+Same policy, v2 simulator, no escape: 11 / 8 / 1, so v4's gain is the escape, not the simulator change.
+Randomised: v4 14 / 0 / 6. The residual policy does not benefit (2/20 finished, heavy sliding) and seed 1's
+original-shield policy is weak with or without escape (0-2/20).
+
+Raw results: `results/eval_escape_v2.json`, `results/eval_escape_v3.json`, `results/eval_escape_v4.json`.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

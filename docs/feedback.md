@@ -1,14 +1,9 @@
 # Proposal feedback -> what we built -> evidence
 
-> **Correction (in progress):** earlier versions counted a race as "finished" whenever there was no collision.
-> Many shielded races actually ended *stuck* (the shield stopped the car and never let it go), so finish counts
-> for shielded controllers were overstated. Collision rates were correct. "Finished" now means all 5 laps
-> completed and stuck races are reported separately; a deadlock fix is being evaluated. Tables below are being
-> updated; see `results/summary.md` for the corrected numbers.
-
-
 The proposal was graded 90/100. This maps each comment to the code that addresses it and the result that tests
-it. Numbers are seed 0 unless noted; see [RUNS.md](../RUNS.md) for seeds in progress.
+it. Numbers are seed 0 unless noted; see [RUNS.md](../RUNS.md) for seeds in progress. "Finished" means all 5
+laps completed; an earlier version of this page counted stuck races as finished (corrected; PROGRESS.md
+problem 22). "Ours (final)" is the shield with the deadlock escape on the post-spin-fixed simulator (E19).
 
 ## Introduction (16/20)
 
@@ -16,14 +11,17 @@ it. Numbers are seed 0 unless noted; see [RUNS.md](../RUNS.md) for seeds in prog
 
 Targets are defined in code (`racing/evaluate.py`, `TARGETS`) and checked automatically by `scripts/analyze.py`:
 
-| metric | target | seed 0, nominal | seed 0, randomised |
-|---|---|---|---|
-| clean-lap time vs PID+APF | <= 0.95x | 0.78x | 0.78x |
-| collisions per 10 laps | <= 0.5 | 0.38 | **0.63 (missed)** |
-| overtake success | >= 70% | 88% | 85% |
-| shield active on race day | <= 10% of steps | 6% | **10.5% (missed)** |
-| time above 90% of mu g | >= 10% | 16.7% | 14.6% |
-| time above 15 deg body slip | <= 1% | 0.0% | 0.9% |
+| metric | target | ours (final), nominal | ours (final), randomised | original shield, nominal |
+|---|---|---|---|---|
+| clean-lap time vs PID+APF | <= 0.95x | 0.79x | 0.78x | 0.78x |
+| collisions per 10 laps | <= 0.5 | 0.44 | **0.75 (missed)** | 0.38 |
+| overtake success | >= 70% | 86% | 75% | 88% |
+| shield active on race day | <= 10% of steps | 3% | 4% | 6% |
+| time above 90% of mu g | >= 10% | 17.1% | 15.9% | 16.7% |
+| time above 15 deg body slip | <= 1% | 0.0% | 0.0% | 0.0% |
+
+Not a target but the most important number: races finished (all 5 laps) - ours (final) 16/20 nominal and 14/20
+randomised, vs 9/20 for PID+APF and for the residual policy, 1/20 for PPO without a shield.
 
 > *APF with PPO already exists in ResRace and RaceMOP. State what is different about yours.*
 
@@ -38,18 +36,25 @@ The difference, made testable:
 Both are implemented under identical conditions: `EnvConfig(residual=True)` reproduces the ResRace structure
 (`final = PID+APF base action + 0.3 x policy`), run `ppo_residual_s0`. Race results (nominal, 20 races x 5 laps):
 
-| controller | finished | clean lap | collisions / 10 laps | passes / race | shield active |
-|---|---|---|---|---|---|
-| ResRace-style residual PPO | 9/20 | **30.4 s** | 1.77 | 2.75 | - |
-| PPO + our shield | 17/20 | 34.3 s | 0.38 | 2.65 | 6% |
-| **residual PPO + our shield on top** | **18/20** | 32.7 s | **0.36** | 2.15 (43/43 attempts) | 20% |
+| controller | finished | stuck | clean lap | collisions / 10 laps | passes / race | shield active |
+|---|---|---|---|---|---|---|
+| ResRace-style residual PPO | 9/20 | 0 | **30.4 s** | 1.77 | 2.75 | - |
+| **PPO + our shield (final)** | **16/20** | 0 | 34.5 s | 0.44 | **2.95** | 3% |
+| PPO + our shield (original) | 12/20 | 5 | 34.3 s | 0.38 | 2.65 | 6% |
+| residual PPO + our original shield | 4/20 | 14 | 32.7 s | 0.36 | 2.15 | 20% |
+| residual PPO + our final shield | 2/20 | 15 | - | 0.52 | 1.70 | 39% |
 
-The residual structure learns faster laps (the APF base gives it a sensible prior), but the always-on APF does not
-make it safe: it crashes in 11 of 20 races, about as often as PID+APF. Our shield is what removes the crashes, and it
-also works on top of the residual policy. So the contribution is better stated as **an action-conditioned safety
-shield that can wrap any racing policy**, including APF-residual ones like ResRace/RaceMOP, rather than as a
-replacement for them. Cost of combining: the shield is active on 20% of steps and the car slides (> 15 deg) 5% of
-the time, so two of the six targets are missed.
+What this says:
+- The residual structure learns faster laps (the PID+APF base is a strong prior) but the always-on APF does not
+  make it safe: it crashes in 11 of 20 races, about as often as PID+APF.
+- Our shield around a policy trained with it finishes the most races (16/20) with few collisions.
+- Simply wrapping our shield around the residual policy at race time does **not** work: collisions drop, but
+  the car deadlocks (14-15 of 20 races) and, with the escape enabled, slides heavily. A first version of this page
+  claimed the two were complementary; that was based on the faulty "finished" metric and is withdrawn.
+- So the contribution statement: **the APF acts as an action-conditioned safety shield around a policy that is
+  trained with it, intervening only when the policy's own action is predicted unsafe (3-6% of race steps), instead
+  of shaping every command as in ResRace/RaceMOP.** Whether it can wrap an APF-residual policy needs that policy to
+  be trained with the shield; not done yet.
 
 ## Content (16/20)
 
@@ -68,8 +73,9 @@ Confirmed experimentally, so the claim must be softened. `scripts/shield_stress.
 
 Even the best variant still has car contacts in traffic, because opponents' future motion is predicted, not
 known. The defensible claim is "reduces violations; zero only under its model assumptions" (opponents braking no
-harder than 6 m/s^2, static world seen by the lidar or the map). Race day: 0.38 collisions / 10 laps with the shield
-vs 5.53 without.
+harder than 6 m/s^2, static world seen by the lidar or the map). Race day: 0.44 collisions / 10 laps with the final
+shield (0.38 original) vs 5.53 without. The shield also introduced a failure the proposal did not anticipate:
+deadlock (the car stopped and never released), fixed by the escape rule (E19).
 
 > *Section II says the shield reach depends on the grip left after cornering, but Section III-C uses braking
 > distance with a fixed assumed deceleration.*
@@ -87,15 +93,15 @@ traffic stress test); grip reach lets the car go further when it is safe to. The
 The `conditioned` shield makes the decision depend on the action: it simulates the policy's action (then a
 braking backup) with the simulator's own vehicle model and intervenes only if that rollout hits something or loses
 control. Effect, stock tyres, too-fast driver: additive shield active on 98% of steps; action-conditioned shield
-active on 18% and still prevents every crash. On race day the trained agent's shield is active on 6% of steps.
+active on 18% and still prevents every crash. On race day the trained agent's shield is active on 3-6% of steps.
 
 ## Plan (8/10)
 
 > *Add team roles and a risk plan.*
 
-Team roles are for the team to fill in. A risk register built from the risks that actually materialised is in [risks.md](risks.md); details of each are logged with
-their fixes in [PROGRESS.md](../PROGRESS.md) ("Problems encountered", 18 entries), which is a ready source for a
-risk table (simulator realism, simulator speed, controller stability at 25 Hz, shield model mismatch).
+Team roles are for the team to fill in. A risk register built from the risks that actually materialised is in
+[risks.md](risks.md); details of each are logged with their fixes in [PROGRESS.md](../PROGRESS.md)
+("Problems encountered", 24 entries).
 
 > *Training steps to first clean lap will not test training efficiency because the shield keeps laps free of
 > collisions, and the training of the unshielded ablation is not defined given that curriculum stage 1 has the
