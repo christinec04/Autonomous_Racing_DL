@@ -1,0 +1,16 @@
+
+=== nominal ===
+pid_apf       finished 12/20 (stuck 0)  lap 42.84 (best 36.0)  coll/10laps 1.09 (wall 3, car 5)  passes/race 1.35 ot 27/41  shield 0.89  grip>90% 0.024 (>100% 0.000)  slip>15 0.006
+ppo@s0        finished 0/20 (stuck 1)  lap 32.5 (best 28.32)  coll/10laps 7.35 (wall 18, car 1)  passes/race 1.35 ot 27/30  shield 0.00  grip>90% 0.321 (>100% 0.001)  slip>15 0.019
+ppo@s1        finished 3/20 (stuck 0)  lap 34.89 (best 32.08)  coll/10laps 3.23 (wall 14, car 3)  passes/race 2.15 ot 43/47  shield 0.00  grip>90% 0.410 (>100% 0.001)  slip>15 0.001
+ppo_additive  finished 18/20 (stuck 0)  lap 47.57 (best 40.44)  coll/10laps 0.21 (wall 2, car 0)  passes/race 0.85 ot 17/24  shield 0.07  grip>90% 0.085 (>100% 0.000)  slip>15 0.000
+ppo_residual  finished 10/20 (stuck 0)  lap 30.37 (best 29.2)  coll/10laps 1.60 (wall 1, car 9)  passes/race 2.20 ot 44/54  shield 0.00  grip>90% 0.123 (>100% 0.000)  slip>15 0.016
+pure_pursuit  finished 0/20 (stuck 0)  lap None (best None)  coll/10laps 61.35 (wall 0, car 20)  passes/race 0.00 ot 0/0  shield 0.00  grip>90% 0.118 (>100% 0.000)  slip>15 0.000
+
+=== randomized ===
+pid_apf       finished 12/20 (stuck 0)  lap 44.04 (best 35.48)  coll/10laps 1.18 (wall 1, car 7)  passes/race 1.40 ot 28/38  shield 0.93  grip>90% 0.022 (>100% 0.001)  slip>15 0.006
+ppo@s0        finished 1/20 (stuck 0)  lap 38.42 (best 28.96)  coll/10laps 7.13 (wall 19, car 0)  passes/race 0.95 ot 19/27  shield 0.00  grip>90% 0.273 (>100% 0.004)  slip>15 0.024
+ppo@s1        finished 4/20 (stuck 0)  lap 34.36 (best 32.72)  coll/10laps 3.48 (wall 15, car 1)  passes/race 1.75 ot 35/44  shield 0.00  grip>90% 0.333 (>100% 0.004)  slip>15 0.012
+ppo_additive  finished 16/20 (stuck 0)  lap 47.11 (best 40.6)  coll/10laps 0.45 (wall 3, car 1)  passes/race 0.95 ot 19/20  shield 0.10  grip>90% 0.075 (>100% 0.001)  slip>15 0.001
+ppo_residual  finished 8/20 (stuck 0)  lap 30.21 (best 28.92)  coll/10laps 1.94 (wall 5, car 7)  passes/race 2.10 ot 42/44  shield 0.00  grip>90% 0.125 (>100% 0.001)  slip>15 0.011
+pure_pursuit  finished 0/20 (stuck 0)  lap None (best None)  coll/10laps 61.52 (wall 0, car 20)  passes/race 0.00 ot 0/0  shield 0.00  grip>90% 0.085 (>100% 0.000)  slip>15 0.000
