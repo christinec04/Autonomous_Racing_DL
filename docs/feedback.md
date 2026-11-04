@@ -75,7 +75,7 @@ active on 18% and still prevents every crash. On race day the trained agent's sh
 
 > *Add team roles and a risk plan.*
 
-This is a document item for the team; not addressed in code. Risks we actually hit while building are logged with
+Team roles are for the team to fill in. A risk register built from the risks that actually materialised is in [risks.md](risks.md); details of each are logged with
 their fixes in [PROGRESS.md](../PROGRESS.md) ("Problems encountered", 18 entries), which is a ready source for a
 risk table (simulator realism, simulator speed, controller stability at 25 Hz, shield model mismatch).
 

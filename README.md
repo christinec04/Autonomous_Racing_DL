@@ -74,5 +74,6 @@ Full from-scratch reproduction: [docs/reproduce.md](docs/reproduce.md).
 - [docs/experiments.md](docs/experiments.md): every experiment, its command, output and result
 - [docs/reproduce.md](docs/reproduce.md): rebuild every number from scratch
 - [docs/developer-guide.md](docs/developer-guide.md): conventions, how to add controllers / shields / tracks, pitfalls
+- [docs/risks.md](docs/risks.md): risk register built from the problems actually hit
 - [PROGRESS.md](PROGRESS.md): chronological build log and problems encountered
 - [RUNS.md](RUNS.md): run registry (auto-generated)
