@@ -17,6 +17,7 @@ PURPOSE = {
     "ppo_noshield_s1": "Ablation (no shield), seed 1",
     "ppo_noshield_s2": "Ablation (no shield), seed 2",
     "ppo_shielddrop_s0": "Shield dropout: shield on in 100% / 50% / 25% of episodes in stages 1/2/3 (does the policy learn safety itself?)",
+    "ppo_shield_linear_s0": "Ours on stock linear tyres: does PPO exploit unlimited grip (slip > 15 deg, > 100% mu g)?",
     "ppo_additive_s0": "Proposal's original shield: PPO + additive Eq. 2/3 APF (fixed reach)",
 }
 RESULTS = {
