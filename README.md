@@ -82,6 +82,7 @@ Full from-scratch reproduction: [docs/reproduce.md](docs/reproduce.md).
 
 ## Documentation
 
+- [docs/results.md](docs/results.md): current results, what works and what does not (living page)
 - [docs/architecture.md](docs/architecture.md): how the pieces fit, with every parameter value
 - [docs/feedback.md](docs/feedback.md): each proposal comment -> what changed -> evidence
 - [docs/design-decisions.md](docs/design-decisions.md): deviations from the proposal and why

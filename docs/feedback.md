@@ -73,6 +73,10 @@ Confirmed experimentally, so the claim must be softened. `scripts/shield_stress.
 | action-conditioned + fallback, fixed reach | 0% | 12% | 0% |
 | action-conditioned + fallback, grip reach | 0% | 38% | 12% |
 
+The same holds during learning (`results/training_efficiency.md`): PPO trained with the proposal's additive shield
+crashed 2286 times in training, no better than with no shield at all (2318-2769), while the action-conditioned
+shield cut this to 234-313.
+
 Even the best variant still has car contacts in traffic, because opponents' future motion is predicted, not
 known. The defensible claim is "reduces violations; zero only under its model assumptions" (opponents braking no
 harder than 6 m/s^2, static world seen by the lidar or the map). Race day: 0.44 collisions / 10 laps with the final
