@@ -56,6 +56,25 @@ not by cornering at the limit. PID+APF barely uses the grip (1% of time above 90
 `python -m scripts.plot_shield_map` -> `results/shield_map.png`. 3.2% of steps over 4 races; clustered at the
 chicane after the main straight, the hairpin, and on the main straight in traffic.
 
+## E14. Shield settings with the trained agent (10 nominal races each)
+`python -m scripts.shield_sensitivity 10` -> `results/shield_sensitivity.md` / `.json`. Same shield-trained policy
+(seed 0), only the shield changes at race time.
+
+| shield setting | finished | clean lap | collisions / 10 laps | passes / race | shield active |
+|---|---|---|---|---|---|
+| default (grip reach, c_safe 0.05, opp_brake 6) | 8/10 | 33.7 | 0.57 | 2.5 | 7% |
+| fixed reach 6 m/s^2 | 10/10 | 33.4 | 0.00 | 1.7 | 13% |
+| c_safe 0.02 | 8/10 | 34.2 | 0.51 | 2.4 | 6% |
+| c_safe 0.10 | 10/10 | 34.4 | 0.00 | 2.8 | 8% |
+| opp_brake 3 | 9/10 | 33.5 | 0.38 | 1.5 | 11% |
+| opp_brake 9 | 9/10 | 33.8 | 0.36 | 1.9 | 10% |
+| no fallback | 8/10 | 34.1 | 0.85 | 1.4 | 11% |
+| additive Eq. 2/3 | 3/10 | 34.9 | 3.15 | 1.5 | 74% |
+
+Reading: a 10 cm prediction margin looks strictly better than 5 cm (no collisions, as many passes); fixed reach is
+also collision-free but more timid (fewer passes, shield on more). The fallback matters; the proposal's additive
+form fails with a learned driver too. 10 races is a small sample: confirmation run E15.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.

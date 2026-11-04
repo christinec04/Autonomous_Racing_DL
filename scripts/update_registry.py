@@ -29,6 +29,8 @@ RESULTS = {
     "summary.md": "Merged race results, metric targets, Mann-Whitney U tests (scripts/analyze.py)",
     "gg_diagrams.png": "g-g diagrams per controller (scripts/plot_gg.py)",
     "shield_map.png": "Where on track the shield intervenes, 4 races (scripts/plot_shield_map.py)",
+    "shield_sensitivity.json": "E14: shield settings at race time with the seed-0 shield-trained policy",
+    "shield_sensitivity.md": "E14 table",
     "training_curves.png": "Training curves for all runs (crash rate, shield activity, unshielded solo lap)",
 }
 
