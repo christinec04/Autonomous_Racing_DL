@@ -34,6 +34,7 @@ SHIELDS = {
     "additive": dict(mode="additive", reach="fixed"),  # proposal Eq. 2/3
     "cond_fb_grip": dict(mode="conditioned_fallback", reach="grip"),
     "cond_fb_fixed": dict(mode="conditioned_fallback", reach="fixed"),
+    "cond_fb_grip_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),  # + deadlock escape
 }
 
 STAGES = {
@@ -213,7 +214,7 @@ if __name__ == "__main__":
     ap.add_argument("--gamma", type=float, default=0.99)
     ap.add_argument("--ent", type=float, default=0.0)
     ap.add_argument("--eval_every", type=int, default=50_000)
-    ap.add_argument("--tire", default="saturated")
+    ap.add_argument("--tire", default="saturated", choices=["saturated", "saturated_v2", "linear"])
     ap.add_argument("--no_randomize", action="store_true")
     ap.add_argument("--curvature_preview", action="store_true")
     ap.add_argument("--residual", action="store_true")
