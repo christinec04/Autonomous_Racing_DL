@@ -14,10 +14,19 @@ KEYS = [("finished", "finished all laps / 20", "{:.1f}"), ("stuck", "stuck / 20"
         ("grip_above_90", "time > 90% grip", "{:.1%}"), ("slip_above_15", "time > 15 deg slip", "{:.1%}")]
 
 
-def main():
+# Canonical result files only. Older experiment files (e.g. escape v2/v3) reuse labels and must not be pooled.
+CANONICAL = ["results/eval_ppo_s0.json", "results/eval_ppo_shield_s1.json", "results/eval_ppo_shield_s2.json",
+             "results/eval_ppo_noshield_s1.json", "results/eval_ppo_noshield_s2.json",
+             "results/eval_escape_v4.json", "results/eval_escape_v4_s1.json", "results/eval_escape_v4_s2.json"]
+
+
+def main(files=None):
     races = []
-    for f in glob.glob("results/eval_*.json"):
-        races += json.load(open(f)).get("races", [])
+    for f in files or CANONICAL:
+        if pathlib.Path(f).exists():
+            races += json.load(open(f)).get("races", [])
+    labels = [(r["controller"], r["randomize"], r["seed"]) for r in races]
+    assert len(labels) == len(set(labels)), "duplicate races for a label: check the file list"
     out = ["# Across training seeds (mean +- std over seeds; each seed = 20 races x 5 laps)", ""]
     for cond in ("nominal", "randomized"):
         R = [r for r in races if r["randomize"] == (cond == "randomized")]
@@ -36,4 +45,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main(sys.argv[1:] or None)
