@@ -21,7 +21,9 @@ Targets are defined in code (`racing/evaluate.py`, `TARGETS`) and checked automa
 | time above 15 deg body slip | <= 1% | 0.0% | 0.0% | 0.0% |
 
 Not a target but the most important number: races finished (all 5 laps) - ours (final) 16/20 nominal and 14/20
-randomised for seed 0, vs 9/20 for PID+APF and for the residual policy, 1/20 for PPO without a shield. Across two
+randomised for seed 0, vs 12/20 for PID+APF, 10/20 for the residual policy, 0/20 for PPO without a shield, and
+18/20 for PPO trained with the additive shield, which however laps 13 s slower (all on the same simulator,
+`results/final_summary.md`). Across two
 seeds the final shield averages 8.5 +- 7.5 finished (seed 1: 1/20, its policy slides), vs 2.0 +- 1.0 without a
 shield; see `results/seed_summary.md` and E20. Targets above are seed 0 only.
 
@@ -40,7 +42,7 @@ Both are implemented under identical conditions: `EnvConfig(residual=True)` repr
 
 | controller | finished | stuck | clean lap | collisions / 10 laps | passes / race | shield active |
 |---|---|---|---|---|---|---|
-| ResRace-style residual PPO | 9/20 | 0 | **30.4 s** | 1.77 | 2.75 | - |
+| ResRace-style residual PPO | 10/20 | 0 | **30.4 s** | 1.60 | 2.20 | - |
 | **PPO + our shield (final)** | **16/20** | 0 | 34.5 s | 0.44 | **2.95** | 3% |
 | PPO + our shield (original) | 12/20 | 5 | 34.3 s | 0.38 | 2.65 | 6% |
 | residual PPO + our original shield | 4/20 | 14 | 32.7 s | 0.36 | 2.15 | 20% |
@@ -48,7 +50,7 @@ Both are implemented under identical conditions: `EnvConfig(residual=True)` repr
 
 What this says:
 - The residual structure learns faster laps (the PID+APF base is a strong prior) but the always-on APF does not
-  make it safe: it crashes in 11 of 20 races, about as often as PID+APF.
+  make it safe: it crashes in 10 of 20 races, more than PID+APF (8 of 20).
 - Our shield around a policy trained with it finishes the most races (16/20) with few collisions.
 - Simply wrapping our shield around the residual policy at race time does **not** work: collisions drop, but
   the car deadlocks (14-15 of 20 races) and, with the escape enabled, slides heavily. A first version of this page
