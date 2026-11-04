@@ -1,5 +1,12 @@
 # Proposal feedback -> what we built -> evidence
 
+> **Correction (in progress):** earlier versions counted a race as "finished" whenever there was no collision.
+> Many shielded races actually ended *stuck* (the shield stopped the car and never let it go), so finish counts
+> for shielded controllers were overstated. Collision rates were correct. "Finished" now means all 5 laps
+> completed and stuck races are reported separately; a deadlock fix is being evaluated. Tables below are being
+> updated; see `results/summary.md` for the corrected numbers.
+
+
 The proposal was graded 90/100. This maps each comment to the code that addresses it and the result that tests
 it. Numbers are seed 0 unless noted; see [RUNS.md](../RUNS.md) for seeds in progress.
 
