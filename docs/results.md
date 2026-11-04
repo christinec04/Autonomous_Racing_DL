@@ -31,6 +31,7 @@ Updated as runs finish. Raw tables: [results/summary.md](../results/summary.md) 
 
 ## Figures
 
+- [safety vs speed](../results/tradeoff.png): every controller on one chart (final comparison, seed 0)
 - [training curves](../results/training_curves.png): crash rate, shield activity and unshielded solo lap time over training
 - [g-g diagrams](../results/gg_diagrams.png): how each controller uses the tyres
 - [shield map](../results/shield_map.png): where on the track the shield intervenes

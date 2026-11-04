@@ -53,6 +53,7 @@ RESULTS = {
     "seed_summary.md": "Mean +- std across training seeds",
     "telemetry_speed.png": "E17: speed trace on a solo flying lap",
     "telemetry_sectors.md": "E17: sector times",
+    "tradeoff.png": "Safety vs speed, every controller (scripts/plot_tradeoff.py)",
     "training_curves.png": "Training curves for all runs (crash rate, shield activity, unshielded solo lap)",
 }
 
