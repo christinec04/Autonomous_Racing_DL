@@ -8,7 +8,7 @@ from scipy.stats import mannwhitneyu
 from racing.evaluate import summarize, check_targets
 
 OURS = "ppo_apf"
-ORDER = ["ppo_apf_esc@s0", "ppo_apf", "ppo_apf@s0v2", "ppo_apf@s1", "ppo", "ppo@shieldtrained_noshield", "ppo_apf@noshieldtrained_withshield", "ppo_residual",
+ORDER = ["ppo_apf_esc@s0", "ppo_apf_esc@s1v4", "ppo_apf_esc@s2", "ppo@s0", "ppo@s1", "ppo_apf", "ppo_apf@s0v2", "ppo_apf@s1", "ppo", "ppo@shieldtrained_noshield", "ppo_apf@noshieldtrained_withshield", "ppo_residual",
          "ppo_residual_apf", "ppo_additive", "pid_apf", "pure_pursuit"]
 NAMES = {
     "ppo_apf_esc@s0": "PPO + shield with deadlock escape (ours, final; v2 sim)",
@@ -17,6 +17,9 @@ NAMES = {
     "ppo_apf@s1": "PPO + shield, original, seed 1",
     "ppo_residual_apf_esc": "residual PPO + escape shield (v2 sim)",
     "ppo": "PPO, no shield",
+    "ppo@s0": "PPO, no shield (seed 0)",
+    "ppo@s1": "PPO, no shield (seed 1)",
+    "ppo_apf_esc@s1v4": "PPO + final shield (seed 1)",
     "ppo@shieldtrained_noshield": "shield-trained PPO, shield removed",
     "ppo_apf@noshieldtrained_withshield": "unshielded PPO + shield at race time",
     "ppo_residual": "residual PPO on PID+APF (ResRace-style)",
@@ -54,7 +57,10 @@ def fmt(v, f="{:.2f}"):
     return "-" if v is None else f.format(v)
 
 
-def main(files, out="results/summary.md"):
+def main(files, out="results/summary.md", ours=None):
+    global OURS
+    if ours:
+        OURS = ours
     races = []
     for f in files:
         races += json.load(open(f))["races"]
@@ -75,7 +81,7 @@ def main(files, out="results/summary.md"):
                          f"{fmt(s['overtake_success'], '{:.0%}')} ({s['overtake_successes']}/{s['overtake_attempts']}) | "
                          f"{s['shield_freq']:.0%} | {s['grip_above_90']:.1%} | {s['slip_above_15']:.1%} |")
         if OURS in S and "pid_apf" in S:
-            T = check_targets(S)
+            T = check_targets(S, ours=OURS)
             lines += ["", f"Targets for {NAMES[OURS]} ({cond}):", "", "| metric | value | target | met |", "|---|---|---|---|"]
             for k, t in T.items():
                 lines.append(f"| {t['desc']} | {fmt(t['value'], '{:.3f}')} | {t['target']} | "
@@ -99,4 +105,7 @@ if __name__ == "__main__":
     out = "results/summary.md"
     if "--out" in args:
         i = args.index("--out"); out = args[i + 1]; args = args[:i] + args[i + 2:]
-    main(args, out)
+    ours = None
+    if "--ours" in args:
+        i = args.index("--ours"); ours = args[i + 1]; args = args[:i] + args[i + 2:]
+    main(args, out, ours)
