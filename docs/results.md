@@ -9,7 +9,7 @@ Updated as runs finish. Raw tables: [results/summary.md](../results/summary.md) 
 | finding | evidence |
 |---|---|
 | The action-conditioned shield prevents crashes that an additive APF (proposal Eq. 2/3) cannot | stress test E4: additive 100% crash in every scripted scenario; conditioned + fallback 0-12% solo/random |
-| Shielded training is ~10x safer | E16: 234 vs 2318 training crashes (seed 0); 8-9 vs ~1000 before the first clean lap |
+| Shielded training is ~10x safer | E16: 234-313 vs 2318-2769 training crashes (seeds 0-1); 8-9 vs ~1000 before the first clean lap; the proposal's additive shield: 2286, no better than none |
 | The shield lowers race collisions | seed 0: 0.38-0.44 vs 5.53 collisions / 10 laps without; across 2 seeds 0.85 (original) vs 4.43 |
 | The shield intervenes rarely once trained | 3-6% of race steps (seed 0), vs 93% for the always-on APF in PID+APF |
 | The deadlock escape removes stuck races | E19: seed 0 from 5-8 stuck to 0; 16/20 races finished (best of all controllers) |
