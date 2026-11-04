@@ -97,6 +97,7 @@ SHIELD_FOR = {
     "ppo": dict(mode="off"),
     "ppo_apf": dict(mode="conditioned_fallback", reach="grip"),
     "ppo_residual": dict(mode="off"),  # ResRace-style: APF base inside the env
+    "ppo_residual_apf": dict(mode="conditioned_fallback", reach="grip"),  # residual policy + our shield on top
     "ppo_additive": dict(mode="additive", reach="fixed"),  # PPO trained with the proposal's Eq. 2/3 shield
 }
 
@@ -107,7 +108,7 @@ def run_race(job):
     sh = shield_override or SHIELD_FOR[ctrl]
     cfg = EnvConfig(n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
                     shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
-                    residual=(ctrl == "ppo_residual"))
+                    residual=ctrl.startswith("ppo_residual"))
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),

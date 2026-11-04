@@ -35,6 +35,7 @@ RESULTS = {
     "shield_confirm.json": "E15: best shield settings on the full protocol",
     "shield_confirm_summary.md": "E15 tables + Mann-Whitney tests",
     "eval_residual_s0.json": "E8: race evaluation of the residual (ResRace-style) policy",
+    "eval_residual_apf_s0.json": "E8: residual policy with our shield added at race time",
     "training_curves.png": "Training curves for all runs (crash rate, shield activity, unshielded solo lap)",
 }
 
