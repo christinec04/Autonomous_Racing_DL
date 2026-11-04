@@ -67,6 +67,7 @@ class ShieldConfig:
     backup_lookahead: float = 1.2
     escape: bool = False  # deadlock fix: near/inside the margin, accept actions predicted to stay out of contact
     escape_tol: float = 0.02  # how much predicted clearance may shrink [m] while escaping
+    escape_v: float = 0.5  # escape only applies below this speed [m/s] (deadlock recovery, not normal driving)
     opp_brake: float = 6.0  # worst-case opponent deceleration assumed in prediction [m/s^2]
 
 
@@ -214,8 +215,10 @@ class APFShield:
         if cfg.escape:
             pts, opp = self._now
             c_now = current_clearance(np.asarray(x7, np.float64), pts, opp, CIRC_OFF, CIRC_R)
-            if c_now < cfg.c_safe + 0.02:
-                # Escape mode (near or inside the margin). Every way out shrinks the clearance a little (the rear
+            # Only when (nearly) stopped: applying the relaxed rule while driving lets the clearance shrink by
+            # escape_tol every step and ratchets the car into the wall (escape v2 did exactly that).
+            if c_now < cfg.c_safe + 0.02 and v < cfg.escape_v:
+                # Escape mode (stopped near or inside the margin). Every way out shrinks the clearance a little (the rear
                 # swings out when turning away from a wall) and the 3-circle body model is ~3 cm fatter than the
                 # car, so the usual threshold deadlocks. Allow at most escape_tol of shrinkage, and prefer slow
                 # "creep" manoeuvres that keep the most clearance over the policy's (often aggressive) action.
