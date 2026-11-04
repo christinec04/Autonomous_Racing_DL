@@ -27,6 +27,8 @@ RESULTS = {
     "tune_apf.json": "Grid search of APF gains for the PID+APF baseline",
     "eval_ppo_s0.json": "Step 4 race evaluation of seed-0 PPO models (with/without shield, cross-combinations)",
     "summary.md": "Merged race results, metric targets, Mann-Whitney U tests (scripts/analyze.py)",
+    "gg_diagrams.png": "g-g diagrams per controller (scripts/plot_gg.py)",
+    "shield_map.png": "Where on track the shield intervenes, 4 races (scripts/plot_shield_map.py)",
     "training_curves.png": "Training curves for all runs (crash rate, shield activity, unshielded solo lap)",
 }
 
