@@ -48,6 +48,8 @@ class EnvConfig:
     # The APF shapes every command (contrast with our shield, which acts only when needed).
     residual: bool = False
     residual_scale: float = 0.3
+    # shield dropout: per-episode probability that the shield is active (1.0 = always)
+    shield_prob: float = 1.0
     tcs: bool = True  # traction control on all cars
     tire: str = "saturated"  # saturated (friction circle) | linear (stock F1TENTH)
     seed: int = 0
@@ -185,6 +187,7 @@ class RaceEnv(gym.Env):
         self.prev_action = np.zeros(2)
         self.prog_hist = []
         self.shield.reset()
+        self.shield_on = c.shield_prob >= 1.0 or self.rng.random() < c.shield_prob
         if c.residual:
             self.base_pid = PIDFollower(self.cl, c.control_dt, speed_scale=0.85, mu=self.mu)
             self.base_apf.reset()
@@ -222,7 +225,10 @@ class RaceEnv(gym.Env):
         else:
             a_rl = self.to_physical(action)
         ego = self.sim.unwrapped.sim.agents[0]
-        a_final, lam, sinfo = self.shield(a_rl, st[0].copy(), ego.steer_buffer.copy(), self.scan, near, opps_world)
+        if self.shield_on:
+            a_final, lam, sinfo = self.shield(a_rl, st[0].copy(), ego.steer_buffer.copy(), self.scan, near, opps_world)
+        else:
+            a_final, lam, sinfo = self.shield.clip_action(np.asarray(a_rl, float)), 0.0, {}
         opp_a = self._opp_actions(st)
         acts = np.array([a_final] + opp_a)
 
