@@ -99,6 +99,8 @@ SHIELD_FOR = {
     "ppo_residual": dict(mode="off"),  # ResRace-style: APF base inside the env
     "ppo_residual_apf": dict(mode="conditioned_fallback", reach="grip"),  # residual policy + our shield on top
     "ppo_additive": dict(mode="additive", reach="fixed"),  # PPO trained with the proposal's Eq. 2/3 shield
+    "ppo_apf_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),  # with the deadlock fix
+    "ppo_residual_apf_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),
 }
 
 
@@ -148,7 +150,8 @@ def run_race(job):
     lap_times = list(np.diff([0.0] + lap_marks))
     mg = env.mu * G
     comb = np.hypot(np.array(glat), np.array(glon)) / mg
-    return dict(controller=label, seed=seed, randomize=randomize, laps_done=float(laps_done),
+    return dict(controller=label, seed=seed, randomize=randomize, laps_done=float(laps_done), laps_target=laps,
+                stuck=bool(not (wall or car) and len(lap_marks) < laps),
                 lap_times=lap_times, wall=bool(wall), car=bool(car), dnf=bool(wall or car),
                 overtake_attempts=ot.attempts, overtake_successes=ot.successes,
                 shield_freq=float(np.mean(np.array(lams) > 0)), lam_mean=float(np.mean(lams)),
@@ -168,7 +171,10 @@ def summarize(res):
         att = sum(r["overtake_attempts"] for r in R)
         suc = sum(r["overtake_successes"] for r in R)
         out[c] = dict(
-            races=len(R), finished=sum(not r["dnf"] for r in R),
+            races=len(R),
+            # finished = completed every lap; stuck = no collision but stopped making progress (shield deadlock)
+            finished=sum((not r["dnf"]) and len(r["lap_times"]) >= r.get("laps_target", 5) for r in R),
+            stuck=sum((not r["dnf"]) and len(r["lap_times"]) < r.get("laps_target", 5) for r in R),
             lap_mean=float(np.mean(laps)) if laps else None, lap_std=float(np.std(laps)) if laps else None,
             lap_best=float(np.min(laps)) if laps else None,
             first_lap_mean=float(np.mean(first)) if first else None,
@@ -243,7 +249,7 @@ if __name__ == "__main__":
         report[key] = dict(summary=summ, targets=check_targets(summ))
         print(f"\n=== {key} ===")
         for c, s in summ.items():
-            print(f"{c:13s} finished {s['finished']}/{s['races']}  lap {s['lap_mean'] and round(s['lap_mean'],2)}"
+            print(f"{c:13s} finished {s['finished']}/{s['races']} (stuck {s['stuck']})  lap {s['lap_mean'] and round(s['lap_mean'],2)}"
                   f" (best {s['lap_best'] and round(s['lap_best'],2)})  coll/10laps {s['collisions_per_10_laps']:.2f}"
                   f" (wall {s['wall']}, car {s['car']})  passes/race {s['passes_per_race']:.2f}"
                   f" ot {s['overtake_successes']}/{s['overtake_attempts']}  shield {s['shield_freq']:.2f}"

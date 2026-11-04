@@ -1,6 +1,6 @@
 # Race results
 
-Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `eval_residual_apf_s0.json`. 20 races x 5 laps per controller, 3 opponents, DNF on first collision. Clean lap = mean over laps 2-5 (lap 1 is a standing start).
+Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `eval_residual_apf_s0.json`, `eval_ppo_shield_s1.json`. 20 races x 5 laps per controller, 3 opponents, DNF on first collision. Clean lap = mean over laps 2-5 (lap 1 is a standing start).
 
 ## nominal
 
@@ -14,6 +14,7 @@ Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `ev
 | residual PPO + our shield at race time | 18/20 | 32.70 | 31.32 | 0.36 (0, 2) | 2.15 | 100% (43/43) | 20% | 13.7% | 5.0% |
 | PID + APF | 9/20 | 43.91 | 36.04 | 1.75 (4, 7) | 1.25 | 66% (25/38) | 93% | 2.5% | 0.6% |
 | Pure Pursuit | 0/20 | - | - | 61.35 (0, 20) | 0.00 | - (0/0) | 0% | 11.8% | 0.0% |
+| ppo_apf@s1 | 16/20 | 32.71 | 31.16 | 1.31 (3, 1) | 1.75 | 70% (35/50) | 24% | 30.3% | 4.0% |
 
 Targets for PPO + shield (ours) (nominal):
 
@@ -37,6 +38,7 @@ Mann-Whitney U p-values, PPO + shield (ours) vs each controller (per-race values
 | residual PPO + our shield at race time | 0.654 | 0.36 | 0.0114 | 5.05e-05 |
 | PID + APF | 0.00926 | 0.00829 | 0.0859 | 2.16e-05 |
 | Pure Pursuit | 8.64e-08 | 3.28e-07 | 6.8e-08 | - |
+| ppo_apf@s1 | 0.696 | 0.0662 | 0.000563 | 0.00165 |
 
 ## randomized
 
@@ -50,6 +52,7 @@ Mann-Whitney U p-values, PPO + shield (ours) vs each controller (per-race values
 | residual PPO + our shield at race time | 17/20 | 32.43 | 31.36 | 0.61 (0, 3) | 2.45 | 96% (49/51) | 20% | 12.1% | 4.9% |
 | PID + APF | 12/20 | 44.02 | 35.48 | 1.18 (2, 6) | 1.40 | 70% (28/40) | 93% | 2.3% | 0.8% |
 | Pure Pursuit | 0/20 | - | - | 61.52 (0, 20) | 0.00 | - (0/0) | 0% | 8.5% | 0.0% |
+| ppo_apf@s1 | 14/20 | - | - | 3.36 (4, 2) | 1.15 | 72% (23/32) | 22% | 24.6% | 2.9% |
 
 Targets for PPO + shield (ours) (randomized):
 
@@ -73,3 +76,4 @@ Mann-Whitney U p-values, PPO + shield (ours) vs each controller (per-race values
 | residual PPO + our shield at race time | 0.696 | 0.826 | 0.561 | 0.000175 |
 | PID + APF | 0.178 | 0.0386 | 0.695 | 5.07e-05 |
 | Pure Pursuit | 3.71e-07 | 1.05e-06 | 7.9e-08 | - |
+| ppo_apf@s1 | 0.482 | 0.0111 | 0.00364 | - |

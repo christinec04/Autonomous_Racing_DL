@@ -2,11 +2,13 @@
  "git_commit": "0152028",
  "git_dirty": [],
  "command": "python -m racing.train --shield cond_fb_grip --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 1 --out runs/ppo_shield_s1",
- "status": "running",
+ "status": "finished",
  "started": "2026-11-04 14:03:40",
  "stages_done": [
   1,
-  2
+  2,
+  3
  ],
- "steps_done": 2500000
+ "steps_done": 3500000,
+ "finished": "2026-11-04 15:45:44"
 }
