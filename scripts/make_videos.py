@@ -35,5 +35,7 @@ if __name__ == "__main__":
         clip("ppo_residual_apf", "runs/ppo_residual_s0/model_stage3.zip", "Residual PPO + our shield: race (red = shield intervening)", "07_ppo_residual_shield_race.mp4")
     elif which == "batch5":
         clip("ppo_apf_esc", "runs/ppo_shield_s0/model_stage3.zip", "PPO + final shield (deadlock escape): race (red = shield)", "08_ppo_final_shield_race.mp4", tire="saturated_v2")
+    elif which == "batch6":
+        clip("ppo_additive", "runs/ppo_additive_s0/model_stage3.zip", "PPO trained with the additive Eq. 2/3 shield: safe but timid", "09_ppo_additive_shield_race.mp4", tire="saturated_v2")
     elif which == "batch3":
         clip("ppo_residual", "runs/ppo_residual_s0/model_stage3.zip", "Residual PPO on PID+APF (ResRace-style): race", "06_ppo_residual_race.mp4")
