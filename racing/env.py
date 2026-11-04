@@ -176,6 +176,7 @@ class RaceEnv(gym.Env):
         self.prog[:] = [0.0] + list(gaps)
         self.t = 0.0
         self.prev_action = np.zeros(2)
+        self.prog_hist = []
         self.shield.reset()
         self.pass_state = {i: {"ahead_since": None, "rewarded": False} for i in range(1, self.n)}
         self.scan = self.sim.unwrapped.sim.agent_scans[0].copy()
@@ -247,12 +248,16 @@ class RaceEnv(gym.Env):
              - c.w3_shield * lam - c.w4_collision * collided)
         self.prev_action = self.to_normalized(a_final)
         terminated = collided
-        truncated = self.t >= c.episode_time - 1e-9
+        # stuck (e.g. shield stopped the car and the policy does not recover): end the episode
+        self.prog_hist.append(self.prog[0])
+        stuck = len(self.prog_hist) > 125 and self.prog[0] - self.prog_hist[-125] < 1.0
+        truncated = self.t >= c.episode_time - 1e-9 or stuck
         info = {
             "lambda": lam, "wall": wall, "car": car, "passes": passes, "progress": float(self.prog[0]),
             "rho": sinfo.get("rho", 0.0), "fallback": sinfo.get("fallback", False),
             "a_rl": a_rl, "a_final": a_final, "t": self.t,
             "state": st[0].copy(), "opp_prog": self.prog[1:].copy(), "opp_lat": self.lat[1:].copy(),
-            "lat": float(self.lat[0]), "mu": self.mu,
+            "lat": float(self.lat[0]), "mu": self.mu, "opp_v": st[1:, 3].copy(),
+            "hdg_err": float(self.hdg_err[0]),
         }
         return self._obs(st, self.scan), float(r), terminated, truncated, info

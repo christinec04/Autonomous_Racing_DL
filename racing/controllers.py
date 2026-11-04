@@ -80,9 +80,11 @@ class PIDFollower:
     """
 
     def __init__(self, cl: Centerline, dt: float, speed_scale: float = 1.0, v_cap: float = 20.0,
-                 offset: float = 0.0, mu: float = DEFAULT_PARAMS["mu"], preview: float = 0.6):
+                 offset: float = 0.0, mu: float = DEFAULT_PARAMS["mu"], preview: float = 0.3,
+                 kp: float = 0.3, ki: float = 0.05, kd: float = 0.0, k_head: float = 0.6):
         self.cl = cl
-        self.pid = PID(kp=0.9, ki=0.05, kd=0.08, dt=dt)
+        self.k_head = k_head
+        self.pid = PID(kp=kp, ki=ki, kd=kd, dt=dt)
         self.profile = curvature_speed_profile(cl, mu, v_cap) * speed_scale
         self.offset = offset
         self.preview = preview
@@ -93,12 +95,16 @@ class PIDFollower:
         self.hint = None
 
     def act(self, x, y, yaw, v):
-        i, s, d, _ = self.cl.project(x, y, self.hint)
+        i, s, d, h = self.cl.project(x, y, self.hint)
         self.hint = i
-        # preview point ahead to absorb steering lag
-        j = int((i + max(1, int((self.preview + 0.1 * v) / 0.1))) % len(self.cl.xy))
-        h_err = (self.cl.heading[j] - yaw + np.pi) % (2 * np.pi) - np.pi
+        n = len(self.cl.xy)
+        # curvature feed-forward, averaged over a short preview window
+        j0 = int(self.preview / 0.1)
+        idx = (i + j0 + np.arange(-3, 4)) % n
+        kappa = float(np.mean(self.cl.curvature[idx]))
+        ff = np.arctan((DEFAULT_PARAMS["lf"] + DEFAULT_PARAMS["lr"]) * kappa)
+        h_err = (h - yaw + np.pi) % (2 * np.pi) - np.pi
         e = (self.offset - d)  # +: need to go left
-        steer = self.pid(e) + 0.9 * h_err
+        steer = ff + self.pid(e) + self.k_head * h_err
         steer = float(np.clip(steer, DEFAULT_PARAMS["s_min"], DEFAULT_PARAMS["s_max"]))
         return steer, float(self.profile[i])
