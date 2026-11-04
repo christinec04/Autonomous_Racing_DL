@@ -75,10 +75,13 @@ from f1tenth_gym.envs import action as _act  # noqa: E402
 
 _STOCK_SPEED_ACT = _act.SpeedAction.act
 TCS_MARGIN = 0.95  # use at most 95% of the friction circle
+SLIDE_BETA = 0.26  # ~15 deg body slip: car is sliding, v*yaw_rate no longer measures lateral load
 
 
 def _speed_act_tcs(self, action, state, params):
     a = _act.pid_accl(action, state[3], params["a_max"], params["v_max"], params["v_min"])
+    if len(state) >= 7 and abs(state[6]) > SLIDE_BETA:
+        return a  # already sliding: wheels may lock, full braking allowed (ABS off)
     if len(state) >= 6:
         mg = TCS_MARGIN * params["mu"] * 9.81
         a_lat = state[3] * state[5]

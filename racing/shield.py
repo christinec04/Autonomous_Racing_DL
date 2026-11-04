@@ -62,6 +62,7 @@ class ShieldConfig:
     max_pred_time: float = 3.0
     blend_levels: tuple = (0.25, 0.5, 0.75, 1.0)
     beam_stride: int = 3
+    beta_max: float = 0.35  # predicted body slip above ~20 deg = loss of control
     use_map: bool = True  # add known track walls (lidar is occluded by opponents)
     backup_lookahead: float = 1.2
     opp_brake: float = 6.0  # worst-case opponent deceleration assumed in prediction [m/s^2]
@@ -183,7 +184,7 @@ class APFShield:
             self.sat, self.tcs, 0.95, fixed, np.ascontiguousarray(pts, dtype=np.float64),
             np.ascontiguousarray(lane_xy, dtype=np.float64), la, opp, cfg.opp_brake,
             int(round(cfg.commit_time / 0.01)), int(cfg.max_pred_time / 0.01), 0.01, 2,
-            CIRC_OFF, CIRC_R, WB)
+            CIRC_OFF, CIRC_R, WB, cfg.beta_max)
 
     # ------------------------------------------------------------------- main
     def __call__(self, a_rl, x7, steer_buf, scan, opps_ego, opps_world):

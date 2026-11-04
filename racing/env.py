@@ -44,6 +44,10 @@ class EnvConfig:
     w5_pass: float = 2.0
     shield: ShieldConfig = field(default_factory=ShieldConfig)
     curvature_preview: bool = False  # optional extra observation (experiment)
+    # ResRace/RaceMOP-style residual policy: final = PID+APF base action + scale * policy action.
+    # The APF shapes every command (contrast with our shield, which acts only when needed).
+    residual: bool = False
+    residual_scale: float = 0.3
     tcs: bool = True  # traction control on all cars
     tire: str = "saturated"  # saturated (friction circle) | linear (stock F1TENTH)
     seed: int = 0
@@ -69,6 +73,9 @@ class RaceEnv(gym.Env):
         self.observation_space = gym.spaces.Box(-np.inf, np.inf, (n_obs,), np.float32)
         self.action_space = gym.spaces.Box(-1.0, 1.0, (2,), np.float32)
         self.mu = DEFAULT_PARAMS["mu"]
+        if self.cfg.residual:
+            self.base_apf = APFShield(ShieldConfig(mode="additive", reach="fixed", k_steer=0.3, k_speed=1.5,
+                                                   d_min=0.3, smooth=0.8), self.cfg.control_dt, self.cl)
 
     # ------------------------------------------------------------- helpers
     def _states(self):
@@ -176,7 +183,11 @@ class RaceEnv(gym.Env):
         self.prog[:] = [0.0] + list(gaps)
         self.t = 0.0
         self.prev_action = np.zeros(2)
+        self.prog_hist = []
         self.shield.reset()
+        if c.residual:
+            self.base_pid = PIDFollower(self.cl, c.control_dt, speed_scale=0.85, mu=self.mu)
+            self.base_apf.reset()
         self.pass_state = {i: {"ahead_since": None, "rewarded": False} for i in range(1, self.n)}
         self.scan = self.sim.unwrapped.sim.agent_scans[0].copy()
         return self._obs(st, self.scan), {}
@@ -200,9 +211,16 @@ class RaceEnv(gym.Env):
     def step(self, action):
         c = self.cfg
         st = self._states()
-        a_rl = self.to_physical(action)
         near, allopp = self._opponents_rel(st, 3)
         opps_world = [(st[i, 0], st[i, 1], st[i, 4], st[i, 3], st[i, 5]) for i in range(1, self.n)]
+        if c.residual:
+            e = st[0]
+            base = np.array(self.base_pid.act(e[0], e[1], e[4], e[3]))
+            base, _, _ = self.base_apf(base, e.copy(), None, self.scan, near, opps_world)
+            act = np.clip(np.asarray(action, float), -1, 1)
+            a_rl = base + c.residual_scale * np.array([act[0] * S_MAX, act[1] * (c.ego_v_max - c.ego_v_min) / 2])
+        else:
+            a_rl = self.to_physical(action)
         ego = self.sim.unwrapped.sim.agents[0]
         a_final, lam, sinfo = self.shield(a_rl, st[0].copy(), ego.steer_buffer.copy(), self.scan, near, opps_world)
         opp_a = self._opp_actions(st)
@@ -247,12 +265,16 @@ class RaceEnv(gym.Env):
              - c.w3_shield * lam - c.w4_collision * collided)
         self.prev_action = self.to_normalized(a_final)
         terminated = collided
-        truncated = self.t >= c.episode_time - 1e-9
+        # stuck (e.g. shield stopped the car and the policy does not recover): end the episode
+        self.prog_hist.append(self.prog[0])
+        stuck = len(self.prog_hist) > 125 and self.prog[0] - self.prog_hist[-125] < 1.0
+        truncated = self.t >= c.episode_time - 1e-9 or stuck
         info = {
             "lambda": lam, "wall": wall, "car": car, "passes": passes, "progress": float(self.prog[0]),
             "rho": sinfo.get("rho", 0.0), "fallback": sinfo.get("fallback", False),
             "a_rl": a_rl, "a_final": a_final, "t": self.t,
             "state": st[0].copy(), "opp_prog": self.prog[1:].copy(), "opp_lat": self.lat[1:].copy(),
-            "lat": float(self.lat[0]), "mu": self.mu,
+            "lat": float(self.lat[0]), "mu": self.mu, "opp_v": st[1:, 3].copy(),
+            "hdg_err": float(self.hdg_err[0]),
         }
         return self._obs(st, self.scan), float(r), terminated, truncated, info
