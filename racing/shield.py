@@ -25,6 +25,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from .predict import rollout_clearance, backup_steer
 from .sim import DEFAULT_PARAMS as P, G
 
 WB = P["lf"] + P["lr"]
@@ -55,12 +56,15 @@ class ShieldConfig:
     opp_a: float = 0.6  # opponent ellipse extra length along its heading [m]
     opp_b: float = 0.15  # opponent ellipse extra width [m]
     smooth: float = 0.5  # EMA on the additive correction (anti-oscillation)
-    c_safe: float = 0.03  # predicted clearance below this counts as a collision
+    c_safe: float = 0.05  # predicted clearance below this counts as a collision (model-error margin)
     pred_dt: float = 0.05
-    commit_time: float = 0.08  # how long the policy action is held before the backup starts
+    commit_time: float = 0.04  # one control step: how long the policy action is held before the backup starts
     max_pred_time: float = 3.0
     blend_levels: tuple = (0.25, 0.5, 0.75, 1.0)
     beam_stride: int = 3
+    use_map: bool = True  # add known track walls (lidar is occluded by opponents)
+    backup_lookahead: float = 1.2
+    opp_brake: float = 6.0  # worst-case opponent deceleration assumed in prediction [m/s^2]
 
 
 def available_decel(cfg: ShieldConfig, v: float, yaw_rate: float) -> float:
@@ -72,9 +76,18 @@ def available_decel(cfg: ShieldConfig, v: float, yaw_rate: float) -> float:
 
 
 class APFShield:
-    def __init__(self, cfg: ShieldConfig, control_dt: float):
+    def __init__(self, cfg: ShieldConfig, control_dt: float, centerline=None, half_width: float = 1.4):
         self.cfg = cfg
         self.dt = control_dt
+        self.cl = centerline
+        self.p = np.array([P[k] for k in ("mu", "C_Sf", "C_Sr", "lf", "lr", "h", "m", "I", "s_min", "s_max",
+                                          "sv_min", "sv_max", "v_switch", "a_max", "v_min", "v_max")], float)
+        self.sat = True
+        self.tcs = True
+        if centerline is not None:
+            n = np.stack([-np.sin(centerline.heading), np.cos(centerline.heading)], 1)
+            self.walls = np.concatenate([centerline.xy + half_width * n, centerline.xy - half_width * n])
+            self.half_width = half_width
         self.reset()
 
     def reset(self):
@@ -123,78 +136,60 @@ class APFShield:
         d_speed = -v * float(np.clip(cfg.k_speed * max(-F[0], 0.0), 0.0, 1.0))
         return np.array([d_steer, d_speed])
 
+    def brake_cmd(self, v, a):
+        """Speed command that makes F1TENTH's speed P-loop (gain ~19/s) brake at ~a m/s^2."""
+        return max(0.0, v - a / 19.0 - a * self.dt)
+
     @staticmethod
     def clip_action(a, v_lo=0.0, v_hi=20.0):
         return np.array([np.clip(a[0], -S_MAX, S_MAX), np.clip(a[1], v_lo, v_hi)])
 
     # ------------------------------------------------------------- prediction
-    def predict_clearance(self, cands, state, scan, opps_world, ab_fn):
-        """Min predicted clearance for each candidate (K,2) action.
-
-        Candidate action is held for commit_time, then a braking backup takes over:
-        brake at the available deceleration while keeping the APF-style steering
-        away from the nearest points.
-        """
+    def predict_clearance(self, cands, x7, steer_buf, scan, opps_world):
+        """Min predicted clearance for each candidate (K,2) action, exact vehicle model."""
         cfg = self.cfg
-        x0, y0, yaw0, v0, d0_ = state
-        K = len(cands)
-        # static points (world frame) from the current scan
+        x0, y0, yaw0, v0 = x7[0], x7[1], x7[4], x7[3]
         idx = slice(None, None, cfg.beam_stride)
         r = scan[idx]
         keep = r < 25.0
         ang = BEAM_ANG[idx][keep] + yaw0
         pts = np.stack([x0 + r[keep] * np.cos(ang), y0 + r[keep] * np.sin(ang)], 1)
-        reach = v0 * cfg.max_pred_time + 2.0
+        reach = v0 * 1.5 + 2.0
         pts = pts[np.hypot(pts[:, 0] - x0, pts[:, 1] - y0) < reach]
-
-        x = np.full(K, x0); y = np.full(K, y0); yaw = np.full(K, yaw0)
-        v = np.full(K, v0); dl = np.full(K, d0_)
-        clear = np.full(K, np.inf)
-        T = int(cfg.max_pred_time / cfg.pred_dt)
-        n_commit = max(1, int(round(cfg.commit_time / cfg.pred_dt)))
-        dt = cfg.pred_dt
-        for t in range(T):
-            if t < n_commit:
-                steer_cmd, v_cmd = cands[:, 0], cands[:, 1]
-                acc = np.clip(10 * cfg.a_max / 20 * (v_cmd - v), -cfg.a_max, cfg.a_max)
-                acc = np.where(v_cmd < v, np.clip(19.0 * (v_cmd - v), -cfg.a_max, 0), acc)
-            else:
-                steer_cmd = dl  # hold steering during the backup
-                ab = np.array([ab_fn(vi, vi * np.tan(di) / WB) for vi, di in zip(v, dl)])
-                acc = -ab
-            dl = dl + np.clip(steer_cmd - dl, -SV_MAX * dt, SV_MAX * dt)
-            v = np.maximum(v + acc * dt, 0.0)
-            yaw = yaw + v / WB * np.tan(dl) * dt
-            x = x + v * np.cos(yaw) * dt
-            y = y + v * np.sin(yaw) * dt
-            cx = x[:, None] + CIRC_OFF[None] * np.cos(yaw)[:, None]  # (K,3)
-            cy = y[:, None] + CIRC_OFF[None] * np.sin(yaw)[:, None]
+        for o in opps_world:  # lidar hits on opponents are handled as moving obstacles
             if len(pts):
-                d = np.hypot(cx[..., None] - pts[:, 0], cy[..., None] - pts[:, 1])  # (K,3,P)
-                clear = np.minimum(clear, d.min(axis=(1, 2)) - CIRC_R)
-            tt = (t + 1) * dt
-            for o in opps_world:
-                ox, oy, oyaw, ov, ow = o
-                if abs(ow) > 1e-3:
-                    oyaw_t = oyaw + ow * tt
-                    ox_t = ox + ov / ow * (np.sin(oyaw_t) - np.sin(oyaw))
-                    oy_t = oy - ov / ow * (np.cos(oyaw_t) - np.cos(oyaw))
-                else:
-                    oyaw_t = oyaw
-                    ox_t, oy_t = ox + ov * np.cos(oyaw) * tt, oy + ov * np.sin(oyaw) * tt
-                ocx = ox_t + CIRC_OFF * np.cos(oyaw_t)
-                ocy = oy_t + CIRC_OFF * np.sin(oyaw_t)
-                d = np.hypot(cx[..., None] - ocx, cy[..., None] - ocy)  # (K,3,3)
-                clear = np.minimum(clear, d.min(axis=(1, 2)) - 2 * CIRC_R)
-            if np.all(v < 0.05):
-                break
-        return clear
+                pts = pts[np.hypot(pts[:, 0] - o[0], pts[:, 1] - o[1]) > 0.5]
+        lane_xy = np.zeros((60, 2)); la = 12
+        if cfg.use_map and self.cl is not None:
+            w = self.walls[np.hypot(self.walls[:, 0] - x0, self.walls[:, 1] - y0) < reach]
+            pts = np.concatenate([pts, w]) if len(pts) else w
+            ci, _, lat0, _ = self.cl.project(x0, y0)
+            lane = float(np.clip(lat0, -self.half_width + 0.4, self.half_width - 0.4))
+            win = (ci + np.arange(-10, int(reach / 0.1) + 40)) % len(self.cl.xy)
+            ch = self.cl.heading[win]
+            lane_xy = self.cl.xy[win] + lane * np.stack([-np.sin(ch), np.cos(ch)], 1)
+            la = int(cfg.backup_lookahead / 0.1)
+        if len(pts) == 0:
+            pts = np.full((1, 2), 1e6)
+        opp = np.array([[o[0], o[1], o[2], o[3], o[4] / max(o[3], 0.3)] for o in opps_world]).reshape(-1, 5)
+        buf = np.zeros(2)
+        sb = np.asarray(steer_buf, float)
+        if len(sb) >= 1: buf[0] = sb[0]
+        if len(sb) >= 2: buf[1] = sb[1]
+        fixed = cfg.a_brake_fixed if cfg.reach == "fixed" else 0.0
+        self._lane = (np.ascontiguousarray(lane_xy, dtype=np.float64), la)
+        return rollout_clearance(
+            np.ascontiguousarray(cands, dtype=np.float64), np.asarray(x7, np.float64), buf, self.p,
+            self.sat, self.tcs, 0.95, fixed, np.ascontiguousarray(pts, dtype=np.float64),
+            np.ascontiguousarray(lane_xy, dtype=np.float64), la, opp, cfg.opp_brake,
+            int(round(cfg.commit_time / 0.01)), int(cfg.max_pred_time / 0.01), 0.01, 2,
+            CIRC_OFF, CIRC_R, WB)
 
     # ------------------------------------------------------------------- main
-    def __call__(self, a_rl, state, scan, opps_ego, opps_world):
-        """state = (x, y, yaw, v, steer, yaw_rate). Returns (a_final, lambda, info)."""
+    def __call__(self, a_rl, x7, steer_buf, scan, opps_ego, opps_world):
+        """x7 = F1TENTH ST state (x, y, delta, v, yaw, yaw_rate, beta). Returns (a_final, lambda, info)."""
         cfg = self.cfg
-        x, y, yaw, v, steer, yaw_rate = state
+        x, y, steer, v, yaw, yaw_rate, beta = x7
         a_rl = self.clip_action(np.asarray(a_rl, float))
         if cfg.mode == "off":
             return a_rl, 0.0, {"rho": 0.0, "fallback": False}
@@ -209,20 +204,16 @@ class APFShield:
             lam = float(np.clip(w, 0, 1))
             return a, lam, {"rho": rho, "fallback": False}
 
-        ab_fn = lambda vi, yr: available_decel(cfg, vi, yr)
-        st = (x, y, yaw, v, steer)
-        c_rl = self.predict_clearance(a_rl[None], st, scan, opps_world, ab_fn)[0]
+        pc = lambda c: self.predict_clearance(c, x7, steer_buf, scan, opps_world)
+        c_rl = pc(a_rl[None])[0]
         if c_rl >= cfg.c_safe:
             return a_rl, 0.0, {"rho": rho, "fallback": False, "c_pred": float(c_rl)}
 
-        # corrective direction: APF steering + strong braking
-        a_corr = self.clip_action(np.array([
-            a_rl[0] + (a_apf[0] if abs(a_apf[0]) > 1e-3 else 0.0),
-            min(a_rl[1] + a_apf[1], v - ab * self.dt * 2),
-        ]))
+        # corrective direction: APF steering + braking (traction control limits the rate)
+        a_corr = self.clip_action(np.array([a_rl[0] + a_apf[0], min(a_rl[1] + a_apf[1], 0.0)]))
         lams = np.array(cfg.blend_levels)
         cands = (1 - lams)[:, None] * a_rl[None] + lams[:, None] * a_corr[None]
-        cl = self.predict_clearance(cands, st, scan, opps_world, ab_fn)
+        cl = pc(cands)
         ok = np.nonzero(cl >= cfg.c_safe)[0]
         if len(ok):
             i = ok[0]
@@ -230,9 +221,15 @@ class APFShield:
         if cfg.mode == "conditioned":
             return a_corr, 1.0, {"rho": rho, "fallback": False, "c_pred": float(cl[-1])}
 
-        # fallback: replace with the safest braking manoeuvre
-        steers = np.clip(np.array([a_corr[0], -S_MAX, -S_MAX / 2, 0.0, S_MAX / 2, S_MAX, steer]), -S_MAX, S_MAX)
+        # fallback: replace the action. First candidate (NaN steer) is the backup
+        # manoeuvre itself (brake + hold lane), which keeps the safety check
+        # recursively feasible; the rest are fixed-steer braking manoeuvres.
+        steers = np.array([np.nan, a_corr[0], -S_MAX, -S_MAX / 2, 0.0, S_MAX / 2, S_MAX, steer])
         fb = np.stack([steers, np.zeros_like(steers)], 1)
-        fb_cl = self.predict_clearance(fb, st, scan, opps_world, ab_fn)
-        j = int(np.argmax(fb_cl))
-        return fb[j], 1.0, {"rho": rho, "fallback": True, "c_pred": float(fb_cl[j])}
+        fb_cl = pc(fb)
+        j = 0 if fb_cl[0] >= cfg.c_safe else int(np.argmax(fb_cl))
+        a = fb[j].copy()
+        if np.isnan(a[0]):
+            lane_xy, la = self._lane
+            a[0] = float(np.clip(backup_steer(np.asarray(x7, np.float64), lane_xy, la, WB), -S_MAX, S_MAX))
+        return a, 1.0, {"rho": rho, "fallback": True, "c_pred": float(fb_cl[j])}

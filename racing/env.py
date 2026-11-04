@@ -14,6 +14,7 @@ import numpy as np
 
 from .controllers import PIDFollower, PurePursuit
 from .shield import APFShield, ShieldConfig, BEAM_ANG
+from .tires import set_tire_model, set_traction_control
 from .sim import DEFAULT_PARAMS, Centerline, make_f110, set_scan_flags
 
 S_MAX = DEFAULT_PARAMS["s_max"]
@@ -43,6 +44,8 @@ class EnvConfig:
     w5_pass: float = 2.0
     shield: ShieldConfig = field(default_factory=ShieldConfig)
     curvature_preview: bool = False  # optional extra observation (experiment)
+    tcs: bool = True  # traction control on all cars
+    tire: str = "saturated"  # saturated (friction circle) | linear (stock F1TENTH)
     seed: int = 0
 
 
@@ -52,11 +55,15 @@ class RaceEnv(gym.Env):
     def __init__(self, cfg: EnvConfig | None = None):
         super().__init__()
         self.cfg = cfg or EnvConfig()
+        set_tire_model(self.cfg.tire)
+        set_traction_control(self.cfg.tcs)
         self.cl = Centerline.load()
         self.n = 1 + self.cfg.n_opp
         self.sim = make_f110(self.n, timestep=self.cfg.phys_dt, seed=self.cfg.seed)
         self.sub = int(round(self.cfg.control_dt / self.cfg.phys_dt))
-        self.shield = APFShield(self.cfg.shield, self.cfg.control_dt)
+        self.shield = APFShield(self.cfg.shield, self.cfg.control_dt, self.cl)
+        self.shield.sat = self.cfg.tire == "saturated"
+        self.shield.tcs = self.cfg.tcs
         self.rng = np.random.default_rng(self.cfg.seed)
         n_obs = N_LIDAR_OBS + 5 + 2 * 5 + 2 + (10 if self.cfg.curvature_preview else 0)
         self.observation_space = gym.spaces.Box(-np.inf, np.inf, (n_obs,), np.float32)
@@ -196,8 +203,8 @@ class RaceEnv(gym.Env):
         a_rl = self.to_physical(action)
         near, allopp = self._opponents_rel(st, 3)
         opps_world = [(st[i, 0], st[i, 1], st[i, 4], st[i, 3], st[i, 5]) for i in range(1, self.n)]
-        sstate = (st[0, 0], st[0, 1], st[0, 4], st[0, 3], st[0, 2], st[0, 5])
-        a_final, lam, sinfo = self.shield(a_rl, sstate, self.scan, near, opps_world)
+        ego = self.sim.unwrapped.sim.agents[0]
+        a_final, lam, sinfo = self.shield(a_rl, st[0].copy(), ego.steer_buffer.copy(), self.scan, near, opps_world)
         opp_a = self._opp_actions(st)
         acts = np.array([a_final] + opp_a)
 
