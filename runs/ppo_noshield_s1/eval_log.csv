@@ -1,0 +1,4 @@
+step,shielded_clean,shielded_lap,shielded_lam_freq,unshielded_clean,unshielded_lap,unshielded_progress
+50001,False,,0.32091097308488614,False,,84.32993776309692
+100002,False,,0.0006666666666666666,False,,88.69791523579397
+150003,False,,0.004666666666666667,False,,175.99968669728338
