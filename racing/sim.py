@@ -87,3 +87,86 @@ def make_f110(num_agents: int, params: dict | None = None, timestep: float = 0.0
             "params": p, "seed": seed, "reset_config": {"type": "cl_grid_static"},
         },
     )
+
+
+# ---------------------------------------------------------------------------
+# Speed patches for F1TENTH Gym (behaviour-preserving for what we use).
+# 1. Only compute a car's lidar scan when flagged (_scan_now). Ego scans every
+#    physics step (wall collision is detected from the scan via iTTC);
+#    opponents scan once per control step.
+# 2. Ray-cast other cars into a scan only when flagged (_rays_now), and skip
+#    cars that are behind the lidar's field of view or beyond range. Upstream
+#    loops over the whole scan for cars behind the car (index wrap-around).
+# ---------------------------------------------------------------------------
+from f1tenth_gym.envs import base_classes as _bc  # noqa: E402
+from f1tenth_gym.envs.laser_models import ray_cast as _ray_cast  # noqa: E402
+from f1tenth_gym.envs.collision_models import get_vertices as _get_vertices  # noqa: E402
+
+_orig_update_pose = _bc.RaceCar.update_pose
+
+
+def _update_pose(self, raw_steer, vel):
+    if getattr(self, "_scan_now", True):
+        return _orig_update_pose(self, raw_steer, vel)
+    # same as upstream but without the scan
+    if self.steer_buffer.shape[0] < self.steer_buffer_size:
+        steer = 0.0
+        self.steer_buffer = np.append(raw_steer, self.steer_buffer)
+    else:
+        steer = self.steer_buffer[-1]
+        self.steer_buffer = self.steer_buffer[:-1]
+        self.steer_buffer = np.append(raw_steer, self.steer_buffer)
+    accl, sv = self.action_type.act(action=(vel, steer), state=self.state, params=self.params)
+    self.state = self.integrator.integrate(f=self.model.f_dynamics, x=self.state,
+                                           u=np.array([sv, accl]), dt=self.time_step, params=self.params)
+    self.state[4] %= 2 * np.pi
+    return None
+
+
+def _update_scan(self, agent_scans, agent_index):
+    if not getattr(self, "_scan_now", True):
+        return
+    scan = agent_scans[agent_index]
+    self.check_ttc(scan)
+    if not getattr(self, "_rays_now", True):
+        return
+    pose = np.append(self.state[0:2], self.state[4])
+    for op in self.opp_poses:
+        dx, dy = op[0] - pose[0], op[1] - pose[1]
+        dist = np.hypot(dx, dy)
+        if dist > 30.0:
+            continue
+        rel = (np.arctan2(dy, dx) - pose[2] + np.pi) % (2 * np.pi) - np.pi
+        if dist > 0.8 and abs(rel) > 2.35 + 0.6 / dist:  # fully behind the 270 deg fov
+            continue
+        verts = _get_vertices(op, self.params["length"], self.params["width"])
+        scan = _ray_cast(pose, scan, self.scan_angles, verts)
+    agent_scans[agent_index] = scan
+
+
+def _sim_step(self, control_inputs):
+    for i, agent in enumerate(self.agents):
+        cur = agent.update_pose(control_inputs[i, 0], control_inputs[i, 1])
+        if cur is not None:
+            self.agent_scans[i, :] = cur
+        self.agent_poses[i, :] = np.append(agent.state[0:2], agent.state[4])
+        self.agent_steerings[i] = agent.state[2]
+    self.check_collision()
+    for i, agent in enumerate(self.agents):
+        agent.update_opp_poses(np.concatenate((self.agent_poses[0:i, :], self.agent_poses[i + 1:, :]), axis=0))
+        agent.update_scan(self.agent_scans, i)
+        if agent.in_collision:
+            self.collisions[i] = 1.0
+
+
+_bc.RaceCar.update_pose = _update_pose
+_bc.RaceCar.update_scan = _update_scan
+_bc.Simulator.step = _sim_step
+
+
+def set_scan_flags(env, last_substep: bool):
+    """Ego: scan every substep, ray-cast cars only on the last. Opponents: last substep only."""
+    agents = env.unwrapped.sim.agents
+    for i, a in enumerate(agents):
+        a._scan_now = (i == 0) or last_substep
+        a._rays_now = (i == 0) and last_substep
