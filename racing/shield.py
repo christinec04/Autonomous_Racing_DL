@@ -65,7 +65,8 @@ class ShieldConfig:
     beta_max: float = 0.35  # predicted body slip above ~20 deg = loss of control
     use_map: bool = True  # add known track walls (lidar is occluded by opponents)
     backup_lookahead: float = 1.2
-    escape: bool = False  # deadlock fix: inside the margin, allow actions that do not reduce clearance further
+    escape: bool = False  # deadlock fix: near/inside the margin, accept actions predicted to stay out of contact
+    escape_tol: float = 0.02  # how much predicted clearance may shrink [m] while escaping
     opp_brake: float = 6.0  # worst-case opponent deceleration assumed in prediction [m/s^2]
 
 
@@ -213,8 +214,21 @@ class APFShield:
         if cfg.escape:
             pts, opp = self._now
             c_now = current_clearance(np.asarray(x7, np.float64), pts, opp, CIRC_OFF, CIRC_R)
-            # near or inside the margin: "do not make it (much) worse", but never allow contact
-            thr = max(min(cfg.c_safe, c_now - 0.02), 0.0)
+            if c_now < cfg.c_safe + 0.02:
+                # Escape mode (near or inside the margin). Every way out shrinks the clearance a little (the rear
+                # swings out when turning away from a wall) and the 3-circle body model is ~3 cm fatter than the
+                # car, so the usual threshold deadlocks. Allow at most escape_tol of shrinkage, and prefer slow
+                # "creep" manoeuvres that keep the most clearance over the policy's (often aggressive) action.
+                thr = min(cfg.c_safe, c_now - cfg.escape_tol)
+                if c_rl >= thr:
+                    return a_rl, 0.0, {"rho": 0.0, "fallback": False, "c_pred": float(c_rl), "escape": True}
+                st_ = np.array([-S_MAX / 4, -S_MAX / 8, 0.0, S_MAX / 8, S_MAX / 4])
+                creep = np.array([[a, sp] for sp in (1.0, 2.0) for a in st_])
+                cc = pc(creep)
+                ok = np.nonzero(cc >= thr)[0]
+                if len(ok):
+                    j = ok[np.argmax(cc[ok])]
+                    return creep[j], 1.0, {"rho": 0.0, "fallback": True, "c_pred": float(cc[j]), "escape": True}
         if c_rl >= thr:
             return a_rl, 0.0, {"rho": rho, "fallback": False, "c_pred": float(c_rl)}
 
