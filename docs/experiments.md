@@ -75,6 +75,22 @@ Reading: a 10 cm prediction margin looks strictly better than 5 cm (no collision
 also collision-free but more timid (fewer passes, shield on more). The fallback matters; the proposal's additive
 form fails with a learned driver too. 10 races is a small sample: confirmation run E15.
 
+## E15. Confirmation of E14 on the full protocol (20 races, nominal + randomised)
+`python -m scripts.shield_confirm`, then `python -m scripts.analyze results/shield_confirm.json --out results/shield_confirm_summary.md`.
+
+| shield setting | finished (nom / rand) | collisions / 10 laps (nom / rand) | passes / race (nom / rand) | shield active |
+|---|---|---|---|---|
+| default: grip reach, c_safe 0.05 | 17 / 16 | 0.38 / 0.63 | 2.65 / 2.50 | 6% / 10% |
+| grip reach, c_safe 0.10 | 18 / 18 | 0.30 / 0.33 | 2.35 / 2.35 | 8% / 10% |
+| fixed reach 6 m/s^2, c_safe 0.05 | 20 / 18 | 0.00 / 0.29 | 2.00 / 2.30 | 10% / 9% |
+| fixed reach, c_safe 0.10 | 19 / 20 | 0.16 / 0.00 | 2.05 / 1.90 | 12% / 13% |
+
+A safety-vs-aggressiveness dial: the more conservative settings remove most collisions but cost overtakes and use
+the shield more (missing the <= 10% target). Only "fixed, c_safe 0.10" vs default under randomisation is significant
+for collisions (Mann-Whitney p = 0.04); 20 races are not enough to separate the others. On grader comment 2: grip
+reach is the more aggressive and fixed reach the more conservative choice; neither dominates. Note: the default row
+reproduces E7 exactly (same seeds, deterministic evaluation).
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.

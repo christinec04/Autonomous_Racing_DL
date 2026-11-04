@@ -47,7 +47,7 @@ def fmt(v, f="{:.2f}"):
     return "-" if v is None else f.format(v)
 
 
-def main(files):
+def main(files, out="results/summary.md"):
     races = []
     for f in files:
         races += json.load(open(f))["races"]
@@ -88,4 +88,8 @@ def main(files):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    args = sys.argv[1:]
+    out = "results/summary.md"
+    if "--out" in args:
+        i = args.index("--out"); out = args[i + 1]; args = args[:i] + args[i + 2:]
+    main(args, out)

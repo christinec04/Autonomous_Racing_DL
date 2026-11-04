@@ -31,6 +31,9 @@ RESULTS = {
     "shield_map.png": "Where on track the shield intervenes, 4 races (scripts/plot_shield_map.py)",
     "shield_sensitivity.json": "E14: shield settings at race time with the seed-0 shield-trained policy",
     "shield_sensitivity.md": "E14 table",
+    "shield_confirm.json": "E15: best shield settings on the full protocol",
+    "shield_confirm_summary.md": "E15 tables + Mann-Whitney tests",
+    "eval_residual_s0.json": "E8: race evaluation of the residual (ResRace-style) policy",
     "training_curves.png": "Training curves for all runs (crash rate, shield activity, unshielded solo lap)",
 }
 
