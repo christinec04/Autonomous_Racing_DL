@@ -86,7 +86,7 @@ class APFShield:
         self.cl = centerline
         self.p = np.array([P[k] for k in ("mu", "C_Sf", "C_Sr", "lf", "lr", "h", "m", "I", "s_min", "s_max",
                                           "sv_min", "sv_max", "v_switch", "a_max", "v_min", "v_max")], float)
-        self.sat = True
+        self.sat = 1  # 0 linear, 1 saturated, 2 saturated_v2
         self.tcs = True
         if centerline is not None:
             n = np.stack([-np.sin(centerline.heading), np.cos(centerline.heading)], 1)
@@ -226,7 +226,8 @@ class APFShield:
                 if c_rl >= thr:
                     return a_rl, 0.0, {"rho": 0.0, "fallback": False, "c_pred": float(c_rl), "escape": True}
                 st_ = np.array([-S_MAX / 4, -S_MAX / 8, 0.0, S_MAX / 8, S_MAX / 4])
-                creep = np.array([[a, sp] for sp in (1.0, 2.0) for a in st_])
+                # forward creep, and reverse creep for a nose-to-wall stop (F1TENTH cars can reverse)
+                creep = np.array([[a, sp] for sp in (1.0, 2.0, -1.0) for a in st_])
                 cc = pc(creep)
                 ok = np.nonzero(cc >= thr)[0]
                 if len(ok):

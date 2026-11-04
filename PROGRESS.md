@@ -215,3 +215,10 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     v2 (`ShieldConfig(escape=True)`): near or inside the margin, allow up to 2 cm of clearance shrinkage and prefer
     slow creep manoeuvres (1-2 m/s, gentle steering) that keep the most clearance. Regression test
     `test_escape_fixes_deadlock_next_to_wall`: from 8-12 cm the car now pulls away without contact.
+24. **Simulator artifact after a spin.** A residual-policy race stayed stuck with no obstacle nearby; the stored
+    slip angle was -262 deg. Below 0.5 m/s F1TENTH switches to a kinematic model that never resets the slip angle,
+    and the dynamic model does not wrap it (the wrap line is commented out upstream), so after a spin the car moves
+    sideways or spins in place when it restarts (we saw the slip angle wind up to -2300 deg). This also made the
+    shield's loss-of-control check block every action from rest. Fixes: `tire="saturated_v2"` wraps the slip angle
+    and relaxes it to its kinematic value at low speed (opt-in so running training is not changed); the
+    loss-of-control check now only applies above 1 m/s. The escape manoeuvres also include reversing at 1 m/s.

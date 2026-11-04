@@ -10,7 +10,7 @@ PARR = np.array([P[k] for k in ("mu", "C_Sf", "C_Sr", "lf", "lr", "h", "m", "I",
                                 "sv_min", "sv_max", "v_switch", "a_max", "v_min", "v_max")], float)
 
 
-@pytest.mark.parametrize("tire", ["saturated", "linear"])
+@pytest.mark.parametrize("tire", ["saturated", "saturated_v2", "linear"])
 @pytest.mark.parametrize("cmd", [(0.0, 8.0), (0.15, 6.0), (-0.3, 3.0), (0.25, 0.0)])
 def test_predicted_clearance_matches_sim(tire, cmd):
     set_tire_model(tire); set_traction_control(True)
@@ -32,7 +32,7 @@ def test_predicted_clearance_matches_sim(tire, cmd):
             for off in CIRC_OFF:
                 d = np.hypot(a.state[0] + off * c - pt[0, 0], a.state[1] + off * s - pt[0, 1]) - CIRC_R
                 clear_sim = min(clear_sim, d)
-    pred = rollout_clearance(np.array([cmd], float), x0, np.zeros(2), PARR, tire == "saturated", True, 0.95, 0.0,
+    pred = rollout_clearance(np.array([cmd], float), x0, np.zeros(2), PARR, {"linear": 0, "saturated": 1, "saturated_v2": 2}[tire], True, 0.95, 0.0,
                              pt, np.zeros((60, 2)), 12, np.zeros((0, 5)), 6.0, steps, steps, 0.01, 2,
                              CIRC_OFF, CIRC_R, WB, 10.0)[0]
     assert abs(pred - clear_sim) < 0.02, (pred, clear_sim)

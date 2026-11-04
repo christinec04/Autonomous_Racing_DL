@@ -1,0 +1,10 @@
+
+=== nominal ===
+ppo_apf_esc@s0 finished 7/20 (stuck 0)  lap 34.72 (best 32.8)  coll/10laps 2.42 (wall 12, car 1)  passes/race 1.60 ot 32/46  shield 0.04  grip>90% 0.183 (>100% 0.001)  slip>15 0.000
+ppo_apf_esc@s1 finished 0/20 (stuck 7)  lap 32.53 (best 31.68)  coll/10laps 6.91 (wall 12, car 1)  passes/race 1.20 ot 24/36  shield 0.16  grip>90% 0.314 (>100% 0.001)  slip>15 0.035
+ppo_residual_apf_esc finished 4/20 (stuck 14)  lap 32.52 (best 31.32)  coll/10laps 0.37 (wall 0, car 2)  passes/race 1.95 ot 39/39  shield 0.20  grip>90% 0.138 (>100% 0.000)  slip>15 0.055
+
+=== randomized ===
+ppo_apf_esc@s0 finished 7/20 (stuck 0)  lap 34.42 (best 32.36)  coll/10laps 2.51 (wall 12, car 1)  passes/race 2.05 ot 41/54  shield 0.03  grip>90% 0.150 (>100% 0.001)  slip>15 0.000
+ppo_apf_esc@s1 finished 0/20 (stuck 9)  lap 31.04 (best 31.04)  coll/10laps 7.41 (wall 9, car 2)  passes/race 1.00 ot 20/26  shield 0.17  grip>90% 0.249 (>100% 0.004)  slip>15 0.069
+ppo_residual_apf_esc finished 7/20 (stuck 12)  lap 32.42 (best 31.24)  coll/10laps 0.17 (wall 0, car 1)  passes/race 2.70 ot 54/55  shield 0.19  grip>90% 0.121 (>100% 0.003)  slip>15 0.054

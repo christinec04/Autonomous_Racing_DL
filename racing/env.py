@@ -51,7 +51,7 @@ class EnvConfig:
     # shield dropout: per-episode probability that the shield is active (1.0 = always)
     shield_prob: float = 1.0
     tcs: bool = True  # traction control on all cars
-    tire: str = "saturated"  # saturated (friction circle) | linear (stock F1TENTH)
+    tire: str = "saturated"  # saturated (friction circle) | saturated_v2 (+ post-spin fixes) | linear (stock)
     seed: int = 0
 
 
@@ -68,7 +68,7 @@ class RaceEnv(gym.Env):
         self.sim = make_f110(self.n, timestep=self.cfg.phys_dt, seed=self.cfg.seed)
         self.sub = int(round(self.cfg.control_dt / self.cfg.phys_dt))
         self.shield = APFShield(self.cfg.shield, self.cfg.control_dt, self.cl)
-        self.shield.sat = self.cfg.tire == "saturated"
+        self.shield.sat = {"linear": 0, "saturated": 1, "saturated_v2": 2}[self.cfg.tire]
         self.shield.tcs = self.cfg.tcs
         self.rng = np.random.default_rng(self.cfg.seed)
         n_obs = N_LIDAR_OBS + 5 + 2 * 5 + 2 + (10 if self.cfg.curvature_preview else 0)
