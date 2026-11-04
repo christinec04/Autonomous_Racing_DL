@@ -36,6 +36,7 @@ RESULTS = {
     "shield_confirm_summary.md": "E15 tables + Mann-Whitney tests",
     "eval_residual_s0.json": "E8: race evaluation of the residual (ResRace-style) policy",
     "eval_residual_apf_s0.json": "E8: residual policy with our shield added at race time",
+    "training_efficiency.md": "E16: steps to first clean / fast unshielded lap, crashes during training (per run)",
     "training_curves.png": "Training curves for all runs (crash rate, shield activity, unshielded solo lap)",
 }
 

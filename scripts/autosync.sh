@@ -5,7 +5,8 @@ PY=../.venv/Scripts/python
 while true; do
   $PY -m scripts.update_registry > /dev/null 2>&1
   $PY -m scripts.plot_training > /dev/null 2>&1
-  git add runs RUNS.md results/training_curves.png > /dev/null 2>&1
+  $PY -m scripts.training_efficiency > /dev/null 2>&1
+  git add runs RUNS.md results/training_curves.png results/training_efficiency.md > /dev/null 2>&1
   if ! git diff --cached --quiet; then
     git commit -q -m "Auto-sync training progress ($(date '+%H:%M'))
 

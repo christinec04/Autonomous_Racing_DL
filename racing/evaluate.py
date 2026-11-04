@@ -105,10 +105,11 @@ SHIELD_FOR = {
 def run_race(job):
     ctrl, model_path, seed, randomize, laps, shield_override = job[:6]
     label = job[6] if len(job) > 6 else ctrl
+    tire = job[7] if len(job) > 7 else "saturated"
     sh = shield_override or SHIELD_FOR[ctrl]
     cfg = EnvConfig(n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
                     shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
-                    residual=ctrl.startswith("ppo_residual"))
+                    residual=ctrl.startswith("ppo_residual"), tire=tire)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),
@@ -220,6 +221,7 @@ if __name__ == "__main__":
     ap.add_argument("--races", type=int, default=20)
     ap.add_argument("--laps", type=int, default=5)
     ap.add_argument("--procs", type=int, default=14)
+    ap.add_argument("--tire", default="saturated", choices=["saturated", "linear"])
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     models = dict(m.split("=", 1) for m in args.models)
@@ -228,7 +230,8 @@ if __name__ == "__main__":
         for c in args.controllers:
             base = c.split("@")[0]
             for seed in range(args.races):
-                jobs.append((base if base in SHIELD_FOR else c, models.get(c), 10_000 + seed, randomize, args.laps, None, c))
+                jobs.append((base if base in SHIELD_FOR else c, models.get(c), 10_000 + seed, randomize, args.laps, None, c,
+                             args.tire))
     with Pool(args.procs) as p:
         res = p.map(run_race, jobs, chunksize=1)
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
