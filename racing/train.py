@@ -44,11 +44,12 @@ STAGES = {
 
 
 def make_cfg(stage: int, shield: str, seed: int, tire: str = "saturated", randomize: bool = True,
-             curvature_preview: bool = False) -> EnvConfig:
+             curvature_preview: bool = False, residual: bool = False) -> EnvConfig:
     st = STAGES[stage]
     return EnvConfig(n_opp=st["n_opp"], opp_speed=st.get("opp_speed", (0.55, 0.8)),
                      random_start=st["random_start"], shield=ShieldConfig(**SHIELDS[shield]),
-                     randomize=randomize, tire=tire, seed=seed, curvature_preview=curvature_preview)
+                     randomize=randomize, tire=tire, seed=seed, curvature_preview=curvature_preview,
+                     residual=residual)
 
 
 def _env_fn(cfg: EnvConfig, rank: int):
@@ -146,7 +147,8 @@ def train(args):
     steps_done = 0
     budgets = dict(zip([1, 2, 3], args.steps))
     for stage in args.stages:
-        cfg = make_cfg(stage, args.shield, args.seed, args.tire, not args.no_randomize, args.curvature_preview)
+        cfg = make_cfg(stage, args.shield, args.seed, args.tire, not args.no_randomize, args.curvature_preview,
+                       args.residual)
         venv = SubprocVecEnv([_env_fn(cfg, r) for r in range(args.n_envs)])
         venv = VecMonitor(venv)
         if vec is None:
@@ -190,5 +192,6 @@ if __name__ == "__main__":
     ap.add_argument("--tire", default="saturated")
     ap.add_argument("--no_randomize", action="store_true")
     ap.add_argument("--curvature_preview", action="store_true")
+    ap.add_argument("--residual", action="store_true")
     ap.add_argument("--out", required=True)
     train(ap.parse_args())

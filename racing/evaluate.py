@@ -96,6 +96,8 @@ SHIELD_FOR = {
     "pid_apf": dict(mode="additive", reach="fixed", k_steer=0.3, k_speed=1.5, d_min=0.3, smooth=0.8),  # tuned, scripts/tune_apf.py
     "ppo": dict(mode="off"),
     "ppo_apf": dict(mode="conditioned_fallback", reach="grip"),
+    "ppo_residual": dict(mode="off"),  # ResRace-style: APF base inside the env
+    "ppo_additive": dict(mode="additive", reach="fixed"),  # PPO trained with the proposal's Eq. 2/3 shield
 }
 
 
@@ -103,7 +105,8 @@ def run_race(job):
     ctrl, model_path, seed, randomize, laps, shield_override = job
     sh = shield_override or SHIELD_FOR[ctrl]
     cfg = EnvConfig(n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
-                    shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed)
+                    shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
+                    residual=(ctrl == "ppo_residual"))
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),
@@ -113,7 +116,8 @@ def run_race(job):
     L = env.cl.length
     ot = OvertakeTracker(3)
     lap_marks, lams, glat, glon, slip = [], [], [], [], []
-    prev_v = env._states()[0][3]
+    e0 = env._states()[0]
+    prev_vel = np.array([e0[3] * np.cos(e0[4] + e0[6]), e0[3] * np.sin(e0[4] + e0[6])])
     wall = car = False
     while True:
         a = act(obs)
@@ -121,8 +125,12 @@ def run_race(job):
         st = info["state"]
         lams.append(info["lambda"])
         v = st[3]
-        glon.append((v - prev_v) / cfg.control_dt); prev_v = v
-        glat.append(v * st[5])
+        # true CoG acceleration from the velocity vector (v * yaw_rate is wrong while sliding)
+        hd = st[4] + st[6]
+        vel = np.array([v * np.cos(hd), v * np.sin(hd)])
+        acc = (vel - prev_vel) / cfg.control_dt; prev_vel = vel
+        glon.append(float(acc @ [np.cos(st[4]), np.sin(st[4])]))
+        glat.append(float(acc @ [-np.sin(st[4]), np.cos(st[4])]))
         slip.append(abs(st[6]))
         ot.update(info["t"], info["progress"], info["lat"], v * np.cos(info["hdg_err"]), info["opp_prog"],
                   info["opp_lat"], info["opp_v"], info["car"], L)
