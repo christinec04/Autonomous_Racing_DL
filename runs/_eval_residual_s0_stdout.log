@@ -1,0 +1,6 @@
+
+=== nominal ===
+ppo_residual  finished 9/20  lap 30.35 (best 29.2)  coll/10laps 1.77 (wall 3, car 8)  passes/race 2.75 ot 55/59  shield 0.00  grip>90% 0.128 (>100% 0.000)  slip>15 0.014
+
+=== randomized ===
+ppo_residual  finished 8/20  lap 30.28 (best 28.92)  coll/10laps 2.10 (wall 6, car 6)  passes/race 1.90 ot 38/41  shield 0.00  grip>90% 0.127 (>100% 0.001)  slip>15 0.013
