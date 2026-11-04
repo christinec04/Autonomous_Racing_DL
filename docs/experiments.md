@@ -94,6 +94,12 @@ for collisions (Mann-Whitney p = 0.04); 20 races are not enough to separate the 
 reach is the more aggressive and fixed reach the more conservative choice; neither dominates. Note: the default row
 reproduces E7 exactly (same seeds, deterministic evaluation).
 
+## E16. Training efficiency and training-time safety
+`python -m scripts.training_efficiency` -> `results/training_efficiency.md` (updates as runs finish). All laps with
+the shield removed. So far: first clean lap at 200k steps with or without the shield (residual: 50k thanks to its
+PID+APF prior), but the shield cuts crashes before that point from about 1000 to 8-9, and crashes over all of
+training by about 10x (234 vs 2318 at seed 0).
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.

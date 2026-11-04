@@ -104,3 +104,6 @@ risk table (simulator realism, simulator speed, controller stability at 25 Hz, s
   (`ppo_shielddrop_s0`: shield on in 100% / 50% / 25% of episodes per stage) tests whether the policy can be made
   safe on its own.
 - Crashes during training: stage 1 ~1% of episodes with the shield vs 25% without; stage 2 9% vs 46%.
+- Training-time safety is where the shield pays off (`results/training_efficiency.md`): 8-9 crashes before the
+  first clean lap with the shield vs about 1000 without, and about 10x fewer crashes over all of training.
+  The proposal's "steps to first clean lap" metric would have missed this; crashes-during-training captures it.
