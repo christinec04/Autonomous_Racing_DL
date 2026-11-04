@@ -1,0 +1,8 @@
+
+=== nominal ===
+pid_apf       finished 9/20  lap 43.91 (best 36.04)  coll/10laps 1.75 (wall 4, car 7)  passes/race 1.25 ot 25/38  shield 0.93  grip>90% 0.025 (>100% 0.000)  slip>15 0.006
+pure_pursuit  finished 0/20  lap None (best None)  coll/10laps 61.35 (wall 0, car 20)  passes/race 0.00 ot 0/0  shield 0.00  grip>90% 0.118 (>100% 0.000)  slip>15 0.000
+
+=== randomized ===
+pid_apf       finished 12/20  lap 44.02 (best 35.48)  coll/10laps 1.18 (wall 2, car 6)  passes/race 1.40 ot 28/40  shield 0.93  grip>90% 0.023 (>100% 0.001)  slip>15 0.008
+pure_pursuit  finished 0/20  lap None (best None)  coll/10laps 61.52 (wall 0, car 20)  passes/race 0.00 ot 0/0  shield 0.00  grip>90% 0.085 (>100% 0.000)  slip>15 0.000
