@@ -20,6 +20,8 @@ RESULTS = {
     "eval_baselines.json": "Step 3 race evaluation: Pure Pursuit, PID+APF (20 races x 5 laps, nominal + randomised)",
     "eval_baselines.log": "Printed summary of eval_baselines.json",
     "tune_apf.json": "Grid search of APF gains for the PID+APF baseline",
+    "eval_ppo_s0.json": "Step 4 race evaluation of seed-0 PPO models (with/without shield, cross-combinations)",
+    "summary.md": "Merged race results, metric targets, Mann-Whitney U tests (scripts/analyze.py)",
     "training_curves.png": "Training curves for all runs (crash rate, shield activity, unshielded solo lap)",
 }
 

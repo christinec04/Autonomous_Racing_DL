@@ -112,6 +112,31 @@ speed up learning to lap *fast*: 34.9 s by 350k (shield) vs 38.3 s (no shield); 
 Crashes during training: stage 1 solo, ~0-5% of episodes with the shield vs 5-55% without. Stage 2 traffic, 7-18%
 with the shield vs 20-54% without.
 
+## Step 4: race day, seed 0 (full tables: `results/summary.md`)
+Nominal, 20 races x 5 laps:
+
+| controller | finished | clean lap | collisions/10 laps | passes/race | overtake success | shield active |
+|---|---|---|---|---|---|---|
+| **PPO + shield (ours)** | **17/20** | **34.3 s** | **0.38** | **2.65** | **88%** | 6% |
+| PPO, no shield | 2/20 | 36.8 s | 5.53 | 1.05 | 72% | - |
+| shield-trained PPO, shield removed | 5/20 | 34.9 s | 4.72 | 1.00 | 62% | - |
+| unshielded PPO + shield at race time | 20/20 | 36.7 s | 0.00 | 1.25 | 81% | 16% |
+| PID + APF | 9/20 | 43.9 s | 1.75 | 1.25 | 66% | 93% |
+| Pure Pursuit | 0/20 | - | 61 | 0 | - | - |
+
+- Ours meets all 6 targets on nominal races; under randomised friction/noise it misses two narrowly
+  (0.63 collisions/10 laps vs <= 0.5; shield active 10.5% vs <= 10%).
+- vs unshielded PPO and vs PID+APF: fewer collisions, more passes, more laps completed (Mann-Whitney p < 0.01);
+  vs PID+APF also 22% faster laps (p = 2e-5).
+- Training *with* the shield produced a much more aggressive overtaker (2.65 vs 1.25 passes/race when the shield is
+  only bolted on at race time) but it leans on the shield: removed, it crashes in 15/20 races. The intervention
+  penalty lowered shield use (60% of steps at the start of training -> 6% on race day) but did not make the policy
+  safe on its own.
+- The unshielded policy has the fastest single laps (best 28.2 s) but crashes in 18/20 races, mostly walls at the limit.
+- Only one seed per configuration so far; seeds 1-2 next.
+
+Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m scripts.make_videos batchN`.
+
 ## Problems encountered
 1. **F1TENTH map download.** Gym tries to download `Spielberg` on startup. Fixed by pointing its track loader at our `maps/`.
 2. **Built-in lap counter is wrong** for our start position (it reported 60 s laps). We count laps from centerline progress.
@@ -151,3 +176,8 @@ with the shield vs 20-54% without.
 16. **Trail braking spins the car** under the friction-circle tyres: braking moves load off the rear axle, the rear
     saturates first. Traction control works on the whole-car friction circle, not per axle, so it does not prevent this;
     controllers have to brake before turning in.
+17. **Evaluation merged two controllers into one row**: results were labelled by base controller ("ppo"), so the
+    shield-trained-shield-removed variant would have been pooled with the ablation. Caught before results; results now
+    carry their own label.
+18. **First video in Downloads would not play**: an interrupted render left an mp4 without its index ("moov atom not
+    found"). Videos now render to a temp file, are checked with ffprobe, then moved into place.
