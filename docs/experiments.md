@@ -122,6 +122,29 @@ shield, so "always slow" is the easy solution) and the 10 m lidar clip (the chic
 `runs/ppo_shield_w3low_s0` (w3 = 0.02 instead of 0.1) and `runs/ppo_shield_preview_s0` (curvature preview in the
 observation). Compared against `ppo_shield_s0` on lap time, top speed and collisions.
 
+## E19. Shield deadlock: diagnosis and fixes
+After fixing the "finished" metric (problem 22), the biggest failure of every shielded controller turned out to be
+getting *stuck*: the shield stops the car and never lets it go.
+`python -m scripts.diag_stuck <controller> <model> <eval json> [escape]` replays the first stuck race.
+
+Two deadlock types were found:
+1. **Wall deadlock:** the car stops ~12 cm from a wall; with the 3-circle body model (about 3 cm fatter than the
+   car) the current clearance already reads below the margin, so every action, including standing still, is
+   "unsafe" and the fallback holds the car forever.
+2. **Mutual deadlock with an opponent:** the ego stops half a metre from an opponent; the opponent's gap keeping
+   will not move while the ego is right ahead of it, and the ego's shield will not move next to the opponent.
+
+Fix attempts (`ShieldConfig(escape=True)`, evaluated as `ppo_apf_esc`):
+
+| version | rule | seed 0 nominal: finished / stuck / crashed | verdict |
+|---|---|---|---|
+| none | - | 12 / 5 / 3 | deadlocks |
+| v1 | allow 2 cm of clearance shrinkage near the margin | (not evaluated; unit test still deadlocked) | circle model reads negative clearance |
+| v2 | v1 + slow creep manoeuvres, whenever within 7 cm of anything | 7 / 0 / 13 | worse: the relaxed rule applied while driving and ratcheted the car into walls 2 cm per step |
+| v3 | v2, but only when nearly stopped (< 0.5 m/s) | running | |
+
+Raw results: `results/eval_escape_v2.json`, `results/eval_escape_v3.json`.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
