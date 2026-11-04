@@ -44,7 +44,7 @@ def _accel(v_cmd, x, p, tcs, tcs_margin, fixed_decel):
             a = 10.0 * a_max / (-v_min) * dv
     else:
         a = 2.0 * a_max / v_max * dv if dv > 0 else 10.0 * a_max / v_max * dv
-    if tcs:
+    if tcs and abs(x[6]) <= 0.26:
         mg = tcs_margin * p[0] * G
         alat = x[3] * x[5]
         av = np.sqrt(max(mg * mg - alat * alat, 0.0))
@@ -72,7 +72,7 @@ def backup_steer(x, lane_xy, lookahead_pts, wb):
 @njit(cache=True)
 def rollout_clearance(cands, x0, steer_buf0, p, sat, tcs, tcs_margin, fixed_decel,
                       pts, lane_xy, lookahead_pts, opp0, opp_brake,
-                      commit_steps, total_steps, dt, check_every, circ_off, circ_r, wb):
+                      commit_steps, total_steps, dt, check_every, circ_off, circ_r, wb, beta_max):
     K = cands.shape[0]
     out = np.full(K, 1e9)
     n_opp = opp0.shape[0]
@@ -124,6 +124,9 @@ def rollout_clearance(cands, x0, steer_buf0, p, sat, tcs, tcs_margin, fixed_dece
                 opp[o, 0] += ov * np.cos(opp[o, 2]) * dt
                 opp[o, 1] += ov * np.sin(opp[o, 2]) * dt
                 opp[o, 3] = ov
+            if abs(x[6]) > beta_max:  # loss of control counts as a violation
+                clear = min(clear, -1.0)
+                break
             if t % check_every == 0:
                 c, s = np.cos(x[4]), np.sin(x[4])
                 for ci in range(3):
