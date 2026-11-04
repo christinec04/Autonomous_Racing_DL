@@ -1,0 +1,18 @@
+C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\ppo\ppo.py:155: UserWarning: You have specified a mini-batch size of 1024, but because the `RolloutBuffer` is of size `n_steps * n_envs = 3584`, after every 3 untruncated mini-batches, there will be a truncated mini-batch of size 512
+We recommend using a `batch_size` that is a factor of `n_steps * n_envs`.
+Info: (n_steps=512 and n_envs=7)
+  warnings.warn(
+== stage 1: 1500000 steps, shield=off
+[50001] eval shielded clean=True lap=40.39999999999932 lam=0.00 | unshielded clean=True lap=40.39999999999932 prog=199
+[100002] eval shielded clean=True lap=40.39999999999932 lam=0.00 | unshielded clean=True lap=40.39999999999932 prog=199
+[150003] eval shielded clean=True lap=37.39999999999938 lam=0.00 | unshielded clean=True lap=37.43999999999938 prog=199
+[200004] eval shielded clean=True lap=35.59999999999942 lam=0.02 | unshielded clean=True lap=35.51999999999942 prog=199
+[250005] eval shielded clean=True lap=34.839999999999435 lam=0.03 | unshielded clean=True lap=34.67999999999944 prog=199
+[300006] eval shielded clean=True lap=34.67999999999944 lam=0.03 | unshielded clean=True lap=34.359999999999445 prog=199
+[350000] eval shielded clean=True lap=33.99999999999945 lam=0.04 | unshielded clean=True lap=33.31999999999947 prog=199
+[400001] eval shielded clean=True lap=34.19999999999945 lam=0.06 | unshielded clean=True lap=33.479999999999464 prog=199
+[450002] eval shielded clean=True lap=33.63999999999946 lam=0.07 | unshielded clean=True lap=32.75999999999948 prog=199
+[500003] eval shielded clean=True lap=33.31999999999947 lam=0.07 | unshielded clean=True lap=32.59999999999948 prog=199
+[550004] eval shielded clean=True lap=32.83999999999948 lam=0.09 | unshielded clean=True lap=31.679999999999502 prog=199
+[600005] eval shielded clean=True lap=32.559999999999484 lam=0.09 | unshielded clean=True lap=31.479999999999507 prog=199
+[650006] eval shielded clean=True lap=32.439999999999486 lam=0.07 | unshielded clean=True lap=32.079999999999494 prog=199
