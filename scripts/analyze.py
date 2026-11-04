@@ -9,13 +9,14 @@ from racing.evaluate import summarize, check_targets
 
 OURS = "ppo_apf"
 ORDER = ["ppo_apf", "ppo", "ppo@shieldtrained_noshield", "ppo_apf@noshieldtrained_withshield", "ppo_residual",
-         "ppo_additive", "pid_apf", "pure_pursuit"]
+         "ppo_residual_apf", "ppo_additive", "pid_apf", "pure_pursuit"]
 NAMES = {
     "ppo_apf": "PPO + shield (ours)",
     "ppo": "PPO, no shield",
     "ppo@shieldtrained_noshield": "shield-trained PPO, shield removed",
     "ppo_apf@noshieldtrained_withshield": "unshielded PPO + shield at race time",
     "ppo_residual": "residual PPO on PID+APF (ResRace-style)",
+    "ppo_residual_apf": "residual PPO + our shield at race time",
     "ppo_additive": "PPO + additive Eq.2/3 shield",
     "pid_apf": "PID + APF",
     "pure_pursuit": "Pure Pursuit",
