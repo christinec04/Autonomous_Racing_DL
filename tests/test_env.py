@@ -32,3 +32,16 @@ def test_overtake_tracker_counts_clean_pass():
         lat = min(0.6, k * 0.02)
         ot.update(t, 100 + gap, lat, 8.0, [100.0], [0.0], [6.0], False, L)
     assert ot.attempts == 1 and ot.successes == 1
+
+
+def test_summary_separates_finished_stuck_crashed():
+    from racing.evaluate import summarize
+    base = dict(controller="x", seed=0, randomize=False, laps_target=5, overtake_attempts=0, overtake_successes=0,
+                shield_freq=0.0, lam_mean=0.0, grip_above_90=0.0, grip_above_100=0.0, slip_above_15=0.0, gg=[[], []])
+    races = [
+        dict(base, laps_done=5.0, lap_times=[35.0] * 5, wall=False, car=False, dnf=False),   # finished
+        dict(base, laps_done=0.6, lap_times=[], wall=False, car=False, dnf=False),           # stuck
+        dict(base, laps_done=2.3, lap_times=[35.0, 34.0], wall=True, car=False, dnf=True),   # crashed
+    ]
+    s = summarize(races)["x"]
+    assert (s["finished"], s["stuck"], s["wall"]) == (1, 1, 1)
