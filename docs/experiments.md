@@ -147,6 +147,14 @@ original-shield policy is weak with or without escape (0-2/20).
 
 Raw results: `results/eval_escape_v2.json`, `results/eval_escape_v3.json`, `results/eval_escape_v4.json`.
 
+## E20. Seed sensitivity
+`python -m scripts.seed_summary` -> `results/seed_summary.md`. With the final shield (escape v4, v2 simulator):
+seed 0 finishes 16/20 (nominal), seed 1 only 1/20 (14 wall crashes, 9% of the time sliding above 15 deg).
+Seed 1's policy learned a much more aggressive, sliding style (42% of the time above 90% grip vs 17% for seed 0);
+the shield predicts and avoids loss of control from a stable state, but cannot reliably recover a car that is
+already sliding. Without the shield, seeds 0 and 1 finish 1/20 and 3/20. Seed 2 is training. Conclusion so far:
+the shield consistently reduces collisions, but how many races are finished depends strongly on the training seed.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
