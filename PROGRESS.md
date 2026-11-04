@@ -202,3 +202,16 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
 20. **Shielded policy is timid.** Telemetry showed it never exceeds ~8.4 m/s; the shield is not the cause (2% active
     there). Likely the intervention penalty and/or the 10 m lidar clip; tests queued (E18).
 21. **`scripts/analyze.py` overwrote `results/summary.md`** when used for a side experiment. Added `--out`.
+22. **"Finished" was overstated.** A race counted as finished whenever there was no collision, but many shielded
+    races ended *stuck* (no progress for 5 s). Corrected numbers, seed 0 nominal: ours 12/20 finished all 5 laps
+    (5 stuck, 3 crashed), not 17/20; "unshielded PPO + shield at race time" 1/20 (19 stuck), not 20/20; residual +
+    shield 4/20 (14 stuck), not 18/20. Collision rates were unaffected. `finished` now means all laps completed and
+    `stuck` is reported separately (`racing/evaluate.py`, `scripts/analyze.py`).
+23. **Shield deadlock.** Replaying a stuck race (`scripts/diag_stuck.py`): the car stops ~12 cm from a wall, inside
+    the shield's margin; every action, including standing still, is then "predicted unsafe", so the fallback holds
+    the car forever while the policy keeps asking to drive away. Fix attempt v1 ("allow actions that do not reduce
+    clearance by more than 2 cm") still deadlocked: the 3-circle body model is ~3 cm fatter than the car, so the
+    current clearance already reads negative, and the rear swings toward the wall when turning away from it.
+    v2 (`ShieldConfig(escape=True)`): near or inside the margin, allow up to 2 cm of clearance shrinkage and prefer
+    slow creep manoeuvres (1-2 m/s, gentle steering) that keep the most clearance. Regression test
+    `test_escape_fixes_deadlock_next_to_wall`: from 8-12 cm the car now pulls away without contact.
