@@ -21,6 +21,7 @@ PURPOSE = {
     "ppo_shield_w3low_s0": "Timidity test: ours with intervention penalty w3 = 0.02 (default 0.1)",
     "ppo_shield_preview_s0": "Timidity test: ours with 10 centerline curvatures (1-20 m ahead) in the observation",
     "ppo_shield_v2esc_s0": "Ours, improved: shield with deadlock escape, trained on the post-spin-fixed simulator",
+    "ppo_shield_v2esc_slip_s1": "Final shield + slip penalty (w6 = 1), seed 1 (the seed that learned to slide)",
     "ppo_additive_s0": "Proposal's original shield: PPO + additive Eq. 2/3 APF (fixed reach)",
 }
 RESULTS = {

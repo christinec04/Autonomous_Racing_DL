@@ -9,6 +9,7 @@ declare -A CTRL=(
   [ppo_additive_s0]="ppo_additive" [ppo_shielddrop_s0]="ppo_apf@drop"
   [ppo_shield_linear_s0]="ppo_apf@linear"
   [ppo_shield_v2esc_s0]="ppo_apf_esc@v2esc" [ppo_shield_w3low_s0]="ppo_apf@w3low" [ppo_shield_preview_s0]="ppo_apf@preview"
+  [ppo_shield_v2esc_slip_s1]="ppo_apf_esc@slip_s1"
 )
 while true; do
   pending=0
@@ -21,6 +22,7 @@ while true; do
     extra=""; tire=saturated
     [ "$r" = ppo_shield_linear_s0 ] && tire=linear
     [ "$r" = ppo_shield_v2esc_s0 ] && tire=saturated_v2
+    [ "$r" = ppo_shield_v2esc_slip_s1 ] && tire=saturated_v2
     # the shield-dropout policy is also raced without its shield (did it learn safety itself?)
     [ "$r" = ppo_shielddrop_s0 ] && extra="ppo@drop_noshield" && models_extra="ppo@drop_noshield=runs/$r/model_stage3.zip"
     $PY -m racing.evaluate --controllers "$label" $extra --models "$label=runs/$r/model_stage3.zip" $models_extra \
