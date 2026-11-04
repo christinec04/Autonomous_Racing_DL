@@ -165,6 +165,9 @@ def train(args):
     for stage in args.stages:
         cfg = make_cfg(stage, args.shield, args.seed, args.tire, not args.no_randomize, args.curvature_preview,
                        args.residual)
+        if args.shield_prob:
+            import dataclasses
+            cfg = dataclasses.replace(cfg, shield_prob=dict(zip([1, 2, 3], args.shield_prob))[stage])
         venv = SubprocVecEnv([_env_fn(cfg, r) for r in range(args.n_envs)])
         venv = VecMonitor(venv)
         if vec is None:
@@ -211,5 +214,7 @@ if __name__ == "__main__":
     ap.add_argument("--no_randomize", action="store_true")
     ap.add_argument("--curvature_preview", action="store_true")
     ap.add_argument("--residual", action="store_true")
+    ap.add_argument("--shield_prob", type=float, nargs="*", default=None,
+                    help="per-stage probability that the shield is on in an episode (shield dropout)")
     ap.add_argument("--out", required=True)
     train(ap.parse_args())

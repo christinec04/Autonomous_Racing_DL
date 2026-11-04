@@ -12,6 +12,11 @@ PURPOSE = {
     "ppo_shield_s0": "Ours: PPO + action-conditioned APF shield with fallback (grip reach), all stages",
     "ppo_noshield_s0": "Ablation: PPO, shield off in every stage",
     "ppo_residual_s0": "ResRace/RaceMOP-style: PPO residual on top of PID+APF (APF shapes every command)",
+    "ppo_shield_s1": "Ours, seed 1",
+    "ppo_shield_s2": "Ours, seed 2",
+    "ppo_noshield_s1": "Ablation (no shield), seed 1",
+    "ppo_noshield_s2": "Ablation (no shield), seed 2",
+    "ppo_shielddrop_s0": "Shield dropout: shield on in 100% / 50% / 25% of episodes in stages 1/2/3 (does the policy learn safety itself?)",
     "ppo_additive_s0": "Proposal's original shield: PPO + additive Eq. 2/3 APF (fixed reach)",
 }
 RESULTS = {
