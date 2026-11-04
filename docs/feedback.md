@@ -75,7 +75,10 @@ Confirmed experimentally, so the claim must be softened. `scripts/shield_stress.
 
 The same holds during learning (`results/training_efficiency.md`): PPO trained with the proposal's additive shield
 crashed 2286 times in training, no better than with no shield at all (2318-2769), while the action-conditioned
-shield cut this to 234-313.
+shield cut this to 234-313. On race day the additive-trained policy is safe but timid: 15/20 finished,
+0.61 collisions / 10 laps, but 48.8 s clean laps (slower than PID+APF's 43.9 s) and 0.55 passes per race, vs
+ours 16/20, 34.5 s and 2.95 passes. This is the "APF makes the car timid" failure the proposal predicted, and the
+clearest case for making the shield action-conditioned.
 
 Even the best variant still has car contacts in traffic, because opponents' future motion is predicted, not
 known. The defensible claim is "reduces violations; zero only under its model assumptions" (opponents braking no
