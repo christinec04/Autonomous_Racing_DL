@@ -46,6 +46,16 @@ keep the shield's training safety but end up safe without it?
 ## E11. Seeds 1-2
 `runs/ppo_shield_s{1,2}`, `runs/ppo_noshield_s{1,2}`, for mean and spread across seeds as in the proposal.
 
+## E12. How do the controllers use the tyres? (g-g)
+`python -m scripts.plot_gg results/eval_baselines.json results/eval_ppo_s0.json` -> `results/gg_diagrams.png`.
+All PPO variants drive bang-bang longitudinally (dense bands at the traction-control limit, about 0.92 mu g, for
+both throttle and braking) but mostly stay below 0.5 mu g laterally: they gain time on straights and braking zones,
+not by cornering at the limit. PID+APF barely uses the grip (1% of time above 90%).
+
+## E13. Where does the shield intervene?
+`python -m scripts.plot_shield_map` -> `results/shield_map.png`. 3.2% of steps over 4 races; clustered at the
+chicane after the main straight, the hairpin, and on the main straight in traffic.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
