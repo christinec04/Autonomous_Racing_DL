@@ -5,8 +5,8 @@ from racing.evaluate import summarize
 
 GROUPS = {
     "PPO + final shield (escape, v2 sim)": ["ppo_apf_esc@s0", "ppo_apf_esc@s1v4", "ppo_apf_esc@s2"],
-    "PPO + original shield": ["ppo_apf", "ppo_apf@s1", "ppo_apf@s2"],
-    "PPO, no shield": ["ppo", "ppo@s1", "ppo@s2"],
+    "PPO + original shield (v1 sim)": ["ppo_apf", "ppo_apf@s1", "ppo_apf@s2"],
+    "PPO, no shield (v2 sim)": ["ppo@s0", "ppo@s1", "ppo@s2v2"],
 }
 KEYS = [("finished", "finished all laps / 20", "{:.1f}"), ("stuck", "stuck / 20", "{:.1f}"), ("lap_mean", "clean lap (s)", "{:.2f}"),
         ("collisions_per_10_laps", "collisions / 10 laps", "{:.2f}"), ("passes_per_race", "passes / race", "{:.2f}"),
@@ -16,7 +16,7 @@ KEYS = [("finished", "finished all laps / 20", "{:.1f}"), ("stuck", "stuck / 20"
 
 # Canonical result files only. Older experiment files (e.g. escape v2/v3) reuse labels and must not be pooled.
 CANONICAL = ["results/eval_ppo_s0.json", "results/eval_ppo_shield_s1.json", "results/eval_ppo_shield_s2.json",
-             "results/eval_ppo_noshield_s1.json", "results/eval_ppo_noshield_s2.json",
+             "results/final_v2_others.json", "results/final_v2_noshield_s2.json",
              "results/eval_escape_v4.json", "results/eval_escape_v4_s1.json", "results/eval_escape_v4_s2.json"]
 
 
