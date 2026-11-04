@@ -41,6 +41,18 @@ RESULTS = {
     "eval_residual_s0.json": "E8: race evaluation of the residual (ResRace-style) policy",
     "eval_residual_apf_s0.json": "E8: residual policy with our shield added at race time",
     "training_efficiency.md": "E16: steps to first clean / fast unshielded lap, crashes during training (per run)",
+    "final_v2_others.json": "Every non-final controller re-raced on the saturated_v2 simulator",
+    "final_summary.md": "FINAL comparison, all controllers on saturated_v2 (scripts/final_tables.sh)",
+    "eval_escape_v4.json": "E19: final shield (escape v4) seed 0, original shield on v2, residual + escape shield",
+    "eval_escape_v4_s1.json": "Final shield, seed 1",
+    "eval_escape_v2.json": "E19: escape v2 (failed: ratchet)",
+    "eval_escape_v3.json": "E19: escape v3",
+    "eval_ppo_additive_s0.json": "E9: PPO trained + raced with the additive Eq. 2/3 shield (v1 simulator)",
+    "eval_ppo_shield_s1.json": "Original shield, seed 1 (v1 simulator)",
+    "eval_ppo_noshield_s1.json": "No shield, seed 1 (v1 simulator)",
+    "seed_summary.md": "Mean +- std across training seeds",
+    "telemetry_speed.png": "E17: speed trace on a solo flying lap",
+    "telemetry_sectors.md": "E17: sector times",
     "training_curves.png": "Training curves for all runs (crash rate, shield activity, unshielded solo lap)",
 }
 

@@ -11,20 +11,21 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
 
 - Everything in the proposal runs end to end: track, opponents, classical baselines, shielded / unshielded PPO
   with the 3-stage curriculum, race-day evaluation with all six metrics, Mann-Whitney U tests.
-- Seed-0 race results (nominal, 20 races x 5 laps; "finished" = all 5 laps), full tables in
-  [results/summary.md](results/summary.md):
+- Seed-0 race results, all controllers on the same simulator version (nominal, 20 races x 5 laps; "finished" =
+  all 5 laps), full tables and Mann-Whitney tests in [results/final_summary.md](results/final_summary.md):
 
   | controller | finished | stuck | clean lap | collisions / 10 laps | passes / race |
   |---|---|---|---|---|---|
-  | **PPO + shield with deadlock escape (ours, final)** | **16/20** | **0** | 34.5 s | 0.44 | **2.95** |
-  | PPO + shield, original | 12/20 | 5 | 34.3 s | 0.38 | 2.65 |
-  | ResRace-style residual PPO | 9/20 | 0 | **30.4 s** | 1.77 | 2.75 |
-  | PID + APF | 9/20 | 0 | 43.9 s | 1.75 | 1.25 |
-  | PPO, no shield | 1/20 | 1 | 36.8 s | 5.53 | 1.05 |
+  | **PPO + action-conditioned shield (ours, final)** | 16/20 | 0 | 34.5 s | 0.44 | **2.95** |
+  | PPO + proposal's additive Eq. 2/3 shield | **18/20** | 0 | 47.6 s | **0.21** | 0.85 |
+  | PID + APF | 12/20 | 0 | 42.8 s | 1.09 | 1.35 |
+  | ResRace-style residual PPO | 10/20 | 0 | **30.4 s** | 1.60 | 2.20 |
+  | PPO, no shield | 0/20 | 1 | 32.5 s | 7.35 | 1.35 |
   | Pure Pursuit | 0/20 | 0 | - | 61 | 0 |
 
-  The final row uses the post-spin-fixed simulator (`tire="saturated_v2"`); the others were raced on v1, which
-  differs only after a spin. A full re-evaluation of every controller on v2 is planned once training finishes.
+  Ours meets all six metric targets; vs the additive shield it finishes as often (p = 0.39) while lapping 13 s
+  faster with 3.5x the passes (p < 1e-5); vs no shield it finishes, survives and passes significantly more
+  (p < 0.001). The residual policy is the fastest but crashes in half its races.
 - **Correction:** earlier versions of this page counted a race as finished whenever there was no collision; many
   shielded races had actually ended *stuck* (the shield deadlocked). Finish counts above are corrected; the
   deadlock and its fix are documented in [docs/experiments.md](docs/experiments.md) (E19) and
