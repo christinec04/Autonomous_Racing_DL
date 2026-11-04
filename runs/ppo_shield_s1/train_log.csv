@@ -1,0 +1,2 @@
+step,episodes,crashes,crash_rate,lam_freq,lam_mean,fallback_rate,passes,mean_ep_return,wall_time
+20006,64,3,0.046875,0.5858242527241827,0.5326901929421174,0.44421673497950614,0,-12.082681655883789,25
