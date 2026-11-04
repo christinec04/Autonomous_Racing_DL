@@ -29,9 +29,20 @@ The difference, made testable:
 | safety layer | none beyond the APF | fallback replaces the action when no blend is predicted safe |
 
 Both are implemented under identical conditions: `EnvConfig(residual=True)` reproduces the ResRace structure
-(`final = PID+APF base action + 0.3 x policy`), run `ppo_residual_s0`; results go into
-[results/summary.md](../results/summary.md) when it finishes. On race day our shield is active on 6% of steps; the
-always-on APF in PID+APF is active on 93%.
+(`final = PID+APF base action + 0.3 x policy`), run `ppo_residual_s0`. Race results (nominal, 20 races x 5 laps):
+
+| controller | finished | clean lap | collisions / 10 laps | passes / race | shield active |
+|---|---|---|---|---|---|
+| ResRace-style residual PPO | 9/20 | **30.4 s** | 1.77 | 2.75 | - |
+| PPO + our shield | 17/20 | 34.3 s | 0.38 | 2.65 | 6% |
+| **residual PPO + our shield on top** | **18/20** | 32.7 s | **0.36** | 2.15 (43/43 attempts) | 20% |
+
+The residual structure learns faster laps (the APF base gives it a sensible prior), but the always-on APF does not
+make it safe: it crashes in 11 of 20 races, about as often as PID+APF. Our shield is what removes the crashes, and it
+also works on top of the residual policy. So the contribution is better stated as **an action-conditioned safety
+shield that can wrap any racing policy**, including APF-residual ones like ResRace/RaceMOP, rather than as a
+replacement for them. Cost of combining: the shield is active on 20% of steps and the car slides (> 15 deg) 5% of
+the time, so two of the six targets are missed.
 
 ## Content (16/20)
 

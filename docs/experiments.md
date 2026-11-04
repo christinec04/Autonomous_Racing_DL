@@ -34,7 +34,10 @@ shield-trained policy raced without the shield, and the unshielded policy raced 
 
 ## E8. ResRace-style residual policy
 `runs/ppo_residual_s0`: PPO residual (scale 0.3) on top of the tuned PID+APF controller. Tests the contribution
-statement: shield only when needed vs APF shaping every command.
+statement: shield only when needed vs APF shaping every command. Raced alone (`results/eval_residual_s0.json`) and
+with our shield added at race time (`results/eval_residual_apf_s0.json`).
+Result: fastest clean laps of any controller (30.4 s) but only 9/20 finishes; with our shield on top 18/20 finishes,
+32.7 s laps, 0.36 collisions / 10 laps, 43/43 overtakes. The shield and the residual structure are complementary.
 
 ## E9. PPO with the proposal's original additive shield
 `runs/ppo_additive_s0`.
