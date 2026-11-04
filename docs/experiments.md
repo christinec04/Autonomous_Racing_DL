@@ -100,6 +100,21 @@ the shield removed. So far: first clean lap at 200k steps with or without the sh
 PID+APF prior), but the shield cuts crashes before that point from about 1000 to 8-9, and crashes over all of
 training by about 10x (234 vs 2318 at seed 0).
 
+## E17. Telemetry: where is time lost?
+`python -m scripts.telemetry` -> `results/telemetry_speed.png`, `results/telemetry_sectors.md`. Solo flying lap.
+Residual PPO 29.2 s, ours 32.6 s, Pure Pursuit 35.2 s, PID+APF 36.1 s; unshielded PPO crashed. Ours is slower than
+the residual policy in every sector (0.4-0.9 s each) and never exceeds about 8.4 m/s, even on the main straight
+(Pure Pursuit 12 m/s, residual 10 m/s).
+
+`python -m scripts.diag_topspeed`: on the main straight the shield is active on only 2% of steps and the policy
+itself commands about 7.8 m/s, with or without the shield. The policy learned to be timid; the shield is not
+capping it. Candidate causes, tested in E18: the intervention penalty (going fast near the chicane triggers the
+shield, so "always slow" is the easy solution) and the 10 m lidar clip (the chicane is not visible early enough).
+
+## E18. Timidity tests (queued, lane E)
+`runs/ppo_shield_w3low_s0` (w3 = 0.02 instead of 0.1) and `runs/ppo_shield_preview_s0` (curvature preview in the
+observation). Compared against `ppo_shield_s0` on lap time, top speed and collisions.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.

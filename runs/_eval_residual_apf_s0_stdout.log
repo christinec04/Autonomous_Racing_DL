@@ -1,0 +1,6 @@
+
+=== nominal ===
+ppo_residual_apf finished 18/20  lap 32.7 (best 31.32)  coll/10laps 0.36 (wall 0, car 2)  passes/race 2.15 ot 43/43  shield 0.20  grip>90% 0.137 (>100% 0.000)  slip>15 0.050
+
+=== randomized ===
+ppo_residual_apf finished 17/20  lap 32.43 (best 31.36)  coll/10laps 0.61 (wall 0, car 3)  passes/race 2.45 ot 49/51  shield 0.20  grip>90% 0.121 (>100% 0.003)  slip>15 0.049

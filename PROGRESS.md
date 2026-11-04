@@ -137,6 +137,21 @@ Nominal, 20 races x 5 laps:
 
 Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m scripts.make_videos batchN`.
 
+## Step 5: deeper comparisons and analysis (details: docs/experiments.md E8, E12-E17)
+- **ResRace-style residual PPO** (E8): fastest laps of any controller (30.4 s clean) but 9/20 finishes. With our
+  shield added at race time: 18/20 finishes, 32.7 s, 0.36 collisions / 10 laps, 43/43 overtakes. The shield
+  complements APF-residual policies rather than competing with them.
+- **Shield settings with the trained agent** (E14, E15): a safety-vs-aggressiveness dial. Fixed reach and/or a
+  10 cm margin remove most collisions (39/40 finishes for fixed + 10 cm) but cost passes and use the shield more.
+- **Training efficiency** (E16): same steps to the first unshielded clean lap (200k), but ~10x fewer crashes during
+  training with the shield (8-9 vs ~1000 before the first clean lap).
+- **g-g** (E12): all PPO variants are bang-bang on throttle/brake but corner well below the limit.
+- **Shield map** (E13): interventions cluster at the chicane, the hairpin and in traffic on the main straight.
+- **Telemetry** (E17): the shielded agent caps itself at ~8.4 m/s even on the straight; the shield is active on
+  only 2% of those steps, so the policy is timid, not the shield. Two fixes queued (E18).
+- Tests: `tests/` (18), incl. predictor-vs-simulator agreement < 2 cm.
+- Automation: `scripts/eval_daemon.sh` races each run when it finishes; `scripts/autosync.sh` pushes every 20 min.
+
 ## Problems encountered
 1. **F1TENTH map download.** Gym tries to download `Spielberg` on startup. Fixed by pointing its track loader at our `maps/`.
 2. **Built-in lap counter is wrong** for our start position (it reported 60 s laps). We count laps from centerline progress.
@@ -181,3 +196,9 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     carry their own label.
 18. **First video in Downloads would not play**: an interrupted render left an mp4 without its index ("moov atom not
     found"). Videos now render to a temp file, are checked with ffprobe, then moved into place.
+19. **Memory pressure.** With two training runs, an evaluation pool and other apps, free RAM fell to ~1.7 GB and
+    the OS-side reaper stopped background watchers. Now: at most 2 training runs and one 4-process evaluation at a
+    time (`scripts/queue_evals.sh`, `scripts/eval_daemon.sh`).
+20. **Shielded policy is timid.** Telemetry showed it never exceeds ~8.4 m/s; the shield is not the cause (2% active
+    there). Likely the intervention penalty and/or the 10 m lidar clip; tests queued (E18).
+21. **`scripts/analyze.py` overwrote `results/summary.md`** when used for a side experiment. Added `--out`.

@@ -165,6 +165,9 @@ def train(args):
     for stage in args.stages:
         cfg = make_cfg(stage, args.shield, args.seed, args.tire, not args.no_randomize, args.curvature_preview,
                        args.residual)
+        if args.w3 is not None:
+            import dataclasses
+            cfg = dataclasses.replace(cfg, w3_shield=args.w3)
         if args.shield_prob:
             import dataclasses
             cfg = dataclasses.replace(cfg, shield_prob=dict(zip([1, 2, 3], args.shield_prob))[stage])
@@ -214,6 +217,7 @@ if __name__ == "__main__":
     ap.add_argument("--no_randomize", action="store_true")
     ap.add_argument("--curvature_preview", action="store_true")
     ap.add_argument("--residual", action="store_true")
+    ap.add_argument("--w3", type=float, default=None, help="intervention penalty weight (default 0.1)")
     ap.add_argument("--shield_prob", type=float, nargs="*", default=None,
                     help="per-stage probability that the shield is on in an episode (shield dropout)")
     ap.add_argument("--out", required=True)
