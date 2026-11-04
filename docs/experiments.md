@@ -1,5 +1,12 @@
 # Experiments
 
+> **Correction (in progress):** earlier versions counted a race as "finished" whenever there was no collision.
+> Many shielded races actually ended *stuck* (the shield stopped the car and never let it go), so finish counts
+> for shielded controllers were overstated. Collision rates were correct. "Finished" now means all 5 laps
+> completed and stuck races are reported separately; a deadlock fix is being evaluated. Tables below are being
+> updated; see `results/summary.md` for the corrected numbers.
+
+
 Each experiment: question, command, output, result. Status of training runs: [RUNS.md](../RUNS.md).
 
 ## E1. Can classical controllers lap the track? (step 1)
