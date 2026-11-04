@@ -4,7 +4,8 @@ import numpy as np
 from racing.evaluate import summarize
 
 GROUPS = {
-    "PPO + shield (ours)": ["ppo_apf", "ppo_apf@s1", "ppo_apf@s2"],
+    "PPO + final shield (escape, v2 sim)": ["ppo_apf_esc@s0", "ppo_apf_esc@s1v4", "ppo_apf_esc@s2"],
+    "PPO + original shield": ["ppo_apf", "ppo_apf@s1", "ppo_apf@s2"],
     "PPO, no shield": ["ppo", "ppo@s1", "ppo@s2"],
 }
 KEYS = [("finished", "finished all laps / 20", "{:.1f}"), ("stuck", "stuck / 20", "{:.1f}"), ("lap_mean", "clean lap (s)", "{:.2f}"),
