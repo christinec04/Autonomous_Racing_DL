@@ -1,0 +1,26 @@
+{
+ "shield": "off",
+ "stages": [
+  1,
+  2,
+  3
+ ],
+ "steps": [
+  1500000,
+  1000000,
+  1000000
+ ],
+ "seed": 0,
+ "n_envs": 7,
+ "n_steps": 512,
+ "batch": 1024,
+ "lr": 0.0003,
+ "gamma": 0.99,
+ "ent": 0.0,
+ "eval_every": 50000,
+ "tire": "saturated",
+ "no_randomize": false,
+ "curvature_preview": false,
+ "residual": true,
+ "out": "runs/ppo_residual_s0"
+}

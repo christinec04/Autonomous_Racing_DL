@@ -1,0 +1,12 @@
+
+=== nominal ===
+ppo           finished 2/20  lap 36.82 (best 28.24)  coll/10laps 5.53 (wall 18, car 0)  passes/race 1.05 ot 21/29  shield 0.00  grip>90% 0.319 (>100% 0.001)  slip>15 0.016
+ppo@shieldtrained_noshield finished 5/20  lap 34.94 (best 32.44)  coll/10laps 4.72 (wall 7, car 8)  passes/race 1.00 ot 20/32  shield 0.00  grip>90% 0.172 (>100% 0.001)  slip>15 0.000
+ppo_apf       finished 17/20  lap 34.32 (best 32.64)  coll/10laps 0.38 (wall 0, car 3)  passes/race 2.65 ot 53/60  shield 0.06  grip>90% 0.167 (>100% 0.000)  slip>15 0.000
+ppo_apf@noshieldtrained_withshield finished 20/20  lap 36.66 (best 30.56)  coll/10laps 0.00 (wall 0, car 0)  passes/race 1.25 ot 25/31  shield 0.16  grip>90% 0.294 (>100% 0.000)  slip>15 0.024
+
+=== randomized ===
+ppo           finished 1/20  lap 35.71 (best 26.88)  coll/10laps 6.75 (wall 18, car 1)  passes/race 1.10 ot 22/28  shield 0.00  grip>90% 0.277 (>100% 0.006)  slip>15 0.027
+ppo@shieldtrained_noshield finished 6/20  lap 34.51 (best 32.24)  coll/10laps 3.54 (wall 7, car 7)  passes/race 1.45 ot 29/42  shield 0.00  grip>90% 0.140 (>100% 0.001)  slip>15 0.001
+ppo_apf       finished 16/20  lap 34.49 (best 32.44)  coll/10laps 0.63 (wall 2, car 2)  passes/race 2.50 ot 50/59  shield 0.10  grip>90% 0.146 (>100% 0.001)  slip>15 0.009
+ppo_apf@noshieldtrained_withshield finished 18/20  lap 32.29 (best 30.36)  coll/10laps 0.97 (wall 2, car 0)  passes/race 1.05 ot 21/24  shield 0.24  grip>90% 0.231 (>100% 0.002)  slip>15 0.033

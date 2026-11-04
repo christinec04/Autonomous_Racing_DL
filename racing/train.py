@@ -137,11 +137,27 @@ class TrainLogger(BaseCallback):
         return True
 
 
+def _run_info(out: pathlib.Path, **kw):
+    """Record provenance (git commit, dirty files, command) and status in run_info.json."""
+    import subprocess, sys
+    f = out / "run_info.json"
+    info = json.load(open(f)) if f.exists() else {}
+    if "git_commit" not in info:
+        root = pathlib.Path(__file__).resolve().parents[1]
+        git = lambda *a: subprocess.run(["git", *a], cwd=root, capture_output=True, text=True).stdout.strip()
+        info["git_commit"] = git("rev-parse", "--short", "HEAD")
+        info["git_dirty"] = [l[3:] for l in git("status", "--porcelain").splitlines() if l[3:].startswith("racing/")]
+        info["command"] = "python -m racing.train " + " ".join(sys.argv[1:])
+    info.update(kw)
+    json.dump(info, open(f, "w"), indent=1)
+
+
 def train(args):
     torch.set_num_threads(1)
     out = pathlib.Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     json.dump(vars(args), open(out / "args.json", "w"), indent=1)
+    _run_info(out, status="running", started=time.strftime("%Y-%m-%d %H:%M:%S"))
     model = None
     vec = None
     steps_done = 0
@@ -173,7 +189,9 @@ def train(args):
         model.save(out / f"model_stage{stage}.zip")
         vec.save(str(out / f"vecnorm_stage{stage}.pkl"))
         cb.train_f.close(); cb.eval_f.close()
+        _run_info(out, stages_done=args.stages[:args.stages.index(stage) + 1], steps_done=steps_done)
     vec.close()
+    _run_info(out, status="finished", finished=time.strftime("%Y-%m-%d %H:%M:%S"))
 
 
 if __name__ == "__main__":
