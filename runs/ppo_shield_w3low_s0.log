@@ -4,3 +4,22 @@ Info: (n_steps=512 and n_envs=7)
   warnings.warn(
 == stage 1: 1500000 steps, shield=cond_fb_grip
 [50001] eval shielded clean=False lap=None lam=0.47 | unshielded clean=False lap=None prog=41
+[100002] eval shielded clean=True lap=30.39999999999953 lam=0.53 | unshielded clean=False lap=None prog=40
+[150003] eval shielded clean=False lap=None lam=0.49 | unshielded clean=False lap=None prog=40
+[200004] eval shielded clean=True lap=31.39999999999951 lam=0.32 | unshielded clean=False lap=None prog=45
+[250005] eval shielded clean=True lap=32.439999999999486 lam=0.20 | unshielded clean=False lap=None prog=85
+[300006] eval shielded clean=True lap=31.7999999999995 lam=0.19 | unshielded clean=False lap=None prog=85
+[350000] eval shielded clean=True lap=32.75999999999948 lam=0.13 | unshielded clean=False lap=None prog=85
+[400001] eval shielded clean=True lap=33.439999999999465 lam=0.08 | unshielded clean=False lap=None prog=145
+[450002] eval shielded clean=True lap=35.719999999999416 lam=0.07 | unshielded clean=True lap=34.799999999999436 prog=199
+[500003] eval shielded clean=True lap=33.919999999999455 lam=0.13 | unshielded clean=True lap=31.7999999999995 prog=199
+[550004] eval shielded clean=True lap=34.99999999999943 lam=0.11 | unshielded clean=False lap=None prog=186
+[600005] eval shielded clean=True lap=33.479999999999464 lam=0.13 | unshielded clean=True lap=32.919999999999476 prog=199
+[650006] eval shielded clean=True lap=34.67999999999944 lam=0.06 | unshielded clean=True lap=34.319999999999446 prog=199
+[700000] eval shielded clean=True lap=34.03999999999945 lam=0.07 | unshielded clean=True lap=33.59999999999946 prog=199
+[750001] eval shielded clean=True lap=34.43999999999944 lam=0.07 | unshielded clean=True lap=33.99999999999945 prog=199
+[800002] eval shielded clean=True lap=33.99999999999945 lam=0.07 | unshielded clean=True lap=33.71999999999946 prog=199
+[850003] eval shielded clean=True lap=33.79999999999946 lam=0.05 | unshielded clean=True lap=33.399999999999466 prog=199
+[900004] eval shielded clean=True lap=35.15999999999943 lam=0.04 | unshielded clean=True lap=35.03999999999943 prog=199
+[950005] eval shielded clean=True lap=34.19999999999945 lam=0.06 | unshielded clean=True lap=33.67999999999946 prog=199
+[1000006] eval shielded clean=True lap=34.07999999999945 lam=0.05 | unshielded clean=True lap=33.71999999999946 prog=199
