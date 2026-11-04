@@ -1,0 +1,7 @@
+{
+ "git_commit": "a2a2a8e",
+ "git_dirty": [],
+ "command": "python -m racing.train --shield additive --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 0 --out runs/ppo_additive_s0",
+ "status": "running",
+ "started": "2026-11-04 15:45:50"
+}
