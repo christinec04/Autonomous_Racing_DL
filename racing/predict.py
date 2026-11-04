@@ -148,3 +148,26 @@ def rollout_clearance(cands, x0, steer_buf0, p, sat, tcs, tcs_margin, fixed_dece
                 break
         out[k] = clear
     return out
+
+
+@njit(cache=True)
+def current_clearance(x0, pts, opp0, circ_off, circ_r):
+    """Clearance right now (same geometry as rollout_clearance, no motion)."""
+    clear = 1e9
+    c, s = np.cos(x0[4]), np.sin(x0[4])
+    for ci in range(3):
+        cx = x0[0] + circ_off[ci] * c
+        cy = x0[1] + circ_off[ci] * s
+        for q in range(pts.shape[0]):
+            d = np.sqrt((cx - pts[q, 0]) ** 2 + (cy - pts[q, 1]) ** 2) - circ_r
+            if d < clear:
+                clear = d
+        for o in range(opp0.shape[0]):
+            oc, os_ = np.cos(opp0[o, 2]), np.sin(opp0[o, 2])
+            for cj in range(3):
+                ox = opp0[o, 0] + circ_off[cj] * oc
+                oy = opp0[o, 1] + circ_off[cj] * os_
+                d = np.sqrt((cx - ox) ** 2 + (cy - oy) ** 2) - 2 * circ_r
+                if d < clear:
+                    clear = d
+    return clear

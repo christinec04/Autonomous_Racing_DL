@@ -26,6 +26,8 @@ NAMES = {
 def per_race(r, key):
     if key == "collided":
         return float(r["dnf"])
+    if key == "finished":
+        return float((not r["dnf"]) and len(r["lap_times"]) >= r.get("laps_target", 5))
     if key == "passes":
         return float(r["overtake_successes"])
     if key == "laps_done":
@@ -60,11 +62,11 @@ def main(files, out="results/summary.md"):
         S = summarize(R)
         ctrls = [c for c in ORDER if c in S] + [c for c in S if c not in ORDER]
         lines += [f"## {cond}", "",
-                  "| controller | finished | clean lap (s) | best lap | collisions / 10 laps (wall, car) | passes / race | overtake success | shield active | time > 90% grip | time > 15 deg slip |",
-                  "|---|---|---|---|---|---|---|---|---|---|"]
+                  "| controller | finished all 5 laps | stuck (no crash, stopped) | clean lap (s) | best lap | collisions / 10 laps (wall, car) | passes / race | overtake success | shield active | time > 90% grip | time > 15 deg slip |",
+                  "|---|---|---|---|---|---|---|---|---|---|---|"]
         for c in ctrls:
             s = S[c]
-            lines.append(f"| {NAMES.get(c, c)} | {s['finished']}/{s['races']} | {fmt(s['lap_mean'])} | {fmt(s['lap_best'])} | "
+            lines.append(f"| {NAMES.get(c, c)} | {s['finished']}/{s['races']} | {s['stuck']} | {fmt(s['lap_mean'])} | {fmt(s['lap_best'])} | "
                          f"{s['collisions_per_10_laps']:.2f} ({s['wall']}, {s['car']}) | {s['passes_per_race']:.2f} | "
                          f"{fmt(s['overtake_success'], '{:.0%}')} ({s['overtake_successes']}/{s['overtake_attempts']}) | "
                          f"{s['shield_freq']:.0%} | {s['grip_above_90']:.1%} | {s['slip_above_15']:.1%} |")
@@ -76,12 +78,12 @@ def main(files, out="results/summary.md"):
                              f"{'yes' if t['met'] else ('no' if t['met'] is False else '-')} |")
         if OURS in S:
             lines += ["", f"Mann-Whitney U p-values, {NAMES[OURS]} vs each controller (per-race values):", "",
-                      "| vs | collided (0/1) | passes | laps completed | clean lap time |", "|---|---|---|---|---|"]
+                      "| vs | finished (0/1) | collided (0/1) | passes | laps completed | clean lap time |", "|---|---|---|---|---|---|"]
             for c in ctrls:
                 if c == OURS:
                     continue
                 lines.append(f"| {NAMES.get(c, c)} | " + " | ".join(fmt(mwu(R, OURS, c, k), "{:.3g}") for k in
-                                                                     ("collided", "passes", "laps_done", "clean_lap")) + " |")
+                                                                     ("finished", "collided", "passes", "laps_done", "clean_lap")) + " |")
         lines.append("")
     out = pathlib.Path("results/summary.md")
     out.write_text("\n".join(lines))

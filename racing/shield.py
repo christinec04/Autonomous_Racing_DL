@@ -25,7 +25,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from .predict import rollout_clearance, backup_steer
+from .predict import rollout_clearance, backup_steer, current_clearance
 from .sim import DEFAULT_PARAMS as P, G
 
 WB = P["lf"] + P["lr"]
@@ -65,6 +65,7 @@ class ShieldConfig:
     beta_max: float = 0.35  # predicted body slip above ~20 deg = loss of control
     use_map: bool = True  # add known track walls (lidar is occluded by opponents)
     backup_lookahead: float = 1.2
+    escape: bool = False  # deadlock fix: inside the margin, allow actions that do not reduce clearance further
     opp_brake: float = 6.0  # worst-case opponent deceleration assumed in prediction [m/s^2]
 
 
@@ -179,6 +180,7 @@ class APFShield:
         if len(sb) >= 2: buf[1] = sb[1]
         fixed = cfg.a_brake_fixed if cfg.reach == "fixed" else 0.0
         self._lane = (np.ascontiguousarray(lane_xy, dtype=np.float64), la)
+        self._now = (np.ascontiguousarray(pts, dtype=np.float64), opp)
         return rollout_clearance(
             np.ascontiguousarray(cands, dtype=np.float64), np.asarray(x7, np.float64), buf, self.p,
             self.sat, self.tcs, 0.95, fixed, np.ascontiguousarray(pts, dtype=np.float64),
@@ -207,7 +209,13 @@ class APFShield:
 
         pc = lambda c: self.predict_clearance(c, x7, steer_buf, scan, opps_world)
         c_rl = pc(a_rl[None])[0]
-        if c_rl >= cfg.c_safe:
+        thr = cfg.c_safe
+        if cfg.escape:
+            pts, opp = self._now
+            c_now = current_clearance(np.asarray(x7, np.float64), pts, opp, CIRC_OFF, CIRC_R)
+            # near or inside the margin: "do not make it (much) worse", but never allow contact
+            thr = max(min(cfg.c_safe, c_now - 0.02), 0.0)
+        if c_rl >= thr:
             return a_rl, 0.0, {"rho": rho, "fallback": False, "c_pred": float(c_rl)}
 
         # corrective direction: APF steering + braking (traction control limits the rate)
@@ -215,7 +223,7 @@ class APFShield:
         lams = np.array(cfg.blend_levels)
         cands = (1 - lams)[:, None] * a_rl[None] + lams[:, None] * a_corr[None]
         cl = pc(cands)
-        ok = np.nonzero(cl >= cfg.c_safe)[0]
+        ok = np.nonzero(cl >= thr)[0]
         if len(ok):
             i = ok[0]
             return cands[i], float(lams[i]), {"rho": rho, "fallback": False, "c_pred": float(cl[i])}
@@ -228,7 +236,7 @@ class APFShield:
         steers = np.array([np.nan, a_corr[0], -S_MAX, -S_MAX / 2, 0.0, S_MAX / 2, S_MAX, steer])
         fb = np.stack([steers, np.zeros_like(steers)], 1)
         fb_cl = pc(fb)
-        j = 0 if fb_cl[0] >= cfg.c_safe else int(np.argmax(fb_cl))
+        j = 0 if fb_cl[0] >= thr else int(np.argmax(fb_cl))
         a = fb[j].copy()
         if np.isnan(a[0]):
             lane_xy, la = self._lane

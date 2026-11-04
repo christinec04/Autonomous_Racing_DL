@@ -7,7 +7,7 @@ GROUPS = {
     "PPO + shield (ours)": ["ppo_apf", "ppo_apf@s1", "ppo_apf@s2"],
     "PPO, no shield": ["ppo", "ppo@s1", "ppo@s2"],
 }
-KEYS = [("finished", "finished / 20", "{:.1f}"), ("lap_mean", "clean lap (s)", "{:.2f}"),
+KEYS = [("finished", "finished all laps / 20", "{:.1f}"), ("stuck", "stuck / 20", "{:.1f}"), ("lap_mean", "clean lap (s)", "{:.2f}"),
         ("collisions_per_10_laps", "collisions / 10 laps", "{:.2f}"), ("passes_per_race", "passes / race", "{:.2f}"),
         ("overtake_success", "overtake success", "{:.0%}"), ("shield_freq", "shield active", "{:.1%}"),
         ("grip_above_90", "time > 90% grip", "{:.1%}"), ("slip_above_15", "time > 15 deg slip", "{:.1%}")]
