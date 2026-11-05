@@ -68,6 +68,7 @@ class ShieldConfig:
     escape: bool = False  # deadlock fix: near/inside the margin, accept actions predicted to stay out of contact
     escape_tol: float = 0.02  # how much predicted clearance may shrink [m] while escaping
     escape_v: float = 0.5  # escape only applies below this speed [m/s] (deadlock recovery, not normal driving)
+    allow_reverse: bool = False  # pass negative target speeds through (stall recovery reverses; the policy cannot)
     opp_brake: float = 6.0  # worst-case opponent deceleration assumed in prediction [m/s^2]
 
 
@@ -195,7 +196,7 @@ class APFShield:
         """x7 = F1TENTH ST state (x, y, delta, v, yaw, yaw_rate, beta). Returns (a_final, lambda, info)."""
         cfg = self.cfg
         x, y, steer, v, yaw, yaw_rate, beta = x7
-        a_rl = self.clip_action(np.asarray(a_rl, float))
+        a_rl = self.clip_action(np.asarray(a_rl, float), v_lo=-1.0 if cfg.allow_reverse else 0.0)
         if cfg.mode == "off":
             return a_rl, 0.0, {"rho": 0.0, "fallback": False}
 
