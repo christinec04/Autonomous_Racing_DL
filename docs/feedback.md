@@ -21,7 +21,9 @@ Targets are defined in code (`racing/evaluate.py`, `TARGETS`) and checked automa
 | time above 15 deg body slip | <= 1% | 0.0% | 0.0% | 0.0% / 0.0% |
 
 "Ours (final)" = PPO + action-conditioned shield + deadlock escape + stall recovery (E19, E21), seed 0, all on the
-post-spin-fixed simulator (`results/final_summary.md`).
+post-spin-fixed simulator (`results/final_summary.md`). On 50 race seeds (E25, `results/headtohead50.md`) ours finishes 43/50
+nominal and 35/50 randomised, vs 39/50 and 34/50 for the additive shield (not significant) and 28/50 and 25/50 for
+PID+APF; the 20-race finish counts below are on the optimistic side.
 
 Not a target but the most important number: races finished (all 5 laps) - ours (final) 19/20 nominal and 16/20
 randomised for seed 0, vs 12/20 for PID+APF, 10/20 for the residual policy, 0/20 for PPO without a shield, and

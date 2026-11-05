@@ -27,7 +27,10 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
   Ours meets all six metric targets, nominal and randomised. Vs the additive shield it finishes as often
   (p = 0.57) with fewer collisions while lapping 13 s faster with 3.7x the passes (p < 1e-5); vs PID+APF and no
   shield it finishes, survives and passes significantly more (p < 0.01). The residual policy is the fastest but
-  crashes in half its races. The stall recovery (E21) reverses the car out when the policy stops nose-to-wall; it
+  crashes in half its races. **On 50 race seeds** ([results/headtohead50.md](results/headtohead50.md)) the picture
+  holds but is less rosy: ours finishes 43/50 nominal (86%) and 35/50 randomised (70%), the additive shield 39/50 and
+  34/50 (no significant difference), PID+APF 28/50 and 25/50 (p = 0.002 nominal); ours laps 12 s faster than the
+  additive shield with 2.7x the passes (p < 1e-8). The stall recovery (E21) reverses the car out when the policy stops nose-to-wall; it
   fires in 3 of 20 seed-0 races.
 - **Correction:** earlier versions of this page counted a race as finished whenever there was no collision; many
   shielded races had actually ended *stuck* (the shield deadlocked). Finish counts above are corrected; the
