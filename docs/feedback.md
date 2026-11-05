@@ -23,9 +23,9 @@ Targets are defined in code (`racing/evaluate.py`, `TARGETS`) and checked automa
 Not a target but the most important number: races finished (all 5 laps) - ours (final) 16/20 nominal and 14/20
 randomised for seed 0, vs 12/20 for PID+APF, 10/20 for the residual policy, 0/20 for PPO without a shield, and
 18/20 for PPO trained with the additive shield, which however laps 13 s slower (all on the same simulator,
-`results/final_summary.md`). Across two
-seeds the final shield averages 8.5 +- 7.5 finished (seed 1: 1/20, its policy slides), vs 2.0 +- 1.0 without a
-shield; see `results/seed_summary.md` and E20. Targets above are seed 0 only.
+`results/final_summary.md`). Across three
+seeds the final shield averages 8.3 +- 6.1 finished (seed 1: 1/20, its policy slides; seed 2: 8/20), vs 3.0 +- 2.4
+without a shield; see `results/seed_summary.md` and E20. Targets above are seed 0 only.
 
 > *APF with PPO already exists in ResRace and RaceMOP. State what is different about yours.*
 

@@ -250,7 +250,8 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     `test_stall_recovery_reverses_out_of_a_nose_to_wall_stop`.
 28. **Autosync silently stopped pushing for 90 minutes.** Its `sleep 1200` (Git Bash) never returned; the training
     and eval scripts were fine. Killing the hung `sleep` process let the loop continue without a restart. Check
-    `runs/_autosync.log` timestamps if pushes look stale.
+    `runs/_autosync.log` timestamps if pushes look stale. It happened again after the machine slept overnight (all runs paused ~10 h,
+    then resumed normally; the hung `sleep` again needed killing). Long Git Bash `sleep`s do not survive a suspend.
 29. **A lower intervention penalty made the policy lean on the shield.** `--w3 0.02` (5x lower) gave faster laps
     (31.3 s vs 34.5 s) but the shield was active on 35% of steps (vs 3-6%) and 18/20 races ended stuck. On the
     post-spin-fixed simulator with the escape shield it was worse: 0/20 finished, 47% of time above 15 deg slip. The
