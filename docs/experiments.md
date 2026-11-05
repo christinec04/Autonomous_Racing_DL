@@ -167,7 +167,8 @@ Raw results: `results/eval_escape_v2.json`, `results/eval_escape_v3.json`, `resu
 seed 0 finishes 16/20 (nominal), seed 1 only 1/20 (14 wall crashes, 9% of the time sliding above 15 deg).
 Seed 1's policy learned a much more aggressive, sliding style (42% of the time above 90% grip vs 17% for seed 0);
 the shield predicts and avoids loss of control from a stable state, but cannot reliably recover a car that is
-already sliding. Without the shield, seeds 0 and 1 finish 1/20 and 3/20. Seed 2 is training. Conclusion so far:
+already sliding. Without the shield, seeds 0 and 1 finish 1/20 and 3/20. Seed 2: 8/20 with the final shield (7 stuck, E21), 6/20
+without (2.55 vs 0.77 collisions / 10 laps). Across 3 seeds: 8.3 +- 6.1 vs 3.0 +- 2.4 finished. Conclusion:
 the shield consistently reduces collisions, but how many races are finished depends strongly on the training seed.
 
 ## E21. Stall recovery (seed 2 chicane stops)
