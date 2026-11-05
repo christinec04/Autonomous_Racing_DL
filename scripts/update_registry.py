@@ -23,8 +23,19 @@ PURPOSE = {
     "ppo_shield_v2esc_s0": "Ours, improved: shield with deadlock escape, trained on the post-spin-fixed simulator",
     "ppo_shield_v2esc_slip_s1": "Final shield + slip penalty (w6 = 1), seed 1 (the seed that learned to slide)",
     "ppo_additive_s0": "Proposal's original shield: PPO + additive Eq. 2/3 APF (fixed reach)",
+    "ppo_shield_ft_chicane_s2": "E22: seed-2 shielded policy fine-tuned 500k steps, half the episodes starting before the chicane",
+    "ppo_shield_ft_chicane_s1": "E22: seed-1 shielded policy fine-tuned 500k steps, half the episodes starting before the chicane",
+    "ppo_residual_shield_s0": "E23: ResRace-style residual policy trained with the final shield (escape, v2 sim)",
 }
 RESULTS = {
+    "eval_recover.json": "E21: final shield + stall recovery, seeds 0-2 (20 races x 5 laps, nominal + randomised)",
+    "eval_residual_rec.json": "E21: residual policy + final shield + stall recovery",
+    "final_summary.md": "Final comparison on the v2 simulator: tables, targets, Mann-Whitney tests (scripts/final_tables.sh)",
+    "seed_summary.md": "Mean +- std across training seeds (scripts/seed_summary.py)",
+    "failure_map.png": "Where on the lap races end, per controller (scripts/plot_failures.py)",
+    "eval_ft_chicane_s2.json": "E22: chicane fine-tuned seed-2 policy, with and without stall recovery",
+    "eval_ft_chicane_s1.json": "E22: chicane fine-tuned seed-1 policy, with and without stall recovery",
+    "eval_residual_shield_s0.json": "E23: residual policy trained with the shield",
     "shield_stress_saturated.json": "Step 2 shield stress test (scripted bad drivers), friction-circle tyres",
     "shield_stress_linear.json": "Step 2 shield stress test, stock linear tyres",
     "eval_baselines.json": "Step 3 race evaluation: Pure Pursuit, PID+APF (20 races x 5 laps, nominal + randomised)",
@@ -73,7 +84,8 @@ def run_row(d):
     status = "finished" if len(done) == len(a["stages"]) else ("running" if steps else "starting")
     crash = []
     for s in a["stages"]:
-        lo = STAGE_END.get(s - 1, 0); hi = STAGE_END[s]
+        # fine-tuning stages (e.g. 4, --init) count their own steps from 0
+        lo, hi = (STAGE_END.get(s - 1, 0), STAGE_END[s]) if s in STAGE_END else (0, float("inf"))
         c = [float(r["crash_rate"]) for r in tr if lo < float(r["step"]) <= hi]
         crash.append(f"{100*np.mean(c):.0f}%" if c else "-")
     first = next((int(float(r["step"])) for r in ev if r["unshielded_clean"] == "True"), None)
