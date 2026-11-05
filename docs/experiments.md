@@ -313,11 +313,13 @@ pools them with the first 20 (`results/headtohead50.md`, Wilson 95% intervals, F
 | ours (final) | **43** (74-93%) | **35** (56-81%) | **34.7 s** | **2.98** |
 | PPO + additive shield | 39 (65-87%) | 34 (54-79%) | 46.6 s | 1.10 |
 | PID + APF | 28 (42-69%) | 25 (37-63%) | 42.6 s | 1.34 |
+| residual PPO trained with our shield (E23) | 39 (65-87%) | **37** (60-84%) | **32.2 s** | **3.42** |
 
 Ours vs additive: no significant difference in finishing or crashing (p = 0.44 nominal, 1.0 randomised), but 12 s
 faster laps and 2.7x the passes (p < 1e-8). Ours vs PID+APF: more races finished (p = 0.002 nominal, 0.07
 randomised). The 20-race numbers were optimistic (19/20 vs 43/50; 16/20 vs 35/50 randomised); conclusions about
-finishing rates should use these.
+finishing rates should use these. The residual policy trained with our shield ties ours on finishing (p = 0.44 / 0.82)
+and laps 2.5 s faster (p < 1e-27): the strongest controller overall on seed 0.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
