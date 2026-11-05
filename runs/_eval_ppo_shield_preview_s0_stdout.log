@@ -1,46 +1,6 @@
-multiprocessing.pool.RemoteTraceback: 
-"""
-Traceback (most recent call last):
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\pool.py", line 125, in worker
-    result = (True, func(*args, **kwds))
-                    ^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\pool.py", line 48, in mapstar
-    return list(map(*args))
-           ^^^^^^^^^^^^^^^^
-  File "C:\Users\shore\gabe\Autonomous_Racing_DL\racing\evaluate.py", line 140, in run_race
-    a = act(obs)
-        ^^^^^^^^
-  File "C:\Users\shore\gabe\Autonomous_Racing_DL\racing\evaluate.py", line 85, in <lambda>
-    return lambda obs: model.predict(obs[None], deterministic=True)[0][0]
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\common\base_class.py", line 557, in predict
-    return self.policy.predict(observation, state, episode_start, deterministic)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\common\policies.py", line 365, in predict
-    obs_tensor, vectorized_env = self.obs_to_tensor(observation)
-                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\common\policies.py", line 272, in obs_to_tensor
-    vectorized_env = is_vectorized_observation(observation, self.observation_space)
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\common\utils.py", line 487, in is_vectorized_observation
-    return is_vec_obs_func(observation, observation_space)  # type: ignore[operator]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\common\utils.py", line 354, in is_vectorized_box_observation
-    raise ValueError(
-ValueError: Error: Unexpected observation shape (1, 77) for Box environment, please use (87,) or (n_env, 87) for the observation shape.
-"""
 
-The above exception was the direct cause of the following exception:
+=== nominal ===
+ppo_apf@preview finished 13/20 (stuck 5)  lap 33.36 (best 31.36)  coll/10laps 0.25 (wall 0, car 2)  passes/race 3.50 ot 70/82  shield 0.06  grip>90% 0.246 (>100% 0.000)  slip>15 0.003
 
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "C:\Users\shore\gabe\Autonomous_Racing_DL\racing\evaluate.py", line 255, in <module>
-    res = p.map(run_race, jobs, chunksize=1)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\pool.py", line 367, in map
-    return self._map_async(func, iterable, mapstar, chunksize).get()
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\multiprocessing\pool.py", line 774, in get
-    raise self._value
-ValueError: Error: Unexpected observation shape (1, 77) for Box environment, please use (87,) or (n_env, 87) for the observation shape.
+=== randomized ===
+ppo_apf@preview finished 6/20 (stuck 13)  lap 32.81 (best 31.16)  coll/10laps 0.19 (wall 1, car 0)  passes/race 2.55 ot 51/61  shield 0.13  grip>90% 0.206 (>100% 0.002)  slip>15 0.005

@@ -29,6 +29,7 @@ Updated as runs finish. Raw tables: [results/summary.md](../results/summary.md) 
 | Shield-trained policies lean on the shield | seed 0 with the shield removed: 5/20 finished | shield dropout run (`ppo_shielddrop_s0`) |
 | The shielded policy is timid | top speed ~8.4 m/s even on the main straight (E17); the policy, not the shield, caps it | curvature preview (E18, training). A lower intervention penalty made it worse: faster laps but the shield active 35% of the time and 0/20 finished |
 | Shield + residual policy at race time | deadlocks (4/20 finished) or slides with the escape (2/20) | would need training the residual policy with the shield |
+| The shield reacts too late for a policy that drives at the limit | E24: on seed 1 the predicted clearance shrinks for 6 steps while staying above the 5 cm margin, then braking in the corner spins the car. A stricter slip limit lifts seed 1 from 1/20 to 9-10/20 but costs seed 0 (19 -> 16/20) | a safety/performance dial; possibly train with the stricter shield |
 | Car contacts in traffic remain | opponents' future motion is predicted (worst-case braking), not known | - |
 | Training efficiency (steps to first clean lap) unchanged | 200k with or without the shield | - |
 

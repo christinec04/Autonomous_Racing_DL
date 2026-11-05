@@ -72,7 +72,7 @@ class OvertakeTracker:
                     s["ahead_t"] = None
 
 
-def make_controller(name, env, model_path=None):
+def make_controller(name, env, model_path=None, model=None):
     if name == "pure_pursuit":
         pp = PurePursuit(env.cl, speed_scale=0.85, mu=env.mu)
         return lambda obs: env.to_normalized(pp.act(*_ego(env)))
@@ -80,8 +80,9 @@ def make_controller(name, env, model_path=None):
         pid = PIDFollower(env.cl, env.cfg.control_dt, speed_scale=0.85, mu=env.mu)
         return lambda obs: env.to_normalized(pid.act(*_ego(env)))
     if name.startswith("ppo"):
-        from stable_baselines3 import PPO
-        model = PPO.load(model_path, device="cpu")
+        if model is None:
+            from stable_baselines3 import PPO
+            model = PPO.load(model_path, device="cpu")
         return lambda obs: model.predict(obs[None], deterministic=True)[0][0]
     raise ValueError(name)
 
@@ -121,7 +122,13 @@ def run_race(job):
     label = job[6] if len(job) > 6 else ctrl
     tire = job[7] if len(job) > 7 else "saturated"
     sh = shield_override or SHIELD_FOR[ctrl]
-    cfg = EnvConfig(n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
+    model = None
+    if ctrl.startswith("ppo") and model_path:
+        from stable_baselines3 import PPO
+        model = PPO.load(model_path, device="cpu")
+    # policies trained with the curvature preview expect 10 extra observation values
+    preview = model is not None and model.observation_space.shape[0] > 77
+    cfg = EnvConfig(curvature_preview=preview, n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
                     shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
                     residual=ctrl.startswith("ppo_residual"), tire=tire, recover=ctrl in RECOVER)
     env = RaceEnv(cfg)
@@ -129,7 +136,7 @@ def run_race(job):
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),
                 opp_speeds=list(rng.uniform(0.5, 0.75, 3)))
     obs, _ = env.reset(seed=seed, options=opts)
-    act = make_controller(ctrl, env, model_path)
+    act = make_controller(ctrl, env, model_path, model)
     L = env.cl.length
     ot = OvertakeTracker(3)
     lap_marks, lams, glat, glon, slip = [], [], [], [], []

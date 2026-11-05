@@ -273,3 +273,7 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     finished: it learned to slide (17% of race time above 15 deg slip). Training metrics improving while race results
     get worse is exactly why every change is raced on the full protocol. Retrying with a 6x lower learning rate and
     a slip penalty (E22b). The queued seed-1 fine-tune was cancelled.
+33. **The curvature-preview policy could not be raced.** `racing/evaluate.py` always built the 77-value observation;
+    the preview policy expects 87, so every race raised a shape error. The eval daemon retried every 5 minutes and
+    committed the failed log each time (three "Auto-eval" commits with no results). Fix: `run_race` loads the
+    model first and turns the preview on when its observation has more than 77 values.

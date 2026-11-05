@@ -150,7 +150,8 @@ mean lambda, g-g utilisation from the true velocity-vector acceleration, share o
 (fixed / grip), `a_brake_fixed` 6.0, `d_min` 0.30, `d_crit` 0.05, `k_steer` 2.0, `k_speed` 2.0, `opp_a` 0.6,
 `opp_b` 0.15, `smooth` 0.5, `c_safe` 0.05, `commit_time` 0.04, `max_pred_time` 3.0, `blend_levels`
 (0.25, 0.5, 0.75, 1.0), `beam_stride` 3, `beta_max` 0.35, `use_map` True, `backup_lookahead` 1.2, `opp_brake` 6.0, `escape` False (deadlock escape, E19), `escape_tol` 0.02, `escape_v` 0.5,
-`allow_reverse` False (let negative target speeds through; used by the stall recovery).
+`allow_reverse` False (let negative target speeds through; used by the stall recovery), `c_safe_v` 0 (extra
+margin per m/s), `mu_scale` 1.0 (friction the predictor assumes, fraction of nominal; E24).
 
 `python -m racing.train` flags: `--shield {off, additive, cond_fb_grip, cond_fb_fixed, cond_fb_grip_esc}`, `--w6`, `--stages`, `--steps`
 (per stage), `--seed`, `--n_envs`, `--n_steps`, `--batch`, `--lr`, `--gamma`, `--ent`, `--eval_every`, `--tire`,
