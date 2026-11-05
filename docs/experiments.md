@@ -132,7 +132,22 @@ observation). Compared against `ppo_shield_s0` on lap time, top speed and collis
 Faster when it moves, but the policy hands braking to the shield (35-38% of steps) and gets stuck. On the
 post-spin-fixed simulator it slides most of the time: it learned on the v1 tyre artifact (PROGRESS.md problem 24).
 Conclusion: the intervention penalty is what keeps the shield rare and the policy self-reliant; lowering it is
-not the way to fix timidity. The curvature-preview run is training.
+not the way to fix timidity.
+
+**Curvature preview** (10 centerline curvatures 1-20 m ahead in the observation; `runs/ppo_shield_preview_s0`,
+same shield and simulator as the original seed-0 run), 20 races x 5 laps, nominal:
+
+| | finished | stuck | clean lap | collisions / 10 laps | passes / race |
+|---|---|---|---|---|---|
+| original seed 0 (no preview) | 12/20 | 5 | 34.3 s | 0.38 | 2.65 |
+| with curvature preview | 13/20 | 5 | **33.4 s** | **0.25** | **3.50** |
+
+Solo flying lap (`python -m scripts.diag_topspeed <models>`): 31.2 s vs 32.7 s, top speed 8.8 vs 8.4 m/s. Knowing
+the road ahead helps a little everywhere, but the cap near 8.5 m/s remains (the v2esc run also tops out at 8.45),
+so timidity is not mainly a perception problem. Raced with the final configuration (escape + stall recovery, v2 simulator;
+`results/eval_preview_rec.json`): 17/20 finished nominal (14/20 randomised), 0.22 collisions / 10 laps, 3.80 passes
+per race (the most of any controller), best lap 30.8 s; vs 19/20, 0.10 and 3.15 for the final seed-0 policy.
+Comparable, not clearly better, on one seed.
 
 ## E19. Shield deadlock: diagnosis and fixes
 After fixing the "finished" metric (problem 22), the biggest failure of every shielded controller turned out to be
