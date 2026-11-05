@@ -102,8 +102,9 @@ SHIELD_FOR = {
     "ppo_apf_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),  # with the deadlock fix
     "ppo_residual_apf_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),
     "ppo_apf_rec": dict(mode="conditioned_fallback", reach="grip", escape=True, allow_reverse=True),  # + stall recovery (EnvConfig.recover)
+    "ppo_residual_apf_rec": dict(mode="conditioned_fallback", reach="grip", escape=True, allow_reverse=True),
 }
-RECOVER = {"ppo_apf_rec"}
+RECOVER = {"ppo_apf_rec", "ppo_residual_apf_rec"}
 
 
 def run_race(job):
