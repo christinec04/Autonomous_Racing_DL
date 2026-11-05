@@ -7,3 +7,6 @@ fine-tuning runs/ppo_shield_s2/model_stage3.zip (vecnorm loaded)
 [250002] eval shielded clean=True lap=32.039999999999495 lam=0.10 | unshielded clean=True lap=31.559999999999505 prog=199
 [300000] eval shielded clean=True lap=32.11999999999949 lam=0.09 | unshielded clean=False lap=None prog=59
 [350004] eval shielded clean=False lap=None lam=0.48 | unshielded clean=False lap=None prog=113
+[400002] eval shielded clean=True lap=32.999999999999474 lam=0.13 | unshielded clean=False lap=None prog=87
+[450000] eval shielded clean=False lap=None lam=0.48 | unshielded clean=True lap=30.35999999999953 prog=199
+[500004] eval shielded clean=True lap=31.7999999999995 lam=0.11 | unshielded clean=False lap=None prog=86
