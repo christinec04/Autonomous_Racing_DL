@@ -9,8 +9,9 @@ Solo laps every 50k steps, standing start. 'fast' = under 34 s (best classical s
 | `ppo_noshield_s1` | off | 3500k | 200k | 600k | 1080 | 2769 (5517) | 28.60 |
 | `ppo_noshield_s2` | off | 3500k | 150k | 550k | 969 | 2295 (5267) | 27.56 |
 | `ppo_residual_s0` | off residual | 3500k | 50k | 350k | 259 | 995 (4141) | 29.80 |
+| `ppo_shield_preview_s0` | cond_fb_grip | 420k | 250k | 400k | 15 | 18 (569) | 32.72 |
 | `ppo_shield_s0` | cond_fb_grip | 3500k | 200k | 450k | 8 | 234 (4158) | 30.48 |
 | `ppo_shield_s1` | cond_fb_grip | 3500k | 200k | 800k | 9 | 313 (4572) | 29.12 |
 | `ppo_shield_s2` | cond_fb_grip | 3500k | 150k | 600k | 11 | 96 (3965) | 30.28 |
-| `ppo_shield_v2esc_s0` | cond_fb_grip_esc tyre=saturated_v2 | 2000k | 150k | 150k | 76 | 187 (2122) | 31.48 |
-| `ppo_shield_w3low_s0` | cond_fb_grip | 3160k | 450k | 500k | 24 | 315 (4369) | 28.72 |
+| `ppo_shield_v2esc_s0` | cond_fb_grip_esc tyre=saturated_v2 | 2720k | 150k | 150k | 76 | 334 (2938) | 31.48 |
+| `ppo_shield_w3low_s0` | cond_fb_grip | 3500k | 450k | 500k | 24 | 405 (4981) | 28.24 |
