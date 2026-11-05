@@ -60,3 +60,9 @@ Info: (n_steps=512 and n_envs=7)
 [2650003] eval shielded clean=True lap=32.87999999999948 lam=0.00 | unshielded clean=True lap=32.87999999999948 prog=199
 [2700004] eval shielded clean=True lap=34.15999999999945 lam=0.00 | unshielded clean=True lap=34.15999999999945 prog=199
 [2750005] eval shielded clean=True lap=35.43999999999942 lam=0.00 | unshielded clean=True lap=35.43999999999942 prog=199
+[2800006] eval shielded clean=True lap=30.759999999999522 lam=0.00 | unshielded clean=True lap=30.759999999999522 prog=199
+[2850000] eval shielded clean=True lap=30.239999999999533 lam=0.00 | unshielded clean=True lap=30.239999999999533 prog=199
+[2900001] eval shielded clean=True lap=30.31999999999953 lam=0.00 | unshielded clean=True lap=30.31999999999953 prog=199
+[2950002] eval shielded clean=True lap=31.27999999999951 lam=0.00 | unshielded clean=True lap=31.27999999999951 prog=199
+[3000003] eval shielded clean=True lap=29.91999999999954 lam=0.00 | unshielded clean=True lap=29.91999999999954 prog=199
+[3050004] eval shielded clean=True lap=29.359999999999552 lam=0.00 | unshielded clean=True lap=29.359999999999552 prog=199
