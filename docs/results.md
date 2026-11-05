@@ -24,8 +24,8 @@ Updated as runs finish. Raw tables: [results/summary.md](../results/summary.md) 
 
 | finding | evidence | next step |
 |---|---|---|
-| Strong seed dependence | final shield, nominal: seed 0 16/20, seed 1 1/20 (sliding style the shield cannot catch), seed 2 8/20 (7 stuck); mean 8.3 +- 6.1 vs 3.0 +- 2.4 without a shield; with stall recovery 13.0 +- 8.5 (seed 1 still 1/20) | slip penalty run (`ppo_shield_v2esc_slip_s1`); chicane fine-tuning (E22) |
-| Failures concentrate in the chicane | `results/failure_map.png`: 61% of our shield's race-ending events (3 seeds) are in the 2.5 m chicane (84-126 m); seed 2's stuck races are the policy steering into the outer wall at crawling speed | stall recovery (E21), chicane fine-tuning (E22) |
+| Strong seed dependence | final shield, nominal: seed 0 16/20, seed 1 1/20 (sliding style the shield cannot catch), seed 2 8/20 (7 stuck); mean 8.3 +- 6.1 vs 3.0 +- 2.4 without a shield; with stall recovery 13.0 +- 8.5 (seed 1 still 1/20) | slip penalty run (`ppo_shield_v2esc_slip_s1`); chicane fine-tuning backfired (E22: 8/20, slides), gentler retry E22b queued |
+| Failures concentrate in the chicane | `results/failure_map.png`: 61% of our shield's race-ending events (3 seeds) are in the 2.5 m chicane (84-126 m); seed 2's stuck races are the policy steering into the outer wall at crawling speed | stall recovery (E21) fixed most of it; fine-tuning on the chicane made seed 2 slide (E22) |
 | Shield-trained policies lean on the shield | seed 0 with the shield removed: 5/20 finished | shield dropout run (`ppo_shielddrop_s0`) |
 | The shielded policy is timid | top speed ~8.4 m/s even on the main straight (E17); the policy, not the shield, caps it | curvature preview (E18, training). A lower intervention penalty made it worse: faster laps but the shield active 35% of the time and 0/20 finished |
 | Shield + residual policy at race time | deadlocks (4/20 finished) or slides with the escape (2/20) | would need training the residual policy with the shield |
