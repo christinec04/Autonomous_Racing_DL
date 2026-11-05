@@ -54,4 +54,8 @@ to `make_f110`. The centerline CSV drives progress, lap counting, opponents and 
 - Controllers tuned at 100 Hz can be unstable at the 25 Hz control rate.
 - Do not judge a shield by intervention count alone; check collisions in the stress test and on race day.
 - Evaluation labels: give every variant its own controller label, otherwise results get pooled.
+- Never `git pull` (least of all `--rebase --autostash`) from a background script: Windows will not let git replace a
+  log file a training run holds open, and the repo is left mid-rebase. All jobs commit to the same clone, so a
+  retried `git push` is enough.
+- Git Bash `sleep` can hang after a system suspend; if `runs/_autosync.log` stops advancing, kill the stuck `sleep`.
 - Memory: each training run with 7 envs uses about 2.5 GB; evaluation pools about 0.3 GB per process.

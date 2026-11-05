@@ -185,8 +185,29 @@ nose 40-45 deg into the outer wall; the shield stops it there correctly and the 
 - every recovery command still goes through the shield (`ShieldConfig(allow_reverse=True)`).
 
 Spot check on the 7 stuck seed-2 races: all 7 finish all 5 laps, using 1-5 recoveries per race; laps behind slow
-traffic are ~50 s. Full evaluation (`ppo_apf_rec`, seeds 0-2, `results/eval_recover.json`): running.
+traffic are ~50 s. Two fixes were needed first (PROGRESS.md problem 27): the shield clamped the reverse command to
+0, and a car creeping along the wall nose-out never triggered the stall test.
+
+Full evaluation, same models and race seeds as E19/E20 (`results/eval_recover.json`, 20 races x 5 laps):
+
+| seed | finished, nominal (before -> with recovery) | collisions / 10 laps | randomised finished | races using recovery |
+|---|---|---|---|---|
+| 0 | 16 -> **19** | 0.44 -> **0.10** | 14 -> 16 (0.47 collisions) | 3/20 (once each) |
+| 1 | 1 -> 1 | 4.68 | 3 | 9/20 |
+| 2 | 8 -> **19** | 0.77 -> **0.10** | 5 -> 14 | 14/20 (1.6 per race) |
+
+Seed 0 now meets all six targets in both conditions. In seed 0 the recovery also turned 3 crashes into finishes:
+those were escape-mode scrapes after a stall. Seed 1 is untouched (its failures are high-speed slides). Chicane
+failures, 3 seeds pooled: 46 -> 17 (`results/failure_map.png`). Cost: seed-2 laps behind slow traffic stay slow
+(mean clean lap 43 s), because the policy still crawls through the chicane and needs a recovery there most laps.
 Inspect one race: `python -m scripts.trace_recover <race seed>`.
+
+## E22. Chicane fine-tuning (running, lane F2)
+The recovery treats the symptom. E22 tries to fix the policy: fine-tune the seed-2 and seed-1 policies for 500k steps
+(`python -m racing.train --init runs/ppo_shield_s<k>/model_stage3.zip --stages 4 --shield cond_fb_grip_esc
+--tire saturated_v2`), where stage 4 is stage-3 traffic with half the episodes starting from rest just before the
+chicane (lap distance 55-90 m, random lateral offset +-0.6 m and heading +-0.3 rad, opponents 3-10 m ahead;
+`EnvConfig.hotspot_prob`). Raced with and without the recovery (`results/eval_ft_chicane_s<k>.json`).
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

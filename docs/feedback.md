@@ -11,20 +11,23 @@ problem 22). "Ours (final)" is the shield with the deadlock escape on the post-s
 
 Targets are defined in code (`racing/evaluate.py`, `TARGETS`) and checked automatically by `scripts/analyze.py`:
 
-| metric | target | ours (final), nominal | ours (final), randomised | original shield, nominal |
+| metric | target | ours (final), nominal | ours (final), randomised | without stall recovery, nominal / randomised |
 |---|---|---|---|---|
-| clean-lap time vs PID+APF | <= 0.95x | 0.79x | 0.78x | 0.78x |
-| collisions per 10 laps | <= 0.5 | 0.44 | **0.75 (missed)** | 0.38 |
-| overtake success | >= 70% | 86% | 75% | 88% |
-| shield active on race day | <= 10% of steps | 3% | 4% | 6% |
-| time above 90% of mu g | >= 10% | 17.1% | 15.9% | 16.7% |
-| time above 15 deg body slip | <= 1% | 0.0% | 0.0% | 0.0% |
+| clean-lap time vs PID+APF | <= 0.95x | 0.81x | 0.78x | 0.79x / 0.78x |
+| collisions per 10 laps | <= 0.5 | 0.10 | 0.47 | 0.44 / **0.75 (missed)** |
+| overtake success | >= 70% | 85% | 78% | 86% / 75% |
+| shield active on race day | <= 10% of steps | 3% | 4% | 3% / 4% |
+| time above 90% of mu g | >= 10% | 16.8% | 15.6% | 17.1% / 15.9% |
+| time above 15 deg body slip | <= 1% | 0.0% | 0.0% | 0.0% / 0.0% |
 
-Not a target but the most important number: races finished (all 5 laps) - ours (final) 16/20 nominal and 14/20
+"Ours (final)" = PPO + action-conditioned shield + deadlock escape + stall recovery (E19, E21), seed 0, all on the
+post-spin-fixed simulator (`results/final_summary.md`).
+
+Not a target but the most important number: races finished (all 5 laps) - ours (final) 19/20 nominal and 16/20
 randomised for seed 0, vs 12/20 for PID+APF, 10/20 for the residual policy, 0/20 for PPO without a shield, and
-18/20 for PPO trained with the additive shield, which however laps 13 s slower (all on the same simulator,
+18/20 for PPO trained with the additive shield, which however laps 13 s slower with twice our collision rate (all on the same simulator,
 `results/final_summary.md`). Across three
-seeds the final shield averages 8.3 +- 6.1 finished (seed 1: 1/20, its policy slides; seed 2: 8/20), vs 3.0 +- 2.4
+seeds ours averages 13.0 +- 8.5 finished (seeds 0 and 2: 19/20; seed 1: 1/20, its policy slides), vs 3.0 +- 2.4
 without a shield; see `results/seed_summary.md` and E20. Targets above are seed 0 only.
 
 > *APF with PPO already exists in ResRace and RaceMOP. State what is different about yours.*
@@ -43,7 +46,8 @@ Both are implemented under identical conditions: `EnvConfig(residual=True)` repr
 | controller | finished | stuck | clean lap | collisions / 10 laps | passes / race | shield active |
 |---|---|---|---|---|---|---|
 | ResRace-style residual PPO | 10/20 | 0 | **30.4 s** | 1.60 | 2.20 | - |
-| **PPO + our shield (final)** | **16/20** | 0 | 34.5 s | 0.44 | **2.95** | 3% |
+| **PPO + our shield (final, with stall recovery)** | **19/20** | 0 | 34.7 s | 0.10 | **3.15** | 3% |
+| PPO + our shield (escape, no stall recovery) | 16/20 | 0 | 34.5 s | 0.44 | 2.95 | 3% |
 | PPO + our shield (original) | 12/20 | 5 | 34.3 s | 0.38 | 2.65 | 6% |
 | residual PPO + our original shield | 4/20 | 14 | 32.7 s | 0.36 | 2.15 | 20% |
 | residual PPO + our final shield | 2/20 | 15 | - | 0.52 | 1.70 | 39% |

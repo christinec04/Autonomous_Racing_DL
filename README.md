@@ -16,28 +16,32 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
 
   | controller | finished | stuck | clean lap | collisions / 10 laps | passes / race |
   |---|---|---|---|---|---|
-  | **PPO + action-conditioned shield (ours, final)** | 16/20 | 0 | 34.5 s | 0.44 | **2.95** |
-  | PPO + proposal's additive Eq. 2/3 shield | **18/20** | 0 | 47.6 s | **0.21** | 0.85 |
+  | **PPO + action-conditioned shield + stall recovery (ours, final)** | **19/20** | 0 | 34.7 s | **0.10** | **3.15** |
+  | same, without the stall recovery | 16/20 | 0 | 34.5 s | 0.44 | 2.95 |
+  | PPO + proposal's additive Eq. 2/3 shield | 18/20 | 0 | 47.6 s | 0.21 | 0.85 |
   | PID + APF | 12/20 | 0 | 42.8 s | 1.09 | 1.35 |
   | ResRace-style residual PPO | 10/20 | 0 | **30.4 s** | 1.60 | 2.20 |
   | PPO, no shield | 0/20 | 1 | 32.5 s | 7.35 | 1.35 |
   | Pure Pursuit | 0/20 | 0 | - | 61 | 0 |
 
-  Ours meets all six metric targets; vs the additive shield it finishes as often (p = 0.39) while lapping 13 s
-  faster with 3.5x the passes (p < 1e-5); vs no shield it finishes, survives and passes significantly more
-  (p < 0.001). The residual policy is the fastest but crashes in half its races.
+  Ours meets all six metric targets, nominal and randomised. Vs the additive shield it finishes as often
+  (p = 0.57) with fewer collisions while lapping 13 s faster with 3.7x the passes (p < 1e-5); vs PID+APF and no
+  shield it finishes, survives and passes significantly more (p < 0.01). The residual policy is the fastest but
+  crashes in half its races. The stall recovery (E21) reverses the car out when the policy stops nose-to-wall; it
+  fires in 3 of 20 seed-0 races.
 - **Correction:** earlier versions of this page counted a race as finished whenever there was no collision; many
   shielded races had actually ended *stuck* (the shield deadlocked). Finish counts above are corrected; the
   deadlock and its fix are documented in [docs/experiments.md](docs/experiments.md) (E19) and
   [PROGRESS.md](PROGRESS.md) (problems 22-24).
 - **Across seeds the picture is weaker than seed 0 alone** ([results/seed_summary.md](results/seed_summary.md),
-  3 seeds, nominal): final shield 8.3 +- 6.1 races finished, 2.04 +- 2.03 collisions / 10 laps; original shield
+  3 seeds, nominal): final (with stall recovery) 13.0 +- 8.5 races finished, 1.63 +- 2.16 collisions / 10 laps
+  (seeds 0 and 2: 19/20 each; seed 1: 1/20); without the recovery 8.3 +- 6.1 finished; original shield
   6.7 +- 4.5 finished (10 stuck on average), 0.74 collisions; no shield 3.0 +- 2.4 finished, 4.38 collisions.
   Seed 1 learned a sliding driving style that the shield cannot reliably catch (E20); seed 2 stalls in the chicane
-  (E21). The shield consistently lowers collisions versus no shield; how many races get finished depends strongly
+  (E21; with the recovery it finishes 19/20). The shield consistently lowers collisions versus no shield; how many races get finished depends strongly
   on the seed. Most remaining failures happen in one place, the 2.5 m chicane
-  ([results/failure_map.png](results/failure_map.png)); a stall recovery (E21) and chicane fine-tuning (E22) target
-  it. Live status of runs in [RUNS.md](RUNS.md).
+  ([results/failure_map.png](results/failure_map.png)); the stall recovery (E21) cut chicane failures from 46 to 17 (3 seeds,
+  nominal + randomised); chicane fine-tuning (E22) is running. Live status of runs in [RUNS.md](RUNS.md).
 - Running log of every step and every problem hit along the way: [PROGRESS.md](PROGRESS.md).
 
 ## Quick start

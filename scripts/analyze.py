@@ -8,10 +8,13 @@ from scipy.stats import mannwhitneyu
 from racing.evaluate import summarize, check_targets
 
 OURS = "ppo_apf"
-ORDER = ["ppo_apf_esc@s0", "ppo_apf_esc@s1v4", "ppo_apf_esc@s2", "ppo@s0", "ppo@s1", "ppo_apf", "ppo_apf@s0v2", "ppo_apf@s1", "ppo", "ppo@shieldtrained_noshield", "ppo_apf@noshieldtrained_withshield", "ppo_residual",
+ORDER = ["ppo_apf_rec@s0", "ppo_apf_rec@s1", "ppo_apf_rec@s2", "ppo_apf_esc@s0", "ppo_apf_esc@s1v4", "ppo_apf_esc@s2", "ppo@s0", "ppo@s1", "ppo_apf", "ppo_apf@s0v2", "ppo_apf@s1", "ppo", "ppo@shieldtrained_noshield", "ppo_apf@noshieldtrained_withshield", "ppo_residual",
          "ppo_residual_apf", "ppo_additive", "pid_apf", "pure_pursuit"]
 NAMES = {
-    "ppo_apf_esc@s0": "PPO + shield with deadlock escape (ours, final; v2 sim)",
+    "ppo_apf_rec@s0": "PPO + shield + escape + stall recovery (ours, final; v2 sim)",
+    "ppo_apf_rec@s1": "same, training seed 1",
+    "ppo_apf_rec@s2": "same, training seed 2",
+    "ppo_apf_esc@s0": "PPO + shield with deadlock escape (no stall recovery; v2 sim)",
     "ppo_apf": "PPO + shield, original (ours)",
     "ppo_apf@s0v2": "PPO + shield, original, on v2 sim",
     "ppo_apf@s1": "PPO + shield, original, seed 1",
@@ -95,7 +98,7 @@ def main(files, out="results/summary.md", ours=None):
                 lines.append(f"| {NAMES.get(c, c)} | " + " | ".join(fmt(mwu(R, OURS, c, k), "{:.3g}") for k in
                                                                      ("finished", "collided", "passes", "laps_done", "clean_lap")) + " |")
         lines.append("")
-    out = pathlib.Path("results/summary.md")
+    out = pathlib.Path(out)
     out.write_text("\n".join(lines))
     print("\n".join(lines))
 

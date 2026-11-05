@@ -257,3 +257,14 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     post-spin-fixed simulator with the escape shield it was worse: 0/20 finished, 47% of time above 15 deg slip. The
     policy learned to slide on the v1 tyre artifact and to let the shield brake for it. The intervention penalty is
     what keeps the shield rare; it should not be lowered to fight timidity.
+30. **`results/final_summary.md` was never actually written.** The `--out` option of `scripts/analyze.py` (problem 21)
+    was parsed but `main` still wrote to a hard-coded `results/summary.md`, so every "final tables" run overwrote the
+    seed-0 summary (the eval daemon then rewrote it) and the final file did not exist. The numbers quoted in the docs
+    came from the script's stdout and are correct. Fixed (`main` uses its `out` argument); `final_summary.md` is now
+    generated and committed.
+31. **`git pull --rebase --autostash` broke on a live log file.** Windows will not let git replace
+    `runs/*/train_log.csv` while a training run has it open, so the autostash's reset failed and left the repo
+    mid-rebase (it would have blocked every background commit). Recovered with `git rebase --quit` (the log file was
+    intact; the stash held only older log lines). All background jobs commit to the same local clone, so pulling is
+    never needed: scripts now just retry `git push`. Lane F, which pulled after each run, was replaced by
+    `scripts/queue_lane_f2.sh` (its seed-2 fine-tuning process kept running).
