@@ -45,3 +45,20 @@ def test_summary_separates_finished_stuck_crashed():
     ]
     s = summarize(races)["x"]
     assert (s["finished"], s["stuck"], s["wall"]) == (1, 1, 1)
+
+
+def test_stall_recovery_reverses_out_of_a_nose_to_wall_stop():
+    # a "policy" that crawls and always steers left: drives into the left wall at minimum speed
+    sh = ShieldConfig(mode="conditioned_fallback", reach="grip", escape=True, allow_reverse=True)
+    env = RaceEnv(EnvConfig(n_opp=0, shield=sh, recover=True, tire="saturated_v2", episode_time=20.0))
+    env.reset(seed=0)
+    vs, crashed, info = [], False, {}
+    for _ in range(500):
+        _, _, term, trunc, info = env.step(np.array([1.0, -1.0]))
+        vs.append(info["state"][3])
+        crashed |= term
+        if term or trunc:
+            break
+    assert not crashed
+    assert info["n_recover"] >= 1
+    assert min(vs) < -0.1  # it actually reversed

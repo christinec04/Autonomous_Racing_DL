@@ -101,7 +101,9 @@ SHIELD_FOR = {
     "ppo_additive": dict(mode="additive", reach="fixed"),  # PPO trained with the proposal's Eq. 2/3 shield
     "ppo_apf_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),  # with the deadlock fix
     "ppo_residual_apf_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),
+    "ppo_apf_rec": dict(mode="conditioned_fallback", reach="grip", escape=True, allow_reverse=True),  # + stall recovery (EnvConfig.recover)
 }
+RECOVER = {"ppo_apf_rec"}
 
 
 def run_race(job):
@@ -111,7 +113,7 @@ def run_race(job):
     sh = shield_override or SHIELD_FOR[ctrl]
     cfg = EnvConfig(n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
                     shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
-                    residual=ctrl.startswith("ppo_residual"), tire=tire)
+                    residual=ctrl.startswith("ppo_residual"), tire=tire, recover=ctrl in RECOVER)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),
@@ -157,6 +159,7 @@ def run_race(job):
                 shield_freq=float(np.mean(np.array(lams) > 0)), lam_mean=float(np.mean(lams)),
                 grip_above_90=float(np.mean(comb > 0.9)), grip_above_100=float(np.mean(comb > 1.0)),
                 slip_above_15=float(np.mean(np.array(slip) > np.radians(15))),
+                n_recover=int(info.get("n_recover", 0)),
                 gg=[list(np.round(glat[::5], 2)), list(np.round(glon[::5], 2))])
 
 

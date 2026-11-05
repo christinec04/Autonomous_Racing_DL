@@ -53,6 +53,16 @@ class EnvConfig:
     shield_prob: float = 1.0
     tcs: bool = True  # traction control on all cars
     tire: str = "saturated"  # saturated (friction circle) | saturated_v2 (+ post-spin fixes) | linear (stock)
+    # stall recovery (opt-in): if the ego makes < recover_dist progress in recover_window s while pointing more than
+    # recover_hdg off the track direction (or within 0.5 m of the edge), take over: reverse with the steering that
+    # swings the nose back toward the track direction, then follow the centerline forward, then hand back.
+    # Every recovery command still goes through the shield.
+    recover: bool = False
+    recover_window: float = 1.5
+    recover_dist: float = 0.3
+    recover_hdg: float = 0.35
+    recover_rev_time: float = 1.5
+    recover_fwd_time: float = 1.0
     seed: int = 0
 
 
@@ -187,6 +197,7 @@ class RaceEnv(gym.Env):
         self.t = 0.0
         self.prev_action = np.zeros(2)
         self.prog_hist = []
+        self.rec_phase, self.rec_t0, self.rec_cooldown, self.n_recover = None, 0.0, 0.0, 0
         self.shield.reset()
         self.shield_on = c.shield_prob >= 1.0 or self.rng.random() < c.shield_prob
         if c.residual:
@@ -195,6 +206,32 @@ class RaceEnv(gym.Env):
         self.pass_state = {i: {"ahead_since": None, "rewarded": False} for i in range(1, self.n)}
         self.scan = self.sim.unwrapped.sim.agent_scans[0].copy()
         return self._obs(st, self.scan), {}
+
+    def _recover(self, a_rl, e):
+        """Stall recovery state machine (EnvConfig.recover). Returns the physical action to send to the shield."""
+        c = self.cfg
+        n = int(round(c.recover_window / c.control_dt))
+        h = self.hdg_err[0]
+        stalled = len(self.prog_hist) > n and self.prog[0] - self.prog_hist[-n] < c.recover_dist             and (abs(h) > c.recover_hdg or abs(self.lat[0]) > 0.9)
+        # slow, near the edge and pointing outward: the policy is steering into the wall at crawling speed
+        nose_out = e[3] < 1.5 and abs(self.lat[0]) > 0.95 and np.sign(h) == np.sign(self.lat[0]) and abs(h) > c.recover_hdg
+        if self.rec_phase is None and self.t >= self.rec_cooldown and (stalled or nose_out):
+            self.rec_phase, self.rec_t0 = "rev", self.t
+            self.n_recover += 1
+        if self.rec_phase == "rev":
+            if abs(h) < 0.15 or self.t - self.rec_t0 >= c.recover_rev_time:
+                self.rec_phase, self.rec_t0 = "fwd", self.t
+                self.rec_pid = PIDFollower(self.cl, c.control_dt, mu=self.mu)
+            else:
+                # reversing (v < 0) turns the nose the opposite way to the steering, so steer toward the error
+                return np.array([np.sign(h) * S_MAX, -1.0])
+        if self.rec_phase == "fwd":
+            if self.t - self.rec_t0 >= c.recover_fwd_time:
+                self.rec_phase, self.rec_cooldown = None, self.t + 1.0
+            else:
+                steer, _ = self.rec_pid.act(e[0], e[1], e[4], e[3])
+                return np.array([steer, 2.0])
+        return a_rl
 
     def _opp_actions(self, st):
         acts = []
@@ -225,6 +262,8 @@ class RaceEnv(gym.Env):
             a_rl = base + c.residual_scale * np.array([act[0] * S_MAX, act[1] * (c.ego_v_max - c.ego_v_min) / 2])
         else:
             a_rl = self.to_physical(action)
+        if c.recover:
+            a_rl = self._recover(a_rl, st[0])
         ego = self.sim.unwrapped.sim.agents[0]
         if self.shield_on:
             a_final, lam, sinfo = self.shield(a_rl, st[0].copy(), ego.steer_buffer.copy(), self.scan, near, opps_world)
@@ -284,5 +323,6 @@ class RaceEnv(gym.Env):
             "state": st[0].copy(), "opp_prog": self.prog[1:].copy(), "opp_lat": self.lat[1:].copy(),
             "lat": float(self.lat[0]), "mu": self.mu, "opp_v": st[1:, 3].copy(),
             "hdg_err": float(self.hdg_err[0]),
+            "recovering": self.rec_phase is not None, "n_recover": self.n_recover,
         }
         return self._obs(st, self.scan), float(r), terminated, truncated, info

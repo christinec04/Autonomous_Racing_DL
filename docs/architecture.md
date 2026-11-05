@@ -141,17 +141,21 @@ mean lambda, g-g utilisation from the true velocity-vector acceleration, share o
 | `curvature_preview` | False | add 10 centerline curvatures 1-20 m ahead to the observation |
 | `residual`, `residual_scale` | False, 0.3 | ResRace-style: action = PID+APF base + scale x policy |
 | `tcs` | True | traction control on all cars |
-| `tire` | "saturated" | "saturated" (friction circle) or "linear" (stock F1TENTH) |
+| `tire` | "saturated" | "saturated" (friction circle), "saturated_v2" (+ post-spin slip-angle fixes, used for the final comparison) or "linear" (stock F1TENTH) |
+| `w6_slip` | 0.0 | optional penalty per step for body slip beyond 0.15 rad |
+| `recover`, `recover_window`, `recover_dist`, `recover_hdg` | False, 1.5 s, 0.3 m, 0.35 rad | stall recovery trigger (E21) |
+| `recover_rev_time`, `recover_fwd_time` | 1.5 s, 1.0 s | reverse phase, then centerline-following phase |
 
 `ShieldConfig` (`racing/shield.py`): `mode` (off / additive / conditioned / conditioned_fallback), `reach`
 (fixed / grip), `a_brake_fixed` 6.0, `d_min` 0.30, `d_crit` 0.05, `k_steer` 2.0, `k_speed` 2.0, `opp_a` 0.6,
 `opp_b` 0.15, `smooth` 0.5, `c_safe` 0.05, `commit_time` 0.04, `max_pred_time` 3.0, `blend_levels`
-(0.25, 0.5, 0.75, 1.0), `beam_stride` 3, `beta_max` 0.35, `use_map` True, `backup_lookahead` 1.2, `opp_brake` 6.0.
+(0.25, 0.5, 0.75, 1.0), `beam_stride` 3, `beta_max` 0.35, `use_map` True, `backup_lookahead` 1.2, `opp_brake` 6.0, `escape` False (deadlock escape, E19), `escape_tol` 0.02, `escape_v` 0.5,
+`allow_reverse` False (let negative target speeds through; used by the stall recovery).
 
-`python -m racing.train` flags: `--shield {off, additive, cond_fb_grip, cond_fb_fixed}`, `--stages`, `--steps`
+`python -m racing.train` flags: `--shield {off, additive, cond_fb_grip, cond_fb_fixed, cond_fb_grip_esc}`, `--w6`, `--stages`, `--steps`
 (per stage), `--seed`, `--n_envs`, `--n_steps`, `--batch`, `--lr`, `--gamma`, `--ent`, `--eval_every`, `--tire`,
 `--no_randomize`, `--curvature_preview`, `--residual`, `--w3`, `--shield_prob p1 p2 p3`, `--out`.
 
 `python -m racing.evaluate` flags: `--controllers` (pure_pursuit, pid_apf, ppo, ppo_apf, ppo_residual,
-ppo_residual_apf, ppo_additive; append `@label` to race the same controller type with different models),
+ppo_residual_apf, ppo_additive, ppo_apf_esc, ppo_residual_apf_esc, ppo_apf_rec; append `@label` to race the same controller type with different models),
 `--models label=path ...`, `--races`, `--laps`, `--procs`, `--tire`, `--out`.

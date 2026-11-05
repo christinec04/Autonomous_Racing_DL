@@ -117,9 +117,22 @@ itself commands about 7.8 m/s, with or without the shield. The policy learned to
 capping it. Candidate causes, tested in E18: the intervention penalty (going fast near the chicane triggers the
 shield, so "always slow" is the easy solution) and the 10 m lidar clip (the chicane is not visible early enough).
 
-## E18. Timidity tests (queued, lane E)
+## E18. Timidity tests
 `runs/ppo_shield_w3low_s0` (w3 = 0.02 instead of 0.1) and `runs/ppo_shield_preview_s0` (curvature preview in the
 observation). Compared against `ppo_shield_s0` on lap time, top speed and collisions.
+
+**Lower intervention penalty (w3 = 0.02), seed 0, 20 races x 5 laps, nominal:**
+
+| | finished | stuck | clean lap | collisions / 10 laps | shield active | time > 15 deg slip |
+|---|---|---|---|---|---|---|
+| w3 = 0.1 (ours), original shield | 12/20 | 5 | 34.3 s | 0.38 | 6% | 0% |
+| w3 = 0.02, original shield (v1 sim) | 0/20 | 18 | 31.3 s | 1.19 | 35% | 12% |
+| w3 = 0.02, escape shield (v2 sim) | 0/20 | 12 | - | 3.47 | 38% | 47% |
+
+Faster when it moves, but the policy hands braking to the shield (35-38% of steps) and gets stuck. On the
+post-spin-fixed simulator it slides most of the time: it learned on the v1 tyre artifact (PROGRESS.md problem 24).
+Conclusion: the intervention penalty is what keeps the shield rare and the policy self-reliant; lowering it is
+not the way to fix timidity. The curvature-preview run is training.
 
 ## E19. Shield deadlock: diagnosis and fixes
 After fixing the "finished" metric (problem 22), the biggest failure of every shielded controller turned out to be
@@ -156,6 +169,23 @@ Seed 1's policy learned a much more aggressive, sliding style (42% of the time a
 the shield predicts and avoids loss of control from a stable state, but cannot reliably recover a car that is
 already sliding. Without the shield, seeds 0 and 1 finish 1/20 and 3/20. Seed 2 is training. Conclusion so far:
 the shield consistently reduces collisions, but how many races are finished depends strongly on the training seed.
+
+## E21. Stall recovery (seed 2 chicane stops)
+Seed 2 with the final shield still had 7/20 stuck races. `diag_stuck` (with `tire=saturated_v2 k=<i>`) showed a new
+cause: the policy itself crawls at 1 m/s through the 2.5 m chicane (lap distance 84-125 m) and steers the wrong way,
+nose 40-45 deg into the outer wall; the shield stops it there correctly and the policy keeps asking for the same.
+6 of 7 stuck races stopped at lap distance ~94 m or ~120 m.
+
+`EnvConfig(recover=True)` adds a stall recovery like a real car's limp mode, outside the policy:
+- trigger: < 0.3 m progress in 1.5 s while > 20 deg off the track direction or near the edge, or slow (< 1.5 m/s),
+  near the edge and pointing outward;
+- reverse at 1 m/s with full steering toward the heading error (reversing turns the nose back) until aligned within
+  9 deg or 1.5 s; then follow the centerline at 2 m/s for 1 s; then hand back (1 s cooldown);
+- every recovery command still goes through the shield (`ShieldConfig(allow_reverse=True)`).
+
+Spot check on the 7 stuck seed-2 races: all 7 finish all 5 laps, using 1-5 recoveries per race; laps behind slow
+traffic are ~50 s. Full evaluation (`ppo_apf_rec`, seeds 0-2, `results/eval_recover.json`): running.
+Inspect one race: `python -m scripts.trace_recover <race seed>`.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
