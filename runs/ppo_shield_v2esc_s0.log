@@ -44,3 +44,17 @@ Info: (n_steps=512 and n_envs=7)
 [1900001] eval shielded clean=True lap=32.87999999999948 lam=0.04 | unshielded clean=True lap=32.479999999999485 prog=199
 [1950002] eval shielded clean=True lap=32.999999999999474 lam=0.04 | unshielded clean=True lap=32.479999999999485 prog=199
 [2000003] eval shielded clean=True lap=32.959999999999475 lam=0.04 | unshielded clean=True lap=32.59999999999948 prog=199
+[2050004] eval shielded clean=True lap=33.11999999999947 lam=0.04 | unshielded clean=True lap=32.75999999999948 prog=199
+[2100005] eval shielded clean=True lap=33.67999999999946 lam=0.03 | unshielded clean=True lap=33.479999999999464 prog=199
+[2150006] eval shielded clean=True lap=33.479999999999464 lam=0.05 | unshielded clean=True lap=33.03999999999947 prog=199
+[2200000] eval shielded clean=True lap=33.03999999999947 lam=0.06 | unshielded clean=True lap=32.75999999999948 prog=199
+[2250001] eval shielded clean=True lap=33.31999999999947 lam=0.04 | unshielded clean=True lap=33.23999999999947 prog=199
+[2300002] eval shielded clean=True lap=33.07999999999947 lam=0.06 | unshielded clean=True lap=32.83999999999948 prog=199
+[2350003] eval shielded clean=True lap=32.71999999999948 lam=0.05 | unshielded clean=True lap=32.27999999999949 prog=199
+[2400004] eval shielded clean=True lap=32.919999999999476 lam=0.07 | unshielded clean=True lap=32.75999999999948 prog=199
+[2450005] eval shielded clean=True lap=33.63999999999946 lam=0.05 | unshielded clean=True lap=33.399999999999466 prog=199
+[2500006] eval shielded clean=True lap=33.399999999999466 lam=0.07 | unshielded clean=True lap=32.999999999999474 prog=199
+== stage 3: 1000000 steps, shield=cond_fb_grip_esc
+[2550001] eval shielded clean=True lap=32.959999999999475 lam=0.08 | unshielded clean=True lap=32.39999999999949 prog=199
+[2600002] eval shielded clean=True lap=34.63999999999944 lam=0.05 | unshielded clean=True lap=34.23999999999945 prog=199
+[2650003] eval shielded clean=True lap=35.39999999999942 lam=0.04 | unshielded clean=True lap=34.99999999999943 prog=199
