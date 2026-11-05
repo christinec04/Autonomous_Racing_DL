@@ -7,7 +7,7 @@ git clone -b gabe-build https://github.com/christinec04/Autonomous_Racing_DL
 cd Autonomous_Racing_DL
 python -m venv .venv && source .venv/Scripts/activate   # Linux/macOS: .venv/bin/activate
 pip install -r requirements.txt
-python -m pytest -q tests                                # 23 tests
+python -m pytest -q tests                                # 25 tests
 ```
 
 | step | command | time (16 cores) | output |
