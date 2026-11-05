@@ -51,6 +51,7 @@ Both are implemented under identical conditions: `EnvConfig(residual=True)` repr
 | PPO + our shield (original) | 12/20 | 5 | 34.3 s | 0.38 | 2.65 | 6% |
 | residual PPO + our original shield | 4/20 | 14 | 32.7 s | 0.36 | 2.15 | 20% |
 | residual PPO + our final shield | 2/20 | 15 | - | 0.52 | 1.70 | 39% |
+| residual PPO + our final shield + stall recovery | 2/20 | 14 | - | 0.70 | 1.70 | 37% |
 
 What this says:
 - The residual structure learns faster laps (the PID+APF base is a strong prior) but the always-on APF does not
@@ -61,8 +62,10 @@ What this says:
   claimed the two were complementary; that was based on the faulty "finished" metric and is withdrawn.
 - So the contribution statement: **the APF acts as an action-conditioned safety shield around a policy that is
   trained with it, intervening only when the policy's own action is predicted unsafe (3-6% of race steps), instead
-  of shaping every command as in ResRace/RaceMOP.** Whether it can wrap an APF-residual policy needs that policy to
-  be trained with the shield; not done yet.
+  of shaping every command as in ResRace/RaceMOP.** Adding the stall recovery does not help the residual policy either (2/20 finished): its
+  stuck races are slides and spins (56% of race time above 15 deg body slip), not nose-to-wall stops. Whether our
+  shield can wrap an APF-residual policy therefore needs that policy to be *trained* with the shield: run
+  `ppo_residual_shield_s0` (E23, queued).
 
 ## Content (16/20)
 

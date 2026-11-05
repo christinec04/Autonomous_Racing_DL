@@ -209,6 +209,14 @@ The recovery treats the symptom. E22 tries to fix the policy: fine-tune the seed
 chicane (lap distance 55-90 m, random lateral offset +-0.6 m and heading +-0.3 rad, opponents 3-10 m ahead;
 `EnvConfig.hotspot_prob`). Raced with and without the recovery (`results/eval_ft_chicane_s<k>.json`).
 
+## E23. Residual policy trained with our shield (queued, lane G)
+Racing the ResRace-style residual policy with our shield added only at race time fails three ways: deadlock (original
+shield, 14/20 stuck), slides (escape shield, 15/20 stuck) and, with the stall recovery too, still 2/20 finished,
+14 stuck, 56% of the time above 15 deg slip (`results/eval_residual_rec.json`; note the recovery variant lets
+negative residual speed commands through as a slow reverse). `runs/ppo_residual_shield_s0` trains the residual
+policy with the final shield from the start (`--residual --shield cond_fb_grip_esc --tire saturated_v2`) and races it
+with the shield + recovery, with the shield only, and without the shield.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
