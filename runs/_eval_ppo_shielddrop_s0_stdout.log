@@ -1,0 +1,8 @@
+
+=== nominal ===
+ppo@drop_noshield finished 16/20 (stuck 0)  lap 42.02 (best 30.28)  coll/10laps 0.45 (wall 2, car 2)  passes/race 0.25 ot 5/6  shield 0.00  grip>90% 0.094 (>100% 0.000)  slip>15 0.001
+ppo_apf@drop  finished 11/20 (stuck 5)  lap 44.35 (best 32.56)  coll/10laps 0.61 (wall 2, car 2)  passes/race 0.30 ot 6/8  shield 0.04  grip>90% 0.099 (>100% 0.000)  slip>15 0.003
+
+=== randomized ===
+ppo@drop_noshield finished 13/20 (stuck 0)  lap 45.38 (best 30.04)  coll/10laps 0.96 (wall 2, car 5)  passes/race 0.45 ot 9/12  shield 0.00  grip>90% 0.081 (>100% 0.001)  slip>15 0.001
+ppo_apf@drop  finished 14/20 (stuck 5)  lap 44.8 (best 31.8)  coll/10laps 0.13 (wall 0, car 1)  passes/race 0.60 ot 12/14  shield 0.04  grip>90% 0.083 (>100% 0.000)  slip>15 0.001
