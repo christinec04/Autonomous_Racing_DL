@@ -20,6 +20,7 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
   | same, without the stall recovery | 16/20 | 0 | 34.5 s | 0.44 | 2.95 |
   | PPO + proposal's additive Eq. 2/3 shield | 18/20 | 0 | 47.6 s | 0.21 | 0.85 |
   | PID + APF | 12/20 | 0 | 42.8 s | 1.09 | 1.35 |
+  | ResRace-style residual PPO trained with our shield (E23) | 15/20 | 0 | 32.1 s | 0.59 | **3.15** |
   | ResRace-style residual PPO | 10/20 | 0 | **30.4 s** | 1.60 | 2.20 |
   | PPO, no shield | 0/20 | 1 | 32.5 s | 7.35 | 1.35 |
   | Pure Pursuit | 0/20 | 0 | - | 61 | 0 |
@@ -27,7 +28,8 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
   Ours meets all six metric targets, nominal and randomised. Vs the additive shield it finishes as often
   (p = 0.57) with fewer collisions while lapping 13 s faster with 3.7x the passes (p < 1e-5); vs PID+APF and no
   shield it finishes, survives and passes significantly more (p < 0.01). The residual policy is the fastest but
-  crashes in half its races. **On 50 race seeds** ([results/headtohead50.md](results/headtohead50.md)) the picture
+  crashes in half its races; trained *with* our shield it keeps most of the speed and crashes a third as often
+  (E23), while adding the shield only at race time makes it deadlock. **On 50 race seeds** ([results/headtohead50.md](results/headtohead50.md)) the picture
   holds but is less rosy: ours finishes 43/50 nominal (86%) and 35/50 randomised (70%), the additive shield 39/50 and
   34/50 (no significant difference), PID+APF 28/50 and 25/50 (p = 0.002 nominal); ours laps 12 s faster than the
   additive shield with 2.7x the passes (p < 1e-8). The stall recovery (E21) reverses the car out when the policy stops nose-to-wall; it

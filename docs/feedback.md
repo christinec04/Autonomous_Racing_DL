@@ -54,6 +54,7 @@ Both are implemented under identical conditions: `EnvConfig(residual=True)` repr
 | residual PPO + our original shield | 4/20 | 14 | 32.7 s | 0.36 | 2.15 | 20% |
 | residual PPO + our final shield | 2/20 | 15 | - | 0.52 | 1.70 | 39% |
 | residual PPO + our final shield + stall recovery | 2/20 | 14 | - | 0.70 | 1.70 | 37% |
+| **residual PPO trained with our shield** (E23) | 15/20 | 0 | 32.1 s | 0.59 | 3.15 | 6% |
 
 What this says:
 - The residual structure learns faster laps (the PID+APF base is a strong prior) but the always-on APF does not
@@ -65,9 +66,11 @@ What this says:
 - So the contribution statement: **the APF acts as an action-conditioned safety shield around a policy that is
   trained with it, intervening only when the policy's own action is predicted unsafe (3-6% of race steps), instead
   of shaping every command as in ResRace/RaceMOP.** Adding the stall recovery does not help the residual policy either (2/20 finished): its
-  stuck races are slides and spins (56% of race time above 15 deg body slip), not nose-to-wall stops. Whether our
-  shield can wrap an APF-residual policy therefore needs that policy to be *trained* with the shield: run
-  `ppo_residual_shield_s0` (E23, queued).
+  stuck races are slides and spins, not nose-to-wall stops. **Training** the residual policy with the shield does
+  work (E23): 15/20 finished, 0.59 collisions / 10 laps, 32.1 s laps and 3.15 passes per race, vs 10/20 and 1.60
+  for the unshielded residual policy. So the ResRace structure and our shield are complementary, provided the
+  policy is trained with the shield, which is itself part of our contribution: the shield shapes what the policy
+  learns, not only what the car does.
 
 ## Content (16/20)
 
