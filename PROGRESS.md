@@ -257,3 +257,8 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     post-spin-fixed simulator with the escape shield it was worse: 0/20 finished, 47% of time above 15 deg slip. The
     policy learned to slide on the v1 tyre artifact and to let the shield brake for it. The intervention penalty is
     what keeps the shield rare; it should not be lowered to fight timidity.
+30. **`results/final_summary.md` was never actually written.** The `--out` option of `scripts/analyze.py` (problem 21)
+    was parsed but `main` still wrote to a hard-coded `results/summary.md`, so every "final tables" run overwrote the
+    seed-0 summary (the eval daemon then rewrote it) and the final file did not exist. The numbers quoted in the docs
+    came from the script's stdout and are correct. Fixed (`main` uses its `out` argument); `final_summary.md` is now
+    generated and committed.

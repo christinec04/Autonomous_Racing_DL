@@ -6,8 +6,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from racing.evaluate import summarize
 
-FILES = ["results/final_v2_others.json", "results/eval_escape_v4.json"]
-SHOW = {"ppo_apf_esc@s0": "PPO + action-conditioned shield (ours)", "ppo_additive": "PPO + additive Eq. 2/3 shield",
+FILES = ["results/final_v2_others.json", "results/eval_recover.json"]
+SHOW = {"ppo_apf_rec@s0": "PPO + action-conditioned shield (ours)", "ppo_additive": "PPO + additive Eq. 2/3 shield",
         "pid_apf": "PID + APF", "ppo_residual": "ResRace-style residual PPO", "ppo@s0": "PPO, no shield"}
 COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4"]
 INK, MUTED, GRID, SURF = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
