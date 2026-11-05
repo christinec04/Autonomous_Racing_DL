@@ -4,3 +4,5 @@ Info: (n_steps=512 and n_envs=7)
   warnings.warn(
 == stage 1: 1500000 steps, shield=cond_fb_grip
 [50001] eval shielded clean=False lap=None lam=0.34 | unshielded clean=False lap=None prog=46
+[100002] eval shielded clean=False lap=None lam=0.25 | unshielded clean=False lap=None prog=96
+[150003] eval shielded clean=True lap=36.5599999999994 lam=0.02 | unshielded clean=True lap=36.4799999999994 prog=199
