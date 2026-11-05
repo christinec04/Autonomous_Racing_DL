@@ -3,5 +3,9 @@
  "git_dirty": [],
  "command": "python -m racing.train --residual --shield cond_fb_grip_esc --tire saturated_v2 --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 0 --out runs/ppo_residual_shield_s0",
  "status": "running",
- "started": "2026-11-05 11:05:12"
+ "started": "2026-11-05 11:05:12",
+ "stages_done": [
+  1
+ ],
+ "steps_done": 1500000
 }
