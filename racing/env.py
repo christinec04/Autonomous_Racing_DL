@@ -63,6 +63,12 @@ class EnvConfig:
     recover_hdg: float = 0.35
     recover_rev_time: float = 1.5
     recover_fwd_time: float = 1.0
+    # hotspot practice (opt-in, fine-tuning): with this probability an episode starts from rest at a random point in
+    # hotspot_s (default: just before the chicane), with a random lateral offset and heading error
+    hotspot_prob: float = 0.0
+    hotspot_s: tuple = (55.0, 90.0)
+    hotspot_d: float = 0.6
+    hotspot_hdg: float = 0.3
     seed: int = 0
 
 
@@ -173,7 +179,14 @@ class RaceEnv(gym.Env):
             gaps = list(np.cumsum(self.rng.uniform(4.0, 15.0, c.n_opp)))
         else:
             gaps = [6.0 * (j + 1) for j in range(c.n_opp)]
-        poses = [self.cl.pose_at(s_ego, 0.0)]
+        hot = "s_ego" not in options and c.hotspot_prob > 0 and self.rng.random() < c.hotspot_prob
+        if hot:
+            s_ego = self.rng.uniform(*c.hotspot_s)
+            gaps = list(np.cumsum(self.rng.uniform(3.0, 10.0, c.n_opp)))  # traffic close ahead, into the chicane
+            x, y, yaw = self.cl.pose_at(s_ego, self.rng.uniform(-c.hotspot_d, c.hotspot_d))
+            poses = [(x, y, yaw + self.rng.uniform(-c.hotspot_hdg, c.hotspot_hdg))]
+        else:
+            poses = [self.cl.pose_at(s_ego, 0.0)]
         for j, g in enumerate(gaps):
             poses.append(self.cl.pose_at(s_ego + g, 0.0))
         self.sim.reset(options={"poses": np.array(poses)})
