@@ -5,7 +5,8 @@
  "status": "running",
  "started": "2026-11-05 11:05:12",
  "stages_done": [
-  1
+  1,
+  2
  ],
- "steps_done": 1500000
+ "steps_done": 2500000
 }

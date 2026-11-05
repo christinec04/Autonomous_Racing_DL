@@ -132,8 +132,9 @@ Team roles are for the team to fill in. A risk register built from the risks tha
 - Result (seed 0): both reach their first clean unshielded lap at 200k steps, so the shield did not speed up
   learning to lap. It did change what was learned: the shielded agent overtakes far more (2.65 vs 1.05 passes per
   race) but relies on the shield (with it removed, it crashes in 15/20 races). A shield-dropout run
-  (`ppo_shielddrop_s0`: shield on in 100% / 50% / 25% of episodes per stage) tests whether the policy can be made
-  safe on its own.
+  (`ppo_shielddrop_s0`: shield on in 100% / 50% / 25% of episodes per stage) makes it safe on its own: 16/20
+  finished and 0.45 collisions / 10 laps with no shield at all, at half the unshielded training crashes, but it
+  passes almost nobody (0.25 per race) and laps 8 s slower (E10).
 - Crashes during training: stage 1 ~1% of episodes with the shield vs 25% without; stage 2 9% vs 46%.
 - Training-time safety is where the shield pays off (`results/training_efficiency.md`): 8-9 crashes before the
   first clean lap with the shield vs about 1000 without, and about 10x fewer crashes over all of training.
