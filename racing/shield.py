@@ -60,6 +60,9 @@ class ShieldConfig:
     # extra margin per m/s of speed [s]. Clearance is sampled every 0.02 s of the rollout (15 cm of travel at 7.5 m/s),
     # so a fixed 5 cm margin is below the estimate's own jitter at speed. Default 0 = original behaviour.
     c_safe_v: float = 0.0
+    # friction the predictor assumes, as a fraction of nominal. The real friction is unknown under domain
+    # randomisation (x0.85-1.15); 0.85 = plan for the worst case. Default 1.0 = original behaviour.
+    mu_scale: float = 1.0
     pred_dt: float = 0.05
     commit_time: float = 0.04  # one control step: how long the policy action is held before the backup starts
     max_pred_time: float = 3.0
@@ -90,6 +93,7 @@ class APFShield:
         self.cl = centerline
         self.p = np.array([P[k] for k in ("mu", "C_Sf", "C_Sr", "lf", "lr", "h", "m", "I", "s_min", "s_max",
                                           "sv_min", "sv_max", "v_switch", "a_max", "v_min", "v_max")], float)
+        self.p[0] *= cfg.mu_scale
         self.sat = 1  # 0 linear, 1 saturated, 2 saturated_v2
         self.tcs = True
         if centerline is not None:

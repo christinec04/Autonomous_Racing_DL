@@ -1,0 +1,7 @@
+{
+ "git_commit": "7cd44cb",
+ "git_dirty": [],
+ "command": "python -m racing.train --shield cond_fb_grip_esc --tire saturated_v2 --w6 1.0 --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 1 --out runs/ppo_shield_v2esc_slip_s1",
+ "status": "running",
+ "started": "2026-11-05 11:55:30"
+}

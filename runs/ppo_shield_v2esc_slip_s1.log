@@ -1,0 +1,12 @@
+C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\ppo\ppo.py:155: UserWarning: You have specified a mini-batch size of 1024, but because the `RolloutBuffer` is of size `n_steps * n_envs = 3584`, after every 3 untruncated mini-batches, there will be a truncated mini-batch of size 512
+We recommend using a `batch_size` that is a factor of `n_steps * n_envs`.
+Info: (n_steps=512 and n_envs=7)
+  warnings.warn(
+== stage 1: 1500000 steps, shield=cond_fb_grip_esc
+[50001] eval shielded clean=False lap=None lam=0.51 | unshielded clean=False lap=None prog=43
+[100002] eval shielded clean=False lap=None lam=0.50 | unshielded clean=False lap=None prog=33
+[150003] eval shielded clean=False lap=None lam=0.48 | unshielded clean=False lap=None prog=43
+[200004] eval shielded clean=True lap=43.63999999999925 lam=0.44 | unshielded clean=False lap=None prog=35
+[250005] eval shielded clean=True lap=34.27999999999945 lam=0.17 | unshielded clean=False lap=None prog=42
+[300006] eval shielded clean=True lap=39.79999999999933 lam=0.06 | unshielded clean=False lap=None prog=96
+[350000] eval shielded clean=False lap=None lam=0.47 | unshielded clean=False lap=None prog=96

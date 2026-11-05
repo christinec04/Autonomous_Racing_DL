@@ -107,7 +107,13 @@ SHIELD_FOR = {
 # speed-scaled margin variants (E24): margin = 5 cm + c_safe_v * speed
 SHIELD_FOR["ppo_apf_rec_m1"] = dict(SHIELD_FOR["ppo_apf_rec"], c_safe_v=0.01)
 SHIELD_FOR["ppo_apf_rec_m2"] = dict(SHIELD_FOR["ppo_apf_rec"], c_safe_v=0.02)
-RECOVER = {"ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2"}
+# stricter loss-of-control limit (predicted body slip; default 0.35 rad = 20 deg)
+SHIELD_FOR["ppo_apf_rec_b25"] = dict(SHIELD_FOR["ppo_apf_rec_m2"], beta_max=0.25)
+SHIELD_FOR["ppo_apf_rec_b18"] = dict(SHIELD_FOR["ppo_apf_rec_m2"], beta_max=0.18)
+# robust: predictor assumes the lowest friction of the randomisation range
+SHIELD_FOR["ppo_apf_rec_b25mu"] = dict(SHIELD_FOR["ppo_apf_rec_b25"], mu_scale=0.85)
+RECOVER = {"ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
+           "ppo_apf_rec_b25mu"}
 
 
 def run_race(job):
