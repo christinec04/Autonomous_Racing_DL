@@ -202,12 +202,25 @@ failures, 3 seeds pooled: 46 -> 17 (`results/failure_map.png`). Cost: seed-2 lap
 (mean clean lap 43 s), because the policy still crawls through the chicane and needs a recovery there most laps.
 Inspect one race: `python -m scripts.trace_recover <race seed>`.
 
-## E22. Chicane fine-tuning (running, lane F2)
-The recovery treats the symptom. E22 tries to fix the policy: fine-tune the seed-2 and seed-1 policies for 500k steps
-(`python -m racing.train --init runs/ppo_shield_s<k>/model_stage3.zip --stages 4 --shield cond_fb_grip_esc
+## E22. Chicane fine-tuning
+The recovery treats the symptom. E22 tries to fix the policy: fine-tune the shielded seed-2 policy for 500k steps
+(`python -m racing.train --init runs/ppo_shield_s2/model_stage3.zip --stages 4 --shield cond_fb_grip_esc
 --tire saturated_v2`), where stage 4 is stage-3 traffic with half the episodes starting from rest just before the
 chicane (lap distance 55-90 m, random lateral offset +-0.6 m and heading +-0.3 rad, opponents 3-10 m ahead;
-`EnvConfig.hotspot_prob`). Raced with and without the recovery (`results/eval_ft_chicane_s<k>.json`).
+`EnvConfig.hotspot_prob`). Training crash rate fell from 32% to ~14% and solo laps got faster (32.1 s vs ~34 s).
+
+**Result: worse on race day** (`results/eval_ft_chicane_s2.json`, 20 races x 5 laps, nominal):
+
+| seed-2 policy | finished | stuck | collisions / 10 laps | time > 15 deg slip |
+|---|---|---|---|---|
+| original + final shield + recovery (E21) | **19/20** | 0 | **0.10** | 0.0% |
+| fine-tuned + final shield | 7/20 | 2 | 1.83 | 10.9% |
+| fine-tuned + final shield + recovery | 8/20 | 4 | 1.18 | 16.6% |
+
+The fine-tuned policy learned to slide (grip use > 90% of mu g half the time, 11-17% of the time above 15 deg slip),
+the same style that sinks seed 1. Likely causes: a full learning rate (3e-4) for 500k steps moved the policy far,
+and nothing in the reward discourages sliding. The seed-1 fine-tune was cancelled (seed 1 already slides).
+**E22b** (lane F3, queued): lr 5e-5, slip penalty `--w6 1.0`, 300k steps (`runs/ppo_shield_ft2_chicane_s2`).
 
 ## E23. Residual policy trained with our shield (queued, lane G)
 Racing the ResRace-style residual policy with our shield added only at race time fails three ways: deadlock (original

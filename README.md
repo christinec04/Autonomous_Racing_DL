@@ -41,7 +41,8 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
   (E21; with the recovery it finishes 19/20). The shield consistently lowers collisions versus no shield; how many races get finished depends strongly
   on the seed. Most remaining failures happen in one place, the 2.5 m chicane
   ([results/failure_map.png](results/failure_map.png)); the stall recovery (E21) cut chicane failures from 46 to 17 (3 seeds,
-  nominal + randomised); chicane fine-tuning (E22) is running. Live status of runs in [RUNS.md](RUNS.md).
+  nominal + randomised). Fine-tuning the policy on the chicane instead (E22) backfired: it learned to
+  slide (19/20 -> 8/20); a gentler retry is queued. Live status of runs in [RUNS.md](RUNS.md).
 - Running log of every step and every problem hit along the way: [PROGRESS.md](PROGRESS.md).
 
 ## Quick start

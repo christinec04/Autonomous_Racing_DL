@@ -268,3 +268,8 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     intact; the stash held only older log lines). All background jobs commit to the same local clone, so pulling is
     never needed: scripts now just retry `git push`. Lane F, which pulled after each run, was replaced by
     `scripts/queue_lane_f2.sh` (its seed-2 fine-tuning process kept running).
+32. **Fine-tuning on the failure spot made the policy worse.** 500k steps of chicane-focused fine-tuning (E22) lowered
+    the training crash rate and sped up solo laps, but on race day the seed-2 policy dropped from 19/20 to 8/20
+    finished: it learned to slide (17% of race time above 15 deg slip). Training metrics improving while race results
+    get worse is exactly why every change is raced on the full protocol. Retrying with a 6x lower learning rate and
+    a slip penalty (E22b). The queued seed-1 fine-tune was cancelled.

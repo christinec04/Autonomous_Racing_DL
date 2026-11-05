@@ -188,7 +188,9 @@ def train(args):
             old.close()
         if model is None and args.init:
             # fine-tune an existing policy; reuse its reward-normalisation statistics if they were saved
-            model = PPO.load(args.init, env=vec, device="cpu", tensorboard_log=str(out / "tb"))
+            # --lr applies to fine-tuning too (the saved model would otherwise keep its own learning rate)
+            model = PPO.load(args.init, env=vec, device="cpu", tensorboard_log=str(out / "tb"),
+                             custom_objects={"learning_rate": args.lr, "lr_schedule": lambda _: args.lr})
             vn = pathlib.Path(args.init).with_name(pathlib.Path(args.init).name.replace("model_", "vecnorm_").replace(".zip", ".pkl"))
             if vn.exists():
                 vec.ret_rms = VecNormalize.load(str(vn), venv).ret_rms
