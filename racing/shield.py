@@ -57,6 +57,9 @@ class ShieldConfig:
     opp_b: float = 0.15  # opponent ellipse extra width [m]
     smooth: float = 0.5  # EMA on the additive correction (anti-oscillation)
     c_safe: float = 0.05  # predicted clearance below this counts as a collision (model-error margin)
+    # extra margin per m/s of speed [s]. Clearance is sampled every 0.02 s of the rollout (15 cm of travel at 7.5 m/s),
+    # so a fixed 5 cm margin is below the estimate's own jitter at speed. Default 0 = original behaviour.
+    c_safe_v: float = 0.0
     pred_dt: float = 0.05
     commit_time: float = 0.04  # one control step: how long the policy action is held before the backup starts
     max_pred_time: float = 3.0
@@ -212,7 +215,7 @@ class APFShield:
 
         pc = lambda c: self.predict_clearance(c, x7, steer_buf, scan, opps_world)
         c_rl = pc(a_rl[None])[0]
-        thr = cfg.c_safe
+        thr = cfg.c_safe + cfg.c_safe_v * max(v, 0.0)
         if cfg.escape:
             pts, opp = self._now
             c_now = current_clearance(np.asarray(x7, np.float64), pts, opp, CIRC_OFF, CIRC_R)
