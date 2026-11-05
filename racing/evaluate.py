@@ -104,7 +104,10 @@ SHIELD_FOR = {
     "ppo_apf_rec": dict(mode="conditioned_fallback", reach="grip", escape=True, allow_reverse=True),  # + stall recovery (EnvConfig.recover)
     "ppo_residual_apf_rec": dict(mode="conditioned_fallback", reach="grip", escape=True, allow_reverse=True),
 }
-RECOVER = {"ppo_apf_rec", "ppo_residual_apf_rec"}
+# speed-scaled margin variants (E24): margin = 5 cm + c_safe_v * speed
+SHIELD_FOR["ppo_apf_rec_m1"] = dict(SHIELD_FOR["ppo_apf_rec"], c_safe_v=0.01)
+SHIELD_FOR["ppo_apf_rec_m2"] = dict(SHIELD_FOR["ppo_apf_rec"], c_safe_v=0.02)
+RECOVER = {"ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2"}
 
 
 def run_race(job):

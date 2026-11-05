@@ -337,5 +337,6 @@ class RaceEnv(gym.Env):
             "lat": float(self.lat[0]), "mu": self.mu, "opp_v": st[1:, 3].copy(),
             "hdg_err": float(self.hdg_err[0]),
             "recovering": self.rec_phase is not None, "n_recover": self.n_recover,
+            "c_pred": sinfo.get("c_pred", float("nan")),
         }
         return self._obs(st, self.scan), float(r), terminated, truncated, info
