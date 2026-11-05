@@ -8,9 +8,10 @@ import json
 import numpy as np
 from scipy.stats import fisher_exact, mannwhitneyu
 
-FILES = ["results/eval_recover.json", "results/final_v2_others.json", "results/eval_extra30.json"]
+FILES = ["results/eval_recover.json", "results/final_v2_others.json", "results/eval_extra30.json",
+         "results/eval_residual_shield_s0.json", "results/eval_extra30_residual.json"]
 CTRL = {"ppo_apf_rec@s0": "PPO + our shield + stall recovery (final)", "ppo_additive": "PPO + additive Eq. 2/3 shield",
-        "pid_apf": "PID + APF"}
+        "pid_apf": "PID + APF", "ppo_residual_apf_rec@trained": "Residual PPO trained with our shield (E23)"}
 OURS = "ppo_apf_rec@s0"
 
 
@@ -24,7 +25,8 @@ def wilson(k, n, z=1.96):
     return c - h, c + h
 
 
-races = [r for f in FILES for r in json.load(open(f))["races"] if r["controller"] in CTRL]
+import pathlib
+races = [r for f in FILES if pathlib.Path(f).exists() for r in json.load(open(f))["races"] if r["controller"] in CTRL]
 keys = [(r["controller"], r["randomize"], r["seed"]) for r in races]
 assert len(keys) == len(set(keys)), "duplicate races"
 out = ["# Head-to-head on 50 race seeds per condition (v2 simulator)", "",

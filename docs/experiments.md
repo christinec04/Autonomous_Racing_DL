@@ -254,13 +254,26 @@ the same style that sinks seed 1. Likely causes: a full learning rate (3e-4) for
 and nothing in the reward discourages sliding. The seed-1 fine-tune was cancelled (seed 1 already slides).
 **E22b** (lane F3, queued): lr 5e-5, slip penalty `--w6 1.0`, 300k steps (`runs/ppo_shield_ft2_chicane_s2`).
 
-## E23. Residual policy trained with our shield (queued, lane G)
+## E23. Residual policy trained with our shield
 Racing the ResRace-style residual policy with our shield added only at race time fails three ways: deadlock (original
 shield, 14/20 stuck), slides (escape shield, 15/20 stuck) and, with the stall recovery too, still 2/20 finished,
-14 stuck, 56% of the time above 15 deg slip (`results/eval_residual_rec.json`; note the recovery variant lets
-negative residual speed commands through as a slow reverse). `runs/ppo_residual_shield_s0` trains the residual
-policy with the final shield from the start (`--residual --shield cond_fb_grip_esc --tire saturated_v2`) and races it
-with the shield + recovery, with the shield only, and without the shield.
+14 stuck, 56% of the time above 15 deg slip (`results/eval_residual_rec.json`). `runs/ppo_residual_shield_s0` trains
+the residual policy with the final shield from the start (`--residual --shield cond_fb_grip_esc --tire
+saturated_v2`, same curriculum) and races it three ways (`results/eval_residual_shield_s0.json`, 20 races x 5 laps):
+
+| residual policy | finished nominal | collisions / 10 laps | clean lap | passes / race | randomised finished |
+|---|---|---|---|---|---|
+| trained without shield, no shield (E8) | 10/20 | 1.60 | **30.4 s** | 2.20 | - |
+| trained without shield, our shield added at race time | 2/20 (14 stuck) | 0.70 | - | 1.70 | 6/20 |
+| **trained with our shield, raced with it** (+ recovery) | **15/20** | **0.59** | 32.1 s | **3.15** | **16/20** |
+| trained with our shield, raced without it | 10/20 | 1.54 | 31.6 s | 2.40 | 14/20 |
+| (plain PPO + our shield, final, for reference) | 19/20 | 0.10 | 34.7 s | 3.15 | 16/20 |
+
+Training the residual policy with the shield turns the combination from the worst shielded controller into a good
+one: +5 finishes and a third of the collisions of the unshielded residual policy, 2.6 s faster laps than plain PPO
+with our shield and as many passes. Its remaining crashes are car contacts (5 of 5 nominal). The stall recovery
+never fired. So ResRace-style residual learning and our action-conditioned shield are complementary *if the policy
+is trained with the shield*; adding the shield afterwards does not work.
 
 ## E24. Why the shield cannot save seed 1, and stricter settings
 `python -m scripts.trace_crash ppo_apf_rec@s1 runs/ppo_shield_s1/model_stage3.zip results/eval_recover.json k=3`
