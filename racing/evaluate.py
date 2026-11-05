@@ -245,6 +245,7 @@ if __name__ == "__main__":
     ap.add_argument("--controllers", nargs="+", default=["pure_pursuit", "pid_apf"])
     ap.add_argument("--models", nargs="*", default=[], help="name=path pairs for ppo controllers")
     ap.add_argument("--races", type=int, default=20)
+    ap.add_argument("--first", type=int, default=0, help="first race index (seed 10000 + index), to extend a study")
     ap.add_argument("--laps", type=int, default=5)
     ap.add_argument("--procs", type=int, default=14)
     ap.add_argument("--tire", default="saturated", choices=["saturated", "saturated_v2", "linear"])
@@ -255,7 +256,7 @@ if __name__ == "__main__":
     for randomize in (False, True):
         for c in args.controllers:
             base = c.split("@")[0]
-            for seed in range(args.races):
+            for seed in range(args.first, args.first + args.races):
                 jobs.append((base if base in SHIELD_FOR else c, models.get(c), 10_000 + seed, randomize, args.laps, None, c,
                              args.tire))
     with Pool(args.procs) as p:
