@@ -230,6 +230,34 @@ negative residual speed commands through as a slow reverse). `runs/ppo_residual_
 policy with the final shield from the start (`--residual --shield cond_fb_grip_esc --tire saturated_v2`) and races it
 with the shield + recovery, with the shield only, and without the shield.
 
+## E24. Why the shield cannot save seed 1, and stricter settings
+`python -m scripts.trace_crash ppo_apf_rec@s1 runs/ppo_shield_s1/model_stage3.zip results/eval_recover.json k=3`
+replays a seed-1 wall crash at 7.5 m/s. The shield's predicted clearance for the policy's actions shrinks over six
+steps (0.38, 0.30, 0.18, 0.11, 0.06 m) and each is accepted because it is above the 5 cm margin; one step later the
+best braking manoeuvre is predicted to leave 1 cm, and from then on every option is predicted to spin (> 20 deg slip).
+The car slides into the wall with the fallback braking. Two reasons: the rollout samples clearance every 0.02 s
+(15 cm of travel at 7.5 m/s), so a fixed 5 cm margin is below the estimate's own jitter at speed; and by the time
+the clearance test fires, braking in the corner already destabilises the car.
+
+Race-time variants on seed 1 (same model, 20 races x 5 laps; `results/eval_margin_s1.json`, `eval_beta_s1.json`,
+`eval_robust.json`):
+
+| shield (all with escape + stall recovery) | seed 1 nominal finished | collisions / 10 laps | randomised finished | seed 0 nominal / randomised |
+|---|---|---|---|---|
+| final (5 cm margin, 20 deg slip limit) | 1/20 | 4.68 | 3/20 | **19/20** / **16/20** |
+| + speed margin 1 cm per m/s | 1/20 | 4.78 | 3/20 | - |
+| + speed margin 2 cm per m/s (m2) | 3/20 | 3.81 | 3/20 | - |
+| m2 + slip limit 14 deg | 9/20 | 1.75 | 1/20 | 16/20 / 16/20 |
+| m2 + slip limit 10 deg | 5/20 | 2.73 | 3/20 | - |
+| m2 + 14 deg + predictor assumes 0.85 x friction | **10/20** | **1.59** | 2/20 | 16/20 / 15/20 |
+
+The speed margin alone barely helps; it mostly makes the shield brake more, and the sliding gets worse (35% of time
+above 15 deg). Treating smaller predicted slip as loss of control helps the sliding policy most (1 -> 9-10 of 20)
+but costs the clean seed-0 policy 3 finishes and raises its collisions (0.10 -> 0.45). Assuming worst-case friction
+did not fix seed 1 in randomised races. So these are a safety/performance dial, not a free improvement; the final
+configuration keeps the original settings. The options stay available: `ShieldConfig(c_safe_v=..., beta_max=...,
+mu_scale=...)`.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
