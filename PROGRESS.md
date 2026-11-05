@@ -235,3 +235,24 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
 25. **Editing a queue script while bash was running it killed the queue.** Lane E waited in a loop; appending a
     run by rewriting the file shifted bash's read offset and it died with a syntax error, so the timidity runs did
     not start for about an hour. Restarted; rule: never edit a running queue script, start a new one instead.
+26. **Seed 2 still got stuck with the final shield (7/20).** Not the shield deadlock this time: replaying with
+    `scripts/diag_stuck.py` (now takes `tire=` and `k=` to pick the race) showed the *policy* slowing to its minimum
+    speed (1 m/s) in the 2.5 m chicane (lap distance 84-125 m) and steering the wrong way, nose 40-45 deg into the
+    outer wall. The shield then correctly stops it, and the policy keeps asking for the same thing. 6 of 7 stuck races
+    stopped at lap distance ~94 m or ~120 m. Training episodes are 40 s, so the policy rarely sees the chicane at
+    crawling speed behind traffic. Fix: opt-in stall recovery (`EnvConfig.recover`, problem 27).
+27. **The first stall recovery never reversed, and then scraped the wall.** The shield clamps every target speed to
+    >= 0 on input, so the recovery's reverse command became "stand still" (the policy can never ask for reverse, so
+    this had not mattered). Added `ShieldConfig(allow_reverse=True)` (default off). Second issue: in 2 races the car
+    crept along the wall at 0.4 m/s pointing 24 deg into it, still making a little progress, so the stall trigger
+    never fired, and the escape rule's 2 cm tolerance let it scrape. Added a second trigger: slow (< 1.5 m/s), within
+    0.45 m of the edge and pointing outward. Spot check: all 7 stuck seed-2 races then finished. Test:
+    `test_stall_recovery_reverses_out_of_a_nose_to_wall_stop`.
+28. **Autosync silently stopped pushing for 90 minutes.** Its `sleep 1200` (Git Bash) never returned; the training
+    and eval scripts were fine. Killing the hung `sleep` process let the loop continue without a restart. Check
+    `runs/_autosync.log` timestamps if pushes look stale.
+29. **A lower intervention penalty made the policy lean on the shield.** `--w3 0.02` (5x lower) gave faster laps
+    (31.3 s vs 34.5 s) but the shield was active on 35% of steps (vs 3-6%) and 18/20 races ended stuck. On the
+    post-spin-fixed simulator with the escape shield it was worse: 0/20 finished, 47% of time above 15 deg slip. The
+    policy learned to slide on the v1 tyre artifact and to let the shield brake for it. The intervention penalty is
+    what keeps the shield rare; it should not be lowered to fight timidity.
