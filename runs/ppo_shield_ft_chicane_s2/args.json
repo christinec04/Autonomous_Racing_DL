@@ -1,0 +1,26 @@
+{
+ "shield": "cond_fb_grip_esc",
+ "stages": [
+  4
+ ],
+ "steps": [
+  500000
+ ],
+ "seed": 2,
+ "n_envs": 6,
+ "n_steps": 512,
+ "batch": 1024,
+ "lr": 0.0003,
+ "gamma": 0.99,
+ "ent": 0.0,
+ "eval_every": 50000,
+ "tire": "saturated_v2",
+ "no_randomize": false,
+ "curvature_preview": false,
+ "residual": false,
+ "w3": null,
+ "w6": 0.0,
+ "shield_prob": null,
+ "init": "runs/ppo_shield_s2/model_stage3.zip",
+ "out": "runs/ppo_shield_ft_chicane_s2"
+}
