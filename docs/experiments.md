@@ -290,6 +290,22 @@ did not fix seed 1 in randomised races. So these are a safety/performance dial, 
 configuration keeps the original settings. The options stay available: `ShieldConfig(c_safe_v=..., beta_max=...,
 mu_scale=...)`.
 
+## E25. 50-race head-to-head
+20 races per condition cannot separate 19/20 from 18/20. `python -m racing.evaluate ... --first 20 --races 30`
+adds race seeds 10020-10049 for ours (final), the additive-shield PPO and PID+APF; `python -m scripts.headtohead`
+pools them with the first 20 (`results/headtohead50.md`, Wilson 95% intervals, Fisher / Mann-Whitney tests).
+
+| (50 races each) | finished nominal | finished randomised | clean lap | passes / race |
+|---|---|---|---|---|
+| ours (final) | **43** (74-93%) | **35** (56-81%) | **34.7 s** | **2.98** |
+| PPO + additive shield | 39 (65-87%) | 34 (54-79%) | 46.6 s | 1.10 |
+| PID + APF | 28 (42-69%) | 25 (37-63%) | 42.6 s | 1.34 |
+
+Ours vs additive: no significant difference in finishing or crashing (p = 0.44 nominal, 1.0 randomised), but 12 s
+faster laps and 2.7x the passes (p < 1e-8). Ours vs PID+APF: more races finished (p = 0.002 nominal, 0.07
+randomised). The 20-race numbers were optimistic (19/20 vs 43/50; 16/20 vs 35/50 randomised); conclusions about
+finishing rates should use these.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
