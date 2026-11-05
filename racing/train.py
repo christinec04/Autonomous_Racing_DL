@@ -41,6 +41,8 @@ STAGES = {
     1: dict(n_opp=0, random_start=True),
     2: dict(n_opp=3, opp_speed=(0.45, 0.6), random_start=False),
     3: dict(n_opp=3, opp_speed=(0.5, 0.85), random_start=True),
+    # fine-tuning: stage 3 traffic, half the episodes start from rest just before the chicane (E22)
+    4: dict(n_opp=3, opp_speed=(0.45, 0.8), random_start=True, hotspot_prob=0.5),
 }
 
 
@@ -50,7 +52,7 @@ def make_cfg(stage: int, shield: str, seed: int, tire: str = "saturated", random
     return EnvConfig(n_opp=st["n_opp"], opp_speed=st.get("opp_speed", (0.55, 0.8)),
                      random_start=st["random_start"], shield=ShieldConfig(**SHIELDS[shield]),
                      randomize=randomize, tire=tire, seed=seed, curvature_preview=curvature_preview,
-                     residual=residual)
+                     residual=residual, hotspot_prob=st.get("hotspot_prob", 0.0))
 
 
 def _env_fn(cfg: EnvConfig, rank: int):
@@ -162,7 +164,7 @@ def train(args):
     model = None
     vec = None
     steps_done = 0
-    budgets = dict(zip([1, 2, 3], args.steps))
+    budgets = dict(zip(args.stages, args.steps)) if args.init else dict(zip([1, 2, 3, 4], args.steps))
     for stage in args.stages:
         cfg = make_cfg(stage, args.shield, args.seed, args.tire, not args.no_randomize, args.curvature_preview,
                        args.residual)
@@ -184,6 +186,13 @@ def train(args):
             vec = VecNormalize(venv, norm_obs=False, norm_reward=True, gamma=args.gamma)
             vec.ret_rms = old.ret_rms
             old.close()
+        if model is None and args.init:
+            # fine-tune an existing policy; reuse its reward-normalisation statistics if they were saved
+            model = PPO.load(args.init, env=vec, device="cpu", tensorboard_log=str(out / "tb"))
+            vn = pathlib.Path(args.init).with_name(pathlib.Path(args.init).name.replace("model_", "vecnorm_").replace(".zip", ".pkl"))
+            if vn.exists():
+                vec.ret_rms = VecNormalize.load(str(vn), venv).ret_rms
+            print(f"fine-tuning {args.init} (vecnorm {'loaded' if vn.exists() else 'fresh'})", flush=True)
         if model is None:
             model = PPO("MlpPolicy", vec, learning_rate=args.lr, n_steps=args.n_steps, batch_size=args.batch,
                         n_epochs=10, gamma=args.gamma, gae_lambda=0.95, clip_range=0.2, ent_coef=args.ent,
@@ -225,5 +234,6 @@ if __name__ == "__main__":
     ap.add_argument("--w6", type=float, default=0.0, help="slip penalty weight (default 0 = off)")
     ap.add_argument("--shield_prob", type=float, nargs="*", default=None,
                     help="per-stage probability that the shield is on in an episode (shield dropout)")
+    ap.add_argument("--init", default=None, help="fine-tune this model.zip instead of starting fresh")
     ap.add_argument("--out", required=True)
     train(ap.parse_args())
