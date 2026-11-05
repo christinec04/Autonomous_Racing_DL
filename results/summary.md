@@ -1,6 +1,6 @@
 # Race results
 
-Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `eval_residual_apf_s0.json`, `eval_ppo_additive_s0.json`, `eval_ppo_noshield_s1.json`, `eval_ppo_noshield_s2.json`, `eval_ppo_shield_s1.json`. 20 races x 5 laps per controller, 3 opponents, DNF on first collision. Clean lap = mean over laps 2-5 (lap 1 is a standing start).
+Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `eval_residual_apf_s0.json`, `eval_ppo_additive_s0.json`, `eval_ppo_noshield_s1.json`, `eval_ppo_noshield_s2.json`, `eval_ppo_shield_s1.json`, `eval_ppo_shield_s2.json`. 20 races x 5 laps per controller, 3 opponents, DNF on first collision. Clean lap = mean over laps 2-5 (lap 1 is a standing start).
 
 ## nominal
 
@@ -18,6 +18,7 @@ Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `ev
 | PID + APF | 9/20 | 0 | 43.91 | 36.04 | 1.75 (4, 7) | 1.25 | 66% (25/38) | 93% | 2.5% | 0.6% |
 | Pure Pursuit | 0/20 | 0 | - | - | 61.35 (0, 20) | 0.00 | - (0/0) | 0% | 11.8% | 0.0% |
 | ppo@s2 | 5/20 | 0 | 48.23 | 33.40 | 2.79 (12, 3) | 0.30 | 67% (6/9) | 0% | 9.2% | 0.0% |
+| ppo_apf@s2 | 7/20 | 10 | 41.93 | 32.00 | 0.52 (0, 3) | 0.85 | 85% (17/20) | 5% | 43.9% | 0.3% |
 
 Targets for PPO + shield, original (ours) (nominal):
 
@@ -45,6 +46,7 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | PID + APF | 0.356 | 0.00926 | 0.00829 | 0.0859 | 2.16e-05 |
 | Pure Pursuit | 4.68e-05 | 8.64e-08 | 3.28e-07 | 6.8e-08 | - |
 | ppo@s2 | 0.0282 | 0.000177 | 1.14e-05 | 0.0155 | 0.000186 |
+| ppo_apf@s2 | 0.122 | 1 | 0.0008 | 0.072 | 0.000106 |
 
 ## randomized
 
@@ -62,6 +64,7 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | PID + APF | 12/20 | 0 | 44.02 | 35.48 | 1.18 (2, 6) | 1.40 | 70% (28/40) | 93% | 2.3% | 0.8% |
 | Pure Pursuit | 0/20 | 0 | - | - | 61.52 (0, 20) | 0.00 | - (0/0) | 0% | 8.5% | 0.0% |
 | ppo@s2 | 6/20 | 0 | 48.41 | 33.24 | 2.71 (9, 5) | 0.35 | 64% (7/11) | 0% | 8.5% | 0.2% |
+| ppo_apf@s2 | 4/20 | 14 | 42.23 | 32.40 | 0.44 (0, 2) | 0.60 | 86% (12/14) | 8% | 32.7% | 0.3% |
 
 Targets for PPO + shield, original (ours) (randomized):
 
@@ -89,3 +92,4 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | PID + APF | 0.356 | 0.178 | 0.0386 | 0.695 | 5.07e-05 |
 | Pure Pursuit | 0.000819 | 3.71e-07 | 1.05e-06 | 7.9e-08 | - |
 | ppo@s2 | 0.341 | 0.00179 | 5.87e-05 | 0.473 | 0.000106 |
+| ppo_apf@s2 | 0.0989 | 0.394 | 0.000498 | 0.181 | 0.000401 |
