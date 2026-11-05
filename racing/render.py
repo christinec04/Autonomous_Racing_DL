@@ -22,7 +22,7 @@ import numpy as np
 from PIL import Image
 
 from .env import EnvConfig, RaceEnv
-from .evaluate import SHIELD_FOR, make_controller
+from .evaluate import RECOVER, SHIELD_FOR, make_controller
 from .shield import ShieldConfig
 from .sim import MAPS_DIR, DEFAULT_PARAMS
 
@@ -33,7 +33,8 @@ L, W = DEFAULT_PARAMS["length"], DEFAULT_PARAMS["width"]
 def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturated"):
     sh = SHIELD_FOR[controller]
     cfg = EnvConfig(n_opp=0 if solo else n_opp, random_start=not solo, shield=ShieldConfig(**sh),
-                    episode_time=seconds, seed=seed, residual=controller.startswith("ppo_residual"), tire=tire)
+                    episode_time=seconds, seed=seed, residual=controller.startswith("ppo_residual"), tire=tire,
+                    recover=controller in RECOVER)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0)
@@ -47,7 +48,8 @@ def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturate
         obs, r, term, trunc, info = env.step(a)
         st = env._states()
         frames.append(dict(t=info["t"], poses=st[:, [0, 1, 4]].copy(), v=float(st[0, 3]), lam=info["lambda"],
-                           prog=info["progress"], crash=bool(term), passes=info["passes"]))
+                           prog=info["progress"], crash=bool(term), passes=info["passes"],
+                           rec=bool(info.get("recovering", False))))
         if term or trunc:
             break
     return env, frames
@@ -95,6 +97,8 @@ def render(env, frames, out, title, follow=True, fps=25, view=14.0):
             ax.set_xlim(x - view, x + view); ax.set_ylim(y - view, y + view)
         lap = int(f["prog"] // env.cl.length) + 1
         shield = "INTERVENING" if f["lam"] > 0 else "-"
+        if f.get("rec"):
+            shield += "  (stall recovery)"
         hud.set_text(f"t {f['t']:5.1f} s   lap {lap}\nspeed {f['v']:4.1f} m/s\nshield {shield}"
                      + ("\nCRASH" if f["crash"] else ""))
         return cars + [trail, hud]
