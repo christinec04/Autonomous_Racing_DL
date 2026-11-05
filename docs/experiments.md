@@ -52,6 +52,23 @@ but 48.8 s clean laps and 0.55 passes per race: it learned to crawl. Ours (final
 `runs/ppo_shielddrop_s0`: shield on in 100% / 50% / 25% of episodes in stages 1 / 2 / 3. Question: can the policy
 keep the shield's training safety but end up safe without it?
 
+Result (`results/eval_ppo_shielddrop_s0.json`, 20 races x 5 laps, original simulator):
+
+| seed-0 policy, raced... | finished nominal | collisions / 10 laps | randomised finished | passes / race | clean lap |
+|---|---|---|---|---|---|
+| trained without shield, no shield | 0/20 | 5.53 | - | 1.05 | 32.5 s |
+| trained with shield, shield removed | 5/20 | - | - | - | - |
+| **shield dropout, shield removed** | **16/20** | **0.45** | 13/20 | 0.25 | 42.0 s |
+| shield dropout, with the shield | 11/20 (5 stuck) | 0.61 | 14/20 | 0.30 | 44.4 s |
+| trained with shield, with shield (ours, original) | 12/20 (5 stuck) | 0.38 | - | 2.65 | 34.3 s |
+
+Dropout works for safety: the policy is safe on its own (16/20 without any shield, vs 0/20 for the unshielded
+ablation and 5/20 for the shield-trained policy with its shield removed). Training cost: 0% / 23% / 19% of episodes
+crashed in stages 1-3 (shield always on: 1% / 9% / 7%; no shield: 25% / 46% / 21%). But it learned the timid way:
+it follows traffic (0.25 passes per race) and laps 8 s slower. With the shield back on it gets stuck like the
+original shield (no escape in this protocol). So there is a three-way trade: always-on shield = fast + safe but
+dependent on the shield; dropout = safe on its own but timid; no shield = fast but crashes.
+
 ## E11. Seeds 1-2
 `runs/ppo_shield_s{1,2}`, `runs/ppo_noshield_s{1,2}`, for mean and spread across seeds as in the proposal.
 
