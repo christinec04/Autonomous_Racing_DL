@@ -35,6 +35,12 @@ if __name__ == "__main__":
         clip("ppo_residual_apf", "runs/ppo_residual_s0/model_stage3.zip", "Residual PPO + our shield: race (red = shield intervening)", "07_ppo_residual_shield_race.mp4")
     elif which == "batch5":
         clip("ppo_apf_esc", "runs/ppo_shield_s0/model_stage3.zip", "PPO + final shield (deadlock escape): race (red = shield)", "08_ppo_final_shield_race.mp4", tire="saturated_v2")
+    elif which == "batch7":
+        # stall recovery in the chicane: seed 2 policy, race seed 10006 (stuck without recovery), from 14 s
+        env, fr = record("ppo_apf_rec", "runs/ppo_shield_s2/model_stage3.zip", 10006, 34, tire="saturated_v2")
+        fr = [f for f in fr if f["t"] >= 14.0]
+        render(env, fr, OUT / "10_stall_recovery_chicane.mp4", "Seed-2 policy stalls nose-to-wall in the chicane; stall recovery reverses out")
+        print("recoveries:", sum(1 for a, b in zip(fr, fr[1:]) if b["rec"] and not a["rec"]), "crash:", fr[-1]["crash"])
     elif which == "batch6":
         clip("ppo_additive", "runs/ppo_additive_s0/model_stage3.zip", "PPO trained with the additive Eq. 2/3 shield: safe but timid", "09_ppo_additive_shield_race.mp4", tire="saturated_v2")
     elif which == "batch3":
