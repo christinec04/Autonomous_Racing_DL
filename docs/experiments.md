@@ -339,6 +339,20 @@ The penalty removes the sliding style that the shield could not catch, and the p
 alone could be luck, lane I (`scripts/queue_lane_i.sh`) races it with the stall recovery and trains seeds 0 and 2
 with the same recipe (`runs/ppo_shield_v2esc_slip_s0`, `_s2`).
 
+## E27. Does PPO exploit stock tyres?
+`runs/ppo_shield_linear_s0`: the seed-0 recipe (original shield, no escape) trained and raced on the stock F1TENTH
+linear tyres, which have no grip limit (`results/eval_ppo_shield_linear_s0.json`, 20 races x 5 laps):
+
+| seed 0, original shield | finished nominal | stuck | clean lap | collisions / 10 laps | time > 100% of mu g | time > 15 deg slip |
+|---|---|---|---|---|---|---|
+| friction-circle tyres (E7) | 12/20 | 5 | 34.3 s | 0.38 | 0.0% | 0.0% |
+| stock linear tyres | 13/20 | 6 | **29.3 s** | 0.13 | **9.7%** | 0.0% |
+
+On stock tyres the agent laps 5 s faster by cornering above the friction limit for 9.7% of the race (physically
+impossible; best lap 26.5 s). It does not slide (0% above 15 deg): the exploit Evans et al. report as sliding
+shows up here as over-the-limit cornering. This is why the friction-circle tyre model is part of the simulator
+and why the grip metric counts time above 100% of mu g.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
