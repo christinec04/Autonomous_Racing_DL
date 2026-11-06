@@ -4,6 +4,9 @@ import numpy as np
 from racing.evaluate import summarize
 
 GROUPS = {
+    "PPO + slip penalty + shield + recovery (E26)": ["ppo_apf_rec@slip_s0", "ppo_apf_rec@slip_s1", "ppo_apf_rec@slip_s2"],
+    "residual PPO trained with shield + recovery (E23)": ["ppo_residual_apf_rec@trained", "ppo_residual_apf_rec@trained_s1",
+                                                          "ppo_residual_apf_rec@trained_s2"],
     "PPO + shield + escape + stall recovery (final, v2 sim)": ["ppo_apf_rec@s0", "ppo_apf_rec@s1", "ppo_apf_rec@s2"],
     "PPO + shield + escape (v2 sim)": ["ppo_apf_esc@s0", "ppo_apf_esc@s1v4", "ppo_apf_esc@s2"],
     "PPO + original shield (v1 sim)": ["ppo_apf", "ppo_apf@s1", "ppo_apf@s2"],
@@ -19,7 +22,10 @@ KEYS = [("finished", "finished all laps / 20", "{:.1f}"), ("stuck", "stuck / 20"
 CANONICAL = ["results/eval_ppo_s0.json", "results/eval_ppo_shield_s1.json", "results/eval_ppo_shield_s2.json",
              "results/final_v2_others.json", "results/final_v2_noshield_s2.json",
              "results/eval_escape_v4.json", "results/eval_escape_v4_s1.json", "results/eval_escape_v4_s2.json",
-             "results/eval_recover.json"]
+             "results/eval_recover.json",
+             "results/eval_slip_rec_slip_s0.json", "results/eval_slip_rec_slip_s1.json", "results/eval_slip_rec_slip_s2.json",
+             "results/eval_residual_shield_s0.json", "results/eval_residual_shield_s1.json",
+             "results/eval_residual_shield_s2.json"]
 
 
 def main(files=None):
