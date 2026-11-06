@@ -38,8 +38,8 @@ feedback, the shield is action-conditioned rather than additive, the simulator h
 every metric has a target. On the shared race seeds our agent finishes 43 of 50 five-lap races (PID+APF: 28,
 $p=0.002$), laps 8\,s faster than PID+APF, crashes about 10$\times$ less often during training than unshielded
 PPO, and meets all six metric targets on the 20-race protocol. The main open problem is variance across training
-seeds; a residual policy trained with the shield removes most of it (16.0\,$\pm$\,0.8 of 20 races finished over
-three seeds).
+seeds; a residual policy trained with the shield removes most of it (81\% of 150 races finished over three
+seeds, PID+APF 56\%) and is our final controller.
 \end{abstract}
 
 \section{Introduction}
@@ -231,7 +231,7 @@ six metric targets in both conditions: lap time 0.81$\times$ PID+APF ($\le$\,0.9
 collision rate is 0.77, which misses its target. Adding our shield to the residual
 policy only at race time fails (2--4 of 20 finished, deadlocks and slides), but training the residual policy with
 the shield works: statistically tied with ours on finishes over 50 races ($p = 0.44$ / $0.82$) and
-1.9--2.5\,s per lap faster (one training seed so far).
+1.9--2.5\,s per lap faster on all three training seeds (39--42 of 50 finished nominal, 37--40 randomised).
 
 \textbf{Across training seeds} the results vary a lot. With the final shield, seeds 0 and 2 finish 19/20 and seed 1
 only 1/20 (13.0\,$\pm$\,8.5, mean $\pm$ population s.d.\ over 3 seeds), versus 3.0\,$\pm$\,2.4 without a shield; collisions per 10 laps are
@@ -241,10 +241,13 @@ manoeuvre is predicted to spin. Fig.~\ref{fig:fail} shows where races end: most 
 were in the tight 2.5\,m-radius corners at 84--126\,m, where the policy stalled with its nose against the wall; the stall recovery removed
 most of them. \textbf{A fix for the sliding seed:} retraining seed 1 with a slip penalty
 $w_6 \max(|\beta| - 0.15, 0)$ added to Eq.~(1) ($w_6 = 1$, final shield from the start) gives 18/20 finished with the stall
-recovery (17/20 randomised), 0.11 collisions per 10 laps and 32.5\,s laps. It is not a general fix: seed 0 with
-the same recipe finishes only 11/20 (19/20 without it). The residual policy trained with the shield is more
+recovery (17/20 randomised), 0.11 collisions per 10 laps and 32.5\,s laps. It is not a general fix: seeds 0 and 2 with
+the same recipe finish only 11/20 (13.3\,$\pm$\,3.3 over three seeds). The residual policy trained with the shield is more
 consistent: over three seeds it finishes 16.0\,$\pm$\,0.8 of 20 races (16.7\,$\pm$\,0.5 randomised), with
-0.47\,$\pm$\,0.10 collisions per 10 laps and 32.2\,$\pm$\,0.1\,s laps, never stuck.
+0.47\,$\pm$\,0.10 collisions per 10 laps and 32.2\,$\pm$\,0.1\,s laps, never stuck. \textbf{We therefore adopt it as
+the final controller.} Pooled over 150 races it meets five of six targets (lap 0.76$\times$ PID+APF, 0.43
+collisions per 10 laps, 91\% overtake success, shield on 5\% of steps, 0\% slip) and misses the grip target
+(8.8\% of time above 90\% of $\mu g$).
 
 \begin{figure}[t]
 \centering
@@ -260,7 +263,7 @@ friction-circle tyres this share is 0\%.
 \textbf{Generalisation.} On a second track that no policy saw in training (228\,m, a 55\,m straight, a fast
 sweeper and a 2.5\,m hairpin; 20 races), the shielded learned policies still finish at least as often as PID+APF
 (15/20) and lap faster: slip-penalty PPO 19/20 in 32.2\,s with 0.10 collisions per 10 laps, residual PPO trained
-with the shield 17/20 in 31.3\,s, our seed-0 agent 16/20 in 36.7\,s (PID+APF 39.3\,s). PPO without a shield
+with the shield 17, 19 and 19/20 on its three seeds in 31.0--31.4\,s, our seed-0 agent 16/20 in 36.7\,s (PID+APF 39.3\,s). PPO without a shield
 finishes 1/20.
 
 \textbf{Negative results.} Lowering the intervention penalty to $w_3 = 0.02$ made laps faster but the agent let
@@ -271,11 +274,10 @@ with no shield at all (16/20 finished) but timid (0.25 passes per race).
 \section{Plan to the Final Demo}
 \textbf{Remaining tasks and milestones} (final demo December 7):
 \begin{itemize}
-\item \emph{Nov 13--20:} finish seed 2 of the slip-penalty recipe and the 50-race and second-track runs of
-all residual + shield seeds (running); choose the final controller (residual + shield leads on consistency).
-\item \emph{Nov 21--27:} since the slip penalty does not remove the seed variance, train with the stricter shield
-settings that rescued seed 1 at race time (smaller slip limit, speed-scaled margin); repeat the
-generalisation test below with all training seeds.
+\item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); try to lift its grip use
+(target $\ge$\,10\% of time above 90\% of $\mu g$) and randomised collisions without losing consistency.
+\item \emph{Nov 21--27:} second-track test for all learned controllers on three seeds; ablations of the final
+controller (no stall recovery, additive shield in training).
 \item \emph{Nov 28--Dec 3:} freeze the code; run the final evaluation (all controllers, 3 training seeds, 50 race
 seeds, nominal and randomised); telemetry, g-g diagrams and videos.
 \item \emph{Dec 4--7:} final report, presentation and live demo (recorded four-car races).

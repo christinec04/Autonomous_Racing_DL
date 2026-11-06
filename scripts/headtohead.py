@@ -9,9 +9,13 @@ import numpy as np
 from scipy.stats import fisher_exact, mannwhitneyu
 
 FILES = ["results/eval_recover.json", "results/final_v2_others.json", "results/eval_extra30.json",
-         "results/eval_residual_shield_s0.json", "results/eval_extra30_residual.json"]
+         "results/eval_residual_shield_s0.json", "results/eval_extra30_residual.json",
+         "results/eval_residual_shield_s1.json", "results/eval_residual_shield_s2.json",
+         "results/eval_extra30_residual_s12.json"]
 CTRL = {"ppo_apf_rec@s0": "PPO + our shield + stall recovery (final)", "ppo_additive": "PPO + additive Eq. 2/3 shield",
-        "pid_apf": "PID + APF", "ppo_residual_apf_rec@trained": "Residual PPO trained with our shield (E23)"}
+        "pid_apf": "PID + APF", "ppo_residual_apf_rec@trained": "Residual PPO trained with our shield (E23), seed 0",
+        "ppo_residual_apf_rec@trained_s1": "Residual PPO trained with our shield, seed 1",
+        "ppo_residual_apf_rec@trained_s2": "Residual PPO trained with our shield, seed 2"}
 OURS = "ppo_apf_rec@s0"
 
 

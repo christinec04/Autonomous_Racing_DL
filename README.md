@@ -46,7 +46,9 @@ simulator, nominal conditions. "Finished" = all 5 laps. Sources: [results/final_
 - **Correction:** early versions of these docs counted a race as finished whenever there was no collision; many
   shielded races had actually ended *stuck* (shield deadlock). All counts here are corrected (E19, PROGRESS.md
   problems 22-24).
-- Still running: seed 2 of the slip-penalty recipe (E26); 50-race and Track2 runs of residual + shield seeds 1-2. Live status: [RUNS.md](RUNS.md).
+- **Final controller (E29): residual PPO trained with our shield.** Over 3 seeds x 50 races it finishes 81% nominal
+  and 77% randomised (PID+APF 56% / 50%, p < 0.001), laps in 32.2 s and passes 3.7 cars per race; on the unseen
+  Track2 18.3 of 20. The slip penalty (E26) did not generalise (13.3 +- 3.3 over 3 seeds) and is dropped. Live status: [RUNS.md](RUNS.md).
 - Mid-term report draft: [report/midterm.tex](report/midterm.tex) (build: [docs/reproduce.md](docs/reproduce.md)).
 - Build log with every step and the 33 problems hit along the way: [PROGRESS.md](PROGRESS.md).
 
