@@ -44,7 +44,7 @@ race time collisions drop (0.36 / 10 laps) but 14 of 20 races end stuck: 4/20 fi
 18/20 and called the two complementary; that used the faulty "finished" metric and is withdrawn.)
 
 ## E9. PPO with the proposal's original additive shield
-`runs/ppo_additive_s0`, raced with the same shield (`results/eval_ppo_additive_s0.json`). Training: 2286 crashes,
+`runs/ppo_additive_s0`, raced with the same shield (`results/eval_ppo_additive_s0.json`). Training: 2333 crashes (2286 in an earlier count; `results/training_efficiency.md` has 2333),
 no better than no shield. Race: 15/20 finished (nominal), 17/20 (randomised), 0.61 / 0.22 collisions per 10 laps,
 but 48.8 s clean laps and 0.55 passes per race: it learned to crawl. Ours (final): 16/20, 34.5 s, 2.95 passes.
 
@@ -319,9 +319,10 @@ pools them with the first 20 (`results/headtohead50.md`, Wilson 95% intervals, F
 | residual PPO trained with our shield (E23) | 39 (65-87%) | **37** (60-84%) | **32.2 s** | **3.42** |
 
 Ours vs additive: no significant difference in finishing or crashing (p = 0.44 nominal, 1.0 randomised), but 12 s
-faster laps and 2.7x the passes (p < 1e-8). Ours vs PID+APF: more races finished (p = 0.002 nominal, 0.07
+faster laps and 2.7x the passes (p = 1e-8 nominal, 5e-8 randomised). Ours vs PID+APF: more races finished (p = 0.002 nominal, 0.07
 randomised). The 20-race numbers were optimistic (19/20 vs 43/50; 16/20 vs 35/50 randomised); conclusions about
-finishing rates should use these. The residual policy trained with our shield ties ours on finishing (p = 0.44 / 0.82)
+finishing rates should use these. Collisions per 10 laps over the 50 races: ours 0.31 nominal and **0.77 randomised, which misses
+the 0.5 target** (it is met on the first 20 races only). The residual policy trained with our shield ties ours on finishing (p = 0.44 / 0.82)
 and laps 2.5 s faster (p < 1e-27): the strongest controller overall on seed 0.
 
 ## E26. Slip penalty: a fix for the sliding seed?
