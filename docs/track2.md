@@ -83,3 +83,8 @@ without contact — but the lap-time advantage seen on Singapore (34.7 s vs 42.8
 clean-lap means are within 1 s of PID+APF and best laps are slightly slower. Laps vary with traffic (33-44 s), since
 opponents are hard to pass on this layout. A larger study (20+ races, more seeds) is needed before claiming anything
 beyond "no collapse".
+
+## Full evaluation
+
+20 races x 5 laps per controller: see `docs/experiments.md` E28 and `results/eval_track2.json`. The 5-race smoke
+test above was too pessimistic about the learned policies (seed 0: 16/20 finished, 36.7 s vs PID+APF 39.3 s).

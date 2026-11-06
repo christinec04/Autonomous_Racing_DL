@@ -356,6 +356,27 @@ impossible; best lap 26.5 s). It does not slide (0% above 15 deg): the exploit E
 shows up here as over-the-limit cornering. This is why the friction-circle tyre model is part of the simulator
 and why the grip metric counts time above 100% of mu g.
 
+## E28. Generalisation to an unseen track (Track2)
+Every policy was trained on Singapore only. `docs/track2.md` describes Track2 (228 m, 55 m straight, fast sweeper,
+2.5 m hairpin). Full protocol on Track2 (`python -m racing.evaluate --map Track2 ...`, `results/eval_track2.json`,
+20 races x 5 laps, v2 simulator):
+
+| controller (trained on Singapore) | finished nominal | finished randomised | clean lap | collisions / 10 laps | passes / race |
+|---|---|---|---|---|---|
+| PPO + slip penalty (seed 1) + our shield + recovery | **19/20** | 18/20 | 32.2 s | **0.10** | 2.25 |
+| residual PPO trained with our shield | 17/20 | 18/20 | **31.3 s** | 0.33 | **3.60** |
+| PPO + our shield + recovery (seed 0) | 16/20 | 18/20 | 36.7 s | 0.46 | 1.25 |
+| PPO + additive shield | 18/20 | 19/20 | 45.9 s | 0.21 | 0.00 |
+| PID + APF | 15/20 | 15/20 | 39.3 s | 0.60 | 0.80 |
+| PPO, no shield | 1/20 | 1/20 | 33.6 s | 4.86 | 0.75 |
+| Pure Pursuit | 0/20 | 0/20 | - | 48.0 | 0 |
+
+The shielded learned policies transfer: all finish at least as often as PID+APF and lap 2.6-8.0 s faster. The
+seed-0 policy's lap-time edge shrinks (0.93x PID+APF here vs 0.81x on Singapore; the 5-race smoke test even
+showed none), while the slip-penalty and residual policies keep theirs. The additive-shield policy is safe but
+never passes anyone. Without a shield the policy crashes in 19 of 20 races. The shield is active on 2-12% of steps
+on Track2, similar to Singapore. One training seed per controller.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
