@@ -37,15 +37,15 @@ simulator, nominal conditions. "Finished" = all 5 laps. Sources: [results/final_
   4.38 +- 2.12 per 10 laps. Seeds 0 and 2 finish 19/20, seed 1 only 1/20: it learned to slide (E20, E24).
   Seed 1 retrained with a slip penalty (`--w6 1`) and the escape shield from the start (`ppo_shield_v2esc_slip_s1`,
   raced without the stall recovery) finishes 17/20 nominal and 13/20 randomised, 0.22 collisions / 10 laps, 32.5 s
-  laps. This run is not in the 3-seed means. Seeds 0 and 2 with the same recipe are training now (E26, lane I).
+  laps. But seed 0 with the same recipe finishes only 11/20 (E26), so the penalty is not a general fix. Residual
+  PPO trained with our shield is the most consistent recipe so far: 15 and 16 of 20 on seeds 0 and 1 (E23).
 - What did not work: fine-tuning on the chicane (E22, E22b), a lower intervention penalty (E18), stricter shield
   settings (E24: help seed 1, cost seed 0). Shield dropout (E10) gives a policy that is safe without the shield but
   timid. Full list: [docs/results.md](docs/results.md).
 - **Correction:** early versions of these docs counted a race as finished whenever there was no collision; many
   shielded races had actually ended *stuck* (shield deadlock). All counts here are corrected (E19, PROGRESS.md
   problems 22-24).
-- Still running: residual PPO trained with our shield, seeds 1-2; ours on stock linear tyres
-  (`ppo_shield_linear_s0`); the slip-penalty recipe on seeds 0 and 2 (E26). Live status: [RUNS.md](RUNS.md).
+- Still running: seed 2 of the residual + shield recipe (E23) and of the slip-penalty recipe (E26). Live status: [RUNS.md](RUNS.md).
 - Mid-term report draft: [report/midterm.tex](report/midterm.tex) (build: [docs/reproduce.md](docs/reproduce.md)).
 - Build log with every step and the 33 problems hit along the way: [PROGRESS.md](PROGRESS.md).
 

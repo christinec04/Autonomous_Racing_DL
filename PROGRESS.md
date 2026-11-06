@@ -284,3 +284,7 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
 35. **The machine sleeps overnight and every run pauses.** Twice the laptop suspended for ~10 h; trainings,
     evaluations and the eval daemon simply resumed afterwards, but the long Git Bash `sleep` in autosync hung
     (problem 28). Nothing is lost, it only costs wall-clock time; keep the machine awake for long queues.
+36. **Squashing commits changed the hashes that runs record.** At the user's request, 13 small commits on
+    `gabe-build` after `main` (runs of auto-sync commits, repeated eval commits, doc follow-ups) were folded into their
+    neighbours (67 -> 54 commits, final tree identical, `main` untouched). Six `runs/*/run_info.json` files pointed
+    at rewritten commits; they now hold the equivalent new hash, with the old one kept as `git_commit_presquash`.

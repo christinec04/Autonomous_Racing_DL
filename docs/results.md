@@ -22,7 +22,7 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 | The shield intervenes rarely once trained | seed 0: 3% of race steps nominal, 4% randomised, vs 89-93% for the always-on APF in PID+APF. Seed-dependent: seed 1 22%; 3-seed mean 9.0 +- 9.5% |
 | The deadlock escape removes stuck races | E19: seed 0 from 5-8 stuck to 0; 16/20 finished before the stall recovery was added |
 | Stall recovery fixes the chicane stops | E21: seeds 0 and 2 finish 19/20 (from 16 and 8), 0.10 collisions / 10 laps each; chicane failures 46 -> 17 (3 seeds, nominal + randomised) |
-| Residual policy + our shield work together when trained together | E23: 15/20 finished, 0.59 collisions / 10 laps, 32.1 s laps, 3.15 passes, vs 10/20 and 1.60 for the residual policy without the shield; on 50 races 39/50 nominal and 37/50 randomised, a tie with ours (E25) |
+| Residual policy + our shield work together when trained together | E23: seeds 0 / 1 finish 15 / 16 of 20 (17 / 16 randomised), seed 0: 0.59 collisions / 10 laps, 32.1 s laps, 3.15 passes, vs 10/20 and 1.60 for the residual policy without the shield; on 50 races 39/50 nominal and 37/50 randomised, a tie with ours (E25) |
 | A slip penalty fixes the sliding seed 1 | `ppo_shield_v2esc_slip_s1` (`--w6 1`, escape shield and v2 simulator from the start; raced with the escape shield, no stall recovery; `results/eval_ppo_shield_v2esc_slip_s1.json`): 17/20 finished nominal (1 stuck), 13/20 randomised (4 stuck), 0.22 / 0.38 collisions / 10 laps, 32.5 s laps, 0.4% of time above 15 deg slip; with the stall recovery 18/20 nominal, 17/20 randomised, 0.11 collisions / 10 laps (`results/eval_slip_rec_slip_s1.json`); seed 1 before: 1/20, 4.91 collisions. Two things changed at once (slip penalty, shield and simulator during training); one seed only |
 | Shielded learned policies generalise to an unseen track | E28 (Track2, 20 races): slip-penalty PPO 19/20, 32.2 s, 0.10 collisions; residual + shield 17/20, 31.3 s; ours seed 0 16/20, 36.7 s; PID+APF 15/20, 39.3 s; no shield 1/20 |
 | Learned driving beats classical | seed 0 clean laps 34.7 s (ours) vs 42.8 s PID+APF; residual PPO 30.4 s |
@@ -34,7 +34,7 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 | finding | evidence | next step |
 |---|---|---|
-| Strong seed dependence | final setup, nominal: seeds 0 and 2 19/20, seed 1 1/20 (sliding style the shield cannot catch); mean 13.0 +- 8.5 vs 3.0 +- 2.4 without a shield | the slip penalty fixed seed 1 (17/20, above); E26 (lane I, `scripts/queue_lane_i.sh`): races it with the stall recovery and trains seeds 0 and 2 with the same recipe (training now) |
+| Strong seed dependence | final setup, nominal: seeds 0 and 2 19/20, seed 1 1/20 (sliding style the shield cannot catch); mean 13.0 +- 8.5 vs 3.0 +- 2.4 without a shield | the slip penalty fixed seed 1 (18/20) but hurt seed 0 (11/20 vs 19/20, E26); residual PPO trained with the shield is the most consistent so far (15 and 16/20 on seeds 0-1, E23); seed 2 of both training |
 | Fine-tuning on the chicane backfired | E22: seed 2 fine-tuned on chicane starts learned to slide, 19/20 -> 8/20 (with recovery); E22b, a gentler retry (lr 5e-5, slip penalty): 16/20 | none; the stall recovery handles the chicane better |
 | Failures concentrate in the chicane | `results/failure_map.png`: 61% of our shield's race-ending events (3 seeds) are in the 2.5 m chicane (84-126 m); seed 2's stuck races were the policy steering into the outer wall at crawling speed | stall recovery (E21) fixed most of it |
 | Shield-trained policies lean on the shield | seed 0 with the shield removed: 5/20 finished. Shield dropout (E10) makes it safe on its own (16/20, 0.45 collisions with no shield at all) but timid: 0.25 passes / race, 42 s laps | dropout with a pass reward boost, or a dropout schedule that ends higher |
@@ -48,8 +48,8 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 ## Running now
 
 
-- `ppo_residual_shield_s1`, `ppo_residual_shield_s2`: E23 on more seeds (lane H; s2 starts after s1).
-- E26 (lane I): seeds 0 and 2 trained with the slip penalty, then raced with the stall recovery.
+- `ppo_residual_shield_s2`: E23 seed 2 (lane H). Seed 1 done: 16/20 nominal, 17/20 randomised.
+- `ppo_shield_v2esc_slip_s2`: E26 seed 2 (lane I). Seed 0 done: 11/20 nominal, 6/20 randomised.
 
 Status: [RUNS.md](../RUNS.md).
 

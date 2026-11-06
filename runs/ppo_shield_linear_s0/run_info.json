@@ -1,5 +1,5 @@
 {
- "git_commit": "4ab467a",
+ "git_commit": "50f68d0",
  "git_dirty": [],
  "command": "python -m racing.train --shield cond_fb_grip --tire linear --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 0 --out runs/ppo_shield_linear_s0",
  "status": "finished",
@@ -10,5 +10,6 @@
   3
  ],
  "steps_done": 3500000,
- "finished": "2026-11-05 21:30:32"
+ "finished": "2026-11-05 21:30:32",
+ "git_commit_presquash": "4ab467a"
 }
