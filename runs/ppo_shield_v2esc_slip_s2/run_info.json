@@ -4,5 +4,9 @@
  "command": "python -m racing.train --shield cond_fb_grip_esc --tire saturated_v2 --w6 1.0 --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 2 --out runs/ppo_shield_v2esc_slip_s2",
  "status": "running",
  "started": "2026-11-06 08:32:24",
- "git_commit_presquash": "28eceda"
+ "git_commit_presquash": "28eceda",
+ "stages_done": [
+  1
+ ],
+ "steps_done": 1500000
 }
