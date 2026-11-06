@@ -121,6 +121,7 @@ def run_race(job):
     ctrl, model_path, seed, randomize, laps, shield_override = job[:6]
     label = job[6] if len(job) > 6 else ctrl
     tire = job[7] if len(job) > 7 else "saturated"
+    map_name = job[8] if len(job) > 8 else "Singapore"
     sh = shield_override or SHIELD_FOR[ctrl]
     model = None
     if ctrl.startswith("ppo") and model_path:
@@ -130,7 +131,8 @@ def run_race(job):
     preview = model is not None and model.observation_space.shape[0] > 77
     cfg = EnvConfig(curvature_preview=preview, n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
                     shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
-                    residual=ctrl.startswith("ppo_residual"), tire=tire, recover=ctrl in RECOVER)
+                    residual=ctrl.startswith("ppo_residual"), tire=tire, recover=ctrl in RECOVER,
+                    map_name=map_name)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),
@@ -169,7 +171,7 @@ def run_race(job):
     lap_times = list(np.diff([0.0] + lap_marks))
     mg = env.mu * G
     comb = np.hypot(np.array(glat), np.array(glon)) / mg
-    return dict(controller=label, seed=seed, randomize=randomize, laps_done=float(laps_done), laps_target=laps,
+    return dict(controller=label, map=map_name, seed=seed, randomize=randomize, laps_done=float(laps_done), laps_target=laps,
                 stuck=bool(not (wall or car) and len(lap_marks) < laps),
                 lap_times=lap_times, wall=bool(wall), car=bool(car), dnf=bool(wall or car),
                 overtake_attempts=ot.attempts, overtake_successes=ot.successes,
@@ -249,6 +251,7 @@ if __name__ == "__main__":
     ap.add_argument("--laps", type=int, default=5)
     ap.add_argument("--procs", type=int, default=14)
     ap.add_argument("--tire", default="saturated", choices=["saturated", "saturated_v2", "linear"])
+    ap.add_argument("--map", default="Singapore", help="track in maps/ (e.g. Track2, the unseen generalisation track)")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     models = dict(m.split("=", 1) for m in args.models)
@@ -258,7 +261,7 @@ if __name__ == "__main__":
             base = c.split("@")[0]
             for seed in range(args.first, args.first + args.races):
                 jobs.append((base if base in SHIELD_FOR else c, models.get(c), 10_000 + seed, randomize, args.laps, None, c,
-                             args.tire))
+                             args.tire, args.map))
     with Pool(args.procs) as p:
         res = p.map(run_race, jobs, chunksize=1)
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
@@ -275,4 +278,4 @@ if __name__ == "__main__":
                   f" (wall {s['wall']}, car {s['car']})  passes/race {s['passes_per_race']:.2f}"
                   f" ot {s['overtake_successes']}/{s['overtake_attempts']}  shield {s['shield_freq']:.2f}"
                   f"  grip>90% {s['grip_above_90']:.3f} (>100% {s['grip_above_100']:.3f})  slip>15 {s['slip_above_15']:.3f}")
-    json.dump(dict(report=report, races=res), open(args.out, "w"))
+    json.dump(dict(map=args.map, report=report, races=res), open(args.out, "w"))

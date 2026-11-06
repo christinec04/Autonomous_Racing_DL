@@ -1,4 +1,4 @@
-"""Generate the Singapore-inspired (Marina Bay style) street circuit.
+"""Generate the race tracks: the Singapore-inspired (Marina Bay style) street circuit and Track2.
 
 Marina Bay is a tight street circuit: many ~90 degree corners, a chicane
 after the main straight, one long back straight and a slow hairpin. We keep
@@ -7,6 +7,12 @@ that character, scaled to a 1:10 F1TENTH car (~120 m lap).
 Outputs (in maps/Singapore/):
   Singapore_map.png / Singapore_map.yaml  occupancy grid for F1TENTH Gym
   Singapore_centerline.csv                x, y, w_left, w_right
+
+Track2 (maps/Track2/, same file layout) is a second, unseen test track with a different character: long straights,
+a fast sweeper and a tight hairpin. Used only to test generalisation (EnvConfig.map_name / evaluate --map).
+
+  python -m racing.track_gen            # all tracks
+  python -m racing.track_gen Track2     # one track
 """
 from __future__ import annotations
 
@@ -44,6 +50,25 @@ VERTICES = [
     (-6.0, 4.0, 3.0),    # T19 left onto main straight
 ]
 
+# Track2: unseen generalisation track, counter-clockwise. Long main straight (~55 m), fast left sweeper (two
+# 45 deg corners, r = 10 m), 90 deg corners, a tight right-right hairpin (r = 2.5 m, legs 6 m apart), a ~30 m back
+# straight and a medium left onto the main straight.
+VERTICES_TRACK2 = [
+    (0.0, 0.0, None),    # start / finish straight
+    (60.0, 0.0, 10.0),   # T1 fast sweeper, first half (left)
+    (70.0, 10.0, 10.0),  # T2 fast sweeper, second half (left)
+    (70.0, 30.0, 3.0),   # T3 90 left
+    (56.0, 30.0, 3.0),   # T4 90 left
+    (56.0, 18.0, 2.5),   # T5 hairpin (right, tight)
+    (50.0, 18.0, 2.5),   # T6 hairpin exit (right)
+    (50.0, 40.0, 3.5),   # T7 90 left onto the back straight
+    (18.0, 40.0, 6.0),   # T8 medium left
+    (4.0, 30.0, 5.0),    # T9 left kink
+    (-10.0, 3.0, 4.0),   # T10 left onto the main straight
+]
+
+TRACKS = {"Singapore": VERTICES, "Track2": VERTICES_TRACK2}
+
 
 def _fillet_polyline(verts: list[tuple[float, float, float | None]], ds: float = 0.1) -> np.ndarray:
     pts = np.array([[v[0], v[1]] for v in verts])
@@ -80,8 +105,9 @@ def _fillet_polyline(verts: list[tuple[float, float, float | None]], ds: float =
     return np.stack([np.interp(s_new, s, poly[:, 0]), np.interp(s_new, s, poly[:, 1])], 1)
 
 
-def build(out_dir: pathlib.Path) -> dict:
-    center = _fillet_polyline(VERTICES)
+def build(out_dir: pathlib.Path, name: str = "Singapore", vertices: list | None = None) -> dict:
+    vertices = VERTICES if vertices is None else vertices
+    center = _fillet_polyline(vertices)
     xmin, ymin = center.min(0) - TRACK_WIDTH / 2 - MARGIN
     xmax, ymax = center.max(0) + TRACK_WIDTH / 2 + MARGIN
     w = int(np.ceil((xmax - xmin) / RESOLUTION))
@@ -89,7 +115,7 @@ def build(out_dir: pathlib.Path) -> dict:
 
     # rasterize centerline, then free space = within TRACK_WIDTH/2 of it
     mask = np.ones((h, w), dtype=bool)  # True = not centerline
-    dense = _fillet_polyline(VERTICES, ds=RESOLUTION / 2)
+    dense = _fillet_polyline(vertices, ds=RESOLUTION / 2)
     cols = ((dense[:, 0] - xmin) / RESOLUTION).astype(int)
     rows = ((dense[:, 1] - ymin) / RESOLUTION).astype(int)
     mask[rows, cols] = False
@@ -100,17 +126,18 @@ def build(out_dir: pathlib.Path) -> dict:
     img = img[::-1]
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    Image.fromarray(img).save(out_dir / "Singapore_map.png")
-    (out_dir / "Singapore_map.yaml").write_text(
-        "image: Singapore_map.png\n"
+    Image.fromarray(img).save(out_dir / f"{name}_map.png")
+    # write LF line endings on every OS (the committed maps were generated with LF)
+    (out_dir / f"{name}_map.yaml").write_bytes((
+        f"image: {name}_map.png\n"
         f"resolution: {RESOLUTION}\n"
         f"origin: [{xmin:.4f}, {ymin:.4f}, 0.0]\n"
         "negate: 0\noccupied_thresh: 0.65\nfree_thresh: 0.196\n"
-    )
+    ).encode())
     wl = np.full(len(center), TRACK_WIDTH / 2)
-    np.savetxt(out_dir / "Singapore_centerline.csv",
-               np.column_stack([center, wl, wl]), delimiter=",", fmt="%.4f",
-               header="x_m, y_m, w_tr_left_m, w_tr_right_m")
+    with open(out_dir / f"{name}_centerline.csv", "wb") as f:
+        np.savetxt(f, np.column_stack([center, wl, wl]), delimiter=",", fmt="%.4f",
+                   header="x_m, y_m, w_tr_left_m, w_tr_right_m")
 
     # sanity: closest approach between non-neighbouring centerline points
     seg_len = 0.1
@@ -124,5 +151,7 @@ def build(out_dir: pathlib.Path) -> dict:
 
 
 if __name__ == "__main__":
+    import sys
     root = pathlib.Path(__file__).resolve().parents[1]
-    print(build(root / "maps" / "Singapore"))
+    for name in sys.argv[1:] or list(TRACKS):
+        print(name, build(root / "maps" / name, name, TRACKS[name]))
