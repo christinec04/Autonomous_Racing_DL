@@ -48,7 +48,7 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
   on the seed. Most remaining failures happen in one place, the 2.5 m chicane
   ([results/failure_map.png](results/failure_map.png)); the stall recovery (E21) cut chicane failures from 46 to 17 (3 seeds,
   nominal + randomised). Fine-tuning the policy on the chicane instead (E22) backfired: it learned to
-  slide (19/20 -> 8/20); a gentler retry is queued. Live status of runs in [RUNS.md](RUNS.md).
+  slide (19/20 -> 8/20); a gentler retry was no better (16/20). Live status of runs in [RUNS.md](RUNS.md).
 - Running log of every step and every problem hit along the way: [PROGRESS.md](PROGRESS.md).
 
 ## Quick start

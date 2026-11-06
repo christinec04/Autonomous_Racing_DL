@@ -252,7 +252,10 @@ chicane (lap distance 55-90 m, random lateral offset +-0.6 m and heading +-0.3 r
 The fine-tuned policy learned to slide (grip use > 90% of mu g half the time, 11-17% of the time above 15 deg slip),
 the same style that sinks seed 1. Likely causes: a full learning rate (3e-4) for 500k steps moved the policy far,
 and nothing in the reward discourages sliding. The seed-1 fine-tune was cancelled (seed 1 already slides).
-**E22b** (lane F3, queued): lr 5e-5, slip penalty `--w6 1.0`, 300k steps (`runs/ppo_shield_ft2_chicane_s2`).
+**E22b**: gentler retry, lr 5e-5 (6x lower), slip penalty `--w6 1.0`, 300k steps (`runs/ppo_shield_ft2_chicane_s2`,
+`results/eval_ft2_chicane_s2.json`): no sliding this time (0-2% above 15 deg), but not better than the original
+either: 16/20 finished with the recovery (19/20 before), 10/20 without (8/20 before), 0.95 passes per race (1.35
+before). Fine-tuning on the failure spot does not beat simply catching the failure with the stall recovery.
 
 ## E23. Residual policy trained with our shield
 Racing the ResRace-style residual policy with our shield added only at race time fails three ways: deadlock (original
