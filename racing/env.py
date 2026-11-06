@@ -69,6 +69,8 @@ class EnvConfig:
     hotspot_s: tuple = (55.0, 90.0)
     hotspot_d: float = 0.6
     hotspot_hdg: float = 0.3
+    # track (maps/<map_name>/, built by racing/track_gen.py); "Track2" is the unseen generalisation track
+    map_name: str = "Singapore"
     seed: int = 0
 
 
@@ -80,9 +82,9 @@ class RaceEnv(gym.Env):
         self.cfg = cfg or EnvConfig()
         set_tire_model(self.cfg.tire)
         set_traction_control(self.cfg.tcs)
-        self.cl = Centerline.load()
+        self.cl = Centerline.load(self.cfg.map_name)
         self.n = 1 + self.cfg.n_opp
-        self.sim = make_f110(self.n, timestep=self.cfg.phys_dt, seed=self.cfg.seed)
+        self.sim = make_f110(self.n, timestep=self.cfg.phys_dt, seed=self.cfg.seed, map_name=self.cfg.map_name)
         self.sub = int(round(self.cfg.control_dt / self.cfg.phys_dt))
         self.shield = APFShield(self.cfg.shield, self.cfg.control_dt, self.cl)
         self.shield.sat = {"linear": 0, "saturated": 1, "saturated_v2": 2}[self.cfg.tire]

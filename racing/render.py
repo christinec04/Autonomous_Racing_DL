@@ -30,11 +30,11 @@ EGO, EGO_SHIELD, OPP, INK, SURF = "#2a78d6", "#e34948", "#8a8984", "#0b0b0b", "#
 L, W = DEFAULT_PARAMS["length"], DEFAULT_PARAMS["width"]
 
 
-def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturated"):
+def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturated", map_name="Singapore"):
     sh = SHIELD_FOR[controller]
     cfg = EnvConfig(n_opp=0 if solo else n_opp, random_start=not solo, shield=ShieldConfig(**sh),
                     episode_time=seconds, seed=seed, residual=controller.startswith("ppo_residual"), tire=tire,
-                    recover=controller in RECOVER)
+                    recover=controller in RECOVER, map_name=map_name)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0)
@@ -62,10 +62,11 @@ def car_poly(x, y, yaw):
 
 
 def render(env, frames, out, title, follow=True, fps=25, view=14.0):
-    spec = (MAPS_DIR / "Singapore" / "Singapore_map.yaml").read_text().splitlines()
+    name = env.cfg.map_name
+    spec = (MAPS_DIR / name / f"{name}_map.yaml").read_text().splitlines()
     res = float([l for l in spec if l.startswith("resolution")][0].split(":")[1])
     ox, oy = [float(v) for v in [l for l in spec if l.startswith("origin")][0].split("[")[1].split(",")[:2]]
-    img = np.array(Image.open(MAPS_DIR / "Singapore" / "Singapore_map.png"))
+    img = np.array(Image.open(MAPS_DIR / name / f"{name}_map.png"))
     h, w = img.shape
     extent = [ox, ox + w * res, oy, oy + h * res]
     fig, ax = plt.subplots(figsize=(7.2, 7.2) if follow else (10, 6.4), dpi=110, facecolor=SURF)
@@ -135,8 +136,9 @@ if __name__ == "__main__":
     ap.add_argument("--solo", action="store_true")
     ap.add_argument("--overview", action="store_true", help="whole track instead of a follow camera")
     ap.add_argument("--title", default="")
+    ap.add_argument("--map", default="Singapore")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
-    env, frames = record(a.controller, a.model, a.seed, a.seconds, solo=a.solo)
+    env, frames = record(a.controller, a.model, a.seed, a.seconds, solo=a.solo, map_name=a.map)
     p = render(env, frames, a.out, a.title or a.controller, follow=not a.overview)
     print(f"wrote {p}  ({len(frames)} frames, crash={frames[-1]['crash']}, distance={frames[-1]['prog']:.0f} m)")

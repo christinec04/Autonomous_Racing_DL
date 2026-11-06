@@ -73,14 +73,15 @@ class Centerline:
         return np.array([x, y, h])
 
 
-def make_f110(num_agents: int, params: dict | None = None, timestep: float = 0.01, seed: int = 0):
+def make_f110(num_agents: int, params: dict | None = None, timestep: float = 0.01, seed: int = 0,
+              map_name: str = "Singapore"):
     p = dict(DEFAULT_PARAMS)
     if params:
         p.update(params)
     return gym.make(
         "f1tenth_gym:f1tenth-v0",
         config={
-            "map": "Singapore", "num_agents": num_agents, "timestep": timestep,
+            "map": map_name, "num_agents": num_agents, "timestep": timestep,
             "integrator": "rk4", "model": "st",
             "control_input": ["speed", "steering_angle"],
             "observation_config": {"type": "original"},
