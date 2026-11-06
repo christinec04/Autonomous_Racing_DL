@@ -1,6 +1,6 @@
 # Race results
 
-Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `eval_residual_apf_s0.json`, `eval_ppo_additive_s0.json`, `eval_ppo_noshield_s1.json`, `eval_ppo_noshield_s2.json`, `eval_ppo_shield_preview_s0.json`, `eval_ppo_shield_s1.json`, `eval_ppo_shield_s2.json`, `eval_ppo_shield_v2esc_s0.json`, `eval_ppo_shield_w3low_s0.json`, `eval_ppo_shielddrop_s0.json`. 20 races x 5 laps per controller, 3 opponents, DNF on first collision. Clean lap = mean over laps 2-5 (lap 1 is a standing start).
+Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `eval_residual_apf_s0.json`, `eval_ppo_additive_s0.json`, `eval_ppo_noshield_s1.json`, `eval_ppo_noshield_s2.json`, `eval_ppo_shield_preview_s0.json`, `eval_ppo_shield_s1.json`, `eval_ppo_shield_s2.json`, `eval_ppo_shield_v2esc_s0.json`, `eval_ppo_shield_v2esc_slip_s1.json`, `eval_ppo_shield_w3low_s0.json`, `eval_ppo_shielddrop_s0.json`. 20 races x 5 laps per controller, 3 opponents, DNF on first collision. Clean lap = mean over laps 2-5 (lap 1 is a standing start).
 
 ## nominal
 
@@ -23,6 +23,7 @@ Sources: `eval_baselines.json`, `eval_ppo_s0.json`, `eval_residual_s0.json`, `ev
 | ppo_apf@preview | 13/20 | 5 | 33.36 | 31.36 | 0.25 (0, 2) | 3.50 | 85% (70/82) | 6% | 24.6% | 0.3% |
 | ppo_apf@s2 | 7/20 | 10 | 41.93 | 32.00 | 0.52 (0, 3) | 0.85 | 85% (17/20) | 5% | 43.9% | 0.3% |
 | ppo_apf@w3low | 0/20 | 18 | 31.26 | 31.08 | 1.19 (0, 2) | 1.70 | 85% (34/40) | 35% | 41.1% | 11.9% |
+| ppo_apf_esc@slip_s1 | 17/20 | 1 | 32.53 | 30.92 | 0.22 (1, 1) | 2.55 | 93% (51/55) | 8% | 28.1% | 0.4% |
 | ppo_apf_esc@v2esc | 14/20 | 1 | 36.26 | 34.44 | 0.62 (1, 4) | 3.45 | 92% (69/75) | 4% | 15.0% | 0.0% |
 
 Targets for PPO + shield, original (ours) (nominal):
@@ -56,6 +57,7 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | ppo_apf@preview | 0.759 | 0.654 | 0.164 | 0.735 | 0.00049 |
 | ppo_apf@s2 | 0.122 | 1 | 0.0008 | 0.072 | 0.000106 |
 | ppo_apf@w3low | 4.68e-05 | 0.654 | 0.0505 | 7.41e-05 | - |
+| ppo_apf_esc@slip_s1 | 0.0835 | 0.654 | 0.762 | 0.0962 | 7.37e-07 |
 | ppo_apf_esc@v2esc | 0.523 | 0.447 | 0.17 | 0.903 | 2.64e-05 |
 
 ## randomized
@@ -79,6 +81,7 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | ppo_apf@preview | 6/20 | 13 | 32.81 | 31.16 | 0.19 (1, 0) | 2.55 | 84% (51/61) | 13% | 20.6% | 0.5% |
 | ppo_apf@s2 | 4/20 | 14 | 42.23 | 32.40 | 0.44 (0, 2) | 0.60 | 86% (12/14) | 8% | 32.7% | 0.3% |
 | ppo_apf@w3low | 1/20 | 18 | 31.49 | 30.68 | 0.45 (1, 0) | 1.65 | 73% (33/45) | 36% | 30.2% | 7.3% |
+| ppo_apf_esc@slip_s1 | 13/20 | 4 | 32.77 | 30.92 | 0.38 (2, 1) | 2.75 | 93% (55/59) | 9% | 24.9% | 0.2% |
 | ppo_apf_esc@v2esc | 11/20 | 2 | 36.37 | 34.24 | 0.95 (5, 2) | 2.60 | 71% (52/73) | 5% | 13.5% | 0.1% |
 
 Targets for PPO + shield, original (ours) (randomized):
@@ -112,4 +115,5 @@ Mann-Whitney U p-values, PPO + shield, original (ours) vs each controller (per-r
 | ppo_apf@preview | 0.341 | 0.164 | 1 | 0.598 | 0.00174 |
 | ppo_apf@s2 | 0.0989 | 0.394 | 0.000498 | 0.181 | 0.000401 |
 | ppo_apf@w3low | 0.00415 | 0.164 | 0.0894 | 0.0028 | 0.00357 |
+| ppo_apf_esc@slip_s1 | 0.215 | 0.696 | 0.72 | 0.351 | 0.000118 |
 | ppo_apf_esc@v2esc | 0.543 | 0.302 | 0.88 | 0.273 | 0.000149 |
