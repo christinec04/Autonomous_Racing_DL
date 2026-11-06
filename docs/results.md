@@ -25,6 +25,7 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 | Residual policy + our shield work together when trained together | E23: seeds 0 / 1 finish 15 / 16 of 20 (17 / 16 randomised), seed 0: 0.59 collisions / 10 laps, 32.1 s laps, 3.15 passes, vs 10/20 and 1.60 for the residual policy without the shield; on 50 races 39/50 nominal and 37/50 randomised, a tie with ours (E25) |
 | A slip penalty fixes the sliding seed 1 | `ppo_shield_v2esc_slip_s1` (`--w6 1`, escape shield and v2 simulator from the start; raced with the escape shield, no stall recovery; `results/eval_ppo_shield_v2esc_slip_s1.json`): 17/20 finished nominal (1 stuck), 13/20 randomised (4 stuck), 0.22 / 0.38 collisions / 10 laps, 32.5 s laps, 0.4% of time above 15 deg slip; with the stall recovery 18/20 nominal, 17/20 randomised, 0.11 collisions / 10 laps (`results/eval_slip_rec_slip_s1.json`); seed 1 before: 1/20, 4.91 collisions. Two things changed at once (slip penalty, shield and simulator during training); one seed only |
 | Final controller: residual PPO trained with our shield | E29: 3 seeds x 50 races, 122/150 finished nominal (81%), 116/150 randomised (77%), vs PID+APF 28/50 and 25/50 (p < 0.001); 32.2 s laps, 3.7 passes / race; meets 5 of 6 targets nominal (misses time above 90% of mu g: 8.8%) |
+| The final controller generalises best | Track2, 3 seeds (E29): residual + shield 18.3 / 16.3 of 20 finished (nominal / randomised), 31.2 s, 3.8 passes; plain PPO + shield 16.7 / 14.0, 37.5 s, 1.2 passes (one seed 5/20 randomised, one never passes); stall recovery barely matters for it (+1 randomised finish in 20) |
 | Shielded learned policies generalise to an unseen track | E28 (Track2, 20 races): slip-penalty PPO 19/20, 32.2 s, 0.10 collisions; residual + shield 17/20, 31.3 s; ours seed 0 16/20, 36.7 s; PID+APF 15/20, 39.3 s; no shield 1/20 |
 | Learned driving beats classical | seed 0 clean laps 34.7 s (ours) vs 42.8 s PID+APF; residual PPO 30.4 s |
 | Curvature preview gives a small gain | E18: raced with the final setup 17/20, 0.22 collisions, 3.80 passes / race vs ours 19/20, 0.10, 3.15; solo lap 31.2 s vs 32.7 s. Comparable, not clearly better, one seed |
@@ -49,7 +50,6 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 ## Running now
 
 - E30 (lane J, `scripts/queue_lane_j.sh`): the final controller with a wider residual (`--residual_scale 0.5`), seeds 0-1, to raise grip use (E29 missed that target).
-- Ablation: final controller seeds 1-2 without the stall recovery (`results/eval_residual_norec_s12.json`); plain PPO + shield seeds 1-2 on Track2 (`results/eval_track2_ours_s12.json`).
 
 
 

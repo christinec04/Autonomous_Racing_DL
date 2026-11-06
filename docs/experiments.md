@@ -420,6 +420,25 @@ time above 15 deg slip 0.0% / 0.8% (<= 1%, met).
 
 On Track2 (unseen) seeds 1 and 2 finish 19/20 each nominal (0.10 collisions / 10 laps, 31.0 / 31.4 s) and 17/20
 and 14/20 randomised (`results/eval_track2_residual_s12.json`); with seed 0 (17/20, E28) that is 18.3 +- 0.9 of 20.
+Plain PPO + our shield on Track2, three seeds (`results/eval_track2_ours_s12.json` for seeds 1-2):
+
+| Track2, 20 races | seed 0 | seed 1 | seed 2 | mean |
+|---|---|---|---|---|
+| residual + shield: finished nominal / randomised | 17 / 18 | 19 / 17 | 19 / 14 | **18.3 / 16.3** |
+| residual + shield: clean lap, passes / race | 31.3 s, 3.6 | 31.0 s, 3.9 | 31.4 s, 4.0 | **31.2 s, 3.8** |
+| plain PPO + shield: finished nominal / randomised | 16 / 18 | 15 / **5** | 19 / 19 | 16.7 / 14.0 |
+| plain PPO + shield: clean lap, passes / race | 36.7 s, 1.3 | 33.2 s, 2.2 | 42.5 s, 0.05 | 37.5 s, 1.2 |
+
+On the unseen track plain PPO's seeds fail in different ways: seed 1 crashes in most randomised races (2.61
+collisions / 10 laps), seed 2 finishes by sitting behind the opponents (42.5 s laps, one pass in 20 races, slower
+than PID+APF's 39.3 s). The residual recipe keeps its speed and passing on every seed.
+
+**Ablation: stall recovery.** Seeds 1-2 of the final controller raced without the stall recovery (escape shield
+only, `results/eval_residual_norec_s12.json`): 16 / 17 of 20 nominal, identical to with it, and 17 / 16
+randomised (with it 17 / 17). With seed 0 (15 / 14 without, 15 / 16 with) the recovery adds 1.0 race per 20
+randomised and nothing nominal: the residual policy, whose PID base always steers back to the centre line, almost
+never stalls. It stays in the final controller because it is free (never fires otherwise) and it matters a lot for
+plain PPO (E21).
 
 **Decision.** The final controller is residual PPO trained with our action-conditioned shield and stall recovery.
 Plain PPO + shield has the best single seed (43/50, 0.10 collisions on the 20-race protocol) but one seed in three

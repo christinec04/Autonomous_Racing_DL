@@ -262,9 +262,10 @@ friction-circle tyres this share is 0\%.
 
 \textbf{Generalisation.} On a second track that no policy saw in training (228\,m, a 55\,m straight, a fast
 sweeper and a 2.5\,m hairpin; 20 races), the shielded learned policies still finish at least as often as PID+APF
-(15/20) and lap faster: slip-penalty PPO 19/20 in 32.2\,s with 0.10 collisions per 10 laps, residual PPO trained
-with the shield 17, 19 and 19/20 on its three seeds in 31.0--31.4\,s, our seed-0 agent 16/20 in 36.7\,s (PID+APF 39.3\,s). PPO without a shield
-finishes 1/20.
+(15/20, 39.3\,s): the final residual controller finishes 18.3 of 20 over three seeds (16.3 randomised) in
+31.2\,s with 3.8 passes per race. Plain PPO + shield is less robust there: 16.7 of 20 (14.0 randomised, one seed
+5/20) in 37.5\,s, and one seed only follows the opponents (one pass in 20 races). PPO without a shield finishes
+1/20. Racing the final controller without the stall recovery changes little (one fewer randomised finish in 20).
 
 \textbf{Negative results.} Lowering the intervention penalty to $w_3 = 0.02$ made laps faster but the agent let
 the shield brake for it (35\% of steps) and deadlocked; fine-tuning on the chicane made a policy slide
@@ -276,8 +277,8 @@ with no shield at all (16/20 finished) but timid (0.25 passes per race).
 \begin{itemize}
 \item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); try to lift its grip use
 (target $\ge$\,10\% of time above 90\% of $\mu g$) and randomised collisions without losing consistency.
-\item \emph{Nov 21--27:} second-track test for all learned controllers on three seeds; ablations of the final
-controller (no stall recovery, additive shield in training).
+\item \emph{Nov 21--27:} remaining ablations of the final controller (residual scale, running; additive shield
+in training); second-track test of the baselines on three seeds.
 \item \emph{Nov 28--Dec 3:} freeze the code; run the final evaluation (all controllers, 3 training seeds, 50 race
 seeds, nominal and randomised); telemetry, g-g diagrams and videos.
 \item \emph{Dec 4--7:} final report, presentation and live demo (recorded four-car races).
