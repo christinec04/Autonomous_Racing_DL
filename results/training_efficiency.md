@@ -22,6 +22,6 @@ Solo laps every 50k steps, standing start. 'fast' = under 34 s (best classical s
 | `ppo_shield_v2esc_s0` | cond_fb_grip_esc tyre=saturated_v2 | 3500k | 150k | 150k | 76 | 497 (3821) | 31.48 |
 | `ppo_shield_v2esc_slip_s0` | cond_fb_grip_esc tyre=saturated_v2 | 3500k | 200k | 200k | 107 | 550 (3905) | 30.12 |
 | `ppo_shield_v2esc_slip_s1` | cond_fb_grip_esc tyre=saturated_v2 | 3500k | 450k | 1000k | 140 | 339 (3740) | 30.08 |
-| `ppo_shield_v2esc_slip_s2` | cond_fb_grip_esc tyre=saturated_v2 | 3420k | 250k | 1100k | 171 | 722 (3786) | 33.32 |
+| `ppo_shield_v2esc_slip_s2` | cond_fb_grip_esc tyre=saturated_v2 | 3500k | 250k | 1100k | 171 | 761 (3888) | 33.32 |
 | `ppo_shield_w3low_s0` | cond_fb_grip | 3500k | 450k | 500k | 24 | 405 (4981) | 28.24 |
 | `ppo_shielddrop_s0` | cond_fb_grip drop=[1.0, 0.5, 0.25] | 3500k | 150k | 650k | 8 | 561 (4046) | 29.32 |
