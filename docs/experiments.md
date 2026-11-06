@@ -324,6 +324,20 @@ randomised). The 20-race numbers were optimistic (19/20 vs 43/50; 16/20 vs 35/50
 finishing rates should use these. The residual policy trained with our shield ties ours on finishing (p = 0.44 / 0.82)
 and laps 2.5 s faster (p < 1e-27): the strongest controller overall on seed 0.
 
+## E26. Slip penalty: a fix for the sliding seed?
+`runs/ppo_shield_v2esc_slip_s1`: seed 1 retrained with the final shield (escape) on the v2 simulator and a slip
+penalty in the reward, `--w6 1.0` (per step: `w6 * max(|beta| - 0.15 rad, 0)`). Raced with the escape shield
+(`results/eval_ppo_shield_v2esc_slip_s1.json`, 20 races x 5 laps):
+
+| seed 1 | finished nominal | collisions / 10 laps | clean lap | passes / race | randomised finished |
+|---|---|---|---|---|---|
+| original recipe, final shield + recovery | 1/20 | 4.68 | 36.6 s | 1.80 | 3/20 |
+| **slip penalty**, escape shield | **17/20** | **0.22** | **32.5 s** | 2.55 | **13/20** |
+
+The penalty removes the sliding style that the shield could not catch, and the policy is also faster. Because seed 1
+alone could be luck, lane I (`scripts/queue_lane_i.sh`) races it with the stall recovery and trains seeds 0 and 2
+with the same recipe (`runs/ppo_shield_v2esc_slip_s0`, `_s2`).
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.

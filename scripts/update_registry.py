@@ -27,6 +27,8 @@ PURPOSE = {
     "ppo_shield_ft2_chicane_s2": "E22b: gentler chicane fine-tuning of seed 2 (lr 5e-5, slip penalty w6 = 1, 300k steps)",
     "ppo_residual_shield_s0": "E23: ResRace-style residual policy trained with the final shield (escape, v2 sim)",
     "ppo_residual_shield_s1": "E23, seed 1",
+    "ppo_shield_v2esc_slip_s0": "E26: slip-penalty recipe (final shield, v2 sim, w6 = 1), seed 0",
+    "ppo_shield_v2esc_slip_s2": "E26: slip-penalty recipe, seed 2",
     "ppo_residual_shield_s2": "E23, seed 2",
 }
 RESULTS = {
