@@ -276,7 +276,9 @@ Training the residual policy with the shield turns the combination from the wors
 one: +5 finishes and a third of the collisions of the unshielded residual policy, 2.6 s faster laps than plain PPO
 with our shield and as many passes. Its remaining crashes are car contacts (5 of 5 nominal). The stall recovery
 never fired. So ResRace-style residual learning and our action-conditioned shield are complementary *if the policy
-is trained with the shield*; adding the shield afterwards does not work.
+is trained with the shield*; adding the shield afterwards does not work. Training was also much safer: 133 crashed episodes over 3.5M steps and 1
+before the first clean lap, vs 995 and 259 for the residual policy trained without the shield
+(`results/training_efficiency.md`).
 
 ## E24. Why the shield cannot save seed 1, and stricter settings
 `python -m scripts.trace_crash ppo_apf_rec@s1 runs/ppo_shield_s1/model_stage3.zip results/eval_recover.json k=3`
@@ -334,6 +336,7 @@ penalty in the reward, `--w6 1.0` (per step: `w6 * max(|beta| - 0.15 rad, 0)`). 
 |---|---|---|---|---|---|
 | original recipe, final shield + recovery | 1/20 | 4.68 | 36.6 s | 1.80 | 3/20 |
 | **slip penalty**, escape shield | **17/20** | **0.22** | **32.5 s** | 2.55 | **13/20** |
+| **slip penalty**, escape shield + stall recovery | **18/20** | **0.11** | **32.5 s** | 2.75 | **17/20** |
 
 The penalty removes the sliding style that the shield could not catch, and the policy is also faster. Because seed 1
 alone could be luck, lane I (`scripts/queue_lane_i.sh`) races it with the stall recovery and trains seeds 0 and 2
