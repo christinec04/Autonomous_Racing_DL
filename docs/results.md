@@ -34,7 +34,7 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 | finding | evidence | next step |
 |---|---|---|
-| Strong seed dependence | final setup, nominal: seeds 0 and 2 19/20, seed 1 1/20 (sliding style the shield cannot catch); mean 13.0 +- 8.5 vs 3.0 +- 2.4 without a shield | the slip penalty fixed seed 1 (18/20) but hurt seed 0 (11/20 vs 19/20, E26); residual PPO trained with the shield is the most consistent so far (15 and 16/20 on seeds 0-1, E23); seed 2 of both training |
+| Strong seed dependence | final setup, nominal: seeds 0 and 2 19/20, seed 1 1/20 (sliding style the shield cannot catch); mean 13.0 +- 8.5 vs 3.0 +- 2.4 without a shield | the slip penalty fixed seed 1 (18/20) but hurt seed 0 (11/20 vs 19/20, E26); residual PPO trained with the shield is consistent across seeds: 16.0 +- 0.8 finished, 0.47 +- 0.10 collisions, 32.2 s (E23, 3 seeds) |
 | Fine-tuning on the chicane backfired | E22: seed 2 fine-tuned on chicane starts learned to slide, 19/20 -> 8/20 (with recovery); E22b, a gentler retry (lr 5e-5, slip penalty): 16/20 | none; the stall recovery handles the chicane better |
 | Failures concentrate in the chicane | `results/failure_map.png`: 61% of our shield's race-ending events (3 seeds) are in the 2.5 m chicane (84-126 m); seed 2's stuck races were the policy steering into the outer wall at crawling speed | stall recovery (E21) fixed most of it |
 | Shield-trained policies lean on the shield | seed 0 with the shield removed: 5/20 finished. Shield dropout (E10) makes it safe on its own (16/20, 0.45 collisions with no shield at all) but timid: 0.25 passes / race, 42 s laps | dropout with a pass reward boost, or a dropout schedule that ends higher |
@@ -48,7 +48,7 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 ## Running now
 
 
-- `ppo_residual_shield_s2`: E23 seed 2 (lane H). Seed 1 done: 16/20 nominal, 17/20 randomised.
+- E23 residual + shield seeds 1-2: 30 extra races each (`results/eval_extra30_residual_s12.json`) and Track2 (`results/eval_track2_residual_s12.json`).
 - `ppo_shield_v2esc_slip_s2`: E26 seed 2 (lane I). Seed 0 done: 11/20 nominal, 6/20 randomised.
 
 Status: [RUNS.md](../RUNS.md).

@@ -283,8 +283,16 @@ before the first clean lap, vs 995 and 259 for the residual policy trained witho
 **Seed 1** (`runs/ppo_residual_shield_s1`, `results/eval_residual_shield_s1.json`): with the shield 16/20 nominal
 (0.47 collisions / 10 laps, 32.1 s, 3.25 passes) and 17/20 randomised (0.35). Raced *without* the shield this seed
 does even better nominally (19/20, 0.10) but worse randomised (16/20, 0.44): it learned to stay safe on its own.
-Two seeds: 15.5 +- 0.5 finished nominal, 16.5 +- 0.5 randomised, 32.1 s laps, by far the smallest seed spread of
-any shielded recipe (plain PPO + shield: 13.0 +- 8.5). Seed 2 is training.
+**Seed 2** (`results/eval_residual_shield_s2.json`): 17/20 nominal and 17/20 randomised with the shield (0.34 / 0.33
+collisions, 32.3 s, 4.05 passes / race, shield active 3% of the time); 17/20 and 16/20 without it.
+
+**Three seeds** (`results/seed_summary.md`, with shield + recovery): finished 16.0 +- 0.8 nominal and 16.7 +- 0.5
+randomised, collisions 0.47 +- 0.10 / 0.38 +- 0.05 per 10 laps, laps 32.16 +- 0.11 s, 3.48 passes / race, never stuck.
+Plain PPO + our shield: 13.0 +- 8.5 and 11.0 +- 5.7 finished, 1.63 +- 2.16 collisions, 38.1 s. The residual recipe
+is the most reliable thing we have trained: a tenth of the seed spread, faster on every seed, more passes. Its
+best seed is still below plain PPO's best (19/20, 0.10 collisions): residual learning removes the bad seeds rather
+than raising the ceiling. On seeds 1 and 2 the trained policy is about as good without the shield nominally, and
+the shield helps slightly in randomised races: once trained with it, the policy needs it rarely (3-6% of steps).
 
 ## E24. Why the shield cannot save seed 1, and stricter settings
 `python -m scripts.trace_crash ppo_apf_rec@s1 runs/ppo_shield_s1/model_stage3.zip results/eval_recover.json k=3`
