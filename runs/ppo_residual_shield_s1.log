@@ -1,0 +1,14 @@
+C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\ppo\ppo.py:155: UserWarning: You have specified a mini-batch size of 1024, but because the `RolloutBuffer` is of size `n_steps * n_envs = 3584`, after every 3 untruncated mini-batches, there will be a truncated mini-batch of size 512
+We recommend using a `batch_size` that is a factor of `n_steps * n_envs`.
+Info: (n_steps=512 and n_envs=7)
+  warnings.warn(
+== stage 1: 1500000 steps, shield=cond_fb_grip_esc
+[50001] eval shielded clean=True lap=36.5199999999994 lam=0.00 | unshielded clean=True lap=36.5199999999994 prog=199
+[100002] eval shielded clean=True lap=36.279999999999404 lam=0.00 | unshielded clean=True lap=36.279999999999404 prog=199
+[150003] eval shielded clean=True lap=34.71999999999944 lam=0.00 | unshielded clean=True lap=34.71999999999944 prog=199
+[200004] eval shielded clean=True lap=34.43999999999944 lam=0.00 | unshielded clean=True lap=34.43999999999944 prog=199
+[250005] eval shielded clean=True lap=33.75999999999946 lam=0.00 | unshielded clean=True lap=33.75999999999946 prog=199
+[300006] eval shielded clean=True lap=33.439999999999465 lam=0.00 | unshielded clean=True lap=33.439999999999465 prog=199
+[350000] eval shielded clean=True lap=33.63999999999946 lam=0.00 | unshielded clean=True lap=33.63999999999946 prog=199
+[400001] eval shielded clean=True lap=33.23999999999947 lam=0.01 | unshielded clean=True lap=33.15999999999947 prog=199
+[450002] eval shielded clean=True lap=33.03999999999947 lam=0.01 | unshielded clean=True lap=32.959999999999475 prog=199
