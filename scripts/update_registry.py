@@ -26,6 +26,8 @@ PURPOSE = {
     "ppo_shield_ft_chicane_s2": "E22: seed-2 shielded policy fine-tuned 500k steps, half the episodes starting before the chicane",
     "ppo_shield_ft2_chicane_s2": "E22b: gentler chicane fine-tuning of seed 2 (lr 5e-5, slip penalty w6 = 1, 300k steps)",
     "ppo_residual_shield_s0": "E23: ResRace-style residual policy trained with the final shield (escape, v2 sim)",
+    "ppo_residual_shield_s1": "E23, seed 1",
+    "ppo_residual_shield_s2": "E23, seed 2",
 }
 RESULTS = {
     "eval_recover.json": "E21: final shield + stall recovery, seeds 0-2 (20 races x 5 laps, nominal + randomised)",
@@ -36,6 +38,8 @@ RESULTS = {
     "eval_ft_chicane_s2.json": "E22: chicane fine-tuned seed-2 policy, with and without stall recovery",
     "eval_ft2_chicane_s2.json": "E22b: gentler chicane fine-tuning, seed 2",
     "eval_residual_shield_s0.json": "E23: residual policy trained with the shield",
+    "eval_residual_shield_s1.json": "E23 seed 1", "eval_residual_shield_s2.json": "E23 seed 2",
+    "headtohead50.md": "E25: 50-race head-to-head with confidence intervals (scripts/headtohead.py)",
     "shield_stress_saturated.json": "Step 2 shield stress test (scripted bad drivers), friction-circle tyres",
     "shield_stress_linear.json": "Step 2 shield stress test, stock linear tyres",
     "eval_baselines.json": "Step 3 race evaluation: Pure Pursuit, PID+APF (20 races x 5 laps, nominal + randomised)",
