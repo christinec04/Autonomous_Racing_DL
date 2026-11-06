@@ -12,3 +12,5 @@
 14:07 evaluated ppo_shielddrop_s0
 Terminated                 sleep 300
 20:45 evaluated ppo_shield_v2esc_slip_s1
+21:41 evaluated ppo_shield_linear_s0
+all-done
