@@ -10,7 +10,8 @@ Solo laps every 50k steps, standing start. 'fast' = under 34 s (best classical s
 | `ppo_noshield_s2` | off | 3500k | 150k | 550k | 969 | 2295 (5267) | 27.56 |
 | `ppo_residual_s0` | off residual | 3500k | 50k | 350k | 259 | 995 (4141) | 29.80 |
 | `ppo_residual_shield_s0` | cond_fb_grip_esc residual tyre=saturated_v2 | 3500k | 50k | 200k | 1 | 133 (3568) | 31.40 |
-| `ppo_residual_shield_s1` | cond_fb_grip_esc residual tyre=saturated_v2 | 3320k | 50k | 250k | 0 | 68 (3356) | 31.52 |
+| `ppo_residual_shield_s1` | cond_fb_grip_esc residual tyre=saturated_v2 | 3500k | 50k | 250k | 0 | 81 (3545) | 31.52 |
+| `ppo_residual_shield_s2` | cond_fb_grip_esc residual tyre=saturated_v2 | 740k | 50k | 200k | 0 | 0 (736) | 32.60 |
 | `ppo_shield_ft2_chicane_s2` | cond_fb_grip_esc tyre=saturated_v2 | 300k | 50k | 50k | 9 | 96 (355) | 31.92 |
 | `ppo_shield_ft_chicane_s2` | cond_fb_grip_esc tyre=saturated_v2 | 500k | 50k | 50k | 14 | 94 (547) | 30.36 |
 | `ppo_shield_linear_s0` | cond_fb_grip tyre=linear | 3500k | 100k | 100k | 21 | 373 (4593) | 25.00 |
@@ -19,7 +20,7 @@ Solo laps every 50k steps, standing start. 'fast' = under 34 s (best classical s
 | `ppo_shield_s1` | cond_fb_grip | 3500k | 200k | 800k | 9 | 313 (4572) | 29.12 |
 | `ppo_shield_s2` | cond_fb_grip | 3500k | 150k | 600k | 11 | 96 (3965) | 30.28 |
 | `ppo_shield_v2esc_s0` | cond_fb_grip_esc tyre=saturated_v2 | 3500k | 150k | 150k | 76 | 497 (3821) | 31.48 |
-| `ppo_shield_v2esc_slip_s0` | cond_fb_grip_esc tyre=saturated_v2 | 2560k | 200k | 200k | 107 | 300 (2777) | 31.44 |
+| `ppo_shield_v2esc_slip_s0` | cond_fb_grip_esc tyre=saturated_v2 | 3500k | 200k | 200k | 107 | 550 (3905) | 30.12 |
 | `ppo_shield_v2esc_slip_s1` | cond_fb_grip_esc tyre=saturated_v2 | 3500k | 450k | 1000k | 140 | 339 (3740) | 30.08 |
 | `ppo_shield_w3low_s0` | cond_fb_grip | 3500k | 450k | 500k | 24 | 405 (4981) | 28.24 |
 | `ppo_shielddrop_s0` | cond_fb_grip drop=[1.0, 0.5, 0.25] | 3500k | 150k | 650k | 8 | 561 (4046) | 29.32 |

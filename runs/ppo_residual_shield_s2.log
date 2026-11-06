@@ -1,0 +1,19 @@
+C:\Users\shore\gabe\.venv\Lib\site-packages\stable_baselines3\ppo\ppo.py:155: UserWarning: You have specified a mini-batch size of 1024, but because the `RolloutBuffer` is of size `n_steps * n_envs = 3584`, after every 3 untruncated mini-batches, there will be a truncated mini-batch of size 512
+We recommend using a `batch_size` that is a factor of `n_steps * n_envs`.
+Info: (n_steps=512 and n_envs=7)
+  warnings.warn(
+== stage 1: 1500000 steps, shield=cond_fb_grip_esc
+[50001] eval shielded clean=True lap=37.43999999999938 lam=0.00 | unshielded clean=True lap=37.43999999999938 prog=199
+[100002] eval shielded clean=True lap=35.43999999999942 lam=0.00 | unshielded clean=True lap=35.43999999999942 prog=199
+[150003] eval shielded clean=True lap=34.43999999999944 lam=0.00 | unshielded clean=True lap=34.399999999999444 prog=199
+[200004] eval shielded clean=True lap=33.959999999999454 lam=0.00 | unshielded clean=True lap=33.919999999999455 prog=199
+[250005] eval shielded clean=True lap=34.67999999999944 lam=0.00 | unshielded clean=True lap=34.67999999999944 prog=199
+[300006] eval shielded clean=True lap=34.63999999999944 lam=0.00 | unshielded clean=True lap=34.59999999999944 prog=199
+[350000] eval shielded clean=True lap=34.47999999999944 lam=0.00 | unshielded clean=True lap=34.47999999999944 prog=199
+[400001] eval shielded clean=True lap=34.47999999999944 lam=0.00 | unshielded clean=True lap=34.47999999999944 prog=199
+[450002] eval shielded clean=True lap=33.07999999999947 lam=0.00 | unshielded clean=True lap=33.03999999999947 prog=199
+[500003] eval shielded clean=True lap=32.999999999999474 lam=0.00 | unshielded clean=True lap=32.999999999999474 prog=199
+[550004] eval shielded clean=True lap=33.439999999999465 lam=0.01 | unshielded clean=True lap=33.439999999999465 prog=199
+[600005] eval shielded clean=True lap=32.87999999999948 lam=0.01 | unshielded clean=True lap=32.79999999999948 prog=199
+[650006] eval shielded clean=True lap=32.63999999999948 lam=0.01 | unshielded clean=True lap=32.59999999999948 prog=199
+[700000] eval shielded clean=True lap=32.87999999999948 lam=0.01 | unshielded clean=True lap=32.83999999999948 prog=199
