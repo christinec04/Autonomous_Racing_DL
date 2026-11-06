@@ -277,3 +277,10 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     the preview policy expects 87, so every race raised a shape error. The eval daemon retried every 5 minutes and
     committed the failed log each time (three "Auto-eval" commits with no results). Fix: `run_race` loads the
     model first and turns the preview on when its observation has more than 77 values.
+34. **Edits from Python on Windows silently converted files to CRLF line endings.** `open(p, 'w')` translates
+    `\n` to `\r\n` on Windows, so about 30 files ended up with CRLF; later exact-text edits failed to match and a
+    docs diff showed 300 changed lines for 50 real changes. Fixed by normalising to LF (commit 7f8843a, `.sh` files
+    left alone while queues run) and writing with `newline='\n'` from now on.
+35. **The machine sleeps overnight and every run pauses.** Twice the laptop suspended for ~10 h; trainings,
+    evaluations and the eval daemon simply resumed afterwards, but the long Git Bash `sleep` in autosync hung
+    (problem 28). Nothing is lost, it only costs wall-clock time; keep the machine awake for long queues.

@@ -23,11 +23,11 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 | The deadlock escape removes stuck races | E19: seed 0 from 5-8 stuck to 0; 16/20 finished before the stall recovery was added |
 | Stall recovery fixes the chicane stops | E21: seeds 0 and 2 finish 19/20 (from 16 and 8), 0.10 collisions / 10 laps each; chicane failures 46 -> 17 (3 seeds, nominal + randomised) |
 | Residual policy + our shield work together when trained together | E23: 15/20 finished, 0.59 collisions / 10 laps, 32.1 s laps, 3.15 passes, vs 10/20 and 1.60 for the residual policy without the shield; on 50 races 39/50 nominal and 37/50 randomised, a tie with ours (E25) |
-| A slip penalty fixes the sliding seed 1 | `ppo_shield_v2esc_slip_s1` (`--w6 1`, escape shield and v2 simulator from the start; raced with the escape shield, no stall recovery; `results/eval_ppo_shield_v2esc_slip_s1.json`): 17/20 finished nominal (1 stuck), 13/20 randomised (4 stuck), 0.22 / 0.38 collisions / 10 laps, 32.5 s laps, 0.4% of time above 15 deg slip; seed 1 before: 1/20, 4.91 collisions. Two things changed at once (slip penalty, shield and simulator during training); one seed only |
+| A slip penalty fixes the sliding seed 1 | `ppo_shield_v2esc_slip_s1` (`--w6 1`, escape shield and v2 simulator from the start; raced with the escape shield, no stall recovery; `results/eval_ppo_shield_v2esc_slip_s1.json`): 17/20 finished nominal (1 stuck), 13/20 randomised (4 stuck), 0.22 / 0.38 collisions / 10 laps, 32.5 s laps, 0.4% of time above 15 deg slip; with the stall recovery 18/20 nominal, 17/20 randomised, 0.11 collisions / 10 laps (`results/eval_slip_rec_slip_s1.json`); seed 1 before: 1/20, 4.91 collisions. Two things changed at once (slip penalty, shield and simulator during training); one seed only |
 | Learned driving beats classical | seed 0 clean laps 34.7 s (ours) vs 42.8 s PID+APF; residual PPO 30.4 s |
 | Curvature preview gives a small gain | E18: raced with the final setup 17/20, 0.22 collisions, 3.80 passes / race vs ours 19/20, 0.10, 3.15; solo lap 31.2 s vs 32.7 s. Comparable, not clearly better, one seed |
 | Training with the escape shield from the start gives the same picture | `ppo_shield_v2esc_s0` (escape shield, v2 sim from step 0, no stall recovery): 14/20 finished, 1 stuck, 0.62 collisions / 10 laps, 3.45 passes / race |
-| Friction-limited tyres close the sliding loophole | stock tyres corner at 2.4 g; with ours, seed 0 spends 0% of race time above 15 deg slip |
+| Friction-limited tyres close the grip loophole | stock tyres corner at 2.4 g. E27: the same recipe trained on stock tyres laps 5 s faster (29.3 s) by cornering above 100% of mu g for 9.7% of the race; with friction-circle tyres 0%, and seed 0 spends 0% of race time above 15 deg slip |
 
 ## What does not (yet)
 
@@ -46,9 +46,10 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## Running now
 
+- Track2 generalisation: every main controller, 20 races x 5 laps (`results/eval_track2.json`).
+
 - `ppo_residual_shield_s1`, `ppo_residual_shield_s2`: E23 on more seeds (lane H; s2 starts after s1).
-- `ppo_shield_linear_s0`: ours on stock linear tyres (does PPO exploit unlimited grip?).
-- E26 (lane I): `ppo_shield_v2esc_slip_s1` raced with the stall recovery; seeds 0 and 2 trained with the slip penalty.
+- E26 (lane I): seeds 0 and 2 trained with the slip penalty, then raced with the stall recovery.
 
 Status: [RUNS.md](../RUNS.md).
 
