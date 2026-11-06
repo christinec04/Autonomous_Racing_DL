@@ -18,8 +18,12 @@ Each entry: what the proposal said, what we did, why. Problems that forced a dec
 | 11 | reward Eq. 1 | same terms; episodes are a fixed 40 s instead of "until finished" | with a progress reward, a fixed-length episode rewards covering more distance, i.e. speed |
 | 12 | speed or acceleration action | target speed in [1, 16] m/s | simpler to learn; the speed loop and traction control handle the rest |
 | 13 | about 60 lidar beams | 60 min-pooled sectors (min, not subsample) | a thin obstacle between subsampled beams would vanish |
-| 14 | 3 seeds per learned controller | seed 0 done, seeds 1-2 running | compute; runs take about 2 h each on 7 cores |
+| 14 | 3 seeds per learned controller | 3 seeds for ours and the no-shield ablation (`results/seed_summary.md`); seed 0 only for the additive-shield, residual, dropout and timidity variants (residual + our shield, seeds 1-2: running) | compute; runs take about 2 h each on 7 cores |
 | 15 | unshielded ablation | shield off in all stages | grader comment (stage 1 had the shield on) |
 | 16 | training steps to first clean lap | measured with the shield removed, every 50k steps | grader comment (the shield would otherwise guarantee clean laps) |
 | 17 | control rate unspecified | 25 Hz policy, 100 Hz physics | standard for F1TENTH RL; keeps PPO horizons manageable |
 | 18 | race 5 laps | DNF on the first collision | the simulator freezes a car after a collision; a DNF is also the honest outcome |
+| 19 | (none) | deadlock escape in the shield (`ShieldConfig(escape=True)`) | the shield could stop the car next to a wall or an opponent and never release it (problem 23, E19) |
+| 20 | (none) | stall recovery outside the policy (`EnvConfig(recover=True)`): reverse out, then hand back | the policy itself stopped nose-to-wall in the chicane (problems 26-27, E21); seed 0 16/20 -> 19/20 |
+| 21 | (none) | final results on the post-spin-fixed tyre model (`tire="saturated_v2"`); every controller re-raced on it | after a spin the stock code kept a wound-up slip angle and the car could not restart (problem 24) |
+| 22 | (none) | 20 races for every controller, 50 for the four main ones (E25) | 20 races cannot separate 19/20 from 18/20 |

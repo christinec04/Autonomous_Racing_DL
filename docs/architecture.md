@@ -66,7 +66,8 @@ profile (0.85 mu g on curvature, 6 m/s^2 accel/brake passes). Gap keeping: if an
 sigma ~ U(0, 0.05) m on the ego scan.
 
 **Curriculum** (`racing/train.py`): stage 1 solo, random start (1.5M steps); stage 2 three opponents at 0.45-0.6 of
-the profile (1M); stage 3 opponents at 0.5-0.85 with random grid gaps (1M).
+the profile (1M); stage 3 opponents at 0.5-0.85 with random grid gaps (1M). Stage 4 (fine-tuning only, E22):
+opponents at 0.45-0.8, half the episodes start from rest just before the chicane (`hotspot_prob` 0.5).
 
 ## Shield (`racing/shield.py`, `racing/predict.py`)
 
@@ -114,12 +115,14 @@ commit, uncommitted changes, command, status) is written to `runs/<run>/run_info
 
 ## Evaluation (`racing/evaluate.py`)
 
-20 shared seeds; each race: ego from s = 3 m, 3 opponents at random gaps (5-15 m apart) and speeds (0.5-0.75 of
+20 shared race seeds (10000-10019; `--first 20 --races 30` adds 10020-10049 for the 50-race head-to-head,
+E25); each race: ego from s = 3 m, 3 opponents at random gaps (5-15 m apart) and speeds (0.5-0.75 of
 the profile), 5 laps, DNF on the first collision; once nominal and once randomised. Metrics: clean-lap mean / best
 (laps 2-5), collisions per 10 laps (wall / car), overtake success (attempt = within 3 m behind, closing, moving
 >= 0.3 m off the opponent's line; success = > 1 car length ahead for 2 s without contact), shield frequency and
 mean lambda, g-g utilisation from the true velocity-vector acceleration, share of time above 15 deg body slip.
-`scripts/analyze.py` merges result files, checks the targets and runs Mann-Whitney U tests on per-race values.
+`scripts/analyze.py` merges result files, checks the targets and runs Mann-Whitney U tests on per-race values;
+`scripts/headtohead.py` pools the 50 races with Wilson intervals and Fisher's exact tests.
 
 ## Configuration reference
 
@@ -145,6 +148,7 @@ mean lambda, g-g utilisation from the true velocity-vector acceleration, share o
 | `w6_slip` | 0.0 | optional penalty per step for body slip beyond 0.15 rad |
 | `recover`, `recover_window`, `recover_dist`, `recover_hdg` | False, 1.5 s, 0.3 m, 0.35 rad | stall recovery trigger (E21) |
 | `recover_rev_time`, `recover_fwd_time` | 1.5 s, 1.0 s | reverse phase, then centerline-following phase |
+| `hotspot_prob`, `hotspot_s`, `hotspot_d`, `hotspot_hdg` | 0.0, (55, 90) m, 0.6 m, 0.3 rad | fine-tuning starts before the chicane (stage 4, E22) |
 
 `ShieldConfig` (`racing/shield.py`): `mode` (off / additive / conditioned / conditioned_fallback), `reach`
 (fixed / grip), `a_brake_fixed` 6.0, `d_min` 0.30, `d_crit` 0.05, `k_steer` 2.0, `k_speed` 2.0, `opp_a` 0.6,
@@ -155,8 +159,10 @@ margin per m/s), `mu_scale` 1.0 (friction the predictor assumes, fraction of nom
 
 `python -m racing.train` flags: `--shield {off, additive, cond_fb_grip, cond_fb_fixed, cond_fb_grip_esc}`, `--w6`, `--stages`, `--steps`
 (per stage), `--seed`, `--n_envs`, `--n_steps`, `--batch`, `--lr`, `--gamma`, `--ent`, `--eval_every`, `--tire`,
-`--no_randomize`, `--curvature_preview`, `--residual`, `--w3`, `--shield_prob p1 p2 p3`, `--out`.
+`--no_randomize`, `--curvature_preview`, `--residual`, `--w3`, `--shield_prob p1 p2 p3`, `--init <model.zip>`
+(fine-tune from a checkpoint), `--out`.
 
 `python -m racing.evaluate` flags: `--controllers` (pure_pursuit, pid_apf, ppo, ppo_apf, ppo_residual,
-ppo_residual_apf, ppo_additive, ppo_apf_esc, ppo_residual_apf_esc, ppo_apf_rec; append `@label` to race the same controller type with different models),
-`--models label=path ...`, `--races`, `--laps`, `--procs`, `--tire`, `--out`.
+ppo_residual_apf, ppo_additive, ppo_apf_esc, ppo_residual_apf_esc, ppo_apf_rec, ppo_residual_apf_rec, and the E24 variants ppo_apf_rec_m1 / _m2 / _b25 / _b18 / _b25mu; append `@label` to race the same controller type with different models),
+`--models label=path ...`, `--races`, `--first`, `--laps`, `--procs`, `--tire`, `--out`. The final controller is
+`ppo_apf_rec` (escape shield + stall recovery) raced with `--tire saturated_v2`.

@@ -1,38 +1,56 @@
 # Current results (living page)
 
-Updated as runs finish. Raw tables: [results/summary.md](../results/summary.md) (seed 0, every controller),
-[results/seed_summary.md](../results/seed_summary.md) (across seeds),
+Updated as runs finish. Raw tables: [results/final_summary.md](../results/final_summary.md) (seed 0, every
+controller, one simulator version, targets and Mann-Whitney tests), [results/headtohead50.md](../results/headtohead50.md)
+(50 races per condition), [results/seed_summary.md](../results/seed_summary.md) (3 training seeds),
 [results/training_efficiency.md](../results/training_efficiency.md). Experiment details: [experiments.md](experiments.md).
+
+"Ours (final)" = PPO trained with the action-conditioned shield (`cond_fb_grip`), raced with the shield, its deadlock
+escape (E19) and the stall recovery (E21) on the post-spin-fixed v2 simulator (eval label `ppo_apf_rec@s0`).
+Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## What works
 
 | finding | evidence |
 |---|---|
-| The action-conditioned shield prevents crashes that an additive APF (proposal Eq. 2/3) cannot | stress test E4: additive 100% crash in every scripted scenario; conditioned + fallback 0-12% solo/random |
-| Shielded training is ~10x safer | E16: 234-313 vs 2318-2769 training crashes (seeds 0-1); 8-9 vs ~1000 before the first clean lap; the proposal's additive shield: 2286, no better than none |
-| The shield lowers race collisions | seed 0: 0.38-0.44 vs 5.53 collisions / 10 laps without; across 2 seeds 0.85 (original) vs 4.43 |
-| The shield intervenes rarely once trained | 3-6% of race steps (seed 0), vs 93% for the always-on APF in PID+APF |
-| Stall recovery fixes the chicane stops | E21: seeds 0 and 2 finish 19/20 (from 16 and 8), 0.10 collisions / 10 laps each; seed 0 meets all 6 targets nominal and randomised |
-| The deadlock escape removes stuck races | E19: seed 0 from 5-8 stuck to 0; 16/20 races finished (best of all controllers) |
-| Action-conditioned beats additive as a training shield | PPO trained with the proposal's additive shield: 15/20 finished but 48.8 s laps, 0.55 passes / race (timid); ours 16/20, 34.5 s, 2.95 passes |
-| Residual policy + our shield work together when trained together | E23: 15/20 finished, 0.59 collisions / 10 laps, 32.1 s laps, 3.15 passes, vs 10/20 and 1.60 for the residual policy without the shield |
-| Learned driving beats classical | seed 0 clean laps 34.5 s vs 42.8 s PID+APF; residual PPO 30.4 s |
-| Training with the final shield from the start gives the same picture | `ppo_shield_v2esc_s0` (escape shield, v2 sim from step 0): 14/20 finished, 1 stuck, 0.62 collisions / 10 laps, 3.45 passes / race (most of any controller) |
-| Final comparison (one simulator version) | `results/final_summary.md`: ours 19/20 finished, 0.10 collisions, all 6 targets met; additive-shield PPO 18/20 but 47.6 s laps; PID+APF 12/20; residual 10/20; no shield 0/20 |
+| Final comparison (one simulator version) | `results/final_summary.md`: ours 19/20 finished, 34.7 s laps, 0.10 collisions / 10 laps, 3.15 passes, all 6 targets met nominal and randomised on these 20 races (over 50 races the randomised collision rate is 0.77 / 10 laps, missing the <= 0.5 target; nominal 0.31); additive-shield PPO 18/20 but 47.6 s laps; PID+APF 12/20; residual 10/20; no shield 0/20; Pure Pursuit 0/20 |
+| The result holds on 50 races, with a smaller margin | E25, `results/headtohead50.md`: ours 43/50 nominal, 35/50 randomised; additive shield 39/50, 34/50 (no significant difference, p = 0.44 nominal); PID+APF 28/50, 25/50 (p = 0.002 nominal); ours 12 s faster than the additive shield with 2.7x the passes (p = 1e-8, nominal) |
+| The action-conditioned shield prevents crashes that an additive APF (proposal Eq. 2/3) cannot | stress test E4 (friction-circle tyres): additive 100% crash in every scripted scenario; conditioned + fallback 0% / 12% / 0% (too fast / traffic / random) with fixed reach, 0% / 38% / 12% with grip reach (what the agent uses) |
+| Action-conditioned beats additive as a training shield | PPO trained with the proposal's additive shield finishes about as often (18/20, 39/50) but is timid: 47.6 s laps and 0.85 passes / race, vs ours 34.7 s and 3.15 |
+| Shielded training is ~10x safer | E16: 96-313 vs 2295-2769 training crashes (3 seeds each); 8-11 vs about 1000 crashes before the first clean lap; the proposal's additive shield: 2333, no better than none |
+| The shield lowers race collisions | seed 0: 0.10 vs 7.35 collisions / 10 laps without a shield; 3 seeds: 1.63 +- 2.16 vs 4.38 +- 2.12 |
+| The shield intervenes rarely once trained | seed 0: 3% of race steps nominal, 4% randomised, vs 89-93% for the always-on APF in PID+APF. Seed-dependent: seed 1 22%; 3-seed mean 9.0 +- 9.5% |
+| The deadlock escape removes stuck races | E19: seed 0 from 5-8 stuck to 0; 16/20 finished before the stall recovery was added |
+| Stall recovery fixes the chicane stops | E21: seeds 0 and 2 finish 19/20 (from 16 and 8), 0.10 collisions / 10 laps each; chicane failures 46 -> 17 (3 seeds, nominal + randomised) |
+| Residual policy + our shield work together when trained together | E23: 15/20 finished, 0.59 collisions / 10 laps, 32.1 s laps, 3.15 passes, vs 10/20 and 1.60 for the residual policy without the shield; on 50 races 39/50 nominal and 37/50 randomised, a tie with ours (E25) |
+| A slip penalty fixes the sliding seed 1 | `ppo_shield_v2esc_slip_s1` (`--w6 1`, escape shield and v2 simulator from the start; raced with the escape shield, no stall recovery; `results/eval_ppo_shield_v2esc_slip_s1.json`): 17/20 finished nominal (1 stuck), 13/20 randomised (4 stuck), 0.22 / 0.38 collisions / 10 laps, 32.5 s laps, 0.4% of time above 15 deg slip; seed 1 before: 1/20, 4.91 collisions. Two things changed at once (slip penalty, shield and simulator during training); one seed only |
+| Learned driving beats classical | seed 0 clean laps 34.7 s (ours) vs 42.8 s PID+APF; residual PPO 30.4 s |
+| Curvature preview gives a small gain | E18: raced with the final setup 17/20, 0.22 collisions, 3.80 passes / race vs ours 19/20, 0.10, 3.15; solo lap 31.2 s vs 32.7 s. Comparable, not clearly better, one seed |
+| Training with the escape shield from the start gives the same picture | `ppo_shield_v2esc_s0` (escape shield, v2 sim from step 0, no stall recovery): 14/20 finished, 1 stuck, 0.62 collisions / 10 laps, 3.45 passes / race |
 | Friction-limited tyres close the sliding loophole | stock tyres corner at 2.4 g; with ours, seed 0 spends 0% of race time above 15 deg slip |
 
 ## What does not (yet)
 
 | finding | evidence | next step |
 |---|---|---|
-| Strong seed dependence | final shield, nominal: seed 0 16/20, seed 1 1/20 (sliding style the shield cannot catch), seed 2 8/20 (7 stuck); mean 8.3 +- 6.1 vs 3.0 +- 2.4 without a shield; with stall recovery 13.0 +- 8.5 (seed 1 still 1/20) | slip penalty run (`ppo_shield_v2esc_slip_s1`); chicane fine-tuning backfired (E22: 8/20, slides), gentler retry E22b queued |
-| Failures concentrate in the chicane | `results/failure_map.png`: 61% of our shield's race-ending events (3 seeds) are in the 2.5 m chicane (84-126 m); seed 2's stuck races are the policy steering into the outer wall at crawling speed | stall recovery (E21) fixed most of it; fine-tuning on the chicane made seed 2 slide (E22) and a gentler retry was no better (E22b) |
-| Shield-trained policies lean on the shield | seed 0 with the shield removed: 5/20 finished. Shield dropout (E10) fixes that (16/20, 0.45 collisions with no shield at all) but the policy turns timid: 0.25 passes / race, 42 s laps | dropout with a pass reward boost, or a dropout schedule that ends higher |
-| The shielded policy is timid | top speed ~8.4 m/s even on the main straight (E17); the policy, not the shield, caps it | curvature preview (E18, training). A lower intervention penalty made it worse: faster laps but the shield active 35% of the time and 0/20 finished |
-| Shield added to a residual policy only at race time | deadlocks (4/20 finished) or slides (2/20), with or without the stall recovery | train it with the shield: done, E23 (15/20, 0.59 collisions, 32.1 s) |
-| The shield reacts too late for a policy that drives at the limit | E24: on seed 1 the predicted clearance shrinks for 6 steps while staying above the 5 cm margin, then braking in the corner spins the car. A stricter slip limit lifts seed 1 from 1/20 to 9-10/20 but costs seed 0 (19 -> 16/20) | a safety/performance dial; possibly train with the stricter shield |
+| Strong seed dependence | final setup, nominal: seeds 0 and 2 19/20, seed 1 1/20 (sliding style the shield cannot catch); mean 13.0 +- 8.5 vs 3.0 +- 2.4 without a shield | the slip penalty fixed seed 1 (17/20, above); E26 (lane I, `scripts/queue_lane_i.sh`): races it with the stall recovery and trains seeds 0 and 2 with the same recipe (training now) |
+| Fine-tuning on the chicane backfired | E22: seed 2 fine-tuned on chicane starts learned to slide, 19/20 -> 8/20 (with recovery); E22b, a gentler retry (lr 5e-5, slip penalty): 16/20 | none; the stall recovery handles the chicane better |
+| Failures concentrate in the chicane | `results/failure_map.png`: 61% of our shield's race-ending events (3 seeds) are in the 2.5 m chicane (84-126 m); seed 2's stuck races were the policy steering into the outer wall at crawling speed | stall recovery (E21) fixed most of it |
+| Shield-trained policies lean on the shield | seed 0 with the shield removed: 5/20 finished. Shield dropout (E10) makes it safe on its own (16/20, 0.45 collisions with no shield at all) but timid: 0.25 passes / race, 42 s laps | dropout with a pass reward boost, or a dropout schedule that ends higher |
+| The shielded policy is timid | top speed ~8.4 m/s even on the main straight (E17); the policy, not the shield, caps it. E18: a lower intervention penalty (w3 = 0.02) made it worse: faster laps but the shield active 35% of the time and 0/20 finished. Curvature preview helps only a little | - |
+| Shield added to a residual policy only at race time | deadlocks (4/20 finished) or slides (2/20), with or without the stall recovery | train it with the shield: done, E23 (15/20); seeds 1-2 running |
+| The shield reacts too late for a policy that drives at the limit | E24: on seed 1 the predicted clearance shrinks for 6 steps while staying above the 5 cm margin, then braking in the corner spins the car. Stricter settings lift seed 1 from 1/20 to 9-10/20 but cost seed 0 (19 -> 16/20) | a safety/performance dial; the final setup keeps the original settings |
+| 20 races cannot separate close controllers | 19/20 vs 18/20 (ours vs additive) is not significant; on 50 races ours 43/50 vs 39/50, still not significant (E25) | use the 50-race numbers for finishing rates |
 | Car contacts in traffic remain | opponents' future motion is predicted (worst-case braking), not known | - |
-| Training efficiency (steps to first clean lap) unchanged | 200k with or without the shield | - |
+| Training efficiency (steps to first clean lap) unchanged | 150-200k with or without the shield (3 seeds each); the shield's gain is in crashes during training (above) | - |
+
+## Running now
+
+- `ppo_residual_shield_s1`, `ppo_residual_shield_s2`: E23 on more seeds (lane H; s2 starts after s1).
+- `ppo_shield_linear_s0`: ours on stock linear tyres (does PPO exploit unlimited grip?).
+- E26 (lane I): `ppo_shield_v2esc_slip_s1` raced with the stall recovery; seeds 0 and 2 trained with the slip penalty.
+
+Status: [RUNS.md](../RUNS.md).
 
 ## Figures
 
@@ -42,6 +60,7 @@ Updated as runs finish. Raw tables: [results/summary.md](../results/summary.md) 
 - [g-g diagrams](../results/gg_diagrams.png): how each controller uses the tyres
 - [shield map](../results/shield_map.png): where on the track the shield intervenes
 - [telemetry](../results/telemetry_speed.png): speed along a flying lap, per controller
+- report figures: `report/figs/` (`python -m scripts.report_figs`)
 
 ## Videos
 
