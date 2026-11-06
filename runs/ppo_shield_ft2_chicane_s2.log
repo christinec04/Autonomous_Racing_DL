@@ -1,3 +1,8 @@
 fine-tuning runs/ppo_shield_s2/model_stage3.zip (vecnorm loaded)
 == stage 4: 300000 steps, shield=cond_fb_grip_esc
 [50004] eval shielded clean=True lap=33.27999999999947 lam=0.05 | unshielded clean=True lap=32.59999999999948 prog=199
+[100002] eval shielded clean=True lap=32.999999999999474 lam=0.05 | unshielded clean=True lap=32.479999999999485 prog=199
+[150000] eval shielded clean=True lap=33.07999999999947 lam=0.04 | unshielded clean=True lap=32.519999999999484 prog=199
+[200004] eval shielded clean=True lap=33.07999999999947 lam=0.04 | unshielded clean=True lap=32.559999999999484 prog=199
+[250002] eval shielded clean=True lap=32.919999999999476 lam=0.05 | unshielded clean=True lap=31.919999999999497 prog=199
+[300000] eval shielded clean=True lap=32.999999999999474 lam=0.07 | unshielded clean=True lap=32.479999999999485 prog=199

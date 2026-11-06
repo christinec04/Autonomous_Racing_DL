@@ -2,6 +2,11 @@
  "git_commit": "f167ff5",
  "git_dirty": [],
  "command": "python -m racing.train --init runs/ppo_shield_s2/model_stage3.zip --shield cond_fb_grip_esc --tire saturated_v2 --stages 4 --steps 300000 --lr 5e-5 --w6 1.0 --n_envs 6 --seed 2 --out runs/ppo_shield_ft2_chicane_s2",
- "status": "running",
- "started": "2026-11-05 14:58:59"
+ "status": "finished",
+ "started": "2026-11-05 14:58:59",
+ "stages_done": [
+  4
+ ],
+ "steps_done": 300000,
+ "finished": "2026-11-05 15:15:12"
 }

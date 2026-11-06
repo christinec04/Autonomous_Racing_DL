@@ -32,7 +32,8 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
   (E23), while adding the shield only at race time makes it deadlock. **On 50 race seeds** ([results/headtohead50.md](results/headtohead50.md)) the picture
   holds but is less rosy: ours finishes 43/50 nominal (86%) and 35/50 randomised (70%), the additive shield 39/50 and
   34/50 (no significant difference), PID+APF 28/50 and 25/50 (p = 0.002 nominal); ours laps 12 s faster than the
-  additive shield with 2.7x the passes (p < 1e-8). The stall recovery (E21) reverses the car out when the policy stops nose-to-wall; it
+  additive shield with 2.7x the passes (p < 1e-8). The residual policy trained with our shield finishes
+  39/50 and 37/50 (a tie with ours) while lapping 2.5 s faster. The stall recovery (E21) reverses the car out when the policy stops nose-to-wall; it
   fires in 3 of 20 seed-0 races.
 - **Correction:** earlier versions of this page counted a race as finished whenever there was no collision; many
   shielded races had actually ended *stuck* (the shield deadlocked). Finish counts above are corrected; the
