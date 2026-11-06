@@ -168,6 +168,9 @@ def train(args):
     for stage in args.stages:
         cfg = make_cfg(stage, args.shield, args.seed, args.tire, not args.no_randomize, args.curvature_preview,
                        args.residual)
+        if args.residual_scale != 0.3:
+            import dataclasses
+            cfg = dataclasses.replace(cfg, residual_scale=args.residual_scale)
         if args.w6:
             import dataclasses
             cfg = dataclasses.replace(cfg, w6_slip=args.w6)
@@ -232,6 +235,8 @@ if __name__ == "__main__":
     ap.add_argument("--no_randomize", action="store_true")
     ap.add_argument("--curvature_preview", action="store_true")
     ap.add_argument("--residual", action="store_true")
+    ap.add_argument("--residual_scale", type=float, default=0.3,
+                    help="how much the residual policy may add to the PID+APF base (fraction of the action range)")
     ap.add_argument("--w3", type=float, default=None, help="intervention penalty weight (default 0.1)")
     ap.add_argument("--w6", type=float, default=0.0, help="slip penalty weight (default 0 = off)")
     ap.add_argument("--shield_prob", type=float, nargs="*", default=None,
