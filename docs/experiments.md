@@ -334,6 +334,7 @@ penalty in the reward, `--w6 1.0` (per step: `w6 * max(|beta| - 0.15 rad, 0)`). 
 |---|---|---|---|---|---|
 | original recipe, final shield + recovery | 1/20 | 4.68 | 36.6 s | 1.80 | 3/20 |
 | **slip penalty**, escape shield | **17/20** | **0.22** | **32.5 s** | 2.55 | **13/20** |
+| **slip penalty**, escape shield + stall recovery | **18/20** | **0.11** | **32.5 s** | 2.75 | **17/20** |
 
 The penalty removes the sliding style that the shield could not catch, and the policy is also faster. Because seed 1
 alone could be luck, lane I (`scripts/queue_lane_i.sh`) races it with the stall recovery and trains seeds 0 and 2
