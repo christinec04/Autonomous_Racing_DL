@@ -1,0 +1,30 @@
+{
+ "shield": "cond_fb_grip_esc",
+ "stages": [
+  1,
+  2,
+  3
+ ],
+ "steps": [
+  1500000,
+  1000000,
+  1000000
+ ],
+ "seed": 2,
+ "n_envs": 7,
+ "n_steps": 512,
+ "batch": 1024,
+ "lr": 0.0003,
+ "gamma": 0.99,
+ "ent": 0.0,
+ "eval_every": 50000,
+ "tire": "saturated_v2",
+ "no_randomize": false,
+ "curvature_preview": false,
+ "residual": false,
+ "w3": null,
+ "w6": 1.0,
+ "shield_prob": null,
+ "init": null,
+ "out": "runs/ppo_shield_v2esc_slip_s2"
+}
