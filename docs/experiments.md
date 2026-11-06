@@ -280,6 +280,12 @@ is trained with the shield*; adding the shield afterwards does not work. Trainin
 before the first clean lap, vs 995 and 259 for the residual policy trained without the shield
 (`results/training_efficiency.md`).
 
+**Seed 1** (`runs/ppo_residual_shield_s1`, `results/eval_residual_shield_s1.json`): with the shield 16/20 nominal
+(0.47 collisions / 10 laps, 32.1 s, 3.25 passes) and 17/20 randomised (0.35). Raced *without* the shield this seed
+does even better nominally (19/20, 0.10) but worse randomised (16/20, 0.44): it learned to stay safe on its own.
+Two seeds: 15.5 +- 0.5 finished nominal, 16.5 +- 0.5 randomised, 32.1 s laps, by far the smallest seed spread of
+any shielded recipe (plain PPO + shield: 13.0 +- 8.5). Seed 2 is training.
+
 ## E24. Why the shield cannot save seed 1, and stricter settings
 `python -m scripts.trace_crash ppo_apf_rec@s1 runs/ppo_shield_s1/model_stage3.zip results/eval_recover.json k=3`
 replays a seed-1 wall crash at 7.5 m/s. The shield's predicted clearance for the policy's actions shrinks over six
@@ -339,8 +345,13 @@ penalty in the reward, `--w6 1.0` (per step: `w6 * max(|beta| - 0.15 rad, 0)`). 
 | **slip penalty**, escape shield + stall recovery | **18/20** | **0.11** | **32.5 s** | 2.75 | **17/20** |
 
 The penalty removes the sliding style that the shield could not catch, and the policy is also faster. Because seed 1
-alone could be luck, lane I (`scripts/queue_lane_i.sh`) races it with the stall recovery and trains seeds 0 and 2
-with the same recipe (`runs/ppo_shield_v2esc_slip_s0`, `_s2`).
+alone could be luck, lane I (`scripts/queue_lane_i.sh`) trains seeds 0 and 2 with the same recipe.
+
+**Seed 0** (`runs/ppo_shield_v2esc_slip_s0`, `results/eval_slip_rec_slip_s0.json`, with recovery): only 11/20
+nominal (2 stuck, 0.92 collisions / 10 laps, 6 of 7 contacts with cars) and 6/20 randomised (1.63), against 19/20 for
+seed 0 without the penalty. It also spends 8% of the race above 15 deg slip, so the penalty did not even remove
+sliding here. The slip penalty is **not** a general fix: it rescued seed 1 and hurt seed 0 (two seeds: 14.5 +- 3.5
+nominal). Seed 2 is training. Lesson: one rescued seed was luck as much as a recipe.
 
 ## E27. Does PPO exploit stock tyres?
 `runs/ppo_shield_linear_s0`: the seed-0 recipe (original shield, no escape) trained and raced on the stock F1TENTH
@@ -379,4 +390,5 @@ on Track2, similar to Singapore. One training seed per controller.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
-renders to `~/Downloads/racing_videos/` (not committed). Blue = ego, red = shield intervening, grey = opponents.
+renders to `~/Downloads/racing_videos/` (not committed). `batch9` renders clip 12, slip-penalty PPO + our shield on
+the unseen Track2 (seed 10004: no crash, 3 passes, shield active 3% of the time). Blue = ego, red = shield intervening, grey = opponents.

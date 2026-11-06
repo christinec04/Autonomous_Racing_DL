@@ -38,7 +38,8 @@ feedback, the shield is action-conditioned rather than additive, the simulator h
 every metric has a target. On the shared race seeds our agent finishes 43 of 50 five-lap races (PID+APF: 28,
 $p=0.002$), laps 8\,s faster than PID+APF, crashes about 10$\times$ less often during training than unshielded
 PPO, and meets all six metric targets on the 20-race protocol. The main open problem is variance across training
-seeds; a slip penalty in the reward lifted the weakest seed from 1 to 17 finished races out of 20.
+seeds; a residual policy trained with the shield is the most consistent recipe so far (15 and 16 of 20 races
+finished on two seeds).
 \end{abstract}
 
 \section{Introduction}
@@ -240,8 +241,9 @@ manoeuvre is predicted to spin. Fig.~\ref{fig:fail} shows where races end: most 
 were in the tight 2.5\,m-radius corners at 84--126\,m, where the policy stalled with its nose against the wall; the stall recovery removed
 most of them. \textbf{A fix for the sliding seed:} retraining seed 1 with a slip penalty
 $w_6 \max(|\beta| - 0.15, 0)$ added to Eq.~(1) ($w_6 = 1$, final shield from the start) gives 18/20 finished with the stall
-recovery (17/20 randomised), 0.11 collisions per 10 laps and 32.5\,s laps, faster than seed 0. Seeds 0 and 2 are
-training with the same recipe.
+recovery (17/20 randomised), 0.11 collisions per 10 laps and 32.5\,s laps. It is not a general fix: seed 0 with
+the same recipe finishes only 11/20 (19/20 without it). The residual policy trained with the shield is more
+consistent: 15 and 16/20 on seeds 0 and 1 (17 and 16 randomised), 32.1\,s laps.
 
 \begin{figure}[t]
 \centering
@@ -268,9 +270,9 @@ with no shield at all (16/20 finished) but timid (0.25 passes per race).
 \section{Plan to the Final Demo}
 \textbf{Remaining tasks and milestones} (final demo December 7):
 \begin{itemize}
-\item \emph{Nov 13--20:} finish seeds 0 and 2 of the slip-penalty recipe and seeds 1--2 of the residual policy
-trained with the shield (all running); choose the final controller and training recipe.
-\item \emph{Nov 21--27:} if the slip penalty does not remove the seed variance, train with the stricter shield
+\item \emph{Nov 13--20:} finish seed 2 of the slip-penalty and residual + shield recipes (running); choose the
+final controller (residual + shield is the front-runner on seed consistency).
+\item \emph{Nov 21--27:} since the slip penalty does not remove the seed variance, train with the stricter shield
 settings that rescued seed 1 at race time (smaller slip limit, speed-scaled margin); repeat the
 generalisation test below with all training seeds.
 \item \emph{Nov 28--Dec 3:} freeze the code; run the final evaluation (all controllers, 3 training seeds, 50 race
