@@ -56,3 +56,5 @@ Info: (n_steps=512 and n_envs=7)
 [2500006] eval shielded clean=True lap=28.719999999999565 lam=0.01 | unshielded clean=True lap=28.719999999999565 prog=199
 == stage 3: 1000000 steps, shield=cond_fb_grip
 [2550001] eval shielded clean=True lap=28.879999999999562 lam=0.01 | unshielded clean=True lap=28.91999999999956 prog=199
+[2600002] eval shielded clean=True lap=28.43999999999957 lam=0.02 | unshielded clean=True lap=28.359999999999573 prog=199
+[2650003] eval shielded clean=True lap=27.759999999999586 lam=0.02 | unshielded clean=True lap=27.759999999999586 prog=199
