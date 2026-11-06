@@ -6,7 +6,8 @@
  "started": "2026-11-06 08:32:24",
  "git_commit_presquash": "28eceda",
  "stages_done": [
-  1
+  1,
+  2
  ],
- "steps_done": 1500000
+ "steps_done": 2500000
 }
