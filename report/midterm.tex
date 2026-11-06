@@ -254,6 +254,12 @@ training with the same recipe.
 faster (29.3\,s) by cornering above 100\% of $\mu g$ for 9.7\% of the race, which a real car cannot do; with
 friction-circle tyres this share is 0\%.
 
+\textbf{Generalisation.} On a second track that no policy saw in training (228\,m, a 55\,m straight, a fast
+sweeper and a 2.5\,m hairpin; 20 races), the shielded learned policies still finish at least as often as PID+APF
+(15/20) and lap faster: slip-penalty PPO 19/20 in 32.2\,s with 0.10 collisions per 10 laps, residual PPO trained
+with the shield 17/20 in 31.3\,s, our seed-0 agent 16/20 in 36.7\,s (PID+APF 39.3\,s). PPO without a shield
+finishes 1/20.
+
 \textbf{Negative results.} Lowering the intervention penalty to $w_3 = 0.02$ made laps faster but the agent let
 the shield brake for it (35\% of steps) and deadlocked; fine-tuning on the chicane made a policy slide
 (19/20 $\to$ 8/20 finished); shield dropout (shield on in 100/50/25\% of episodes) produced a policy that is safe
@@ -265,10 +271,8 @@ with no shield at all (16/20 finished) but timid (0.25 passes per race).
 \item \emph{Nov 13--20:} finish seeds 0 and 2 of the slip-penalty recipe and seeds 1--2 of the residual policy
 trained with the shield (all running); choose the final controller and training recipe.
 \item \emph{Nov 21--27:} if the slip penalty does not remove the seed variance, train with the stricter shield
-settings that rescued seed 1 at race time (smaller slip limit, speed-scaled margin); evaluate generalisation on
-a second, unseen track. It is built (228\,m, a 55\,m straight, a fast sweeper and a 2.5\,m hairpin); in a first
-5-race smoke test the Singapore-trained agent finished all races without contact but lapped no faster than
-PID+APF (37.8 vs 38.4\,s), so speed does not transfer yet.
+settings that rescued seed 1 at race time (smaller slip limit, speed-scaled margin); repeat the
+generalisation test below with all training seeds.
 \item \emph{Nov 28--Dec 3:} freeze the code; run the final evaluation (all controllers, 3 training seeds, 50 race
 seeds, nominal and randomised); telemetry, g-g diagrams and videos.
 \item \emph{Dec 4--7:} final report, presentation and live demo (recorded four-car races).
