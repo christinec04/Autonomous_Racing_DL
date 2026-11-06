@@ -239,8 +239,9 @@ predicted clearance shrinking for several steps while staying above the 5\,cm ma
 manoeuvre is predicted to spin. Fig.~\ref{fig:fail} shows where races end: most failures of the shielded agent
 were in the tight 2.5\,m-radius corners at 84--126\,m, where the policy stalled with its nose against the wall; the stall recovery removed
 most of them. \textbf{A fix for the sliding seed:} retraining seed 1 with a slip penalty
-$w_6 \max(|\beta| - 0.15, 0)$ added to Eq.~(1) ($w_6 = 1$, final shield from the start) gives 17/20 finished, 0.22
-collisions per 10 laps and 32.5\,s laps (13/20 randomised). Seeds 0 and 2 are training with the same recipe.
+$w_6 \max(|\beta| - 0.15, 0)$ added to Eq.~(1) ($w_6 = 1$, final shield from the start) gives 18/20 finished with the stall
+recovery (17/20 randomised), 0.11 collisions per 10 laps and 32.5\,s laps, faster than seed 0. Seeds 0 and 2 are
+training with the same recipe.
 
 \begin{figure}[t]
 \centering
@@ -248,6 +249,10 @@ collisions per 10 laps and 32.5\,s laps (13/20 randomised). Seeds 0 and 2 are tr
 \caption{Where races end on the lap (3 training seeds, nominal and randomised races pooled).}
 \label{fig:fail}
 \end{figure}
+
+\textbf{Why the tyre model matters.} Trained and raced on the stock linear tyres, the same recipe laps 5\,s
+faster (29.3\,s) by cornering above 100\% of $\mu g$ for 9.7\% of the race, which a real car cannot do; with
+friction-circle tyres this share is 0\%.
 
 \textbf{Negative results.} Lowering the intervention penalty to $w_3 = 0.02$ made laps faster but the agent let
 the shield brake for it (35\% of steps) and deadlocked; fine-tuning on the chicane made a policy slide
