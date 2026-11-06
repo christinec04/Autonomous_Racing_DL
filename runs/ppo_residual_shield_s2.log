@@ -17,3 +17,17 @@ Info: (n_steps=512 and n_envs=7)
 [600005] eval shielded clean=True lap=32.87999999999948 lam=0.01 | unshielded clean=True lap=32.79999999999948 prog=199
 [650006] eval shielded clean=True lap=32.63999999999948 lam=0.01 | unshielded clean=True lap=32.59999999999948 prog=199
 [700000] eval shielded clean=True lap=32.87999999999948 lam=0.01 | unshielded clean=True lap=32.83999999999948 prog=199
+[750001] eval shielded clean=True lap=32.63999999999948 lam=0.01 | unshielded clean=True lap=32.59999999999948 prog=199
+[800002] eval shielded clean=True lap=32.999999999999474 lam=0.01 | unshielded clean=True lap=32.959999999999475 prog=199
+[850003] eval shielded clean=True lap=32.959999999999475 lam=0.01 | unshielded clean=True lap=32.83999999999948 prog=199
+[900004] eval shielded clean=True lap=32.71999999999948 lam=0.02 | unshielded clean=True lap=32.559999999999484 prog=199
+[950005] eval shielded clean=True lap=32.519999999999484 lam=0.02 | unshielded clean=True lap=32.439999999999486 prog=199
+[1000006] eval shielded clean=True lap=32.71999999999948 lam=0.01 | unshielded clean=True lap=32.59999999999948 prog=199
+[1050000] eval shielded clean=True lap=32.79999999999948 lam=0.01 | unshielded clean=True lap=32.67999999999948 prog=199
+[1100001] eval shielded clean=True lap=33.03999999999947 lam=0.00 | unshielded clean=True lap=32.999999999999474 prog=199
+[1150002] eval shielded clean=True lap=32.83999999999948 lam=0.00 | unshielded clean=True lap=32.87999999999948 prog=199
+[1200003] eval shielded clean=True lap=32.63999999999948 lam=0.01 | unshielded clean=True lap=32.519999999999484 prog=199
+[1250004] eval shielded clean=True lap=32.439999999999486 lam=0.01 | unshielded clean=True lap=32.439999999999486 prog=199
+[1300005] eval shielded clean=True lap=32.439999999999486 lam=0.02 | unshielded clean=True lap=32.31999999999949 prog=199
+[1350006] eval shielded clean=True lap=32.439999999999486 lam=0.02 | unshielded clean=True lap=32.31999999999949 prog=199
+[1400000] eval shielded clean=True lap=32.27999999999949 lam=0.02 | unshielded clean=True lap=32.15999999999949 prog=199
