@@ -9,3 +9,17 @@ Info: (n_steps=512 and n_envs=7)
 [200004] eval shielded clean=True lap=35.719999999999416 lam=0.11 | unshielded clean=False lap=None prog=140
 [250005] eval shielded clean=True lap=34.55999999999944 lam=0.07 | unshielded clean=True lap=34.27999999999945 prog=199
 [300006] eval shielded clean=True lap=34.839999999999435 lam=0.08 | unshielded clean=False lap=None prog=141
+[350000] eval shielded clean=True lap=36.95999999999939 lam=0.07 | unshielded clean=True lap=35.759999999999415 prog=199
+[400001] eval shielded clean=True lap=37.07999999999939 lam=0.05 | unshielded clean=True lap=36.4799999999994 prog=199
+[450002] eval shielded clean=True lap=37.55999999999938 lam=0.04 | unshielded clean=True lap=37.159999999999386 prog=199
+[500003] eval shielded clean=True lap=38.79999999999935 lam=0.03 | unshielded clean=True lap=38.83999999999935 prog=199
+[550004] eval shielded clean=True lap=38.39999999999936 lam=0.02 | unshielded clean=True lap=38.079999999999366 prog=199
+[600005] eval shielded clean=True lap=37.99999999999937 lam=0.03 | unshielded clean=True lap=37.79999999999937 prog=199
+[650006] eval shielded clean=True lap=36.6399999999994 lam=0.03 | unshielded clean=True lap=36.6399999999994 prog=199
+[700000] eval shielded clean=True lap=36.719999999999395 lam=0.02 | unshielded clean=True lap=36.95999999999939 prog=199
+[750001] eval shielded clean=True lap=37.75999999999937 lam=0.02 | unshielded clean=True lap=37.79999999999937 prog=199
+[800002] eval shielded clean=True lap=37.599999999999376 lam=0.01 | unshielded clean=True lap=37.599999999999376 prog=199
+[850003] eval shielded clean=True lap=35.67999999999942 lam=0.02 | unshielded clean=True lap=35.55999999999942 prog=199
+[900004] eval shielded clean=True lap=35.63999999999942 lam=0.03 | unshielded clean=True lap=35.19999999999943 prog=199
+[950005] eval shielded clean=True lap=35.799999999999415 lam=0.03 | unshielded clean=True lap=35.839999999999414 prog=199
+[1000006] eval shielded clean=True lap=36.3999999999994 lam=0.02 | unshielded clean=True lap=36.3999999999994 prog=199
