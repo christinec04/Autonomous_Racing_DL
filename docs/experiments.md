@@ -359,7 +359,9 @@ alone could be luck, lane I (`scripts/queue_lane_i.sh`) trains seeds 0 and 2 wit
 nominal (2 stuck, 0.92 collisions / 10 laps, 6 of 7 contacts with cars) and 6/20 randomised (1.63), against 19/20 for
 seed 0 without the penalty. It also spends 8% of the race above 15 deg slip, so the penalty did not even remove
 sliding here. The slip penalty is **not** a general fix: it rescued seed 1 and hurt seed 0 (two seeds: 14.5 +- 3.5
-nominal). Seed 2 is training. Lesson: one rescued seed was luck as much as a recipe.
+nominal). **Seed 2** (`results/eval_slip_rec_slip_s2.json`): 11/20 nominal, 8/20 randomised, 1.01 collisions / 10 laps,
+11% of the time above 15 deg slip. Three seeds: 13.3 +- 3.3 finished, no better than without the penalty
+(13.0 +- 8.5) and slower. Lesson: one rescued seed was luck as much as a recipe; the penalty is dropped (E29).
 
 ## E27. Does PPO exploit stock tyres?
 `runs/ppo_shield_linear_s0`: the seed-0 recipe (original shield, no escape) trained and raced on the stock F1TENTH
@@ -395,6 +397,34 @@ seed-0 policy's lap-time edge shrinks (0.93x PID+APF here vs 0.81x on Singapore;
 showed none), while the slip-penalty and residual policies keep theirs. The additive-shield policy is safe but
 never passes anyone. Without a shield the policy crashes in 19 of 20 races. The shield is active on 2-12% of steps
 on Track2, similar to Singapore. One training seed per controller.
+
+## E29. Choosing the final controller: residual PPO trained with our shield
+Every residual + shield seed now has 50 races per condition (`results/eval_extra30_residual_s12.json` adds races
+10020-10049 for seeds 1-2; `results/headtohead50.md`):
+
+| 50 races, v2 simulator | finished nominal | finished randomised | clean lap | passes / race |
+|---|---|---|---|---|
+| PPO + our shield + recovery, seed 0 (best plain seed) | **43** | 35 | 34.7 s | 2.98 |
+| residual PPO trained with our shield, seed 0 | 39 | 37 | 32.2 s | 3.42 |
+| residual PPO trained with our shield, seed 1 | 42 | 39 | 32.2 s | 3.64 |
+| residual PPO trained with our shield, seed 2 | 41 | **40** | 32.4 s | **4.10** |
+| PID + APF | 28 | 25 | 42.6 s | 1.34 |
+
+Pooled over the three residual seeds (150 races per condition): 122/150 (81%) finished nominal and 116/150 (77%)
+randomised, vs PID+APF 28/50 and 25/50 (Fisher p = 6e-4 and 5e-4); against plain PPO's best seed the finish rate
+is tied (p = 0.68 / 0.19) and laps are 1.9-2.5 s faster on every seed (Mann-Whitney p < 1e-27). Targets on the 150
+pooled races, nominal / randomised: lap 0.76x / 0.74x PID+APF (<= 0.95, met), collisions 0.43 / 0.53 per 10 laps
+(<= 0.5, met / just missed), overtake success 91% / 90% (>= 70%, met), shield active on 5.2% / 5.7% of steps
+(<= 10%, met), time above 90% of mu g 8.8% / 9.2% (>= 10%, **missed**: it is fast while using less of the tyre),
+time above 15 deg slip 0.0% / 0.8% (<= 1%, met).
+
+On Track2 (unseen) seeds 1 and 2 finish 19/20 each nominal (0.10 collisions / 10 laps, 31.0 / 31.4 s) and 17/20
+and 14/20 randomised (`results/eval_track2_residual_s12.json`); with seed 0 (17/20, E28) that is 18.3 +- 0.9 of 20.
+
+**Decision.** The final controller is residual PPO trained with our action-conditioned shield and stall recovery.
+Plain PPO + shield has the best single seed (43/50, 0.10 collisions on the 20-race protocol) but one seed in three
+fails (1/20); the residual recipe never fails, is 2 s faster and passes more. Plain PPO + shield stays in the final
+evaluation as the second learned controller. The slip penalty (E26) is dropped.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
