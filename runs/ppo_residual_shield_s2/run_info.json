@@ -5,8 +5,9 @@
  "status": "running",
  "started": "2026-11-06 08:02:30",
  "stages_done": [
-  1
+  1,
+  2
  ],
- "steps_done": 1500000,
+ "steps_done": 2500000,
  "git_commit_presquash": "ab53fbb"
 }
