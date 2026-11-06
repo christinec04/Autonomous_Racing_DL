@@ -117,6 +117,16 @@ RECOVER = {"ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec
            "ppo_apf_rec_b25mu"}
 
 
+def residual_scale_for(model_path, default=0.3):
+    """Residual scale a policy was trained with (from args.json next to the model), so it is raced the same way."""
+    if not model_path:
+        return default
+    f = pathlib.Path(model_path).parent / "args.json"
+    if f.exists():
+        return json.load(open(f)).get("residual_scale", default)
+    return default
+
+
 def run_race(job):
     ctrl, model_path, seed, randomize, laps, shield_override = job[:6]
     label = job[6] if len(job) > 6 else ctrl
@@ -132,7 +142,7 @@ def run_race(job):
     cfg = EnvConfig(curvature_preview=preview, n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
                     shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
                     residual=ctrl.startswith("ppo_residual"), tire=tire, recover=ctrl in RECOVER,
-                    map_name=map_name)
+                    map_name=map_name, residual_scale=residual_scale_for(model_path))
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),
