@@ -15,7 +15,7 @@ from racing.sim import Centerline
 OUT = pathlib.Path("report/figs"); OUT.mkdir(parents=True, exist_ok=True)
 C = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#6250d6"]
 INK, MUTED, GRID = "#0b0b0b", "#52514e", "#e4e3df"
-plt.rcParams.update({"font.size": 7, "axes.titlesize": 7.5, "axes.labelsize": 7, "legend.fontsize": 6.3,
+plt.rcParams.update({"font.size": 7, "axes.titlesize": 7.5, "axes.labelsize": 7, "legend.fontsize": 6.5,
                      "xtick.labelsize": 6.5, "ytick.labelsize": 6.5, "font.family": "serif",
                      "axes.edgecolor": MUTED, "axes.labelcolor": INK, "xtick.color": MUTED, "ytick.color": MUTED})
 
@@ -36,7 +36,7 @@ races = [r for r in load(["results/final_v2_others.json", "results/eval_recover.
                           "results/eval_residual_shield_s0.json"]) if not r["randomize"]]
 S = summarize(races)
 SHOW = [("ppo_apf_rec@s0", "PPO + our shield"), ("ppo_residual_apf_rec@trained", "Residual PPO trained w/ our shield"),
-        ("ppo_additive", "PPO + additive APF (Eq. 2)"), ("pid_apf", "PID + APF"),
+        ("ppo_additive", "PPO + additive APF (Eq. 2-3)"), ("pid_apf", "PID + APF"),
         ("ppo_residual", "Residual PPO (ResRace-style)"), ("ppo@s0", "PPO, no shield")]
 fig, ax = plt.subplots(figsize=(3.5, 2.35))
 for (k, name), col in zip(SHOW, C):
@@ -46,7 +46,9 @@ for (k, name), col in zip(SHOW, C):
 style(ax)
 ax.set_xlabel("mean clean-lap time (s)  (left = faster)")
 ax.set_ylabel("collisions / 10 laps")
-ax.legend(loc="upper right", frameon=False, handletextpad=0.3, borderaxespad=0.2, labelspacing=0.35)
+leg = ax.legend(loc="upper right", frameon=False, handletextpad=0.3, borderaxespad=0.2, labelspacing=0.4)
+for h in leg.legend_handles:  # same marker size in the legend; size on the plot encodes races finished
+    h.set_sizes([30])
 ax.set_ylim(-0.3, 8.2)
 fig.tight_layout(pad=0.3)
 fig.savefig(OUT / "tradeoff.pdf")
@@ -72,7 +74,8 @@ style(ax)
 ax.set_ylim(0, 3100)
 ax.set_xlabel("training steps (millions)")
 ax.set_ylabel("cumulative crashes")
-ax.legend(loc="center left", frameon=False, bbox_to_anchor=(0.0, 0.62))
+ax.legend(loc="lower right", frameon=False, bbox_to_anchor=(1.0, 0.14), handlelength=1.2, handletextpad=0.4,
+          borderaxespad=0.1)
 fig.tight_layout(pad=0.3)
 fig.savefig(OUT / "training_crashes.pdf")
 plt.close(fig)
@@ -88,7 +91,7 @@ GROUPS = [("PID + APF", [("final_v2_others.json", "pid_apf")]),
           ("PPO + shield + stall recovery", [("eval_recover.json", "ppo_apf_rec@s0"), ("eval_recover.json", "ppo_apf_rec@s1"),
                                              ("eval_recover.json", "ppo_apf_rec@s2")])]
 edges = np.arange(0, L + 10, 10.0)
-fig, axes = plt.subplots(len(GROUPS), 1, figsize=(3.5, 3.0), sharex=True)
+fig, axes = plt.subplots(len(GROUPS), 1, figsize=(3.5, 3.3), sharex=True)
 cache = {}
 for ax, (name, srcs) in zip(axes, GROUPS):
     ev = {"wall": [], "car": [], "stuck": []}; n = 0
@@ -109,13 +112,16 @@ for ax, (name, srcs) in zip(axes, GROUPS):
         bottom += h
     ax.axvspan(84, 126, color=GRID, alpha=0.7, lw=0, zorder=0)
     ax.set_ylim(0, 26)
-    ax.text(0.01, 0.92, f"{name}: {int(bottom.sum())} of {n} races ended early", transform=ax.transAxes, va="top",
-            fontsize=6.3, color=INK)
+    ax.set_yticks([0, 10, 20])
+    ax.set_title(f"{name}: {int(bottom.sum())} of {n} races ended early", loc="left", fontsize=6.5, color=INK,
+                 pad=1.5)
     style(ax); ax.grid(False)
-axes[0].legend(loc="upper right", frameon=False, ncol=3, fontsize=6, bbox_to_anchor=(1.0, 1.35))
+h, l = axes[0].get_legend_handles_labels()
+fig.legend(h, l, loc="upper center", frameon=False, ncol=3, fontsize=6.5, borderaxespad=0.1, handlelength=1.2,
+           columnspacing=1.5)
 axes[-1].set_xlabel("lap distance (m); shaded = 2.5 m-radius chicane")
 axes[-1].set_xlim(0, L)
-fig.tight_layout(pad=0.3, h_pad=0.2)
+fig.tight_layout(pad=0.3, h_pad=0.2, rect=(0, 0, 1, 0.955))
 fig.savefig(OUT / "failure_map.pdf")
 plt.close(fig)
 print("wrote", sorted(p.name for p in OUT.glob("*.pdf")))
