@@ -4,21 +4,21 @@ import numpy as np
 from racing.render import record, render
 OUT = pathlib.Path.home() / "Downloads" / "racing_videos"
 
-def best_seed(ctrl, model, seconds, seeds=range(10000, 10012), tire="saturated"):
+def best_seed(ctrl, model, seconds, seeds=range(10000, 10012), tire="saturated", map_name="Singapore"):
     best = None
     for s in seeds:
-        env, fr = record(ctrl, model, s, seconds, tire=tire)
+        env, fr = record(ctrl, model, s, seconds, tire=tire, map_name=map_name)
         passes = sum(f["passes"] for f in fr)
         score = (not fr[-1]["crash"], passes, fr[-1]["prog"])
         if best is None or score > best[0]:
             best = (score, s, env, fr)
     return best
 
-def clip(ctrl, model, title, name, seconds=20, solo=False, tire="saturated"):
+def clip(ctrl, model, title, name, seconds=20, solo=False, tire="saturated", map_name="Singapore", seeds=range(10000, 10012)):
     if solo:
         env, fr = record(ctrl, model, 0, seconds, solo=True); s = 0; score = (not fr[-1]["crash"], 0, fr[-1]["prog"])
     else:
-        score, s, env, fr = best_seed(ctrl, model, seconds, tire=tire)
+        score, s, env, fr = best_seed(ctrl, model, seconds, tire=tire, map_name=map_name, seeds=seeds)
     p = render(env, fr, OUT / name, f"{title}  (seed {s})")
     print(f"{name}: seed={s} crash={fr[-1]['crash']} passes={score[1]} dist={fr[-1]['prog']:.0f} m shield_steps={np.mean([f['lam']>0 for f in fr]):.0%}")
 
@@ -41,6 +41,8 @@ if __name__ == "__main__":
         fr = [f for f in fr if f["t"] >= 14.0]
         render(env, fr, OUT / "10_stall_recovery_chicane.mp4", "Seed-2 policy stalls nose-to-wall in the chicane; stall recovery reverses out")
         print("recoveries:", sum(1 for a, b in zip(fr, fr[1:]) if b["rec"] and not a["rec"]), "crash:", fr[-1]["crash"])
+    elif which == "batch9":
+        clip("ppo_apf_rec", "runs/ppo_shield_v2esc_slip_s1/model_stage3.zip", "Unseen track (Track2): slip-penalty PPO + our shield", "12_track2_slip_penalty_race.mp4", tire="saturated_v2", map_name="Track2", seeds=range(10000, 10006))
     elif which == "batch8":
         clip("ppo_residual_apf_rec", "runs/ppo_residual_shield_s0/model_stage3.zip", "Residual PPO trained with our shield (E23): race (red = shield)", "11_residual_trained_with_shield_race.mp4", tire="saturated_v2")
     elif which == "batch6":
