@@ -48,6 +48,9 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## Running now
 
+- E30 (lane J, `scripts/queue_lane_j.sh`): the final controller with a wider residual (`--residual_scale 0.5`), seeds 0-1, to raise grip use (E29 missed that target).
+- Ablation: final controller seeds 1-2 without the stall recovery (`results/eval_residual_norec_s12.json`); plain PPO + shield seeds 1-2 on Track2 (`results/eval_track2_ours_s12.json`).
+
 
 
 Status: [RUNS.md](../RUNS.md).
