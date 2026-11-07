@@ -1,0 +1,6 @@
+
+=== nominal ===
+ppo_residual_additive@s1 finished 1/20 (stuck 0)  lap 36.8 (best 36.08)  coll/10laps 7.44 (wall 14, car 5)  passes/race 0.90 ot 18/37  shield 0.68  grip>90% 0.110 (>100% 0.002)  slip>15 0.042
+
+=== randomized ===
+ppo_residual_additive@s1 finished 0/20 (stuck 0)  lap 36.97 (best 36.0)  coll/10laps 14.27 (wall 18, car 2)  passes/race 0.75 ot 15/35  shield 0.72  grip>90% 0.103 (>100% 0.007)  slip>15 0.056
