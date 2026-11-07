@@ -457,10 +457,33 @@ add `residual_scale = 0.3` of the action range to the PID+APF base, which could 
 | **scale 0.5** | **19 / 18** | **0.10 / 0.21** | 32.5 s | **4.05** | 6% | 3% |
 | scale 0.5, raced without the shield | 19 / 18 | 0.11 / 0.21 | 32.2 s | 3.80 | 5% | - |
 
+| seed 1 | finished nominal / randomised | stuck | collisions / 10 laps | clean lap | passes / race | time > 15 deg slip | shield active |
+|---|---|---|---|---|---|---|---|
+| scale 0.3 (final, E23) | 16 / 17 | 0 / 0 | 0.47 / 0.35 | 32.1 s | 3.25 | 0% | 6% |
+| scale 0.5 | 14 / 11 | 2 / 5 | 0.47 / 0.51 | 34.9 s | 2.55 | 11% / 19% | 19% / 22% |
+| scale 0.5, raced without the shield | 8 / 10 | 0 / 0 | 2.05 / 1.58 | 29.9 s | 1.55 | 0% | - |
+
 Training was as safe (65 crashed episodes vs 133; `results/training_efficiency.md`). The wider residual does not
 raise grip use, the target it was meant for: it halves it (13% -> 6%; scale 0.3 seeds 1-2 were at 7%, which is why
 the pooled E29 number missed). It drives a smoother line at the same lap time. On seed 0 it is clearly safer and
-passes more. Seed 1 pending.
+passes more, but **seed 1 brings back the failure mode of plain PPO**: on its own it laps 2 s faster than any
+residual policy and crashes in half the races, and with the shield it leans on it (active on 20% of steps), slides
+(11-19% of the time above 15 deg) and gets stuck. With more authority the policy can again learn to drive at the
+limit, so the residual scale is the dial between consistency and peak performance. Two seeds: 16.5 +- 2.5 vs 15.5 +-
+0.5 finished nominal, 14.5 +- 3.5 vs 16.5 +- 0.5 randomised. **Decision: keep 0.3**; consistency is why the residual
+recipe was chosen. The grip target stays missed (8.8% pooled) and is reported as such.
+
+## E31. Baselines on three training seeds (lane K, running)
+The additive-shield and residual (no shield) baselines only had seed 0. `scripts/queue_lane_k.sh` trains seeds 1-2
+with the seed-0 recipe and races each on Singapore and Track2 (`results/eval_<run>_<map>.json`, 20 races x 5 laps):
+
+| PPO + additive Eq. 2/3 shield | Singapore finished nom / rand | lap | passes / race | Track2 finished nom / rand | Track2 lap |
+|---|---|---|---|---|---|
+| seed 0 | 18 / 16 | 47.6 s | 0.85 | 18 / 19 | 45.9 s |
+| seed 1 | 13 / 15 | 50.4 s | 0.00 | 10 / 13 | 46.7 s |
+
+Seed 1 confirms the timid style the proposal feedback predicted for an always-on APF (no passes at all in 20
+races), and it is less safe than seed 0 (0.92 collisions / 10 laps). Seeds 2 and the residual baseline pending.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
