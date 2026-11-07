@@ -445,6 +445,23 @@ Plain PPO + shield has the best single seed (43/50, 0.10 collisions on the 20-ra
 fails (1/20); the residual recipe never fails, is 2 s faster and passes more. Plain PPO + shield stays in the final
 evaluation as the second learned controller. The slip penalty (E26) is dropped.
 
+## E30. A wider residual: does letting the policy add more raise grip use?
+The final controller (E29) misses one target: it spends under 10% of the race above 90% of mu g. Its policy may only
+add `residual_scale = 0.3` of the action range to the PID+APF base, which could cap how hard it drives.
+`runs/ppo_residual_wide_s0`, `_s1`: the same recipe with `--residual_scale 0.5` (lane J, `scripts/queue_lane_j.sh`;
+`results/eval_residual_wide_s0.json`, `_s1`, 20 races x 5 laps, v2 simulator, with shield + recovery):
+
+| seed 0 | finished nominal / randomised | collisions / 10 laps | clean lap | passes / race | time > 90% of mu g | shield active |
+|---|---|---|---|---|---|---|
+| scale 0.3 (final, E23) | 15 / 16 | 0.59 / 0.44 | 32.1 s | 3.15 | 13% | 6% |
+| **scale 0.5** | **19 / 18** | **0.10 / 0.21** | 32.5 s | **4.05** | 6% | 3% |
+| scale 0.5, raced without the shield | 19 / 18 | 0.11 / 0.21 | 32.2 s | 3.80 | 5% | - |
+
+Training was as safe (65 crashed episodes vs 133; `results/training_efficiency.md`). The wider residual does not
+raise grip use, the target it was meant for: it halves it (13% -> 6%; scale 0.3 seeds 1-2 were at 7%, which is why
+the pooled E29 number missed). It drives a smoother line at the same lap time. On seed 0 it is clearly safer and
+passes more. Seed 1 pending.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). `batch9` renders clip 12, slip-penalty PPO + our shield on

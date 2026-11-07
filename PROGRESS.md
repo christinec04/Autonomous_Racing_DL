@@ -288,3 +288,8 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     `gabe-build` after `main` (runs of auto-sync commits, repeated eval commits, doc follow-ups) were folded into their
     neighbours (67 -> 54 commits, final tree identical, `main` untouched). Six `runs/*/run_info.json` files pointed
     at rewritten commits; they now hold the equivalent new hash, with the old one kept as `git_commit_presquash`.
+37. **An evaluation sat for 80 minutes without output and was hard to diagnose.** Lane J's seed-1 race run (E30)
+    started at 20:11, right around a low-memory episode, and never wrote a line, while seed 0 finished in 12 min.
+    Process checks were misleading: the venv `python.exe` is only a launcher, the real interpreter and its pool
+    workers run as `python3.11.exe`, so filtering on `python.exe` shows an idle parent with no children. Restarted
+    the evaluation by hand. When checking runs on Windows, look at `python3.11.exe` processes and their CPU time.
