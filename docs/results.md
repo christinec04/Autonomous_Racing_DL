@@ -49,6 +49,7 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## Running now
 
+- E32 (lane L, `scripts/queue_lane_l.sh`): the final recipe with the proposal's additive shield instead of ours (residual policy trained with Eq. 2/3), seeds 0-1: is it our shield or any shield?
 - Lane K (`scripts/queue_lane_k.sh`): seeds 1-2 of the additive-shield and residual baselines, raced on Singapore and Track2, so every learned controller has 3 seeds for the final evaluation.
 
 
