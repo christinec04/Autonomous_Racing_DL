@@ -9,9 +9,12 @@ The grader's proposal feedback is addressed in code and experiments; see [docs/f
 
 ## Status at a glance
 
-Final controller ("ours"): PPO trained with the action-conditioned shield, raced with the shield, its deadlock
-escape and the stall recovery, on the post-spin-fixed ("v2") simulator. Seed 0, all controllers on the same
-simulator, nominal conditions. "Finished" = all 5 laps. Sources: [results/final_summary.md](results/final_summary.md)
+**Final controller (chosen in E29): ResRace-style residual PPO trained with our action-conditioned shield**, raced
+with the shield, its deadlock escape and the stall recovery on the post-spin-fixed ("v2") simulator. Over 3
+training seeds x 50 races it finishes 122/150 nominal and 116/150 randomised (PID+APF 28/50 and 25/50), laps in
+32.2 s and passes 3.7 cars per race. Plain PPO + our shield (below, "ours" in the earlier experiments) has the best
+single seed but one seed in three fails, so it is the second learned controller. Table: seed 0, all controllers on
+the same simulator, nominal conditions. "Finished" = all 5 laps. Sources: [results/final_summary.md](results/final_summary.md)
 (20 races, all metrics, Mann-Whitney tests) and [results/headtohead50.md](results/headtohead50.md) (50 races).
 
 | controller | finished, 20 races | finished, 50 races (nominal / randomised) | clean lap | collisions / 10 laps | passes / race |
@@ -20,7 +23,7 @@ simulator, nominal conditions. "Finished" = all 5 laps. Sources: [results/final_
 | same, without the stall recovery | 16/20 | - | 34.5 s | 0.44 | 2.95 |
 | PPO + proposal's additive Eq. 2/3 shield | 18/20 | 39/50 / 34/50 | 47.6 s | 0.21 | 0.85 |
 | PID + APF | 12/20 | 28/50 / 25/50 | 42.8 s | 1.09 | 1.35 |
-| ResRace-style residual PPO trained with our shield (E23) | 15/20 | 39/50 / **37/50** | 32.1 s | 0.59 | 3.15 |
+| **ResRace-style residual PPO trained with our shield (final, E23/E29)** | 15/20 | 39/50 / **37/50** (seeds 1, 2: 42 / 39, 41 / 40) | 32.1 s | 0.59 | 3.15 |
 | ResRace-style residual PPO | 10/20 | - | **30.4 s** | 1.60 | 2.20 |
 | PPO, no shield | 0/20 (1 stuck) | - | 32.5 s | 7.35 | 1.35 |
 | Pure Pursuit | 0/20 | - | - | 61 | 0 |
@@ -67,8 +70,12 @@ python -m racing.evaluate --controllers pure_pursuit pid_apf --races 20 --out re
 # train PPO + shield (3 stages, ~2 h on 7 cores)
 python -m racing.train --shield cond_fb_grip --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --out runs/my_run
 
-# race it with the final setup (escape shield + stall recovery, v2 simulator), then render a replay
+# race it with the escape shield + stall recovery on the v2 simulator, then render a replay
 python -m racing.evaluate --controllers ppo_apf_rec --models ppo_apf_rec=runs/my_run/model_stage3.zip --tire saturated_v2 --out results/eval_mine.json
+
+# the final controller: residual PPO trained with the shield (exact recipe of runs/ppo_residual_shield_s*)
+python -m racing.train --residual --shield cond_fb_grip_esc --tire saturated_v2 --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --out runs/my_residual
+python -m racing.evaluate --controllers ppo_residual_apf_rec --models ppo_residual_apf_rec=runs/my_residual/model_stage3.zip --tire saturated_v2 --out results/eval_my_residual.json
 python -m racing.render --controller ppo_apf --model runs/my_run/model_stage3.zip --seconds 20 --out replay.mp4
 ```
 

@@ -30,7 +30,7 @@ def main():
         crashes = sum(int(r["crashes"]) for r in tr)
         eps = sum(int(r["episodes"]) for r in tr)
         before = sum(int(r["crashes"]) for r in tr if first and float(r["step"]) <= first)
-        cfg = f"{a['shield']}{' residual' if a.get('residual') else ''}{' tyre=' + a['tire'] if a['tire'] != 'saturated' else ''}" \
+        cfg = f"{a['shield']}{' residual' if a.get('residual') else ''}{' scale=' + str(a['residual_scale']) if a.get('residual_scale', 0.3) != 0.3 else ''}{' tyre=' + a['tire'] if a['tire'] != 'saturated' else ''}" \
               f"{' drop=' + str(a.get('shield_prob')) if a.get('shield_prob') else ''}"
         k = lambda s: f"{s/1e3:.0f}k" if s else "-"
         out.append(f"| `{d.name}` | {cfg} | {k(int(float(tr[-1]['step'])))} | {k(first)} | {k(fast)} | {before} | "

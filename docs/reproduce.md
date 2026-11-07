@@ -43,7 +43,11 @@ nominal and 20 randomised per controller, about 40 min per controller on 16 core
 | `results/final_v2_others.json` | `bash scripts/final_eval_v2.sh` (Pure Pursuit, PID+APF, no shield s0/s1, residual, additive) |
 | `results/final_v2_noshield_s2.json` | `bash scripts/queue_eval_noshield_s2_v2.sh` (no shield, seed 2) |
 | `results/eval_escape_v4.json`, `_s1`, `_s2` | `ppo_apf_esc@s<s>` = `ppo_shield_s<s>` (escape shield, no stall recovery); `scripts/queue_eval_s2_final.sh` for seed 2 |
-| `results/eval_recover.json` | `ppo_apf_rec@s0`, `ppo_apf_rec@s1`, `ppo_apf_rec@s2` = `ppo_shield_s0/1/2` (ours, final) |
+| `results/eval_recover.json` | `ppo_apf_rec@s0`, `ppo_apf_rec@s1`, `ppo_apf_rec@s2` = `ppo_shield_s0/1/2` (plain PPO + our shield) |
+| `results/eval_residual_shield_s1.json`, `_s2` | final controller seeds 1-2 (`scripts/queue_lane_h.sh`) |
+| `results/eval_extra30_residual_s12.json` | final controller seeds 1-2 with `--first 20 --races 30` |
+| `results/eval_track2_residual_s12.json`, `eval_track2_ours_s12.json` | Track2 (`--map Track2`), seeds 1-2 of the final controller and of plain PPO + shield |
+| `results/eval_residual_norec_s12.json` | final controller seeds 1-2 without the stall recovery (`ppo_residual_apf_esc`) |
 | `results/eval_residual_shield_s0.json` | `ppo_residual_apf_rec@trained` etc. = `ppo_residual_shield_s0` (exact command in `scripts/queue_lane_g.sh`) |
 | `results/eval_extra30.json` | `ppo_apf_rec@s0 ppo_additive pid_apf` with `--first 20 --races 30` (race seeds 10020-10049) |
 | `results/eval_extra30_residual.json` | `ppo_residual_apf_rec@trained` with `--first 20 --races 30` |
