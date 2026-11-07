@@ -100,6 +100,7 @@ SHIELD_FOR = {
     "ppo_residual": dict(mode="off"),  # ResRace-style: APF base inside the env
     "ppo_residual_apf": dict(mode="conditioned_fallback", reach="grip"),  # residual policy + our shield on top
     "ppo_additive": dict(mode="additive", reach="fixed"),  # PPO trained with the proposal's Eq. 2/3 shield
+    "ppo_residual_additive": dict(mode="additive", reach="fixed"),  # residual policy trained with the Eq. 2/3 shield (E32)
     "ppo_apf_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),  # with the deadlock fix
     "ppo_residual_apf_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),
     "ppo_apf_rec": dict(mode="conditioned_fallback", reach="grip", escape=True, allow_reverse=True),  # + stall recovery (EnvConfig.recover)
