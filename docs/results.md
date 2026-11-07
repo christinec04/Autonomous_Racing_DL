@@ -58,6 +58,7 @@ Status: [RUNS.md](../RUNS.md).
 
 ## Figures
 
+- [seed spread](../results/seed_spread.png): races finished per training seed for each recipe (why the final controller was chosen; `python -m scripts.plot_seeds`)
 - [failure map](../results/failure_map.png): where on the lap each controller's races end (wall / car / stuck)
 - [safety vs speed](../results/tradeoff.png): every controller on one chart (final comparison, seed 0)
 - [training curves](../results/training_curves.png): crash rate, shield activity and unshielded solo lap time over training

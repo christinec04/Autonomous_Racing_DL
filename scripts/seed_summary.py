@@ -11,6 +11,8 @@ GROUPS = {
     "PPO + shield + escape (v2 sim)": ["ppo_apf_esc@s0", "ppo_apf_esc@s1v4", "ppo_apf_esc@s2"],
     "PPO + original shield (v1 sim)": ["ppo_apf", "ppo_apf@s1", "ppo_apf@s2"],
     "PPO, no shield (v2 sim)": ["ppo@s0", "ppo@s1", "ppo@s2v2"],
+    "PPO + additive Eq. 2/3 shield (E31)": ["ppo_additive", "ppo_additive@s1", "ppo_additive@s2"],
+    "residual PPO, no shield (E31)": ["ppo_residual", "ppo_residual@s1", "ppo_residual@s2"],
 }
 KEYS = [("finished", "finished all laps / 20", "{:.1f}"), ("stuck", "stuck / 20", "{:.1f}"), ("lap_mean", "clean lap (s)", "{:.2f}"),
         ("collisions_per_10_laps", "collisions / 10 laps", "{:.2f}"), ("passes_per_race", "passes / race", "{:.2f}"),
@@ -25,7 +27,9 @@ CANONICAL = ["results/eval_ppo_s0.json", "results/eval_ppo_shield_s1.json", "res
              "results/eval_recover.json",
              "results/eval_slip_rec_slip_s0.json", "results/eval_slip_rec_slip_s1.json", "results/eval_slip_rec_slip_s2.json",
              "results/eval_residual_shield_s0.json", "results/eval_residual_shield_s1.json",
-             "results/eval_residual_shield_s2.json"]
+             "results/eval_residual_shield_s2.json",
+             "results/eval_ppo_additive_s1_Singapore.json", "results/eval_ppo_additive_s2_Singapore.json",
+             "results/eval_ppo_residual_s1_Singapore.json", "results/eval_ppo_residual_s2_Singapore.json"]
 
 
 def main(files=None):

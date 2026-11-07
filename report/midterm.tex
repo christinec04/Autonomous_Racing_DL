@@ -233,7 +233,7 @@ policy only at race time fails (2--4 of 20 finished, deadlocks and slides), but 
 the shield works: statistically tied with ours on finishes over 50 races ($p = 0.44$ / $0.82$) and
 1.9--2.5\,s per lap faster on all three training seeds (39--42 of 50 finished nominal, 37--40 randomised).
 
-\textbf{Across training seeds} the results vary a lot. With the final shield, seeds 0 and 2 finish 19/20 and seed 1
+\textbf{Across training seeds} the results vary a lot (Fig.~\ref{fig:seeds}). With the final shield, seeds 0 and 2 finish 19/20 and seed 1
 only 1/20 (13.0\,$\pm$\,8.5, mean $\pm$ population s.d.\ over 3 seeds), versus 3.0\,$\pm$\,2.4 without a shield; collisions per 10 laps are
 1.63\,$\pm$\,2.16 versus 4.38\,$\pm$\,2.12. Seed 1 learned to drive at the limit: replaying a crash shows the
 predicted clearance shrinking for several steps while staying above the 5\,cm margin, after which every braking
@@ -254,6 +254,15 @@ collisions per 10 laps, 91\% overtake success, shield on 5\% of steps, 0\% slip)
 \includegraphics[width=\columnwidth]{failure_map.pdf}
 \caption{Where races end on the lap (3 training seeds, nominal and randomised races pooled).}
 \label{fig:fail}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{seed_spread.pdf}
+\caption{Races finished out of 20 per training seed (filled: nominal, hollow: randomised; dashed: PID+APF).
+The residual policy trained with our shield has the smallest spread; plain PPO with our shield has both the
+best and the worst seed.}
+\label{fig:seeds}
 \end{figure}
 
 \textbf{Why the tyre model matters.} Trained and raced on the stock linear tyres, the same recipe laps 5\,s
