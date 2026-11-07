@@ -165,4 +165,6 @@ margin per m/s), `mu_scale` 1.0 (friction the predictor assumes, fraction of nom
 `python -m racing.evaluate` flags: `--controllers` (pure_pursuit, pid_apf, ppo, ppo_apf, ppo_residual,
 ppo_residual_apf, ppo_additive, ppo_apf_esc, ppo_residual_apf_esc, ppo_apf_rec, ppo_residual_apf_rec, and the E24 variants ppo_apf_rec_m1 / _m2 / _b25 / _b18 / _b25mu; append `@label` to race the same controller type with different models),
 `--models label=path ...`, `--races`, `--first`, `--laps`, `--procs`, `--tire`, `--out`. The final controller is
-`ppo_apf_rec` (escape shield + stall recovery) raced with `--tire saturated_v2`.
+`ppo_residual_apf_rec` (residual policy trained with the escape shield, raced with it and the stall recovery) with
+`--tire saturated_v2`; `ppo_apf_rec` is the same shield setup for plain PPO. The residual scale a model was trained
+with is read back from its `args.json`.
