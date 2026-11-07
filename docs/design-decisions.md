@@ -18,7 +18,7 @@ Each entry: what the proposal said, what we did, why. Problems that forced a dec
 | 11 | reward Eq. 1 | same terms; episodes are a fixed 40 s instead of "until finished" | with a progress reward, a fixed-length episode rewards covering more distance, i.e. speed |
 | 12 | speed or acceleration action | target speed in [1, 16] m/s | simpler to learn; the speed loop and traction control handle the rest |
 | 13 | about 60 lidar beams | 60 min-pooled sectors (min, not subsample) | a thin obstacle between subsampled beams would vanish |
-| 14 | 3 seeds per learned controller | 3 seeds for ours and the no-shield ablation (`results/seed_summary.md`); residual + our shield (final controller) on 3 seeds; additive-shield and residual baselines: seed 1 done, seed 2 running (lane K); seed 0 only for the dropout and timidity variants | compute; runs take about 2 h each on 7 cores |
+| 14 | 3 seeds per learned controller | 3 seeds for ours and the no-shield ablation (`results/seed_summary.md`); residual + our shield (final controller) on 3 seeds; additive-shield baseline seed 1 done, residual baseline seed 1 and both seed 2 runs in progress (lane K); seed 0 only for the dropout and timidity variants | compute; runs take about 2 h each on 7 cores |
 | 15 | unshielded ablation | shield off in all stages | grader comment (stage 1 had the shield on) |
 | 16 | training steps to first clean lap | measured with the shield removed, every 50k steps | grader comment (the shield would otherwise guarantee clean laps) |
 | 17 | control rate unspecified | 25 Hz policy, 100 Hz physics | standard for F1TENTH RL; keeps PPO horizons manageable |
