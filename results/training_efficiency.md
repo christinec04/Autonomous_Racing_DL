@@ -5,11 +5,12 @@ Solo laps every 50k steps, standing start. 'fast' = under 34 s (best classical s
 | run | config | steps trained | first clean lap | first fast lap | crashes before first clean lap | crashes during training (episodes) | best lap |
 |---|---|---|---|---|---|---|---|
 | `ppo_additive_s0` | additive | 3500k | 150k | - | 783 | 2333 (5146) | 34.28 |
-| `ppo_additive_s1` | additive | 3120k | 150k | - | 703 | 1773 (4316) | 36.84 |
+| `ppo_additive_s1` | additive | 3500k | 150k | - | 703 | 1786 (4698) | 36.84 |
 | `ppo_noshield_s0` | off | 3500k | 200k | 850k | 995 | 2318 (5249) | 27.60 |
 | `ppo_noshield_s1` | off | 3500k | 200k | 600k | 1080 | 2769 (5517) | 28.60 |
 | `ppo_noshield_s2` | off | 3500k | 150k | 550k | 969 | 2295 (5267) | 27.56 |
 | `ppo_residual_s0` | off residual | 3500k | 50k | 350k | 259 | 995 (4141) | 29.80 |
+| `ppo_residual_s1` | off residual | 100k | 50k | - | 240 | 315 (349) | 41.36 |
 | `ppo_residual_shield_s0` | cond_fb_grip_esc residual tyre=saturated_v2 | 3500k | 50k | 200k | 1 | 133 (3568) | 31.40 |
 | `ppo_residual_shield_s1` | cond_fb_grip_esc residual tyre=saturated_v2 | 3500k | 50k | 250k | 0 | 81 (3545) | 31.52 |
 | `ppo_residual_shield_s2` | cond_fb_grip_esc residual tyre=saturated_v2 | 3500k | 50k | 200k | 0 | 120 (3571) | 31.36 |

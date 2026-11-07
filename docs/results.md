@@ -50,7 +50,6 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 ## Running now
 
 - Lane K (`scripts/queue_lane_k.sh`): seeds 1-2 of the additive-shield and residual baselines, raced on Singapore and Track2, so every learned controller has 3 seeds for the final evaluation.
-- E30 (lane J, `scripts/queue_lane_j.sh`): the final controller with a wider residual (`--residual_scale 0.5`), seeds 0-1, to raise grip use (E29 missed that target).
 
 
 

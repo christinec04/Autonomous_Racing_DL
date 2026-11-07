@@ -270,15 +270,16 @@ sweeper and a 2.5\,m hairpin; 20 races), the shielded learned policies still fin
 \textbf{Negative results.} Lowering the intervention penalty to $w_3 = 0.02$ made laps faster but the agent let
 the shield brake for it (35\% of steps) and deadlocked; fine-tuning on the chicane made a policy slide
 (19/20 $\to$ 8/20 finished); shield dropout (shield on in 100/50/25\% of episodes) produced a policy that is safe
-with no shield at all (16/20 finished) but timid (0.25 passes per race).
+with no shield at all (16/20 finished) but timid (0.25 passes per race); giving the residual policy more authority
+(scale 0.5 instead of 0.3) helped one seed (19/20) and let the other learn to slide again (14/20, 11\% of the time above 15$^\circ$ slip).
 
 \section{Plan to the Final Demo}
 \textbf{Remaining tasks and milestones} (final demo December 7):
 \begin{itemize}
 \item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); try to lift its grip use
 (target $\ge$\,10\% of time above 90\% of $\mu g$) and randomised collisions without losing consistency.
-\item \emph{Nov 21--27:} remaining ablations of the final controller (residual scale, running; additive shield
-in training); second-track test of the baselines on three seeds.
+\item \emph{Nov 21--27:} train the additive-shield and residual baselines on two more seeds (running) and test
+them on both tracks; ablation of the final controller trained with the additive shield.
 \item \emph{Nov 28--Dec 3:} freeze the code; run the final evaluation (all controllers, 3 training seeds, 50 race
 seeds, nominal and randomised); telemetry, g-g diagrams and videos.
 \item \emph{Dec 4--7:} final report, presentation and live demo (recorded four-car races).
