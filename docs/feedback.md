@@ -6,6 +6,11 @@ counted stuck races as finished (corrected; PROGRESS.md problem 22). "Ours (fina
 action-conditioned shield, raced with the shield, its deadlock escape (E19) and the stall recovery (E21) on the
 post-spin-fixed simulator. Current results in one place: [results.md](results.md).
 
+**Update (E29):** the final controller is now the ResRace-style residual policy *trained with* our action-conditioned
+shield. Over 3 training seeds x 50 races it finishes 81% nominal / 77% randomised (PID+APF 56% / 50%, p < 0.001) with
+32.2 s laps; plain PPO + our shield ("ours (final)" below) has the best single seed but one seed in three fails.
+Most numbers on this page are for plain PPO + our shield, seed 0; see the ResRace section for how the two relate.
+
 ## Introduction (16/20)
 
 > *The metrics are listed without target values.*
@@ -79,6 +84,13 @@ What this says:
   while lapping 2.5 s faster (`results/headtohead50.md`). So the ResRace structure and our shield are complementary, provided the
   policy is trained with the shield, which is itself part of our contribution: the shield shapes what the policy
   learns, not only what the car does.
+- Across seeds (E29) this combination is the most reliable controller we trained: 16.0 +- 0.8 of 20 finished
+  (plain PPO + our shield 13.0 +- 8.5), 122/150 over 50 races per seed, 18.3 of 20 on the unseen Track2. We
+  therefore race it as the final controller. How it differs from ResRace/RaceMOP: they use the APF as the base the
+  residual is added to; we keep that base but add the action-conditioned shield that only overrides the combined
+  action when it is predicted unsafe, and train with it in the loop (133 crashed training episodes vs 995 without).
+  Giving the residual more authority (scale 0.5, E30) brings back the seed variance. E32 (running) tests whether
+  the proposal's additive shield would do the same job in training.
 
 ## Content (16/20)
 
