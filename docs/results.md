@@ -27,6 +27,8 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 | Final controller: residual PPO trained with our shield | E29: 3 seeds x 50 races, 122/150 finished nominal (81%), 116/150 randomised (77%), vs PID+APF 28/50 and 25/50 (p < 0.001); 32.2 s laps, 3.7 passes / race; meets 5 of 6 targets nominal (misses time above 90% of mu g: 8.8%) |
 | The final controller generalises best | Track2, 3 seeds (E29): residual + shield 18.3 / 16.3 of 20 finished (nominal / randomised), 31.2 s, 3.8 passes; plain PPO + shield 16.7 / 14.0, 37.5 s, 1.2 passes (one seed 5/20 randomised, one never passes); stall recovery barely matters for it (+1 randomised finish in 20) |
 | Shielded learned policies generalise to an unseen track | E28 (Track2, 20 races): slip-penalty PPO 19/20, 32.2 s, 0.10 collisions; residual + shield 17/20, 31.3 s; ours seed 0 16/20, 36.7 s; PID+APF 15/20, 39.3 s; no shield 1/20 |
+| Our shield composes with a classical controller; the additive one does not | E32: PID+APF + our shield, no learning (`results/eval_zero_residual.json`): 20/20 finished, 0 collisions (16/20, 0.47 randomised), 42.5 s laps; PID+APF + the additive Eq. 2/3 shield: 0/20, 68 collisions / 10 laps (two APF fields stack). The residual policy trained with the additive shield therefore fails (0-1/20, 4845-5717 training crashes) while the one trained with ours is the final controller |
+| The final controller corners harder instead of braking harder | `results/grip_use.md`, Fig. 6: residual + shield corners above 0.6 mu g 14% of the time (PPO + shield 5%, PID+APF 5%) and brakes harder than 0.5 mu g 14% (PPO + shield 31%, with a bang-bang throttle clipped by traction control). The 'time above 90% of mu g' target rewards that throttle |
 | Learned driving beats classical | seed 0 clean laps 34.7 s (ours) vs 42.8 s PID+APF; residual PPO 30.4 s |
 | Curvature preview gives a small gain | E18: raced with the final setup 17/20, 0.22 collisions, 3.80 passes / race vs ours 19/20, 0.10, 3.15; solo lap 31.2 s vs 32.7 s. Comparable, not clearly better, one seed |
 | Training with the escape shield from the start gives the same picture | `ppo_shield_v2esc_s0` (escape shield, v2 sim from step 0, no stall recovery): 14/20 finished, 1 stuck, 0.62 collisions / 10 laps, 3.45 passes / race |
@@ -44,20 +46,22 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 | Shield added to a residual policy only at race time | deadlocks (4/20 finished) or slides (2/20), with or without the stall recovery | train it with the shield: done, E23 (15/20); seeds 1-2 running |
 | The shield reacts too late for a policy that drives at the limit | E24: on seed 1 the predicted clearance shrinks for 6 steps while staying above the 5 cm margin, then braking in the corner spins the car. Stricter settings lift seed 1 from 1/20 to 9-10/20 but cost seed 0 (19 -> 16/20) | a safety/performance dial; the final setup keeps the original settings |
 | 20 races cannot separate close controllers | 19/20 vs 18/20 (ours vs additive) is not significant; on 50 races ours 43/50 vs 39/50, still not significant (E25) | use the 50-race numbers for finishing rates |
-| Car contacts in traffic remain | opponents' future motion is predicted (worst-case braking), not known | - |
+| Car contacts in traffic remain | E34 (`results/contacts.md`): 60 of the final controller's 62 DNFs in 300 races are car contacts, half in the first half lap; of seed 0's 24, 15 are cutting back in after a pass, 5 side-by-side squeezes, 4 rear-ends; the shield intervened before all of them. It predicts opponents braking at 6 m/s^2, the best case for a car just passed | check both braking and holding speed (`opp_both`, lane N, running) |
+| Missed grip target | the final controller spends 8.8% of the race above 90% of mu g (target 10%) | the target measures throttle style, not cornering (row above); report cornering grip instead |
 | Training efficiency (steps to first clean lap) unchanged | 150-200k with or without the shield (3 seeds each); the shield's gain is in crashes during training (above) | - |
 
 ## Running now
 
-- E32 (lane L, `scripts/queue_lane_l.sh`): the final recipe with the proposal's additive shield instead of ours (residual policy trained with Eq. 2/3), seeds 0-1: is it our shield or any shield?
-- Lane K (`scripts/queue_lane_k.sh`): seeds 1-2 of the additive-shield and residual baselines, raced on Singapore and Track2, so every learned controller has 3 seeds for the final evaluation.
-
-
+- Lane N (`scripts/queue_lane_n.sh`, E34): the final controller with the two-hypothesis opponent check, 3 seeds x 50 races.
+- Lane M (`scripts/queue_lane_m.sh`, E33): stress tests outside the training conditions, friction x0.6-1.3 and 1 or 5 opponents, 6 controllers x 20 races (`results/stress_*.json`). First result, friction x0.8: PPO + shield seed 0 17/20, final controller 13 / 13 / 5 (drives above the friction limit 3-6% of the time; the shield's model assumes nominal friction), additive-shield PPO 3/20.
+- PID+APF + our shield on the 30 extra race seeds (`results/eval_extra30_zero.json`).
+- Lane K (`scripts/queue_lane_k.sh`): residual baseline seed 2 (additive seed 2: 12/20, 50 s, 0.1 passes).
 
 Status: [RUNS.md](../RUNS.md).
 
 ## Figures
 
+- [grip use](../results/grip_use.png): g-g diagrams, PID+APF vs PPO + shield vs final controller (`python -m scripts.plot_grip`)
 - [seed spread](../results/seed_spread.png): races finished per training seed for each recipe (why the final controller was chosen; `python -m scripts.plot_seeds`)
 - [failure map](../results/failure_map.png): where on the lap each controller's races end (wall / car / stuck)
 - [safety vs speed](../results/tradeoff.png): every controller on one chart (final comparison, seed 0)

@@ -115,9 +115,11 @@ race, vs ours 19/20, 34.7 s and 3.15 passes (`results/final_summary.md`). On 50 
 often (39/50 vs 43/50, p = 0.44), and ours keeps the 12 s and 2.7x passes advantage (p = 1e-8, nominal; E25). This is the "APF makes the car timid" failure the proposal predicted, and the
 clearest case for making the shield action-conditioned.
 
+A second, sharper case (E32): an additive shield cannot be put on top of a controller that already has an APF. With no learning at all, PID+APF plus the additive Eq. 2/3 shield finishes 0/20 (68 collisions / 10 laps, every one a wall; the two fields stack and the car oscillates into slides), while PID+APF plus our shield finishes 20/20 with no collision (`results/eval_zero_residual.json`). Accordingly the residual policy trained with the additive shield fails (0-1/20, about 5000 training crashes) and the one trained with ours is the final controller. Because it passes safe actions through unchanged, the action-conditioned shield composes with whatever drives.
+
 Even the best variant still has car contacts in traffic, because opponents' future motion is predicted, not
 known. The defensible claim is "reduces violations; zero only under its model assumptions" (opponents braking no
-harder than 6 m/s^2, static world seen by the lidar or the map). Race day, seed 0: 0.10 collisions / 10 laps for
+harder than 6 m/s^2, static world seen by the lidar or the map). E34 shows where that assumption bites: of the final controller's 24 car contacts on seed 0 (50 race seeds x 2 conditions), 15 are the ego cutting back in front of a car it has just passed, which keeps its speed; for that car braking is the best case, not the worst. The shield now has an option to check both hypotheses (`opp_both`, lane N). Race day, seed 0: 0.10 collisions / 10 laps for
 ours (final) vs 7.35 without a shield; across 3 training seeds 1.63 +- 2.16 vs 4.38 +- 2.12. The shield also
 introduced a failure the proposal did not anticipate: deadlock (the car stopped and never released), fixed by the
 escape rule (E19); stops caused by the policy itself in the chicane are handled by the stall recovery (E21). The
