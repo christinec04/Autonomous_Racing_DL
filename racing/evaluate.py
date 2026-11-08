@@ -120,7 +120,11 @@ SHIELD_FOR["ppo_apf_rec_b25mu"] = dict(SHIELD_FOR["ppo_apf_rec_b25"], mu_scale=0
 # E34: opponents checked both braking and holding speed (cars just passed are the main contact risk)
 SHIELD_FOR["ppo_residual_apf_rec_ob"] = dict(SHIELD_FOR["ppo_residual_apf_rec"], opp_both=True)
 SHIELD_FOR["ppo_apf_rec_ob"] = dict(SHIELD_FOR["ppo_apf_rec"], opp_both=True)
-RECOVER = {"ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
+# hold-speed hypothesis only for cars more than 0.35 m behind (cut-ins), braking for cars alongside or ahead
+SHIELD_FOR["ppo_residual_apf_rec_or"] = dict(SHIELD_FOR["ppo_residual_apf_rec_ob"], opp_rear=0.35)
+# both hypotheses, but fall back to braking-only when nothing is safe under both
+SHIELD_FOR["ppo_residual_apf_rec_ox"] = dict(SHIELD_FOR["ppo_residual_apf_rec_ob"], opp_relax=True)
+RECOVER = {"ppo_residual_apf_rec_ox", "ppo_residual_apf_rec_or", "ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
            "ppo_apf_rec_b25mu"}
 
 

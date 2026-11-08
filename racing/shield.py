@@ -79,6 +79,13 @@ class ShieldConfig:
     # E34: braking is the worst case only for a car ahead; for a car just passed it is holding speed. If set, check
     # both opponent hypotheses (brake at opp_brake, keep speed) and keep the lower clearance.
     opp_both: bool = False
+    # if set, the hold-speed hypothesis only applies to opponents more than this far behind the ego's centre along its
+    # heading [m] (cars just passed); a car alongside keeps the braking hypothesis (E34: applying both to it made
+    # the fallback steer the ego into the wall)
+    opp_rear: float = -1.0
+    # with opp_both: if no action (blend or fallback) is safe under both hypotheses, decide as the original shield
+    # (braking hypothesis only) instead of trading a real wall for a hypothetical car (E34)
+    opp_relax: bool = False
 
 
 def available_decel(cfg: ShieldConfig, v: float, yaw_rate: float) -> float:
@@ -194,15 +201,20 @@ class APFShield:
         fixed = cfg.a_brake_fixed if cfg.reach == "fixed" else 0.0
         self._lane = (np.ascontiguousarray(lane_xy, dtype=np.float64), la)
         self._now = (np.ascontiguousarray(pts, dtype=np.float64), opp)
-        run = lambda ob: rollout_clearance(
+        run = lambda ob, op: rollout_clearance(
             np.ascontiguousarray(cands, dtype=np.float64), np.asarray(x7, np.float64), buf, self.p,
             self.sat, self.tcs, 0.95, fixed, np.ascontiguousarray(pts, dtype=np.float64),
-            np.ascontiguousarray(lane_xy, dtype=np.float64), la, opp, ob,
+            np.ascontiguousarray(lane_xy, dtype=np.float64), la, np.ascontiguousarray(op, dtype=np.float64), ob,
             int(round(cfg.commit_time / 0.01)), int(cfg.max_pred_time / 0.01), 0.01, 2,
             CIRC_OFF, CIRC_R, WB, cfg.beta_max)
-        c = run(cfg.opp_brake)
-        if cfg.opp_both and len(opp):
-            c = np.minimum(c, run(0.0))
+        c = run(cfg.opp_brake, opp)
+        if cfg.opp_both and len(opp) and not getattr(self, '_single', False):
+            op = opp
+            if cfg.opp_rear >= 0:
+                xr = (opp[:, 0] - x0) * np.cos(yaw0) + (opp[:, 1] - y0) * np.sin(yaw0)
+                op = opp[xr < -cfg.opp_rear]
+            if len(op):
+                c = np.minimum(c, run(0.0, op))
         return c
 
     # ------------------------------------------------------------------- main
@@ -262,6 +274,16 @@ class APFShield:
             return cands[i], float(lams[i]), {"rho": rho, "fallback": False, "c_pred": float(cl[i])}
         if cfg.mode == "conditioned":
             return a_corr, 1.0, {"rho": rho, "fallback": False, "c_pred": float(cl[-1])}
+
+        if cfg.opp_both and cfg.opp_relax and not getattr(self, '_single', False):
+            fb0 = np.stack([np.array([np.nan, a_corr[0], -S_MAX, -S_MAX / 2, 0.0, S_MAX / 2, S_MAX, steer]),
+                            np.zeros(8)], 1)
+            if pc(fb0).max() < thr:  # nothing is safe under both hypotheses: decide with the braking one only
+                self._single = True
+                try:
+                    return self(a_rl, x7, steer_buf, scan, opps_ego, opps_world)
+                finally:
+                    self._single = False
 
         # fallback: replace the action. First candidate (NaN steer) is the backup
         # manoeuvre itself (brake + hold lane), which keeps the safety check
