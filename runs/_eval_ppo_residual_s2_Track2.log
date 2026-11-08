@@ -1,0 +1,10 @@
+10/40 races
+20/40 races
+30/40 races
+40/40 races
+
+=== nominal ===
+ppo_residual@s2 finished 10/20 (stuck 0)  lap 30.36 (best 28.84)  coll/10laps 1.36 (wall 6, car 4)  passes/race 3.00 ot 60/69  shield 0.00  grip>90% 0.076 (>100% 0.000)  slip>15 0.014
+
+=== randomized ===
+ppo_residual@s2 finished 14/20 (stuck 0)  lap 29.98 (best 28.48)  coll/10laps 0.71 (wall 5, car 1)  passes/race 3.20 ot 64/68  shield 0.00  grip>90% 0.077 (>100% 0.000)  slip>15 0.016

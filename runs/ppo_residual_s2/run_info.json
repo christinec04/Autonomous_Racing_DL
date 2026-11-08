@@ -1,0 +1,14 @@
+{
+ "git_commit": "a591db2",
+ "git_dirty": [],
+ "command": "python -m racing.train --shield off --residual --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 2 --out runs/ppo_residual_s2",
+ "status": "finished",
+ "started": "2026-11-08 11:55:03",
+ "stages_done": [
+  1,
+  2,
+  3
+ ],
+ "steps_done": 3500000,
+ "finished": "2026-11-08 17:13:05"
+}
