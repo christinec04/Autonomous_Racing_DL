@@ -247,7 +247,11 @@ consistent: over three seeds it finishes 16.0\,$\pm$\,0.8 of 20 races (16.7\,$\p
 0.47\,$\pm$\,0.10 collisions per 10 laps and 32.2\,$\pm$\,0.1\,s laps, never stuck. \textbf{We therefore adopt it as
 the final controller.} Pooled over 150 races it meets five of six targets (lap 0.76$\times$ PID+APF, 0.43
 collisions per 10 laps, 91\% overtake success, shield on 5\% of steps, 0\% slip) and misses the grip target
-(8.8\% of time above 90\% of $\mu g$).
+(8.8\% of time above 90\% of $\mu g$). The g-g diagrams (Fig.~\ref{fig:grip}) show that this target measures the
+wrong thing: plain PPO reaches 35\% with a bang-bang throttle (31\% of the race braking and 30\% accelerating
+harder than $0.5\mu g$, clipped by traction control at $\pm0.95\mu g$) but corners above $0.6\mu g$ only 5\% of the
+time, like PID+APF. The final controller corners that hard 14\% of the time and brakes hard half as often, which is
+where its 6\,s per lap come from. We will report cornering grip instead.
 
 \begin{figure}[t]
 \centering
@@ -264,6 +268,26 @@ The residual policy trained with our shield has the smallest spread; plain PPO w
 best and the worst seed.}
 \label{fig:seeds}
 \end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{grip_use.pdf}
+\caption{g-g diagrams, nominal races, all training seeds (circle: friction limit). Corner: time with lateral
+acceleration above $0.6\mu g$; brake: braking harder than $0.5\mu g$ (dotted lines).}
+\label{fig:grip}
+\end{figure}
+
+\textbf{Our shield, or any shield?} Trained with the additive Eq.~2--3 shield instead of ours, the residual
+policy fails (0--1 of 20 finished on two seeds; 2.1$\times$ the training crashes of PPO with no shield). With the
+policy output fixed at zero, PID+APF plus the additive shield already finishes 0/20: the residual base has its own
+APF, and the two fields stack. Our shield, which leaves safe actions alone, composes: PID+APF plus our shield with
+no learning finishes 20/20 without a collision (16/20 randomised) but laps at 42.5\,s. The learned residual buys
+10\,s per lap on top of it.
+
+\textbf{What still fails.} 60 of the final controller's 62 non-finishes in 300 races are contacts with opponents,
+half in the first half lap. Replaying the 24 of seed 0, 15 are the ego cutting back in front of a car it has just
+passed and 5 are side-by-side squeezes; the shield was intervening in all 24. Its prediction lets every opponent
+brake at 6\,m/s$^2$, the worst case for a car ahead but the best case for a car just passed, which keeps its speed.
 
 \textbf{Why the tyre model matters.} Trained and raced on the stock linear tyres, the same recipe laps 5\,s
 faster (29.3\,s) by cornering above 100\% of $\mu g$ for 9.7\% of the race, which a real car cannot do; with
@@ -285,10 +309,11 @@ with no shield at all (16/20 finished) but timid (0.25 passes per race); giving 
 \section{Plan to the Final Demo}
 \textbf{Remaining tasks and milestones} (final demo December 7):
 \begin{itemize}
-\item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); try to lift its grip use
-(target $\ge$\,10\% of time above 90\% of $\mu g$) and randomised collisions without losing consistency.
-\item \emph{Nov 21--27:} train the additive-shield and residual baselines on two more seeds (running) and test
-them on both tracks; ablation of the final controller trained with the additive shield.
+\item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); predict opponents both
+braking and holding speed (running) to remove the cut-in contacts; replace the grip target by cornering grip.
+Stress tests outside the training conditions (friction $\times$0.6--1.3, one or five opponents) are running.
+\item \emph{Nov 21--27:} finish the three-seed baselines (running) and test them on both tracks; let the shield's
+predictor use a friction estimate.
 \item \emph{Nov 28--Dec 3:} freeze the code; run the final evaluation (all controllers, 3 training seeds, 50 race
 seeds, nominal and randomised); telemetry, g-g diagrams and videos.
 \item \emph{Dec 4--7:} final report, presentation and live demo (recorded four-car races).

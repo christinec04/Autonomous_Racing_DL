@@ -527,7 +527,7 @@ controller in the study** (20/20 nominal, no collision), without any learning, b
 final controller. Learning buys the speed; the shield keeps it safe. Extended to the 50 race seeds in
 `results/eval_extra30_zero.json`.
 
-## E33. What still ends the final controller's races? (contact classification)
+## E34. What still ends the final controller's races? (contact classification)
 `python -m scripts.classify_contacts` replays every car-contact DNF and classifies the contact at the contact step
 (`results/contacts.md`). Final controller seed 0, 50 race seeds, nominal + randomised: 24 contacts; the final
 controller has 2 wall hits in 300 races over three seeds, all other DNFs are car contacts.
@@ -540,9 +540,9 @@ controller has 2 wall hits in 300 races over three seeds, all other DNFs are car
 
 15 of 24 contacts happen on the first lap (the field is bunched; the first tight corner at s = 39 m alone has 5).
 The shield was active in the last second before all 24, with a fallback, so it saw the danger and could not
-resolve it. Cause: the shield predicts every opponent braking at 6 m/s^2 (`opp_brake`), which is the worst case
+resolve it. Likely cause: the shield predicts every opponent braking at 6 m/s^2 (`opp_brake`), which is the worst case
 for a car ahead but the *best* case for a car just passed, which in fact holds its speed (opponents only slow
-for a car in their own lane, within 0.7 m). E34 tests checking both hypotheses (`ShieldConfig.opp_both`).
+for a car in their own lane, within 0.7 m). Lane N races the final controller with a shield that checks both hypotheses (`ShieldConfig.opp_both`, below).
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
