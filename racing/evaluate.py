@@ -117,7 +117,10 @@ SHIELD_FOR["ppo_apf_rec_b25"] = dict(SHIELD_FOR["ppo_apf_rec_m2"], beta_max=0.25
 SHIELD_FOR["ppo_apf_rec_b18"] = dict(SHIELD_FOR["ppo_apf_rec_m2"], beta_max=0.18)
 # robust: predictor assumes the lowest friction of the randomisation range
 SHIELD_FOR["ppo_apf_rec_b25mu"] = dict(SHIELD_FOR["ppo_apf_rec_b25"], mu_scale=0.85)
-RECOVER = {"ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
+# E34: opponents checked both braking and holding speed (cars just passed are the main contact risk)
+SHIELD_FOR["ppo_residual_apf_rec_ob"] = dict(SHIELD_FOR["ppo_residual_apf_rec"], opp_both=True)
+SHIELD_FOR["ppo_apf_rec_ob"] = dict(SHIELD_FOR["ppo_apf_rec"], opp_both=True)
+RECOVER = {"ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
            "ppo_apf_rec_b25mu"}
 
 

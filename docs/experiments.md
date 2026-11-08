@@ -481,9 +481,68 @@ with the seed-0 recipe and races each on Singapore and Track2 (`results/eval_<ru
 |---|---|---|---|---|---|
 | seed 0 | 18 / 16 | 47.6 s | 0.85 | 18 / 19 | 45.9 s |
 | seed 1 | 13 / 15 | 50.4 s | 0.00 | 10 / 13 | 46.7 s |
+| seed 2 | 12 / 12 | 50.2 s | 0.10 | (running) | |
 
 Seed 1 confirms the timid style the proposal feedback predicted for an always-on APF (no passes at all in 20
-races), and it is less safe than seed 0 (0.92 collisions / 10 laps). Seeds 2 and the residual baseline pending.
+races), and it is less safe than seed 0 (0.92 collisions / 10 laps). Seed 2 is the same: 0.10 passes per race,
+1.06 collisions / 10 laps, 50 s laps. Over three seeds the additive shield gives 14.3 of 20 finished, slower than
+PID+APF (42.8 s) on every seed.
+
+| Residual PPO, no shield (ResRace-style) | Singapore finished nom / rand | lap | collisions / 10 laps | passes / race | Track2 finished nom / rand | Track2 lap |
+|---|---|---|---|---|---|---|
+| seed 0 | 10 / 8 | 30.4 s | 1.60 | 2.20 | - | - |
+| seed 1 | 7 / 5 | 30.3 s | 1.89 | 2.15 | 11 / 7 | 29.3 s |
+| seed 2 | (running) | | | | | |
+
+The residual baseline is the fastest recipe (30.3 s, about 2 s faster than the residual trained with our shield)
+but crashes into opponents: 11 of seed 1's 13 DNFs are car contacts. Training with our shield costs about 2 s per
+lap and doubles the finish rate (E29: 16.0 of 20 per seed).
+
+## E32. Does the residual policy need *our* shield, or would any shield do?
+`scripts/queue_lane_l.sh`: the E29 recipe (residual, scale 0.3, v2 simulator) trained with the proposal's additive
+Eq. 2/3 shield instead of ours, seeds 0-1, raced with the same shield (`results/eval_ppo_residual_additive_s*.json`).
+
+| residual policy trained and raced with | finished nom / rand | lap | collisions / 10 laps | shield on | crashes in training |
+|---|---|---|---|---|---|
+| our shield (E29, 3 seeds) | 16.0 / 16.7 of 20 | 32.2 s | 0.47 | 5% | 81-133 |
+| additive Eq. 2/3 shield, seed 0 | 0 / 0 | 37.9 s | 9.07 | 71% | 5717 |
+| additive Eq. 2/3 shield, seed 1 | 1 / 0 | 36.8 s | 7.44 | 68% | 4845 |
+
+It fails completely: training crashes twice as often as PPO with no shield at all (2295-2769 episodes), and no race is finished.
+**Control with no learning** (`results/eval_zero_residual.json`, residual output fixed at 0, `--models X=zero`):
+
+| base controller (PID + tuned APF) with | finished nom / rand | lap | collisions / 10 laps | passes / race |
+|---|---|---|---|---|
+| nothing (= PID+APF) | 10 / 11 | 43.3 s | 1.50 | 1.20 |
+| + additive Eq. 2/3 shield | **0 / 0** | - | 68.4 (all walls) | 0.05 |
+| + our shield + stall recovery | **20 / 16** | 42.5 s | **0.00** / 0.47 | 2.10 |
+
+So the failure is in the composition, not the learning: the residual base already contains a tuned APF
+(k_steer 0.3) and the additive shield adds a second, untuned one (k_steer 2.0) on top. The two fields push the car
+into oscillation and slides (22% of time above 15 deg slip), and the learned residual (at most 0.3 of the action
+range) cannot cancel them. Our shield leaves a safe action alone, so it composes with any controller.
+
+The second row is also a result in its own right: **our shield alone turns the classical PID+APF into the safest
+controller in the study** (20/20 nominal, no collision), without any learning, but it laps 10 s slower than the
+final controller. Learning buys the speed; the shield keeps it safe. Extended to the 50 race seeds in
+`results/eval_extra30_zero.json`.
+
+## E33. What still ends the final controller's races? (contact classification)
+`python -m scripts.classify_contacts` replays every car-contact DNF and classifies the contact at the contact step
+(`results/contacts.md`). Final controller seed 0, 50 race seeds, nominal + randomised: 24 contacts; the final
+controller has 2 wall hits in 300 races over three seeds, all other DNFs are car contacts.
+
+| class | count | meaning |
+|---|---|---|
+| ego just ahead (~0.5 m) | 15 | cutting back in front of the car it just passed (ego still faster in 12 of 15) |
+| side by side | 5 | squeezed: opponents follow the centreline and never yield sideways |
+| rear-end | 4 | ego closing on a car ahead |
+
+15 of 24 contacts happen on the first lap (the field is bunched; the first tight corner at s = 39 m alone has 5).
+The shield was active in the last second before all 24, with a fallback, so it saw the danger and could not
+resolve it. Cause: the shield predicts every opponent braking at 6 m/s^2 (`opp_brake`), which is the worst case
+for a car ahead but the *best* case for a car just passed, which in fact holds its speed (opponents only slow
+for a car in their own lane, within 0.7 m). E34 tests checking both hypotheses (`ShieldConfig.opp_both`).
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

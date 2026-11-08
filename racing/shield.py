@@ -76,6 +76,9 @@ class ShieldConfig:
     escape_v: float = 0.5  # escape only applies below this speed [m/s] (deadlock recovery, not normal driving)
     allow_reverse: bool = False  # pass negative target speeds through (stall recovery reverses; the policy cannot)
     opp_brake: float = 6.0  # worst-case opponent deceleration assumed in prediction [m/s^2]
+    # E34: braking is the worst case only for a car ahead; for a car just passed it is holding speed. If set, check
+    # both opponent hypotheses (brake at opp_brake, keep speed) and keep the lower clearance.
+    opp_both: bool = False
 
 
 def available_decel(cfg: ShieldConfig, v: float, yaw_rate: float) -> float:
@@ -191,12 +194,16 @@ class APFShield:
         fixed = cfg.a_brake_fixed if cfg.reach == "fixed" else 0.0
         self._lane = (np.ascontiguousarray(lane_xy, dtype=np.float64), la)
         self._now = (np.ascontiguousarray(pts, dtype=np.float64), opp)
-        return rollout_clearance(
+        run = lambda ob: rollout_clearance(
             np.ascontiguousarray(cands, dtype=np.float64), np.asarray(x7, np.float64), buf, self.p,
             self.sat, self.tcs, 0.95, fixed, np.ascontiguousarray(pts, dtype=np.float64),
-            np.ascontiguousarray(lane_xy, dtype=np.float64), la, opp, cfg.opp_brake,
+            np.ascontiguousarray(lane_xy, dtype=np.float64), la, opp, ob,
             int(round(cfg.commit_time / 0.01)), int(cfg.max_pred_time / 0.01), 0.01, 2,
             CIRC_OFF, CIRC_R, WB, cfg.beta_max)
+        c = run(cfg.opp_brake)
+        if cfg.opp_both and len(opp):
+            c = np.minimum(c, run(0.0))
+        return c
 
     # ------------------------------------------------------------------- main
     def __call__(self, a_rl, x7, steer_buf, scan, opps_ego, opps_world):
