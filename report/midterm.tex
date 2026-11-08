@@ -296,7 +296,8 @@ but adds 15 wall hits, where no action is safe under both and the fallback steer
 
 \textbf{Outside the training friction.} At friction $\times$0.8 (trained on 0.85--1.15) the final controller
 finishes 52\% of races, PID+APF 50\%, PPO + shield 85\%. With the shield told the true friction it finishes 83\%
-($p = 4\cdot10^{-4}$) and PPO is unchanged. The policy nearest the limit relies most on the shield's model.
+($p = 4\cdot10^{-4}$). At $\times$0.7 the true friction lifts it from 27\% to 67\% and PPO from 35\% to 90\%, so
+the shield's friction model is the weak point.
 
 \textbf{Why the tyre model matters.} On stock tyres the same recipe laps 5\,s faster by cornering above the
 friction limit 9.7\% of the time; with ours, 0\%.

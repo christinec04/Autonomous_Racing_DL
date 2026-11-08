@@ -549,15 +549,18 @@ know about.
 **Is it the shield's friction model?** The shield predicts with the nominal friction. Lane O
 (`scripts/queue_lane_o.sh`, `--shield_mu`) tells the shield's predictor the true friction and reruns x0.8:
 
-| x0.8 | shield assumes nominal friction | shield told the true friction |
-|---|---|---|
-| final controller, 3 seeds | 31/60 (13, 13, 5) | **50/60** (17, 19, 14) |
-| PPO + our shield, seed 0 | 17/20 | 16/20 |
+| races finished | shield assumes nominal friction | shield told the true friction | Fisher p |
+|---|---|---|---|
+| x0.8, final controller, 3 seeds | 31/60 (13, 13, 5) | **50/60** (17, 19, 14) | 4e-4 |
+| x0.8, PPO + our shield, seed 0 | 17/20 | 16/20 | 1.0 |
+| x0.7, final controller, 3 seeds | 16/60 (5, 11, 0) | **40/60** (14, 19, 7) | 2e-5 |
+| x0.7, PPO + our shield, seed 0 | 7/20 | **18/20** | 8e-4 |
 
-Fisher p = 4e-4 for the final controller, no change for plain PPO. The residual policy drives closer to the limit
-and relies on the shield to catch it, so it needs the shield's model to be right; plain PPO keeps its own margin.
-A friction estimate (for example from measured slip) would make the shield robust to this. x0.7 with the true
-friction was lost in the shutdown of Nov 8 (PROGRESS 38) and is rerunning (lane R).
+The residual policy drives closer to the limit and relies on the shield to catch it, so it needs the shield's
+model to be right already at x0.8. Plain PPO keeps its own margin, which is enough at x0.8 but not at x0.7. With
+the true friction, slip above 15 deg at x0.7 falls from 9-14% to 1-2% for seeds 0-1. Seed 2 still slides (16%)
+and finishes 7/20, so part of its drop is the policy itself. This motivates E35, where the shield estimates the
+friction instead of being told.
 
 
 ## E34. What still ends the final controller's races? (contact classification)

@@ -17,4 +17,5 @@ Shield predictor told the true friction (oracle, `--shield_mu`):
 
 | friction scale | final, nominal model | final, oracle | PPO + shield, nominal model | PPO + shield, oracle |
 |---|---|---|---|---|
+| x0.7 | 27% | 67% | 35% | 90% |
 | x0.8 | 52% | 83% | 85% | 80% |
