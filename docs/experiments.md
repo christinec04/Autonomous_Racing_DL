@@ -593,6 +593,19 @@ safe under both hypotheses, and the fallback then steers away from the car into 
 (controller `ppo_residual_apf_rec_ox`) falls back to the original braking-only check in that case. It is queued in
 lane P (via lane R after the shutdown, PROGRESS 38).
 
+## E35. Can the shield estimate the friction itself? (lane S, running)
+E33 showed the final controller needs the shield to know the friction. `ShieldConfig.mu_est` (controller
+`ppo_residual_apf_rec_mu`) starts from nominal friction and updates an estimate from the car's own state each step.
+When a tyre's slip angle passes the point where its force saturates (|alpha| C >= 0.95 of the friction circle left
+after braking), the car is at the grip limit and the measured acceleration / g is the friction. If only one axle
+saturates this reads low, which is the safe side. Below the limit, acceleration above the estimate slowly raises it.
+The estimate sets both the predictor's friction and the APF reach, and each race records it once a second.
+
+First check, one lap each, seed 0 policy: at x0.8 the estimate falls from 1.0 to 0.70-0.81 within the lap and all 3
+races finish. At x1.2 it stays at 0.9-1.1, since the car never reaches the higher limit, so the shield does not
+become overconfident. Lane S (`scripts/queue_lane_s.sh`) races all three seeds at x0.8 and x0.7 and on the main
+protocol, which checks that the estimate costs nothing in normal conditions.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). `batch9` renders clip 12, slip-penalty PPO + our shield on

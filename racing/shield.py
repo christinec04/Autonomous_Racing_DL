@@ -86,12 +86,18 @@ class ShieldConfig:
     # with opp_both: if no action (blend or fallback) is safe under both hypotheses, decide as the original shield
     # (braking hypothesis only) instead of trading a real wall for a hypothetical car (E34)
     opp_relax: bool = False
+    # E35: estimate the friction online instead of assuming nominal. When a tyre's slip angle passes the point where
+    # its force saturates, the car is at the grip limit and the measured acceleration / g is the friction (an
+    # underestimate if only one axle saturates). Below the limit, acceleration above the estimate proves more grip.
+    mu_est: bool = False
+    mu_est_rate: float = 0.5  # weight of a new reading at the limit
+    mu_est_rise: float = 0.05  # weight of a below-limit reading that proves more grip
 
 
-def available_decel(cfg: ShieldConfig, v: float, yaw_rate: float) -> float:
+def available_decel(cfg: ShieldConfig, v: float, yaw_rate: float, mu: float | None = None) -> float:
     if cfg.reach == "fixed":
         return cfg.a_brake_fixed
-    mg = cfg.mu * G
+    mg = (cfg.mu if mu is None else mu) * G
     a_lat = abs(v * yaw_rate)
     return float(np.clip(np.sqrt(max(mg * mg - a_lat * a_lat, 0.0)), 1.0, cfg.a_max))
 
@@ -115,6 +121,37 @@ class APFShield:
     def reset(self):
         self.corr = np.zeros(2)
         self.last = {}
+        self.mu_hat = self.cfg.mu_scale  # friction estimate, as a fraction of nominal (E35)
+        self._prev = None
+        self._set_mu(self.mu_hat)
+
+    def _set_mu(self, scale):
+        self.p[0] = P["mu"] * scale
+        self.mu_now = self.cfg.mu / self.cfg.mu_scale * scale if self.cfg.mu_scale else self.cfg.mu
+
+    def update_mu(self, x7):
+        """One reading of the online friction estimate (ShieldConfig.mu_est), from consecutive states."""
+        cfg = self.cfg
+        prev, self._prev = self._prev, np.array(x7, float)
+        v = x7[3]
+        if prev is None or v < 2.0 or prev[3] < 2.0:
+            return
+        r, b, d = x7[5], x7[6], x7[2]
+        ax = (v - prev[3]) / self.dt
+        ay = v * (r + np.arctan2(np.sin(b - prev[6]), np.cos(b - prev[6])) / self.dt)
+        m = float(np.hypot(ax, ay)) / (P["mu"] * G)  # measured friction use, as a fraction of nominal mu
+        if m > 1.6:  # contact or a spin: no reading
+            return
+        alpha_f = d - b - P["lf"] * r / v
+        alpha_r = -b + P["lr"] * r / v
+        room = np.sqrt(max(1.0 - (ax / (self.mu_hat * P["mu"] * G)) ** 2, 0.0))
+        at_limit = max(abs(alpha_f) * P["C_Sf"], abs(alpha_r) * P["C_Sr"]) >= 0.95 * room
+        if at_limit:
+            self.mu_hat += cfg.mu_est_rate * (m - self.mu_hat)
+        elif m > self.mu_hat:
+            self.mu_hat += cfg.mu_est_rise * (m - self.mu_hat)
+        self.mu_hat = float(np.clip(self.mu_hat, 0.5, 1.3))
+        self._set_mu(self.mu_hat)
 
     # ------------------------------------------------------------------ APF field
     def field(self, scan, v, yaw_rate, opps):
@@ -123,7 +160,7 @@ class APFShield:
         opps: list of dicts with ego-frame 'pos', 'vel' (relative), 'yaw' (relative heading).
         """
         cfg = self.cfg
-        ab = available_decel(cfg, v, yaw_rate)
+        ab = available_decel(cfg, v, yaw_rate, self.mu_now)
         c = scan - BODY
         v_close = np.maximum(v * COS_B, 0.0)
         d0 = cfg.d_min + v_close ** 2 / (2 * ab)
@@ -222,6 +259,8 @@ class APFShield:
         """x7 = F1TENTH ST state (x, y, delta, v, yaw, yaw_rate, beta). Returns (a_final, lambda, info)."""
         cfg = self.cfg
         x, y, steer, v, yaw, yaw_rate, beta = x7
+        if cfg.mu_est and not getattr(self, '_single', False):
+            self.update_mu(x7)
         a_rl = self.clip_action(np.asarray(a_rl, float), v_lo=-1.0 if cfg.allow_reverse else 0.0)
         if cfg.mode == "off":
             return a_rl, 0.0, {"rho": 0.0, "fallback": False}

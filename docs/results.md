@@ -57,6 +57,8 @@ Restarted after the laptop shut down on Nov 8 (PROGRESS 38).
 
 - Lane R (`scripts/queue_lane_r.sh`): x0.7 with the true friction (E33), the relaxed two-hypothesis check
   (`opp_relax`, E34, 3 seeds x 50 races), then the remaining stress tests (5 and 1 opponents, x0.6, x1.3).
+- Lane S (`scripts/queue_lane_s.sh`, E35): the shield estimates the friction online, final controller at x0.8,
+  x0.7 and on the main protocol.
 - Lane Q (`scripts/queue_lane_q.sh`): residual baseline seed 2, trained from scratch, raced on Singapore and Track2.
 
 Status: [RUNS.md](../RUNS.md).

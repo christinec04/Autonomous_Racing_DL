@@ -126,7 +126,10 @@ SHIELD_FOR["ppo_apf_rec_ob"] = dict(SHIELD_FOR["ppo_apf_rec"], opp_both=True)
 SHIELD_FOR["ppo_residual_apf_rec_or"] = dict(SHIELD_FOR["ppo_residual_apf_rec_ob"], opp_rear=0.35)
 # both hypotheses, but fall back to braking-only when nothing is safe under both
 SHIELD_FOR["ppo_residual_apf_rec_ox"] = dict(SHIELD_FOR["ppo_residual_apf_rec_ob"], opp_relax=True)
-RECOVER = {"ppo_residual_apf_rec_ox", "ppo_residual_apf_rec_or", "ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
+# E35: the shield estimates the friction online (ShieldConfig.mu_est)
+SHIELD_FOR["ppo_residual_apf_rec_mu"] = dict(SHIELD_FOR["ppo_residual_apf_rec"], mu_est=True)
+SHIELD_FOR["ppo_apf_rec_mu"] = dict(SHIELD_FOR["ppo_apf_rec"], mu_est=True)
+RECOVER = {"ppo_residual_apf_rec_mu", "ppo_apf_rec_mu", "ppo_residual_apf_rec_ox", "ppo_residual_apf_rec_or", "ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
            "ppo_apf_rec_b25mu"}
 
 
@@ -178,7 +181,7 @@ def run_race(job):
     act = make_controller(ctrl, env, model_path, model)
     L = env.cl.length
     ot = OvertakeTracker(3)
-    lap_marks, lams, glat, glon, slip = [], [], [], [], []
+    lap_marks, lams, glat, glon, slip, mu_tr = [], [], [], [], [], []
     e0 = env._states()[0]
     prev_vel = np.array([e0[3] * np.cos(e0[4] + e0[6]), e0[3] * np.sin(e0[4] + e0[6])])
     wall = car = False
@@ -195,6 +198,8 @@ def run_race(job):
         glon.append(float(acc @ [np.cos(st[4]), np.sin(st[4])]))
         glat.append(float(acc @ [-np.sin(st[4]), np.cos(st[4])]))
         slip.append(abs(st[6]))
+        if cfg.shield.mu_est and len(lams) % 25 == 1:
+            mu_tr.append(round(env.shield.mu_hat, 3))
         ot.update(info["t"], info["progress"], info["lat"], v * np.cos(info["hdg_err"]), info["opp_prog"],
                   info["opp_lat"], info["opp_v"], info["car"], L)
         if info["progress"] >= L * (len(lap_marks) + 1):
@@ -216,7 +221,8 @@ def run_race(job):
                 grip_above_90=float(np.mean(comb > 0.9)), grip_above_100=float(np.mean(comb > 1.0)),
                 slip_above_15=float(np.mean(np.array(slip) > np.radians(15))),
                 n_recover=int(info.get("n_recover", 0)),
-                gg=[list(np.round(glat[::5], 2)), list(np.round(glon[::5], 2))])
+                gg=[list(np.round(glat[::5], 2)), list(np.round(glon[::5], 2))],
+                **(dict(mu_true=float(env.mu / ShieldConfig().mu), mu_hat=mu_tr) if cfg.shield.mu_est else {}))
 
 
 def summarize(res):
