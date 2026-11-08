@@ -291,6 +291,12 @@ no learning finishes 20/20 without a collision (16/20 randomised) but laps at 42
 half in the first half lap. Of seed 0's 24, 15 are the ego cutting back in front of a car it has just passed
 and 5 side-by-side squeezes; the shield was intervening in all 24. Its prediction lets every opponent
 brake at 6\,m/s$^2$, the worst case for a car ahead but the best case for a car just passed, which keeps its speed.
+Checking both (brake or hold speed) cuts car contacts from 60 to 25 in 300 races ($p = 6\cdot10^{-5}$)
+but adds 15 wall hits, where no action is safe under both and the fallback steers into the wall.
+
+\textbf{Outside the training friction.} At friction $\times$0.8 (trained on 0.85--1.15) the final controller
+finishes 52\% of races, PID+APF 50\%, PPO + shield 85\%. With the shield told the true friction it finishes 83\%
+($p = 4\cdot10^{-4}$) and PPO is unchanged. The policy nearest the limit relies most on the shield's model.
 
 \textbf{Why the tyre model matters.} On stock tyres the same recipe laps 5\,s faster by cornering above the
 friction limit 9.7\% of the time; with ours, 0\%.
@@ -300,20 +306,18 @@ sweeper and a 2.5\,m hairpin; 20 races), the shielded learned policies still fin
 (15/20, 39.3\,s): the final residual controller finishes 18.3 of 20 over three seeds (16.3 randomised) in
 31.2\,s with 3.8 passes per race. Plain PPO + shield is less robust there: 16.7 of 20 (14.0 randomised, one seed
 5/20) in 37.5\,s, and one seed only follows the opponents (one pass in 20 races). PPO without a shield finishes
-1/20. Racing the final controller without the stall recovery changes little (one fewer randomised finish in 20).
+1/20.
 
-\textbf{Negative results.} Lowering the intervention penalty to $w_3 = 0.02$ made laps faster but the agent let
-the shield brake for it (35\% of steps) and deadlocked; fine-tuning on the chicane made a policy slide
-(19/20 $\to$ 8/20 finished); shield dropout (shield on in 100/50/25\% of episodes) produced a policy that is safe
-with no shield at all (16/20 finished) but timid (0.25 passes per race); giving the residual policy more authority
-(scale 0.5 instead of 0.3) helped one seed (19/20) and let the other learn to slide again (14/20, 11\% of the time above 15$^\circ$ slip).
+\textbf{Negative results.} A lower intervention penalty ($w_3 = 0.02$) let the agent hand braking to the
+shield (35\% of steps) and deadlock. Shield dropout gave a policy that is safe with no shield (16/20) but timid
+(0.25 passes per race). A wider residual (scale 0.5) helped one seed (19/20) and let the other slide (14/20).
 
 \section{Plan to the Final Demo}
 \textbf{Remaining tasks and milestones} (final demo December 7):
 \begin{itemize}
-\item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); predict opponents both
-braking and holding speed (running) to remove the cut-in contacts; replace the grip target by cornering grip.
-Stress tests outside the training conditions (friction $\times$0.6--1.3, one or five opponents) are running.
+\item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); keep the two-hypothesis
+opponent check without its wall hits (a braking-only fallback is running); replace the grip target by cornering
+grip. The remaining stress tests (one or five opponents, friction $\times$0.6 and $\times$1.3) are running.
 \item \emph{Nov 21--27:} finish the three-seed baselines (running) and test them on both tracks; let the shield's
 predictor use a friction estimate.
 \item \emph{Nov 28--Dec 3:} freeze the code; run the final evaluation (all controllers, 3 training seeds, 50 race
@@ -322,10 +326,9 @@ seeds, nominal and randomised); telemetry, g-g diagrams and videos.
 \end{itemize}
 \textbf{Evaluation plan.} Controllers: Pure Pursuit, PID+APF, unshielded PPO, PPO with the additive Eq.~2--3
 shield, ResRace-style residual PPO (with and without our shield) and ours. Scenarios: five-lap four-car races on
-50 shared seeds of start gaps and opponent speeds, once nominal and once with randomised friction and lidar noise;
-three training seeds per learned controller; stress tests outside the training conditions. Metrics: the six
-targets above (cornering grip in place of time above 90\% of $\mu g$), races finished, crashes during training and
-steps to the first fast lap with the shield removed. Tests: Fisher's exact test on finish rates, Mann--Whitney U
+50 shared seeds, nominal and randomised, three training seeds per learned controller, and the stress tests.
+Metrics: the six targets (cornering grip in place of time above 90\% of $\mu g$), races finished, crashes in
+training and steps to the first fast lap. Tests: Fisher's exact test on finish rates, Mann--Whitney U
 on per-race values.
 
 \textbf{Team roles.} \todo{Team: fill in who owns which part (e.g., simulator and track, shield, RL training,

@@ -16,7 +16,9 @@ import argparse
 import dataclasses
 import json
 import pathlib
-from multiprocessing import Pool
+import sys
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures.process import BrokenProcessPool
 
 import numpy as np
 
@@ -277,6 +279,29 @@ def check_targets(summary, ours="ppo_apf", ref="pid_apf"):
     return out
 
 
+def run_all(jobs, procs, tries=3):
+    """Race all jobs in parallel, results in job order. multiprocessing.Pool waits forever when a worker is killed
+    (e.g. in a low-memory episode, PROGRESS.md problem 38). This pool fails fast instead and the missing races rerun."""
+    res = [None] * len(jobs)
+    for _ in range(tries):
+        todo = [i for i, r in enumerate(res) if r is None]
+        if not todo:
+            break
+        try:
+            with ProcessPoolExecutor(procs) as ex:
+                futs = {ex.submit(run_race, jobs[i]): i for i in todo}
+                for f in as_completed(futs):
+                    res[futs[f]] = f.result()
+                    done = sum(r is not None for r in res)
+                    if done % 10 == 0 or done == len(jobs):
+                        print(f"{done}/{len(jobs)} races", file=sys.stderr, flush=True)
+        except BrokenProcessPool:
+            print(f"a worker died, rerunning {sum(r is None for r in res)} races", file=sys.stderr, flush=True)
+    if any(r is None for r in res):
+        raise RuntimeError("races still missing after retries")
+    return res
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--controllers", nargs="+", default=["pure_pursuit", "pid_apf"])
@@ -302,8 +327,7 @@ if __name__ == "__main__":
             for seed in range(args.first, args.first + args.races):
                 jobs.append((base if base in SHIELD_FOR else c, models.get(c), 10_000 + seed, randomize, args.laps, None, c,
                              args.tire, args.map, extra))
-    with Pool(args.procs) as p:
-        res = p.map(run_race, jobs, chunksize=1)
+    res = run_all(jobs, args.procs)
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     report = {}
     for randomize in conds:

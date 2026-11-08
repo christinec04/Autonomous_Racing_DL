@@ -481,7 +481,7 @@ with the seed-0 recipe and races each on Singapore and Track2 (`results/eval_<ru
 |---|---|---|---|---|---|
 | seed 0 | 18 / 16 | 47.6 s | 0.85 | 18 / 19 | 45.9 s |
 | seed 1 | 13 / 15 | 50.4 s | 0.00 | 10 / 13 | 46.7 s |
-| seed 2 | 12 / 12 | 50.2 s | 0.10 | (running) | |
+| seed 2 | 12 / 12 | 50.2 s | 0.10 | 14 / 14 | 45.7 s |
 
 Seed 1 confirms the timid style the proposal feedback predicted for an always-on APF (no passes at all in 20
 races), and it is less safe than seed 0 (0.92 collisions / 10 laps). Seed 2 is the same: 0.10 passes per race,
@@ -524,8 +524,41 @@ range) cannot cancel them. Our shield leaves a safe action alone, so it composes
 
 The second row is also a result in its own right: **our shield alone turns the classical PID+APF into the safest
 controller in the study** (20/20 nominal, no collision), without any learning, but it laps 10 s slower than the
-final controller. Learning buys the speed; the shield keeps it safe. Extended to the 50 race seeds in
-`results/eval_extra30_zero.json`.
+final controller. Learning buys the speed; the shield keeps it safe. Extended to the 50 race seeds
+(`results/eval_extra30_zero.json`), the base with our shield finishes 47/50 nominal and 36/50 randomised. That is
+more nominal finishes than any single seed of the final controller (39-42 of 50) at 42 s instead of 32 s per lap.
+In randomised races the final controller is level with it (37-40 of 50).
+
+## E33. Stress tests outside the training conditions (lanes M and O)
+`scripts/queue_lane_m.sh` races six controllers on the 20 race seeds at one fixed friction scale (training
+randomised x0.85-1.15), no lidar noise. `python -m scripts.stress_summary` writes `results/stress.md` and
+`report/figs/stress.pdf`. Races finished:
+
+| friction scale | final controller (3 seeds) | PPO + our shield, seed 0 | PID + APF | PPO + additive APF |
+|---|---|---|---|---|
+| x0.7 | 27% (25, 55, 0) | 35% | 30% | 5% |
+| x0.8 | 52% (65, 65, 25) | 85% | 50% | 15% |
+| x1.0 | 80% (75, 80, 85) | 95% | 60% | 90% |
+| x1.2 | 83% (95, 90, 65) | 80% | 70% | 75% |
+
+Below the training range the final controller loses its lead and drops to PID+APF's level, while plain PPO with
+the shield holds up better at x0.8. More grip than in training costs nobody much. At x0.8 the final controller
+spends 4-8% of the race above 15 deg slip (0-2% at nominal friction), so it is driving past a limit it does not
+know about.
+
+**Is it the shield's friction model?** The shield predicts with the nominal friction. Lane O
+(`scripts/queue_lane_o.sh`, `--shield_mu`) tells the shield's predictor the true friction and reruns x0.8:
+
+| x0.8 | shield assumes nominal friction | shield told the true friction |
+|---|---|---|
+| final controller, 3 seeds | 31/60 (13, 13, 5) | **50/60** (17, 19, 14) |
+| PPO + our shield, seed 0 | 17/20 | 16/20 |
+
+Fisher p = 4e-4 for the final controller, no change for plain PPO. The residual policy drives closer to the limit
+and relies on the shield to catch it, so it needs the shield's model to be right; plain PPO keeps its own margin.
+A friction estimate (for example from measured slip) would make the shield robust to this. x0.7 with the true
+friction was lost in the shutdown of Nov 8 (PROGRESS 38) and is rerunning (lane R).
+
 
 ## E34. What still ends the final controller's races? (contact classification)
 `python -m scripts.classify_contacts` replays every car-contact DNF and classifies the contact at the contact step
@@ -543,6 +576,22 @@ The shield was active in the last second before all 24, with a fallback, so it s
 resolve it. Likely cause: the shield predicts every opponent braking at 6 m/s^2 (`opp_brake`), which is the worst case
 for a car ahead but the *best* case for a car just passed, which in fact holds its speed (opponents only slow
 for a car in their own lane, within 0.7 m). Lane N races the final controller with a shield that checks both hypotheses (`ShieldConfig.opp_both`, below).
+
+**Two-hypothesis opponent check** (`ShieldConfig.opp_both`, controller `ppo_residual_apf_rec_ob`). The shield
+accepts an action only if it is safe whether each opponent brakes or holds its speed. Same three trained policies,
+same 50 race seeds (`results/eval_oppboth_s<seed>.json`):
+
+| 3 seeds x 50 races | finished nom / rand | races ended by a car | races ended by a wall | lap | passes / race |
+|---|---|---|---|---|---|
+| original shield (E29) | 122 / 116 of 150 | 60 | 2 | 32.3 s | 3.7 |
+| two-hypothesis check | **133 / 123** of 150 | **25** | 17 | 32.8 s | 4.0 |
+
+Car contacts fall by more than half (Fisher p = 6e-5) at a cost of 0.5 s per lap, and the car passes slightly more.
+Wall hits rise from 2 to 17 (p = 6e-4), 13 of them in randomised races. Finishes go up from 238 to 256 of 300
+(p = 0.07). A replay of one new wall hit (seed 10043, randomised) shows the cause. With a car alongside, sometimes no candidate action is
+safe under both hypotheses, and the fallback then steers away from the car into the wall. `opp_relax`
+(controller `ppo_residual_apf_rec_ox`) falls back to the original braking-only check in that case. It is queued in
+lane P (via lane R after the shutdown, PROGRESS 38).
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

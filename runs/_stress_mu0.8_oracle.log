@@ -1,0 +1,6 @@
+
+=== randomized ===
+ppo_apf_rec@s0 finished 16/20 (stuck 0)  lap 34.98 (best 33.36)  coll/10laps 0.45 (wall 0, car 4)  passes/race 4.00 ot 80/87  shield 0.06  grip>90% 0.252 (>100% 0.001)  slip>15 0.001
+ppo_residual_apf_rec@trained finished 17/20 (stuck 0)  lap 33.97 (best 33.32)  coll/10laps 0.32 (wall 0, car 3)  passes/race 3.40 ot 68/73  shield 0.15  grip>90% 0.259 (>100% 0.001)  slip>15 0.001
+ppo_residual_apf_rec@trained_s1 finished 19/20 (stuck 0)  lap 34.02 (best 33.32)  coll/10laps 0.10 (wall 0, car 1)  passes/race 3.85 ot 77/80  shield 0.13  grip>90% 0.198 (>100% 0.001)  slip>15 0.002
+ppo_residual_apf_rec@trained_s2 finished 14/20 (stuck 0)  lap 33.84 (best 33.24)  coll/10laps 0.70 (wall 3, car 3)  passes/race 4.00 ot 80/85  shield 0.12  grip>90% 0.220 (>100% 0.036)  slip>15 0.044

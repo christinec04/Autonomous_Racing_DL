@@ -1,0 +1,6 @@
+
+=== nominal ===
+ppo_residual_apf_rec@zero finished 27/30 (stuck 0)  lap 41.22 (best 36.12)  coll/10laps 0.21 (wall 0, car 3)  passes/race 2.00 ot 60/69  shield 0.02  grip>90% 0.018 (>100% 0.000)  slip>15 0.000
+
+=== randomized ===
+ppo_residual_apf_rec@zero finished 20/30 (stuck 2)  lap 41.92 (best 35.08)  coll/10laps 0.60 (wall 1, car 7)  passes/race 1.87 ot 56/72  shield 0.04  grip>90% 0.037 (>100% 0.017)  slip>15 0.022

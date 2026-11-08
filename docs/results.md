@@ -46,16 +46,18 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 | Shield added to a residual policy only at race time | deadlocks (4/20 finished) or slides (2/20), with or without the stall recovery | train it with the shield: done, E23 (15/20); seeds 1-2 running |
 | The shield reacts too late for a policy that drives at the limit | E24: on seed 1 the predicted clearance shrinks for 6 steps while staying above the 5 cm margin, then braking in the corner spins the car. Stricter settings lift seed 1 from 1/20 to 9-10/20 but cost seed 0 (19 -> 16/20) | a safety/performance dial; the final setup keeps the original settings |
 | 20 races cannot separate close controllers | 19/20 vs 18/20 (ours vs additive) is not significant; on 50 races ours 43/50 vs 39/50, still not significant (E25) | use the 50-race numbers for finishing rates |
-| Car contacts in traffic remain | E34 (`results/contacts.md`): 60 of the final controller's 62 DNFs in 300 races are car contacts, half in the first half lap; of seed 0's 24, 15 are cutting back in after a pass, 5 side-by-side squeezes, 4 rear-ends; the shield intervened before all of them. It predicts opponents braking at 6 m/s^2, the best case for a car just passed | check both braking and holding speed (`opp_both`, lane N, running) |
+| Car contacts in traffic remain | E34 (`results/contacts.md`): 60 of the final controller's 62 DNFs in 300 races are car contacts, half in the first half lap; of seed 0's 24, 15 are cutting back in after a pass, 5 side-by-side squeezes, 4 rear-ends; the shield intervened before all of them. It predicts opponents braking at 6 m/s^2, the best case for a car just passed | checking both braking and holding speed (`opp_both`, E34) cuts car contacts from 60 to 25 in 300 races but adds 15 wall hits; a relaxed version (`opp_relax`) is running |
+| Below the training friction the final controller loses its lead | E33: at x0.8 it finishes 52% of races (PPO + shield 85%, PID+APF 50%) and slides above 15 deg 4-8% of the time. Telling the shield the true friction lifts it to 83% (p = 4e-4) and does nothing for plain PPO, so the shield's nominal friction model is the weak point | estimate friction online for the shield's predictor |
 | Missed grip target | the final controller spends 8.8% of the race above 90% of mu g (target 10%) | the target measures throttle style, not cornering (row above); report cornering grip instead |
 | Training efficiency (steps to first clean lap) unchanged | 150-200k with or without the shield (3 seeds each); the shield's gain is in crashes during training (above) | - |
 
 ## Running now
 
-- Lane N (`scripts/queue_lane_n.sh`, E34): the final controller with the two-hypothesis opponent check, 3 seeds x 50 races.
-- Lane M (`scripts/queue_lane_m.sh`, E33): stress tests outside the training conditions, friction x0.6-1.3 and 1 or 5 opponents, 6 controllers x 20 races (`results/stress_*.json`). First result, friction x0.8: PPO + shield seed 0 17/20, final controller 13 / 13 / 5 (drives above the friction limit 3-6% of the time; the shield's model assumes nominal friction), additive-shield PPO 3/20.
-- PID+APF + our shield on the 30 extra race seeds (`results/eval_extra30_zero.json`).
-- Lane K (`scripts/queue_lane_k.sh`): residual baseline seed 2 (additive seed 2: 12/20, 50 s, 0.1 passes).
+Restarted after the laptop shut down on Nov 8 (PROGRESS 38).
+
+- Lane R (`scripts/queue_lane_r.sh`): x0.7 with the true friction (E33), the relaxed two-hypothesis check
+  (`opp_relax`, E34, 3 seeds x 50 races), then the remaining stress tests (5 and 1 opponents, x0.6, x1.3).
+- Lane Q (`scripts/queue_lane_q.sh`): residual baseline seed 2, trained from scratch, raced on Singapore and Track2.
 
 Status: [RUNS.md](../RUNS.md).
 

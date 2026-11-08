@@ -293,3 +293,10 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     Process checks were misleading: the venv `python.exe` is only a launcher, the real interpreter and its pool
     workers run as `python3.11.exe`, so filtering on `python.exe` shows an idle parent with no children. Restarted
     the evaluation by hand. When checking runs on Windows, look at `python3.11.exe` processes and their CPU time.
+38. **Two evaluations hung again and the laptop then shut down unexpectedly.** On Nov 8 the opp5 stress test (lane M)
+    and the x0.7 true-friction test (lane O) wrote nothing for two hours, and at 10:16 Windows logged an unexpected
+    shutdown (Kernel-Power 41). The baseline training ppo_residual_s2 died at 1.9M of 3.5M steps and lane P never
+    started. Cause of the hangs (also problem 37): when a `multiprocessing.Pool` worker is killed, for example in a
+    low-memory episode, `pool.map` waits forever for the lost race. `racing/evaluate.py` now uses
+    `ProcessPoolExecutor`, which raises `BrokenProcessPool` instead, reruns the missing races (up to 3 tries) and
+    prints progress every 10 races. Tested by killing a worker mid-run, all races were still saved.
