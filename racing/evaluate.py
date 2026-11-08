@@ -79,6 +79,9 @@ def make_controller(name, env, model_path=None, model=None):
     if name == "pid_apf":
         pid = PIDFollower(env.cl, env.cfg.control_dt, speed_scale=0.85, mu=env.mu)
         return lambda obs: env.to_normalized(pid.act(*_ego(env)))
+    if name.startswith("ppo") and model_path == "zero":
+        # control: residual controllers with the policy output fixed at 0 (base controller + shield only)
+        return lambda obs: np.zeros(2, np.float32)
     if name.startswith("ppo"):
         if model is None:
             from stable_baselines3 import PPO
@@ -120,7 +123,7 @@ RECOVER = {"ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec
 
 def residual_scale_for(model_path, default=0.3):
     """Residual scale a policy was trained with (from args.json next to the model), so it is raced the same way."""
-    if not model_path:
+    if not model_path or model_path == "zero":
         return default
     f = pathlib.Path(model_path).parent / "args.json"
     if f.exists():
@@ -133,21 +136,33 @@ def run_race(job):
     label = job[6] if len(job) > 6 else ctrl
     tire = job[7] if len(job) > 7 else "saturated"
     map_name = job[8] if len(job) > 8 else "Singapore"
+    extra = job[9] if len(job) > 9 else {}
+    n_opp = extra.get("n_opp", 3)
+    mu_scale = extra.get("mu_scale")
     sh = shield_override or SHIELD_FOR[ctrl]
     model = None
-    if ctrl.startswith("ppo") and model_path:
+    if ctrl.startswith("ppo") and model_path and model_path != "zero":
         from stable_baselines3 import PPO
         model = PPO.load(model_path, device="cpu")
     # policies trained with the curvature preview expect 10 extra observation values
     preview = model is not None and model.observation_space.shape[0] > 77
-    cfg = EnvConfig(curvature_preview=preview, n_opp=3, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
+    env_extra = {}
+    if mu_scale is not None:  # stress test: one fixed friction scale (may lie outside the training range), no lidar noise
+        randomize = True
+        env_extra = dict(mu_range=(mu_scale, mu_scale), lidar_noise=(0.0, 0.0))
+    cfg = EnvConfig(curvature_preview=preview, n_opp=n_opp, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
                     shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
                     residual=ctrl.startswith("ppo_residual"), tire=tire, recover=ctrl in RECOVER,
-                    map_name=map_name, residual_scale=residual_scale_for(model_path))
+                    map_name=map_name, residual_scale=residual_scale_for(model_path), **env_extra)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),
                 opp_speeds=list(rng.uniform(0.5, 0.75, 3)))
+    if n_opp != 3:  # same first three opponents as the standard protocol, extra ones further ahead (track length allows ~6)
+        gaps = list(np.cumsum(rng.uniform(5.0, 15.0, n_opp)))
+        rng2 = np.random.default_rng(seed + 777)
+        opts = dict(s_ego=3.0, opp_gaps=[g * min(1.0, 160.0 / gaps[-1]) for g in gaps],
+                    opp_speeds=list(rng2.uniform(0.5, 0.75, n_opp)))
     obs, _ = env.reset(seed=seed, options=opts)
     act = make_controller(ctrl, env, model_path, model)
     L = env.cl.length
@@ -263,21 +278,25 @@ if __name__ == "__main__":
     ap.add_argument("--procs", type=int, default=14)
     ap.add_argument("--tire", default="saturated", choices=["saturated", "saturated_v2", "linear"])
     ap.add_argument("--map", default="Singapore", help="track in maps/ (e.g. Track2, the unseen generalisation track)")
+    ap.add_argument("--mu_scale", type=float, default=None, help="race once at this fixed friction scale (stress test)")
+    ap.add_argument("--n_opp", type=int, default=3, help="number of opponents (stress test)")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     models = dict(m.split("=", 1) for m in args.models)
     jobs = []
-    for randomize in (False, True):
+    conds = (True,) if args.mu_scale is not None else (False, True)
+    extra = dict(n_opp=args.n_opp, mu_scale=args.mu_scale)
+    for randomize in conds:
         for c in args.controllers:
             base = c.split("@")[0]
             for seed in range(args.first, args.first + args.races):
                 jobs.append((base if base in SHIELD_FOR else c, models.get(c), 10_000 + seed, randomize, args.laps, None, c,
-                             args.tire, args.map))
+                             args.tire, args.map, extra))
     with Pool(args.procs) as p:
         res = p.map(run_race, jobs, chunksize=1)
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     report = {}
-    for randomize in (False, True):
+    for randomize in conds:
         R = [r for r in res if r["randomize"] == randomize]
         key = "randomized" if randomize else "nominal"
         summ = summarize(R)
@@ -289,4 +308,4 @@ if __name__ == "__main__":
                   f" (wall {s['wall']}, car {s['car']})  passes/race {s['passes_per_race']:.2f}"
                   f" ot {s['overtake_successes']}/{s['overtake_attempts']}  shield {s['shield_freq']:.2f}"
                   f"  grip>90% {s['grip_above_90']:.3f} (>100% {s['grip_above_100']:.3f})  slip>15 {s['slip_above_15']:.3f}")
-    json.dump(dict(map=args.map, report=report, races=res), open(args.out, "w"))
+    json.dump(dict(map=args.map, mu_scale=args.mu_scale, n_opp=args.n_opp, report=report, races=res), open(args.out, "w"))
