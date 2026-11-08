@@ -180,10 +180,13 @@ action-conditioned shield and fallback, 0/12/0\% with fixed reach and 0/38/12\% 
 agent). On stock tyres the additive shield is active on 98\% of steps for a too-fast driver, ours on 18\%.
 
 \textbf{Training safety} (Fig.~\ref{fig:train}). Over 3.5\,M steps the shielded agent crashed in 96--313
-episodes versus 2295--2769 without the shield (3 seeds each); PPO trained with the additive shield crashed 2333
-times, no better than none. Before its first clean lap the shielded agent crashed 8--11 times versus 969--1080.
+episodes versus 2295--2769 without the shield (3 seeds each); PPO trained with the additive shield crashed
+1786--2333 times (3 seeds), hardly better than none. Before its first clean lap the shielded agent crashed 8--11 times versus 969--1080.
 With the shield \emph{removed} for the measurement, both variants complete their first clean solo lap after
-150--200\,k steps, so the shield made training far safer but not faster at learning to lap.
+150--200\,k steps, so the shield made training far safer but not faster at learning to lap. The final
+controller's recipe (residual policy trained with our shield) is both: 81--133 crashes in all of training and a first
+solo lap under 34\,s (faster than any classical lap) after 200--250\,k steps, versus 450--800\,k for PPO with our
+shield and 550--850\,k without.
 
 \begin{figure}[t]
 \centering
@@ -285,13 +288,12 @@ no learning finishes 20/20 without a collision (16/20 randomised) but laps at 42
 10\,s per lap on top of it.
 
 \textbf{What still fails.} 60 of the final controller's 62 non-finishes in 300 races are contacts with opponents,
-half in the first half lap. Replaying the 24 of seed 0, 15 are the ego cutting back in front of a car it has just
-passed and 5 are side-by-side squeezes; the shield was intervening in all 24. Its prediction lets every opponent
+half in the first half lap. Of seed 0's 24, 15 are the ego cutting back in front of a car it has just passed
+and 5 side-by-side squeezes; the shield was intervening in all 24. Its prediction lets every opponent
 brake at 6\,m/s$^2$, the worst case for a car ahead but the best case for a car just passed, which keeps its speed.
 
-\textbf{Why the tyre model matters.} Trained and raced on the stock linear tyres, the same recipe laps 5\,s
-faster (29.3\,s) by cornering above 100\% of $\mu g$ for 9.7\% of the race, which a real car cannot do; with
-friction-circle tyres this share is 0\%.
+\textbf{Why the tyre model matters.} On stock tyres the same recipe laps 5\,s faster by cornering above the
+friction limit 9.7\% of the time; with ours, 0\%.
 
 \textbf{Generalisation.} On a second track that no policy saw in training (228\,m, a 55\,m straight, a fast
 sweeper and a 2.5\,m hairpin; 20 races), the shielded learned policies still finish at least as often as PID+APF
@@ -321,11 +323,10 @@ seeds, nominal and randomised); telemetry, g-g diagrams and videos.
 \textbf{Evaluation plan.} Controllers: Pure Pursuit, PID+APF, unshielded PPO, PPO with the additive Eq.~2--3
 shield, ResRace-style residual PPO (with and without our shield) and ours. Scenarios: five-lap four-car races on
 50 shared seeds of start gaps and opponent speeds, once nominal and once with randomised friction and lidar noise;
-three training seeds per learned controller. Metrics and targets: clean-lap time ($\le 0.95\times$ PID+APF),
-collisions per 10 laps ($\le 0.5$), overtake success ($\ge 70\%$), shield activity on race day ($\le 10\%$ of
-steps), time above 90\% of $\mu g$ ($\ge 10\%$) and above 15$^\circ$ slip ($\le 1\%$), plus races finished,
-crashes during training and steps to the first clean lap with the shield removed. Tests: Mann--Whitney U on
-per-race values and Fisher's exact test on finish and crash rates.
+three training seeds per learned controller; stress tests outside the training conditions. Metrics: the six
+targets above (cornering grip in place of time above 90\% of $\mu g$), races finished, crashes during training and
+steps to the first fast lap with the shield removed. Tests: Fisher's exact test on finish rates, Mann--Whitney U
+on per-race values.
 
 \textbf{Team roles.} \todo{Team: fill in who owns which part (e.g., simulator and track, shield, RL training,
 evaluation and analysis).}

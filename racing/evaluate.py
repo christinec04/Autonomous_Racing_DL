@@ -143,6 +143,8 @@ def run_race(job):
     n_opp = extra.get("n_opp", 3)
     mu_scale = extra.get("mu_scale")
     sh = shield_override or SHIELD_FOR[ctrl]
+    if extra.get("shield_mu") and mu_scale is not None and sh.get("mode") not in ("off", "additive"):
+        sh = dict(sh, mu_scale=mu_scale, mu=ShieldConfig().mu * mu_scale)  # oracle friction for the shield's predictor (stress test)
     model = None
     if ctrl.startswith("ppo") and model_path and model_path != "zero":
         from stable_baselines3 import PPO
@@ -282,13 +284,14 @@ if __name__ == "__main__":
     ap.add_argument("--tire", default="saturated", choices=["saturated", "saturated_v2", "linear"])
     ap.add_argument("--map", default="Singapore", help="track in maps/ (e.g. Track2, the unseen generalisation track)")
     ap.add_argument("--mu_scale", type=float, default=None, help="race once at this fixed friction scale (stress test)")
+    ap.add_argument("--shield_mu", action="store_true", help="with --mu_scale: the shield's predictor knows the friction")
     ap.add_argument("--n_opp", type=int, default=3, help="number of opponents (stress test)")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     models = dict(m.split("=", 1) for m in args.models)
     jobs = []
     conds = (True,) if args.mu_scale is not None else (False, True)
-    extra = dict(n_opp=args.n_opp, mu_scale=args.mu_scale)
+    extra = dict(n_opp=args.n_opp, mu_scale=args.mu_scale, shield_mu=args.shield_mu)
     for randomize in conds:
         for c in args.controllers:
             base = c.split("@")[0]
