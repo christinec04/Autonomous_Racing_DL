@@ -1,0 +1,7 @@
+11:24 ppo_residual_oxmu_s0 train start
+11:25 ppo_residual_oxmu_s1 train start
+14:20 ppo_residual_oxmu_s1 train done
+14:26 ppo_residual_oxmu_s0 train done
+14:43 eval_ppo_residual_oxmu_s0 done
+14:46 stress_mu0.8_ppo_residual_oxmu_s0 done
+14:50 stress_mu0.7_ppo_residual_oxmu_s0 done
