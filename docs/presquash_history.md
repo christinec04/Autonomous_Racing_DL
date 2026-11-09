@@ -1,0 +1,188 @@
+# History before the 2026-11-06 squash
+
+On 2026-11-06 at the user's request 13 small commits on `gabe-build` were folded into their neighbours (67 -> 54, final tree identical, PROGRESS 36). This is the original list, oldest first. The commits themselves are kept in the local tag `presquash-2026-11-06` (tip `7dd254e`).
+
+- 2026-11-04 11:36 `b234727` Step 1: Singapore-inspired track, F1TENTH wrapper, Pure Pursuit and PID baselines
+- 2026-11-04 11:42 `2bc2e20` Step 2a: race env, APF shield variants, F1TENTH speed patches
+- 2026-11-04 11:56 `5491f5b` Step 2b: friction-circle tyres, traction control, exact-model action-conditioned shield, shield stress test
+- 2026-11-04 11:59 `afc94c8` Step 2c: TCS slide fix, loss-of-control check, stress-test results and problems log
+- 2026-11-04 12:15 `d735552` Step 3a: PPO curriculum training, race evaluation harness with metric targets, PID retuned for 25 Hz, APF baseline tuned
+- 2026-11-04 12:49 `884b9a9` Step 3b: baseline race results, residual (ResRace-style) policy mode, true g-g metric
+- 2026-11-04 12:50 `9384810` Training curve plots
+- 2026-11-04 13:08 `930b591` Progress log: step 3 baselines, targets, early training results, problems 13-16
+- 2026-11-04 13:28 `5549760` Run registry (RUNS.md), provenance in run_info.json, track run logs and checkpoints
+- 2026-11-04 13:37 `60cfd4d` Merge pull request #1 from christinec04/gabe-build
+- 2026-11-04 13:52 `4f2d382` Replay video renderer (verified H.264, atomic write), clip picker; registry refresh
+- 2026-11-04 14:03 `c1f0254` Step 4: seed-0 race results, targets, Mann-Whitney tests, analysis script; log + registry
+- 2026-11-04 14:03 `0152028` Training queue scripts (more seeds, additive-shield PPO)
+- 2026-11-04 14:04 `51666ed` Auto-sync script for long training queues
+- 2026-11-04 14:04 `43db41b` Auto-sync training progress (14:04)
+- 2026-11-04 14:05 `5a5f096` Shield dropout option (per-stage probability the shield is on) + lane C queue
+- 2026-11-04 14:24 `1774c49` Auto-sync training progress (14:24)
+- 2026-11-04 14:31 `870a827` Test suite: tyre model equivalence, predictor matches simulator (<2 cm), shield behaviour, env, overtake metric
+- 2026-11-04 14:34 `b4b8d0a` Documentation: README, architecture, feedback response, design decisions, experiments, reproduction
+- 2026-11-04 14:37 `8f6243e` Analysis plots: g-g diagrams and shield intervention map; docs
+- 2026-11-04 14:38 `eede32a` Developer guide
+- 2026-11-04 14:44 `ce33361` E14: shield sensitivity with trained agent (c_safe 0.10 and fixed reach collision-free in 10 races)
+- 2026-11-04 14:44 `f4d10dc` Auto-sync training progress (14:44)
+- 2026-11-04 14:55 `b3af79a` Risk register from problems actually encountered
+- 2026-11-04 15:09 `777586b` Auto-sync training progress (15:09)
+- 2026-11-04 15:13 `1978ca0` E15: shield settings confirmed on full protocol (safety vs aggressiveness trade-off); analyze --out
+- 2026-11-04 15:14 `b346951` Lane D queue: shielded PPO on stock linear tyres (loophole check)
+- 2026-11-04 15:14 `56b0d1d` Autosync covers all queued runs
+- 2026-11-04 15:14 `c31338a` Auto-sync training progress (15:14)
+- 2026-11-04 15:14 `ec0003f` E8: residual (ResRace-style) policy race results: fastest laps (30.4 s) but 9/20 finishes; residual+shield evaluation added
+- 2026-11-04 15:19 `6011693` E8: residual + our shield (18/20, 32.7 s, 0.36 coll/10 laps): shield complements ResRace-style policies; contribution statement updated
+- 2026-11-04 15:21 `7f5613d` Video batch 4 (residual + shield)
+- 2026-11-04 15:22 `24a6766` E16: training efficiency + training-time safety table (shield: ~10x fewer training crashes, same steps to first clean lap)
+- 2026-11-04 15:23 `1b6479a` Eval daemon (auto-race finished runs, refresh tables, push); evaluate --tire
+- 2026-11-04 15:23 `c85711f` Cross-seed summary script
+- 2026-11-04 15:25 `275ec57` E17 telemetry: shielded agent is timid (policy caps itself at ~8 m/s, shield not the cause); E18 queued (--w3, curvature preview)
+- 2026-11-04 15:34 `90bd3b5` Auto-sync training progress (15:34)
+- 2026-11-04 15:35 `a2a2a8e` Progress log: step 5 and problems 19-21
+- 2026-11-04 15:46 `cc41f94` Architecture doc: configuration reference
+- 2026-11-04 15:49 `63b7439` Auto-eval: ppo_shield_s1 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 15:53 `9d91294` Shield deadlock fix (escape): near/inside the margin allow actions that do not reduce clearance; stuck metric (finished = all laps)
+- 2026-11-04 15:54 `07c6677` Correction note: finish counts were overstated (stuck races counted as finished); summary.md regenerated with finished/stuck
+- 2026-11-04 15:54 `29714d3` Auto-sync training progress (15:54)
+- 2026-11-04 15:56 `9a1dde8` Escape v2: creep manoeuvres + 2 cm tolerance near walls (v1 still deadlocked: circle body model reads negative clearance while not touching); regression test
+- 2026-11-04 15:57 `e6127f5` Progress log: problems 22-23 (stuck races, shield deadlock and fix)
+- 2026-11-04 16:09 `55f7c5a` Escape v3: only when nearly stopped (v2 ratcheted moving cars into walls: 13 wall crashes)
+- 2026-11-04 16:09 `c5f7b97` E19: deadlock diagnosis and escape v1-v3 (v2 failed: ratchet into walls)
+- 2026-11-04 16:18 `48f06b3` Auto-sync training progress (16:18)
+- 2026-11-04 16:24 `bc9e9a3` saturated_v2 tyres (wrap slip angle, relax at low speed: post-spin artifact), reverse creep, slip check only > 1 m/s
+- 2026-11-04 16:25 `1dac8c3` Queue: improved shield (escape, saturated_v2) trained first in lane C; lane D merged into C
+- 2026-11-04 16:25 `ff88e98` Eval daemon: new runs
+- 2026-11-04 16:26 `65f27b5` Auto-sync training progress (16:26)
+- 2026-11-04 16:34 `7809d92` Auto-eval: ppo_noshield_s1 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 16:43 `56c6b70` Corrected headline numbers everywhere (finished = all laps); escape v4 adopted as final shield (16/20 finished, 0 stuck); residual+shield 'complementary' claim withdrawn
+- 2026-11-04 16:43 `7fa191f` Progress log: inline corrections, step 6 (deadlock fix, final shield)
+- 2026-11-04 16:46 `75d2555` Auto-sync training progress (16:46)
+- 2026-11-04 16:46 `4634bf7` Render on v2 simulator; final-shield clip
+- 2026-11-04 16:47 `fcb2115` Seed summary: 2 seeds each
+- 2026-11-04 16:47 `8f0cf03` Seed summary: final-shield group
+- 2026-11-04 16:50 `ba2cc16` E20: seed sensitivity (final shield: seed 0 16/20, seed 1 1/20; seed 1 policy slides)
+- 2026-11-04 16:51 `e547479` Fix seed summary pooling escape v2/v3/v4 results under one label (explicit canonical files + duplicate check)
+- 2026-11-04 16:51 `232452c` README/feedback: cross-seed numbers next to the seed-0 headline
+- 2026-11-04 16:52 `d9476f4` Slip penalty option (--w6); queued final shield + slip penalty on seed 1
+- 2026-11-04 16:52 `f8182de` Auto-sync training progress (16:52)
+- 2026-11-04 16:53 `a4f11a4` Living results page
+- 2026-11-04 17:23 `6818ad3` Additive-shield training: no fewer crashes than no shield (2286 vs 2318-2769); ours 234-313
+- 2026-11-04 17:34 `1098fec` Test: finished / stuck / crashed accounting
+- 2026-11-04 17:34 `41be473` Auto-sync training progress (17:34)
+- 2026-11-04 17:44 `73f8d4a` Auto-eval: ppo_additive_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 17:45 `b2fd08c` E9: PPO with the additive Eq. 2/3 shield is safe but timid (48.8 s laps, 0.55 passes/race) vs ours (34.5 s, 2.95)
+- 2026-11-04 17:45 `c7e1da4` Final re-evaluation on saturated_v2 for all controllers
+- 2026-11-04 17:45 `da772dd` analyze --ours; final tables script; queued seed-2 final-shield eval
+- 2026-11-04 17:54 `d23d194` Auto-sync training progress (17:54)
+- 2026-11-04 18:02 `69cf95b` Final comparison on one simulator version (saturated_v2): ours 16/20, 34.5 s, 2.95 passes, all 6 targets met; README headline updated
+- 2026-11-04 18:02 `b1388b9` Docs aligned with the final one-simulator comparison
+- 2026-11-04 18:05 `40c4689` Video batch 6 (additive-shield PPO)
+- 2026-11-04 18:12 `9819b5f` Auto-eval: ppo_noshield_s2 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 18:12 `8eb284b` Seed summary: unshielded seed 2
+- 2026-11-04 18:14 `7194fc3` Problem 25: queue script edited while running; dev-guide rule
+- 2026-11-04 18:14 `17a3b22` Seed summary: no-shield group on v2 (same simulator as the final shield); queued unshielded seed 2 on v2
+- 2026-11-04 18:14 `999deed` Auto-sync training progress (18:14)
+- 2026-11-04 18:34 `547b7e7` Auto-sync training progress (18:34)
+- 2026-11-04 18:35 `f750f92` Safety-vs-speed plot; run progress
+- 2026-11-04 18:35 `7b76353` Merge origin/main (PR #1) into gabe-build
+- 2026-11-04 18:36 `1bb44f8` Link safety-vs-speed figure
+- 2026-11-04 20:14 `59c038f` Auto-sync training progress (20:14)
+- 2026-11-04 20:15 `60d053d` Auto-eval: ppo_shield_s2 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 20:20 `31ef132` Auto: seed 2 with the final shield; seed summary and final tables refreshed
+- 2026-11-04 20:24 `d42b547` Auto: unshielded seed 2 on v2; seed summary refreshed
+- 2026-11-04 20:34 `8b19d46` Auto-sync training progress (20:34)
+- 2026-11-04 20:54 `98cfd56` Auto-sync training progress (20:54)
+- 2026-11-04 21:12 `fb1858d` Auto-eval: ppo_shield_w3low_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 21:14 `91fe891` Auto-sync training progress (21:14)
+- 2026-11-04 22:44 `0d04e46` Auto-sync training progress (22:44)
+- 2026-11-04 22:58 `799c075` Stall recovery (opt-in): reverse out of nose-to-wall stops in the chicane
+- 2026-11-04 22:59 `f4cd3c1` Log problems 26-29 (chicane stall, recovery fixes, autosync hang, w3low)
+- 2026-11-04 22:59 `298b49d` Docs: E18 w3low results, E21 stall recovery, config reference
+- 2026-11-04 23:04 `d6c6052` Auto-sync training progress (23:04)
+- 2026-11-04 23:04 `51d06e7` Videos: show stall recovery in the HUD; batch7 renders the chicane recovery clip
+- 2026-11-04 23:09 `7ba448b` Auto-eval: ppo_shield_v2esc_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 10:33 `0a94a26` Failure map (where races end) + hotspot fine-tuning option
+- 2026-11-05 10:33 `3f188a9` Lane F: chicane fine-tuning queue (seeds 2, 1)
+- 2026-11-05 10:33 `2a9c12b` results.md: 3 seeds, chicane failure map, w3low, v2esc run
+- 2026-11-05 10:34 `91f17c0` README/feedback/E20: three-seed numbers, chicane failure map
+- 2026-11-05 10:36 `b2553db` Auto-sync training progress (10:36)
+- 2026-11-05 10:36 `e1f1aac` PROGRESS: autosync sleep hang also follows a system suspend
+- 2026-11-05 10:41 `3f8c1ff` Stall recovery results: seeds 0 and 2 finish 19/20, all 12 seed-0 targets met
+- 2026-11-05 10:42 `064b338` Lane F2 (push-only), log problem 31
+- 2026-11-05 10:43 `583e263` Docs: stall recovery results (README table, targets, E21, results page), E22 plan, git/sleep pitfalls
+- 2026-11-05 10:43 `1a9b4e0` evaluate: ppo_residual_apf_rec (residual policy + final shield + stall recovery)
+- 2026-11-05 10:52 `749ad85` Residual + stall recovery: no help (2/20, slides); queue lane G (residual trained with the shield, E23)
+- 2026-11-05 10:56 `b9dfa24` Auto-sync training progress (10:56)
+- 2026-11-05 11:03 `c8b4246` Registry: E21-E23 entries; handle fine-tuning stage 4 (autosync's registry refresh was failing)
+- 2026-11-05 11:14 `545f69c` Chicane fine-tuning (E22): seed 2 trained and raced
+- 2026-11-05 11:15 `f6bbb87` train: --lr also applies when fine-tuning (--init)
+- 2026-11-05 11:16 `2e97b71` E22 result: chicane fine-tuning made seed 2 slide (19/20 -> 8/20); queue gentler E22b (lane F3)
+- 2026-11-05 11:16 `f38d9b9` README/results: E22 outcome
+- 2026-11-05 11:18 `a9b1793` Auto-sync training progress (11:18)
+- 2026-11-05 11:27 `14845a0` Speed-scaled shield margin (opt-in, c_safe_v) + crash tracer
+- 2026-11-05 11:38 `23ae6d9` Auto-sync training progress (11:38)
+- 2026-11-05 11:39 `ebd9a29` E24: speed-scaled margin on seed 1 (1/20 -> 3/20, slides more); add stricter slip-limit variants
+- 2026-11-05 11:50 `7cd44cb` E24: stricter slip limit helps seed 1 nominally (beta 0.25: 9/20); add worst-case-friction predictor option (mu_scale)
+- 2026-11-05 11:56 `589323c` Auto-eval: ppo_shield_preview_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 11:58 `e1ff2e6` Auto-sync training progress (11:58)
+- 2026-11-05 12:02 `483392d` Auto-eval: ppo_shield_preview_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 12:08 `eb795fb` Auto-eval: ppo_shield_preview_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 12:10 `dc67c93` evaluate: infer curvature preview from the model's observation size (preview run could not be raced)
+- 2026-11-05 12:10 `57b8b73` E24: seed-1 crash anatomy and stricter shield settings (a dial, not a free win)
+- 2026-11-05 12:10 `9e5cbb8` results.md: E24 row
+- 2026-11-05 12:18 `8bbae19` Auto-eval: ppo_shield_preview_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 12:19 `4e96bac` Auto-sync training progress (12:19)
+- 2026-11-05 13:47 `5c65273` E18: curvature preview helps a little (13/20, 33.4 s, 3.5 passes); diag_topspeed takes model paths
+- 2026-11-05 13:48 `4ab467a` E18: preview policy with final config: 17/20, 3.8 passes/race
+- 2026-11-05 14:01 `989627c` Auto-sync training progress (14:01)
+- 2026-11-05 14:07 `3090c20` Auto-eval: ppo_shielddrop_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 14:08 `2272d7e` E10 shield dropout: safe without the shield (16/20, 0.45 coll.) but timid (0.25 passes)
+- 2026-11-05 14:08 `e93cbdf` evaluate: --first to extend a study with more race seeds
+- 2026-11-05 14:21 `d04dad7` Auto-sync training progress (14:21)
+- 2026-11-05 14:36 `80aaaea` E25: 50-race head-to-head (ours 43/50 vs additive 39/50 n.s., PID+APF 28/50 p=0.002; ours 12 s faster)
+- 2026-11-05 14:36 `ba00dc8` feedback.md: 50-race numbers
+- 2026-11-05 14:42 `f167ff5` Auto-sync training progress (14:42)
+- 2026-11-05 15:02 `4cfabc6` Auto-sync training progress (15:02)
+- 2026-11-05 15:10 `f3ab11e` Residual policy trained with the shield (E23): trained and raced
+- 2026-11-05 15:11 `5e76745` E23: residual policy trained with our shield (15/20, 0.59 coll., 32.1 s) - complementary when trained together
+- 2026-11-05 15:11 `8072ee4` README/results: E23 residual + shield trained together
+- 2026-11-05 15:22 `954ccdc` Auto-sync training progress (15:22)
+- 2026-11-05 15:22 `cf9114b` E25: residual + shield (trained together) over 50 races: 39/50, 37/50 randomised, 32.2 s laps
+- 2026-11-05 20:19 `07e37e1` Auto-sync training progress (20:19)
+- 2026-11-05 20:22 `b035c10` Gentler chicane fine-tuning (E22b): seed 2 trained and raced
+- 2026-11-05 20:23 `5f5965b` E22b: gentler chicane fine-tune no better than the original (16/20 vs 19/20); video batch8
+- 2026-11-05 20:23 `1c20b31` Lane H: residual + shield seeds 1-2
+- 2026-11-05 20:39 `14e9577` Auto-sync training progress (20:39)
+- 2026-11-05 20:45 `b45969f` Auto-eval: ppo_shield_v2esc_slip_s1 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 20:46 `7dea813` Mid-term report: first draft (IEEE conference format, report/midterm.tex + PDF)
+- 2026-11-05 20:47 `64a1a49` Lane I: slip-penalty recipe on seeds 0 and 2 (seed 1 went 1/20 -> 17/20)
+- 2026-11-05 20:47 `48b656e` E26: slip penalty fixes the sliding seed (1/20 -> 17/20, 32.5 s laps)
+- 2026-11-05 20:50 `23337aa` E25: exact p-values; 50-race randomised collisions (0.77) miss the target; additive crash count 2333
+- 2026-11-05 20:52 `789792a` Docs consistency pass: one set of final numbers (20 + 50 races), fact-check corrections
+- 2026-11-05 20:57 `7a45b58` Slip-penalty recipe (E26): ppo_shield_v2esc_slip_s1 raced with stall recovery
+- 2026-11-05 20:59 `513d69d` Track2: second, unseen track for generalisation tests (opt-in --map, default Singapore)
+- 2026-11-05 20:59 `7fe08ee` Report v2: layout pass (Times fonts, redrawn Fig. 1, no overfull boxes, 4 pages), fact-check fixes, slip-penalty and Track2 results
+- 2026-11-05 21:00 `7c6d5da` Auto-sync training progress (21:00)
+- 2026-11-05 21:00 `7f8843a` Normalise line endings to LF (Python edits on Windows had written CRLF; .sh left as is while queues run)
+- 2026-11-05 21:20 `9a71be2` Auto-sync training progress (21:20)
+- 2026-11-05 21:40 `35890ba` Auto-sync training progress (21:40)
+- 2026-11-05 21:41 `b4482c1` Auto-eval: ppo_shield_linear_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-06 06:43 `a373e4a` E27: on stock linear tyres PPO corners above the friction limit 9.7% of the time (5 s faster); autosync run list updated
+- 2026-11-06 06:43 `92180aa` Auto-sync training progress (06:43)
+- 2026-11-06 06:44 `8e1f57e` Report: stock-tyre exploit (E27), seed-1 slip penalty with recovery 18/20
+- 2026-11-06 06:44 `14108fc` E26: seed-1 slip penalty + stall recovery 18/20, 17/20 randomised
+- 2026-11-06 06:44 `720f24e` E23: residual + shield training crashes 133 vs 995
+- 2026-11-06 06:46 `4dc1b59` PROGRESS 34-35 (CRLF, machine sleep); results.md: E26 with recovery, E27 stock tyres, running list
+- 2026-11-06 07:04 `d1d8b25` Auto-sync training progress (07:04)
+- 2026-11-06 07:24 `baf68c7` Auto-sync training progress (07:24)
+- 2026-11-06 07:44 `266bde8` Auto-sync training progress (07:44)
+- 2026-11-06 07:53 `d4689df` E28: generalisation to unseen Track2 - shielded learned policies finish >= PID+APF and lap faster; report updated
+- 2026-11-06 07:53 `ee6eba8` track2.md: pointer to full E28 results
+- 2026-11-06 07:54 `1ee0624` seed_summary: slip-penalty and residual+shield recipes (fill in as seeds finish); make_videos map support + batch9
+- 2026-11-06 08:02 `ab53fbb` Residual policy trained with the shield (E23), seed 1: trained and raced
+- 2026-11-06 08:04 `5f3ad2c` Auto-sync training progress (08:04)
+- 2026-11-06 08:24 `1c63624` Auto-sync training progress (08:24)
+- 2026-11-06 08:32 `28eceda` Slip-penalty recipe (E26): ppo_shield_v2esc_slip_s0 raced with stall recovery
+- 2026-11-06 08:45 `fd14f2a` Auto-sync training progress (08:45)
+- 2026-11-06 09:05 `7dd254e` Auto-sync training progress (09:05)

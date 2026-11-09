@@ -88,6 +88,8 @@ def run_row(d):
     steps = int(float(tr[-1]["step"])) if tr else 0
     done = [s for s in (1, 2, 3) if (d / f"model_stage{s}.zip").exists()]
     status = "finished" if len(done) == len(a["stages"]) else ("running" if steps else "starting")
+    if info.get("status") == "crashed":  # interrupted attempts kept as a record (PROGRESS 39)
+        status = "crashed"
     crash = []
     for s in a["stages"]:
         # fine-tuning stages (e.g. 4, --init) count their own steps from 0

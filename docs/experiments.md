@@ -498,6 +498,12 @@ The residual baseline is the fastest recipe (30.3 s, about 2 s faster than the r
 but crashes into opponents: 11 of seed 1's 13 DNFs are car contacts. Training with our shield costs about 2 s per
 lap and doubles the finish rate (E29: 16.0 of 20 per seed).
 
+**Update 2026-11-09.** Residual baseline seed 2 finished (lane Q; its first attempt crashed with the laptop, kept as
+`runs/ppo_residual_s2_attempt1_crashed`). Singapore 15 / 10 of 20 at 31.3 s with 3.65 passes, Track2 10 / 14 at
+30.4 s. Over three seeds the residual baseline without a shield finishes 10.7 / 7.7 of 20 on Singapore (seeds
+10/8, 7/5, 15/10), against 16.0 / 16.7 for the same recipe trained with our shield (E29). It stays the fastest
+recipe (30.3-31.3 s), and 34 of its 43 non-finishes on seeds 1-2 are car contacts.
+
 ## E32. Does the residual policy need *our* shield, or would any shield do?
 `scripts/queue_lane_l.sh`: the E29 recipe (residual, scale 0.3, v2 simulator) trained with the proposal's additive
 Eq. 2/3 shield instead of ours, seeds 0-1, raced with the same shield (`results/eval_ppo_residual_additive_s*.json`).
@@ -562,6 +568,21 @@ the true friction, slip above 15 deg at x0.7 falls from 9-14% to 1-2% for seeds 
 and finishes 7/20, so part of its drop is the policy itself. This motivates E35, where the shield estimates the
 friction instead of being told.
 
+**Update 2026-11-09.** The remaining settings (lane M, `results/stress_mu0.6.json`, `stress_mu1.3.json`,
+`stress_opp5.json`; races finished of 20):
+
+| setting | final controller (3 seeds) | PPO + our shield s0 | PID + APF | PPO + additive |
+|---|---|---|---|---|
+| x0.6 | 5 / 60 (1, 4, 0) | 5 | 4 | 1 |
+| x1.3 | 52 / 60 (17, 17, 18) | 20 | 17 | 17 |
+| 5 opponents, nominal | 50 / 60 (17, 16, 17) | 13 | 9 | 11 |
+| 5 opponents, randomised | 42 / 60 (13, 14, 15) | 13 | 10 | 11 |
+
+At x0.6 every controller fails, mostly into walls, so that is beyond what any of them handles. More grip is easy
+for all. With five opponents the final controller finishes as often as with three (83% vs 80% nominal on these
+20 seeds), while PID+APF drops from 60% to 45%. The one-opponent test crashed on a bug in the
+overtake counter, which also undercounted passes with five opponents (PROGRESS 40). Both rerun in lane T
+(`results/stress_opp1_v2.json`, `stress_opp5_v2.json`); the original opp5 file is kept.
 
 ## E34. What still ends the final controller's races? (contact classification)
 `python -m scripts.classify_contacts` replays every car-contact DNF and classifies the contact at the contact step
@@ -596,6 +617,20 @@ safe under both hypotheses, and the fallback then steers away from the car into 
 (controller `ppo_residual_apf_rec_ox`) falls back to the original braking-only check in that case. It is queued in
 lane P (via lane R after the shutdown, PROGRESS 38).
 
+**Update 2026-11-09, relaxed check (E34b, lane P, `results/eval_opprelax_s<seed>.json`).** Same 3 policies x 50
+race seeds:
+
+| 3 seeds x 50 races | finished nom / rand | car | wall | lap | passes / race |
+|---|---|---|---|---|---|
+| original shield (E29) | 122 / 116 | 60 | 2 | 32.3 s | 3.7 |
+| both hypotheses (E34) | 133 / 123 | 25 | 17 | 32.8 s | 4.0 |
+| both, relaxed fallback (E34b) | 131 / 125 | 38 | 4 | 32.5 s | 3.9 |
+
+The relaxed fallback removes the wall hits the two-hypothesis check introduced (17 -> 4, p = 0.006) and keeps the
+same 256 of 300 finishes. Against the original shield it cuts car contacts from 60 to 38 (p = 0.02) with no
+significant change in wall hits (2 -> 4). Per seed 43/39, 45/43, 43/43 of 50. It replaces the original check in
+the candidate final shield (E36). Full tables: `results/analysis/2026-11-09.md`.
+
 ## E35. Can the shield estimate the friction itself? (lane S, running)
 E33 showed the final controller needs the shield to know the friction. `ShieldConfig.mu_est` (controller
 `ppo_residual_apf_rec_mu`) starts from nominal friction and updates an estimate from the car's own state each step.
@@ -608,6 +643,22 @@ First check, one lap each, seed 0 policy: at x0.8 the estimate falls from 1.0 to
 races finish. At x1.2 it stays at 0.9-1.1, since the car never reaches the higher limit, so the shield does not
 become overconfident. Lane S (`scripts/queue_lane_s.sh`) races all three seeds at x0.8 and x0.7 and on the main
 protocol, which checks that the estimate costs nothing in normal conditions.
+
+**Update 2026-11-09, results (lane S, `results/stress_mu0.8_muest.json`, `stress_mu0.7_muest.json`,
+`eval_muest.json`).** Final controller, 3 seeds x 20 races:
+
+| friction | shield assumes nominal | shield told the truth | shield estimates it |
+|---|---|---|---|
+| x0.8 | 31 / 60 | 50 / 60 | **54 / 60** (20, 18, 16) |
+| x0.7 | 16 / 60 | 40 / 60 | 32 / 60 (10, 18, 4) |
+
+At x0.8 the estimate does as well as knowing the truth. Its estimate ends near 0.78. At x0.7 it recovers half of the
+gap to the oracle. On the main protocol it is level with the original (nominal 51 vs 48 of 60, randomised 45 vs
+50, neither significant), with the shield active a little more often (8% vs 5% of steps). The trace explains the
+remaining gap. The estimate swings by about +-0.2 within a race (at x0.7 between 0.53 and 1.0, at nominal friction
+between 0.78 and 1.15), so it is sometimes too optimistic right when it matters. A smoother version (`mu2`, readings
+at the limit weigh 0.2 instead of 0.5) is running in lane T, and the combination with the relaxed opponent check
+(E36) in lane U.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

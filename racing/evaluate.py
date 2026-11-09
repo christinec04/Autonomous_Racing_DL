@@ -129,7 +129,11 @@ SHIELD_FOR["ppo_residual_apf_rec_ox"] = dict(SHIELD_FOR["ppo_residual_apf_rec_ob
 # E35: the shield estimates the friction online (ShieldConfig.mu_est)
 SHIELD_FOR["ppo_residual_apf_rec_mu"] = dict(SHIELD_FOR["ppo_residual_apf_rec"], mu_est=True)
 SHIELD_FOR["ppo_apf_rec_mu"] = dict(SHIELD_FOR["ppo_apf_rec"], mu_est=True)
-RECOVER = {"ppo_residual_apf_rec_mu", "ppo_apf_rec_mu", "ppo_residual_apf_rec_ox", "ppo_residual_apf_rec_or", "ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
+# E35b: smoother estimate (readings at the limit weigh 0.2 instead of 0.5, proof of more grip 0.02 instead of 0.05)
+SHIELD_FOR["ppo_residual_apf_rec_mu2"] = dict(SHIELD_FOR["ppo_residual_apf_rec_mu"], mu_est_rate=0.2, mu_est_rise=0.02)
+# E36: candidate final shield, relaxed two-hypothesis opponent check (E34b) + online friction estimate (E35)
+SHIELD_FOR["ppo_residual_apf_rec_oxmu"] = dict(SHIELD_FOR["ppo_residual_apf_rec_ox"], mu_est=True)
+RECOVER = {"ppo_residual_apf_rec_mu2", "ppo_residual_apf_rec_oxmu", "ppo_residual_apf_rec_mu", "ppo_apf_rec_mu", "ppo_residual_apf_rec_ox", "ppo_residual_apf_rec_or", "ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
            "ppo_apf_rec_b25mu"}
 
 
@@ -180,7 +184,7 @@ def run_race(job):
     obs, _ = env.reset(seed=seed, options=opts)
     act = make_controller(ctrl, env, model_path, model)
     L = env.cl.length
-    ot = OvertakeTracker(3)
+    ot = OvertakeTracker(n_opp)  # was 3 for every race: opp1 crashed, opp5 counted passes on 3 cars only (PROGRESS 40)
     lap_marks, lams, glat, glon, slip, mu_tr = [], [], [], [], [], []
     e0 = env._states()[0]
     prev_vel = np.array([e0[3] * np.cos(e0[4] + e0[6]), e0[3] * np.sin(e0[4] + e0[6])])

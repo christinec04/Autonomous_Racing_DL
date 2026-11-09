@@ -51,7 +51,24 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 | Missed grip target | the final controller spends 8.8% of the race above 90% of mu g (target 10%) | the target measures throttle style, not cornering (row above); report cornering grip instead |
 | Training efficiency (steps to first clean lap) unchanged | 150-200k with or without the shield (3 seeds each); the shield's gain is in crashes during training (above) | - |
 
-## Running now
+## Running now (2026-11-09)
+
+- Lane T (`scripts/queue_lane_t.sh`): one and five opponent stress tests after the counter fix (PROGRESS 40),
+  smoother friction estimate (`mu2`, E35b) at x0.7 and on the main protocol.
+- Lane U (`scripts/queue_lane_u.sh`, E36): candidate final shield (relaxed opponent check + friction estimate),
+  3 seeds x 50 races, x0.8 and x0.7.
+
+## Update 2026-11-09
+
+- Relaxed two-hypothesis opponent check (E34b): 256 of 300 finished (original 238), car contacts 60 -> 38, wall hits
+  2 -> 4. The plain two-hypothesis check reached the same finishes but with 17 wall hits.
+- Online friction estimate (E35): at x0.8 54 of 60 finished (nominal model 31, told the true friction 50); at x0.7 32
+  (16 and 40). Level with the original shield in normal races.
+- Stress (E33): every controller fails at x0.6; with five opponents the final controller still finishes 83% nominal.
+- Residual baseline (no shield) over three seeds: 10.7 / 7.7 of 20 on Singapore.
+- Full numbers: `results/analysis/2026-11-09.md`.
+
+## Was running on 2026-11-08 (all finished, see the update above)
 
 Restarted after the laptop shut down on Nov 8 (PROGRESS 38).
 

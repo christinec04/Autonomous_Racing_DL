@@ -300,3 +300,14 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     low-memory episode, `pool.map` waits forever for the lost race. `racing/evaluate.py` now uses
     `ProcessPoolExecutor`, which raises `BrokenProcessPool` instead, reruns the missing races (up to 3 tries) and
     prints progress every 10 races. Tested by killing a worker mid-run, all races were still saved.
+39. **Earlier attempts were being replaced instead of kept.** The crashed first try of `ppo_residual_s2` had been moved
+    out of the repo, report text was rewritten in place, and the Nov 6 squash dropped 13 commits from the branch. On
+    the user's request (Nov 9) the project now keeps everything. The crashed run is back as
+    `runs/ppo_residual_s2_attempt1_crashed`, every report build is in `report/history/` (tex and pdf, named by date
+    and commit), `docs/timeline.md` (`python -m scripts.timeline`) lists every commit by day, and
+    `docs/presquash_history.md` lists the squashed commits (kept in the local tag `presquash-2026-11-06`). From now on
+    write-ups get dated "Update" notes instead of edited numbers, and new results go to new files.
+40. **The overtake counter assumed three opponents.** `OvertakeTracker(3)` was hard-coded, so the one-opponent stress
+    test (E33, lane M) crashed with an IndexError and the five-opponent test counted passes on the first three cars
+    only (finish and collision numbers are unaffected). Fixed to use the race's opponent count. The original
+    `results/stress_opp5.json` is kept; the reruns go to `results/stress_opp5_v2.json` and `results/stress_opp1_v2.json`.

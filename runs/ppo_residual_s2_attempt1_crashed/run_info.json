@@ -1,0 +1,12 @@
+{
+ "git_commit": "84abb9a",
+ "git_dirty": [],
+ "command": "python -m racing.train --shield off --residual --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 2 --out runs/ppo_residual_s2",
+ "status": "crashed",
+ "started": "2026-11-08 07:07:52",
+ "stages_done": [
+  1
+ ],
+ "steps_done": 1500000,
+ "note": "laptop shut down 2026-11-08 10:16 at ~1.9M steps (PROGRESS 38); retrained as ppo_residual_s2"
+}

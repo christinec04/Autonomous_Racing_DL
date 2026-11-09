@@ -287,27 +287,26 @@ APF, and the two fields stack. Our shield, which leaves safe actions alone, comp
 no learning finishes 20/20 without a collision (16/20 randomised) but laps at 42.5\,s. The learned residual buys
 10\,s per lap on top of it.
 
-\textbf{What still fails.} 60 of the final controller's 62 non-finishes in 300 races are contacts with opponents,
-half in the first half lap. Of seed 0's 24, 15 are the ego cutting back in front of a car it has just passed
-and 5 side-by-side squeezes; the shield was intervening in all 24. Its prediction lets every opponent
+\textbf{What still fails.} 60 of the final controller's 62 non-finishes in 300 races are contacts with opponents.
+Of seed 0's 24, 15 are the ego cutting back in front of a car it has just passed. The shield's prediction lets every opponent
 brake at 6\,m/s$^2$, the worst case for a car ahead but the best case for a car just passed, which keeps its speed.
 Checking both (brake or hold speed) cuts car contacts from 60 to 25 in 300 races ($p = 6\cdot10^{-5}$)
-but adds 15 wall hits, where no action is safe under both and the fallback steers into the wall.
+but adds 15 wall hits, where no action is safe under both and the fallback steers into the wall. Falling back
+to the braking-only check in that case keeps 256 of 300 finished (238 before) with 38 car contacts and 4 wall hits.
 
 \textbf{Outside the training friction.} At friction $\times$0.8 (trained on 0.85--1.15) the final controller
 finishes 52\% of races, PID+APF 50\%, PPO + shield 85\%. With the shield told the true friction it finishes 83\%
 ($p = 4\cdot10^{-4}$). At $\times$0.7 the true friction lifts it from 27\% to 67\% and PPO from 35\% to 90\%, so
-the shield's friction model is the weak point.
+the friction model is the weak point. Estimating it online from tyre saturation gives 90\% at $\times$0.8 and
+53\% at $\times$0.7, level with the original in normal races.
 
 \textbf{Why the tyre model matters.} On stock tyres the same recipe laps 5\,s faster by cornering above the
 friction limit 9.7\% of the time; with ours, 0\%.
 
 \textbf{Generalisation.} On a second track that no policy saw in training (228\,m, a 55\,m straight, a fast
-sweeper and a 2.5\,m hairpin; 20 races), the shielded learned policies still finish at least as often as PID+APF
-(15/20, 39.3\,s): the final residual controller finishes 18.3 of 20 over three seeds (16.3 randomised) in
-31.2\,s with 3.8 passes per race. Plain PPO + shield is less robust there: 16.7 of 20 (14.0 randomised, one seed
-5/20) in 37.5\,s, and one seed only follows the opponents (one pass in 20 races). PPO without a shield finishes
-1/20.
+sweeper and a 2.5\,m hairpin; 20 races), the final controller finishes 18.3 of 20 over three seeds (16.3 randomised) in
+31.2\,s with 3.8 passes per race, against PID+APF 15/20 in 39.3\,s. Plain PPO + shield finishes 16.7 (14.0, one
+seed 5/20) in 37.5\,s, PPO without a shield 1/20.
 
 \textbf{Negative results.} A lower intervention penalty ($w_3 = 0.02$) let the agent hand braking to the
 shield (35\% of steps) and deadlock. Shield dropout gave a policy that is safe with no shield (16/20) but timid
@@ -316,11 +315,11 @@ shield (35\% of steps) and deadlock. Shield dropout gave a policy that is safe w
 \section{Plan to the Final Demo}
 \textbf{Remaining tasks and milestones} (final demo December 7):
 \begin{itemize}
-\item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); keep the two-hypothesis
-opponent check without its wall hits (a braking-only fallback is running); replace the grip target by cornering
-grip. The remaining stress tests (one or five opponents, friction $\times$0.6 and $\times$1.3) are running.
-\item \emph{Nov 21--27:} finish the three-seed baselines (running) and test them on both tracks; let the shield's
-predictor use a friction estimate.
+\item \emph{Nov 13--20:} final controller chosen (residual PPO trained with our shield); evaluate the shield with
+both the relaxed opponent check and the friction estimate (running); smooth the estimate; replace the grip
+target by cornering grip.
+\item \emph{Nov 21--27:} test the three-seed baselines on both tracks; stress tests of the final shield (friction,
+number of opponents).
 \item \emph{Nov 28--Dec 3:} freeze the code; run the final evaluation (all controllers, 3 training seeds, 50 race
 seeds, nominal and randomised); telemetry, g-g diagrams and videos.
 \item \emph{Dec 4--7:} final report, presentation and live demo (recorded four-car races).
