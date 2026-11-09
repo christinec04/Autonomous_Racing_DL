@@ -727,6 +727,46 @@ stretch where no tyre saturates. Analysis: `results/analysis/2026-11-09b.md` (`s
   (`ppo_residual_apf_rec_oxmed`, `_oxmu2med`), then 50 races main protocol for the smoother one. A one-race smoke
   test at x0.7 kept the estimate between 0.61 and 0.72.
 
+*Correction 2026-11-09 evening* to the E36 x0.7 explanation above (estimate drifting up before wall hits). The
+last ten readings of every wall-hit race (`results/analysis/2026-11-09c.md`) show the estimate near the true 0.70
+right before the wall. It jumps to about 0.9 in one reading at the impact, then stays flat while the car is stopped
+(no reading below 2 m/s). The share of readings above 0.85 counted that flat stretch after the crash, so it measured
+the crash, not its cause. The noise explanation does not hold either: the median gate leaves wall-hit races just as
+high. The x0.7 wall hits happen with a correct estimate, like the 13 of the oracle shield (E33).
+
+**Update 2026-11-09 evening, results** (lanes W and X, same three trained policies):
+
+| shield | main, of 300 | car / wall | x0.8, of 60 | x0.7, of 60 | x0.7 wall |
+|---|---|---|---|---|---|
+| E36 (estimate rate 0.5, rise 0.05) | 269 | 30 / 0 | 55 | 41 | 12 |
+| E36b smoother (0.2 / 0.02) | 257 | 40 / 3 | 57 | 47 | 7 |
+| E35c median gate, rise 0.05 | | | | 40 | 9 |
+| E35c smoother + median gate | 265 | 33 / 1 | | 49 | 4 |
+
+On the main protocol the three are level (269 vs 257, p = 0.17; vs 265, p = 0.7). At x0.7 the smoother estimate
+is what helps (41 -> 47 -> 49), the median gate on its own does nothing (40). Per seed at x0.7 the smoother +
+median gate version finishes 14, 20, 15 of 20. Laps within 0.2 s of each other.
+
+## E37. Retraining the policy with the combined shield on (lane V; seed 2 in lane Y, running)
+Same recipe as the final controller (residual PPO, saturated_v2, 3.5M steps) but trained with
+`cond_fb_grip_esc_oxmu` on, and raced with it. A: the usual friction randomisation x0.85-1.15. B: wider,
+x0.65-1.15 (`--mu_range`, train.py). Compared with the E29 policies (trained with the old shield) raced with the
+same shield (E36). Same 50 race seeds (main protocol), 20 for the stress tests.
+
+| policy | main, of 100 | car / wall | lap s | passes | shield | x0.8 | x0.7 |
+|---|---|---|---|---|---|---|---|
+| E29 seed 0 | 91 | 9 / 0 | 32.6 | 3.9 | 0.106 | 20 | 9 |
+| E29 seed 1 | 87 | 12 / 0 | 33.1 | 4.0 | 0.097 | 19 | 20 |
+| E37 A seed 0 | 94 | 5 / 0 | 33.7 | 3.0 | 0.072 | 17 | 12 |
+| E37 A seed 1 | 82 | 12 / 1 | 35.5 | 3.5 | 0.093 | 12 | 14 |
+| E37 B seed 0 | 96 | 4 / 0 | 33.4 | 4.0 | 0.035 | 15 | 20 |
+
+So far: retraining with the usual friction range does not help (176 vs 178 of 200) and laps get 1 to 2 s slower.
+The wide range on seed 0 is the best single policy yet on the main protocol (96 of 100, 0 car contacts
+randomised) and finishes all 20 at x0.7, with the shield acting on 3.5% of steps (10.6% for E29 seed 0). One seed
+is not enough, the E29 seed-1 policy also finishes 20 of 20 at x0.7. B seed 1 is being raced; lane Y trains
+seed 2 of A and B. Analysis: `results/analysis/2026-11-09c.md` (`scripts/analyze_nov9c.py`).
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). `batch9` renders clip 12, slip-penalty PPO + our shield on

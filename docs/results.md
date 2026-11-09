@@ -60,6 +60,12 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## Update 2026-11-09
 
+- Evening: the midday explanation of the x0.7 wall hits (estimate drifting up) was wrong, the estimate is correct
+  right before the wall and jumps at the impact (correction in E36b / E35c). Shield variants are level on the main
+  protocol (257-269 of 300); at x0.7 the smoother estimate helps (49 of 60 with a median gate, 4 wall hits).
+  Retraining with the combined shield (E37): no gain on the usual friction range; on a wider range seed 0
+  finishes 96 of 100 and 20 of 20 at x0.7. More seeds running. `results/analysis/2026-11-09c.md`.
+
 - Midday: the smoother estimate (E35b) is level with the original in normal races (101 vs 98 of 120). The combined
   shield (E36) finishes 41 of 60 at x0.7 but with 12 wall hits: its estimate climbs back above the true friction
   before them. Two fixes are running (E36b, E35c). Five-opponent rerun: same finishes, 5.7 passes per race.

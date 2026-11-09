@@ -319,3 +319,9 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     The 30 `runs/*/run_info.json` now hold the new hash, the old one is kept as `git_commit_before_collapse_2026-11-09`.
     `main` now carries everything (it was 136 commits behind `gabe-build`); a local post-commit hook pushes every
     commit to both branches.
+42. **A wrong diagnosis, caught the same day.** At midday the x0.7 wall hits of the combined shield (E36) were put
+    down to the friction estimate drifting above the truth, from the share of high readings in wall-hit races. That
+    share included the stretch after the crash, when the car is stopped and the estimate frozen at the value an
+    impact reading gave it. The last readings before each wall show a correct estimate. The midday text stays in
+    `docs/experiments.md` with a dated correction under it, and the median-gated estimate built on it (E35c) is
+    kept as a tested idea that did not help on its own.

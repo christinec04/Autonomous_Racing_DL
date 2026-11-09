@@ -111,9 +111,9 @@ Report versions: [2026-11-08_0732_8ab45df](../report/history/midterm_2026-11-08_
 - 15:26 `475f707` Shield with online friction estimate (E35): stress_mu0.7_muest (+2 more)
 - 17:20 `341f514` Baseline seed 2 (ppo_residual_s2): trained and raced on Singapore and Track2 (+2 more)
 
-## 2026-11-09 (11 commits)
+## 2026-11-09 (21 commits)
 
-Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf), [2026-11-09_1113_build](../report/history/midterm_2026-11-09_1113_build.pdf)
+Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf), [2026-11-09_1113_build](../report/history/midterm_2026-11-09_1113_build.pdf), [2026-11-09_1257_build](../report/history/midterm_2026-11-09_1257_build.pdf)
 
 - 10:06 `5fd783a` Nov 8 jobs analysed (results/analysis/2026-11-09.md); overtake counter uses the real opponent count (PROGRE... (+3 more)
 - 10:22 `1465481` Seed summary and Fig. 5 with three seeds of every baseline; previous generated tables kept in results/histo... (+3 more)
@@ -126,3 +126,13 @@ Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_10
 - 11:21 `b4a5109` Candidate final shield (E36) at x0.7
 - 11:23 `01ced5f` Smoother friction estimate (E35b), main protocol
 - 12:54 `09ad3e0` Lane W (E36b): combined shield with the smoother friction estimate
+- 12:57 `785e688` E36 at x0.7 (41/60, wall hits traced to the estimate drifting up), E35b level in normal races, opp5 rerun; median-gated estimate option (E35c, lane X); report rebuilt
+- 13:04 `0679edb` Candidate final shield (E36b, smoother estimate) at x0.7
+- 13:42 `1b73c3d` Combined shield with smoother estimate (E36b), 50 races
+- 13:52 `ae7297f` Candidate final shield (E36b, smoother estimate) at x0.8
+- 14:03 `66e2a22` Median-gated friction estimate (E35c) at x0.7
+- 14:13 `34966eb` Median-gated smoother friction estimate (E35c) at x0.7
+- 14:50 `1351e6c` E37: ppo_residual_oxmu_s0 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
+- 14:56 `b487d67` Median-gated smoother friction estimate (E35c), 50 races
+- 15:06 `2a6c7b5` E37: ppo_residual_oxmu_s1 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
+- 18:21 `f32ec85` E37: ppo_residual_oxmu_widemu_s0 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
