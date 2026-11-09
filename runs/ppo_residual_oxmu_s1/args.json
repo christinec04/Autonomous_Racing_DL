@@ -1,0 +1,32 @@
+{
+ "shield": "cond_fb_grip_esc_oxmu",
+ "stages": [
+  1,
+  2,
+  3
+ ],
+ "steps": [
+  1500000,
+  1000000,
+  1000000
+ ],
+ "seed": 1,
+ "n_envs": 7,
+ "n_steps": 512,
+ "batch": 1024,
+ "lr": 0.0003,
+ "gamma": 0.99,
+ "ent": 0.0,
+ "eval_every": 50000,
+ "tire": "saturated_v2",
+ "no_randomize": false,
+ "curvature_preview": false,
+ "residual": true,
+ "mu_range": null,
+ "residual_scale": 0.3,
+ "w3": null,
+ "w6": 0.0,
+ "shield_prob": null,
+ "init": null,
+ "out": "runs/ppo_residual_oxmu_s1"
+}
