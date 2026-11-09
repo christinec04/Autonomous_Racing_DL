@@ -1,0 +1,11 @@
+10/60 races
+20/60 races
+30/60 races
+40/60 races
+50/60 races
+60/60 races
+
+=== randomized ===
+ppo_residual_apf_rec_oxmu@trained finished 20/20 (stuck 0)  lap 34.31 (best 33.56)  coll/10laps 0.00 (wall 0, car 0)  passes/race 4.30 ot 86/87  shield 0.18  grip>90% 0.270 (>100% 0.001)  slip>15 0.001
+ppo_residual_apf_rec_oxmu@trained_s1 finished 19/20 (stuck 0)  lap 34.19 (best 33.4)  coll/10laps 0.10 (wall 0, car 1)  passes/race 3.65 ot 73/74  shield 0.16  grip>90% 0.222 (>100% 0.000)  slip>15 0.001
+ppo_residual_apf_rec_oxmu@trained_s2 finished 16/20 (stuck 1)  lap 33.99 (best 33.4)  coll/10laps 0.34 (wall 2, car 1)  passes/race 3.75 ot 75/76  shield 0.14  grip>90% 0.216 (>100% 0.020)  slip>15 0.026
