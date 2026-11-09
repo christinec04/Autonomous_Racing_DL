@@ -1,0 +1,258 @@
+# Commit history before the 2026-11-09 collapse
+
+At the user's request the branch was collapsed from 254 to 90 commits on 2026-11-09, keeping each day's share (PROGRESS 41). This is every original commit, oldest first; each new commit's message also lists the originals it contains. The original commits are kept in the local tag `presquash-2026-11-09`. The earlier Nov 6 squash is recorded in [presquash_history.md](presquash_history.md).
+
+- 2026-11-04 11:18 `f54092d` Christine Chen: Initial commit
+- 2026-11-04 11:36 `b234727` Gabriel Shores: Step 1: Singapore-inspired track, F1TENTH wrapper, Pure Pursuit and PID baselines
+- 2026-11-04 11:42 `2bc2e20` Gabriel Shores: Step 2a: race env, APF shield variants, F1TENTH speed patches
+- 2026-11-04 11:56 `5491f5b` Gabriel Shores: Step 2b: friction-circle tyres, traction control, exact-model action-conditioned shield, shield stress test
+- 2026-11-04 11:59 `afc94c8` Gabriel Shores: Step 2c: TCS slide fix, loss-of-control check, stress-test results and problems log
+- 2026-11-04 12:15 `d735552` Gabriel Shores: Step 3a: PPO curriculum training, race evaluation harness with metric targets, PID retuned for 25 Hz, APF baseline tuned
+- 2026-11-04 12:49 `884b9a9` Gabriel Shores: Step 3b: baseline race results, residual (ResRace-style) policy mode, true g-g metric
+- 2026-11-04 12:50 `9384810` Gabriel Shores: Training curve plots
+- 2026-11-04 13:08 `930b591` Gabriel Shores: Progress log: step 3 baselines, targets, early training results, problems 13-16
+- 2026-11-04 13:28 `5549760` Gabriel Shores: Run registry (RUNS.md), provenance in run_info.json, track run logs and checkpoints
+- 2026-11-04 13:37 `60cfd4d` Gabriel Shores: Merge pull request #1 from christinec04/gabe-build
+- 2026-11-04 13:52 `4f2d382` Gabriel Shores: Replay video renderer (verified H.264, atomic write), clip picker; registry refresh
+- 2026-11-04 14:03 `c1f0254` Gabriel Shores: Step 4: seed-0 race results, targets, Mann-Whitney tests, analysis script; log + registry
+- 2026-11-04 14:03 `0152028` Gabriel Shores: Training queue scripts (more seeds, additive-shield PPO)
+- 2026-11-04 14:04 `51666ed` Gabriel Shores: Auto-sync script for long training queues
+- 2026-11-04 14:04 `43db41b` Gabriel Shores: Auto-sync training progress (14:04)
+- 2026-11-04 14:05 `5a5f096` Gabriel Shores: Shield dropout option (per-stage probability the shield is on) + lane C queue
+- 2026-11-04 14:24 `1774c49` Gabriel Shores: Auto-sync training progress (14:24)
+- 2026-11-04 14:31 `870a827` Gabriel Shores: Test suite: tyre model equivalence, predictor matches simulator (<2 cm), shield behaviour, env, overtake metric
+- 2026-11-04 14:34 `b4b8d0a` Gabriel Shores: Documentation: README, architecture, feedback response, design decisions, experiments, reproduction
+- 2026-11-04 14:37 `8f6243e` Gabriel Shores: Analysis plots: g-g diagrams and shield intervention map; docs
+- 2026-11-04 14:38 `eede32a` Gabriel Shores: Developer guide
+- 2026-11-04 14:44 `ce33361` Gabriel Shores: E14: shield sensitivity with trained agent (c_safe 0.10 and fixed reach collision-free in 10 races)
+- 2026-11-04 14:44 `f4d10dc` Gabriel Shores: Auto-sync training progress (14:44)
+- 2026-11-04 14:55 `b3af79a` Gabriel Shores: Risk register from problems actually encountered
+- 2026-11-04 15:09 `777586b` Gabriel Shores: Auto-sync training progress (15:09)
+- 2026-11-04 15:13 `1978ca0` Gabriel Shores: E15: shield settings confirmed on full protocol (safety vs aggressiveness trade-off); analyze --out
+- 2026-11-04 15:14 `b346951` Gabriel Shores: Lane D queue: shielded PPO on stock linear tyres (loophole check)
+- 2026-11-04 15:14 `56b0d1d` Gabriel Shores: Autosync covers all queued runs
+- 2026-11-04 15:14 `c31338a` Gabriel Shores: Auto-sync training progress (15:14)
+- 2026-11-04 15:14 `ec0003f` Gabriel Shores: E8: residual (ResRace-style) policy race results: fastest laps (30.4 s) but 9/20 finishes; residual+shield evaluation added
+- 2026-11-04 15:19 `6011693` Gabriel Shores: E8: residual + our shield (18/20, 32.7 s, 0.36 coll/10 laps): shield complements ResRace-style policies; contribution statement updated
+- 2026-11-04 15:21 `7f5613d` Gabriel Shores: Video batch 4 (residual + shield)
+- 2026-11-04 15:22 `24a6766` Gabriel Shores: E16: training efficiency + training-time safety table (shield: ~10x fewer training crashes, same steps to first clean lap)
+- 2026-11-04 15:23 `1b6479a` Gabriel Shores: Eval daemon (auto-race finished runs, refresh tables, push); evaluate --tire
+- 2026-11-04 15:23 `c85711f` Gabriel Shores: Cross-seed summary script
+- 2026-11-04 15:25 `275ec57` Gabriel Shores: E17 telemetry: shielded agent is timid (policy caps itself at ~8 m/s, shield not the cause); E18 queued (--w3, curvature preview)
+- 2026-11-04 15:34 `90bd3b5` Gabriel Shores: Auto-sync training progress (15:34)
+- 2026-11-04 15:35 `a2a2a8e` Gabriel Shores: Progress log: step 5 and problems 19-21
+- 2026-11-04 15:46 `cc41f94` Gabriel Shores: Architecture doc: configuration reference
+- 2026-11-04 15:49 `63b7439` Gabriel Shores: Auto-eval: ppo_shield_s1 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 15:53 `9d91294` Gabriel Shores: Shield deadlock fix (escape): near/inside the margin allow actions that do not reduce clearance; stuck metric (finished = all laps)
+- 2026-11-04 15:54 `07c6677` Gabriel Shores: Correction note: finish counts were overstated (stuck races counted as finished); summary.md regenerated with finished/stuck
+- 2026-11-04 15:54 `29714d3` Gabriel Shores: Auto-sync training progress (15:54)
+- 2026-11-04 15:56 `9a1dde8` Gabriel Shores: Escape v2: creep manoeuvres + 2 cm tolerance near walls (v1 still deadlocked: circle body model reads negative clearance while not touching); regression test
+- 2026-11-04 15:57 `e6127f5` Gabriel Shores: Progress log: problems 22-23 (stuck races, shield deadlock and fix)
+- 2026-11-04 16:09 `55f7c5a` Gabriel Shores: Escape v3: only when nearly stopped (v2 ratcheted moving cars into walls: 13 wall crashes)
+- 2026-11-04 16:09 `c5f7b97` Gabriel Shores: E19: deadlock diagnosis and escape v1-v3 (v2 failed: ratchet into walls)
+- 2026-11-04 16:18 `48f06b3` Gabriel Shores: Auto-sync training progress (16:18)
+- 2026-11-04 16:24 `bc9e9a3` Gabriel Shores: saturated_v2 tyres (wrap slip angle, relax at low speed: post-spin artifact), reverse creep, slip check only > 1 m/s
+- 2026-11-04 16:25 `1dac8c3` Gabriel Shores: Queue: improved shield (escape, saturated_v2) trained first in lane C; lane D merged into C
+- 2026-11-04 16:25 `ff88e98` Gabriel Shores: Eval daemon: new runs
+- 2026-11-04 16:26 `65f27b5` Gabriel Shores: Auto-sync training progress (16:26)
+- 2026-11-04 16:34 `7809d92` Gabriel Shores: Auto-eval: ppo_noshield_s1 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 16:43 `56c6b70` Gabriel Shores: Corrected headline numbers everywhere (finished = all laps); escape v4 adopted as final shield (16/20 finished, 0 stuck); residual+shield 'complementary' claim withdrawn
+- 2026-11-04 16:43 `7fa191f` Gabriel Shores: Progress log: inline corrections, step 6 (deadlock fix, final shield)
+- 2026-11-04 16:46 `75d2555` Gabriel Shores: Auto-sync training progress (16:46)
+- 2026-11-04 16:46 `4634bf7` Gabriel Shores: Render on v2 simulator; final-shield clip
+- 2026-11-04 16:47 `fcb2115` Gabriel Shores: Seed summary: 2 seeds each
+- 2026-11-04 16:47 `8f0cf03` Gabriel Shores: Seed summary: final-shield group
+- 2026-11-04 16:50 `ba2cc16` Gabriel Shores: E20: seed sensitivity (final shield: seed 0 16/20, seed 1 1/20; seed 1 policy slides)
+- 2026-11-04 16:51 `e547479` Gabriel Shores: Fix seed summary pooling escape v2/v3/v4 results under one label (explicit canonical files + duplicate check)
+- 2026-11-04 16:51 `232452c` Gabriel Shores: README/feedback: cross-seed numbers next to the seed-0 headline
+- 2026-11-04 16:52 `d9476f4` Gabriel Shores: Slip penalty option (--w6); queued final shield + slip penalty on seed 1
+- 2026-11-04 16:52 `f8182de` Gabriel Shores: Auto-sync training progress (16:52)
+- 2026-11-04 16:53 `a4f11a4` Gabriel Shores: Living results page
+- 2026-11-04 17:23 `6818ad3` Gabriel Shores: Additive-shield training: no fewer crashes than no shield (2286 vs 2318-2769); ours 234-313
+- 2026-11-04 17:34 `1098fec` Gabriel Shores: Test: finished / stuck / crashed accounting
+- 2026-11-04 17:34 `41be473` Gabriel Shores: Auto-sync training progress (17:34)
+- 2026-11-04 17:44 `73f8d4a` Gabriel Shores: Auto-eval: ppo_additive_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 17:45 `b2fd08c` Gabriel Shores: E9: PPO with the additive Eq. 2/3 shield is safe but timid (48.8 s laps, 0.55 passes/race) vs ours (34.5 s, 2.95)
+- 2026-11-04 17:45 `c7e1da4` Gabriel Shores: Final re-evaluation on saturated_v2 for all controllers
+- 2026-11-04 17:45 `da772dd` Gabriel Shores: analyze --ours; final tables script; queued seed-2 final-shield eval
+- 2026-11-04 17:54 `d23d194` Gabriel Shores: Auto-sync training progress (17:54)
+- 2026-11-04 18:02 `69cf95b` Gabriel Shores: Final comparison on one simulator version (saturated_v2): ours 16/20, 34.5 s, 2.95 passes, all 6 targets met; README headline updated
+- 2026-11-04 18:02 `b1388b9` Gabriel Shores: Docs aligned with the final one-simulator comparison
+- 2026-11-04 18:05 `40c4689` Gabriel Shores: Video batch 6 (additive-shield PPO)
+- 2026-11-04 18:12 `9819b5f` Gabriel Shores: Auto-eval: ppo_noshield_s2 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 18:12 `8eb284b` Gabriel Shores: Seed summary: unshielded seed 2
+- 2026-11-04 18:14 `7194fc3` Gabriel Shores: Problem 25: queue script edited while running; dev-guide rule
+- 2026-11-04 18:14 `17a3b22` Gabriel Shores: Seed summary: no-shield group on v2 (same simulator as the final shield); queued unshielded seed 2 on v2
+- 2026-11-04 18:14 `999deed` Gabriel Shores: Auto-sync training progress (18:14)
+- 2026-11-04 18:34 `547b7e7` Gabriel Shores: Auto-sync training progress (18:34)
+- 2026-11-04 18:35 `f750f92` Gabriel Shores: Safety-vs-speed plot; run progress
+- 2026-11-04 18:35 `7b76353` Gabriel Shores: Merge origin/main (PR #1) into gabe-build
+- 2026-11-04 18:36 `1bb44f8` Gabriel Shores: Link safety-vs-speed figure
+- 2026-11-04 20:14 `59c038f` Gabriel Shores: Auto-sync training progress (20:14)
+- 2026-11-04 20:15 `60d053d` Gabriel Shores: Auto-eval: ppo_shield_s2 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 20:20 `31ef132` Gabriel Shores: Auto: seed 2 with the final shield; seed summary and final tables refreshed
+- 2026-11-04 20:24 `d42b547` Gabriel Shores: Auto: unshielded seed 2 on v2; seed summary refreshed
+- 2026-11-04 20:34 `8b19d46` Gabriel Shores: Auto-sync training progress (20:34)
+- 2026-11-04 20:54 `98cfd56` Gabriel Shores: Auto-sync training progress (20:54)
+- 2026-11-04 21:12 `fb1858d` Gabriel Shores: Auto-eval: ppo_shield_w3low_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-04 21:14 `91fe891` Gabriel Shores: Auto-sync training progress (21:14)
+- 2026-11-04 22:44 `0d04e46` Gabriel Shores: Auto-sync training progress (22:44)
+- 2026-11-04 22:58 `799c075` Gabriel Shores: Stall recovery (opt-in): reverse out of nose-to-wall stops in the chicane
+- 2026-11-04 22:59 `f4cd3c1` Gabriel Shores: Log problems 26-29 (chicane stall, recovery fixes, autosync hang, w3low)
+- 2026-11-04 22:59 `298b49d` Gabriel Shores: Docs: E18 w3low results, E21 stall recovery, config reference
+- 2026-11-04 23:04 `d6c6052` Gabriel Shores: Auto-sync training progress (23:04)
+- 2026-11-04 23:04 `51d06e7` Gabriel Shores: Videos: show stall recovery in the HUD; batch7 renders the chicane recovery clip
+- 2026-11-04 23:09 `7ba448b` Gabriel Shores: Auto-eval: ppo_shield_v2esc_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 10:33 `0a94a26` Gabriel Shores: Failure map (where races end) + hotspot fine-tuning option
+- 2026-11-05 10:33 `3f188a9` Gabriel Shores: Lane F: chicane fine-tuning queue (seeds 2, 1)
+- 2026-11-05 10:33 `2a9c12b` Gabriel Shores: results.md: 3 seeds, chicane failure map, w3low, v2esc run
+- 2026-11-05 10:34 `91f17c0` Gabriel Shores: README/feedback/E20: three-seed numbers, chicane failure map
+- 2026-11-05 10:36 `b2553db` Gabriel Shores: Auto-sync training progress (10:36)
+- 2026-11-05 10:36 `e1f1aac` Gabriel Shores: PROGRESS: autosync sleep hang also follows a system suspend
+- 2026-11-05 10:41 `3f8c1ff` Gabriel Shores: Stall recovery results: seeds 0 and 2 finish 19/20, all 12 seed-0 targets met
+- 2026-11-05 10:42 `064b338` Gabriel Shores: Lane F2 (push-only), log problem 31
+- 2026-11-05 10:43 `583e263` Gabriel Shores: Docs: stall recovery results (README table, targets, E21, results page), E22 plan, git/sleep pitfalls
+- 2026-11-05 10:43 `1a9b4e0` Gabriel Shores: evaluate: ppo_residual_apf_rec (residual policy + final shield + stall recovery)
+- 2026-11-05 10:52 `749ad85` Gabriel Shores: Residual + stall recovery: no help (2/20, slides); queue lane G (residual trained with the shield, E23)
+- 2026-11-05 10:56 `b9dfa24` Gabriel Shores: Auto-sync training progress (10:56)
+- 2026-11-05 11:03 `c8b4246` Gabriel Shores: Registry: E21-E23 entries; handle fine-tuning stage 4 (autosync's registry refresh was failing)
+- 2026-11-05 11:14 `545f69c` Gabriel Shores: Chicane fine-tuning (E22): seed 2 trained and raced
+- 2026-11-05 11:15 `f6bbb87` Gabriel Shores: train: --lr also applies when fine-tuning (--init)
+- 2026-11-05 11:16 `2e97b71` Gabriel Shores: E22 result: chicane fine-tuning made seed 2 slide (19/20 -> 8/20); queue gentler E22b (lane F3)
+- 2026-11-05 11:16 `f38d9b9` Gabriel Shores: README/results: E22 outcome
+- 2026-11-05 11:18 `a9b1793` Gabriel Shores: Auto-sync training progress (11:18)
+- 2026-11-05 11:27 `14845a0` Gabriel Shores: Speed-scaled shield margin (opt-in, c_safe_v) + crash tracer
+- 2026-11-05 11:38 `23ae6d9` Gabriel Shores: Auto-sync training progress (11:38)
+- 2026-11-05 11:39 `ebd9a29` Gabriel Shores: E24: speed-scaled margin on seed 1 (1/20 -> 3/20, slides more); add stricter slip-limit variants
+- 2026-11-05 11:50 `7cd44cb` Gabriel Shores: E24: stricter slip limit helps seed 1 nominally (beta 0.25: 9/20); add worst-case-friction predictor option (mu_scale)
+- 2026-11-05 11:56 `169abc0` Gabriel Shores: Auto-eval: ppo_shield_preview_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 12:10 `40c5936` Gabriel Shores: evaluate: infer curvature preview from the model's observation size (preview run could not be raced)
+- 2026-11-05 12:10 `e96b5d6` Gabriel Shores: E24: seed-1 crash anatomy and stricter shield settings (a dial, not a free win)
+- 2026-11-05 12:18 `f097982` Gabriel Shores: Auto-eval: ppo_shield_preview_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 12:19 `087ffe8` Gabriel Shores: Auto-sync training progress (12:19)
+- 2026-11-05 13:47 `50f68d0` Gabriel Shores: E18: curvature preview helps a little (13/20, 33.4 s, 3.5 passes); diag_topspeed takes model paths
+- 2026-11-05 14:01 `9f9fa96` Gabriel Shores: Auto-sync training progress (14:01)
+- 2026-11-05 14:07 `575984f` Gabriel Shores: Auto-eval: ppo_shielddrop_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 14:08 `b71b9e0` Gabriel Shores: E10 shield dropout: safe without the shield (16/20, 0.45 coll.) but timid (0.25 passes)
+- 2026-11-05 14:08 `85d3e0f` Gabriel Shores: evaluate: --first to extend a study with more race seeds
+- 2026-11-05 14:21 `21f73be` Gabriel Shores: Auto-sync training progress (14:21)
+- 2026-11-05 14:36 `2a6c889` Gabriel Shores: E25: 50-race head-to-head (ours 43/50 vs additive 39/50 n.s., PID+APF 28/50 p=0.002; ours 12 s faster)
+- 2026-11-05 14:42 `987513d` Gabriel Shores: Auto-sync training progress (14:42)
+- 2026-11-05 15:10 `ea8c8a4` Gabriel Shores: Residual policy trained with the shield (E23): trained and raced
+- 2026-11-05 15:11 `d08c581` Gabriel Shores: E23: residual policy trained with our shield (15/20, 0.59 coll., 32.1 s) - complementary when trained together
+- 2026-11-05 15:22 `51cf087` Gabriel Shores: Auto-sync training progress (15:22)
+- 2026-11-05 15:22 `564a83a` Gabriel Shores: E25: residual + shield (trained together) over 50 races: 39/50, 37/50 randomised, 32.2 s laps
+- 2026-11-05 20:19 `0cc0414` Gabriel Shores: Auto-sync training progress (20:19)
+- 2026-11-05 20:22 `f54591e` Gabriel Shores: Gentler chicane fine-tuning (E22b): seed 2 trained and raced
+- 2026-11-05 20:23 `014fc9b` Gabriel Shores: E22b: gentler chicane fine-tune no better than the original (16/20 vs 19/20); video batch8
+- 2026-11-05 20:23 `b0becd5` Gabriel Shores: Lane H: residual + shield seeds 1-2
+- 2026-11-05 20:39 `cc6794e` Gabriel Shores: Auto-sync training progress (20:39)
+- 2026-11-05 20:45 `2cf7164` Gabriel Shores: Auto-eval: ppo_shield_v2esc_slip_s1 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-05 20:46 `fbdea0c` Gabriel Shores: Mid-term report: first draft (IEEE conference format, report/midterm.tex + PDF)
+- 2026-11-05 20:47 `626c78a` Gabriel Shores: Lane I: slip-penalty recipe on seeds 0 and 2 (seed 1 went 1/20 -> 17/20)
+- 2026-11-05 20:47 `1d61e80` Gabriel Shores: E26: slip penalty fixes the sliding seed (1/20 -> 17/20, 32.5 s laps)
+- 2026-11-05 20:50 `0fae838` Gabriel Shores: E25: exact p-values; 50-race randomised collisions (0.77) miss the target; additive crash count 2333
+- 2026-11-05 20:52 `71c875f` Gabriel Shores: Docs consistency pass: one set of final numbers (20 + 50 races), fact-check corrections
+- 2026-11-05 20:57 `9d6689e` Gabriel Shores: Slip-penalty recipe (E26): ppo_shield_v2esc_slip_s1 raced with stall recovery
+- 2026-11-05 20:59 `ecc5f52` Gabriel Shores: Track2: second, unseen track for generalisation tests (opt-in --map, default Singapore)
+- 2026-11-05 20:59 `cc9472d` Gabriel Shores: Report v2: layout pass (Times fonts, redrawn Fig. 1, no overfull boxes, 4 pages), fact-check fixes, slip-penalty and Track2 results
+- 2026-11-05 21:00 `b37f641` Gabriel Shores: Auto-sync training progress (21:00)
+- 2026-11-05 21:00 `e116a49` Gabriel Shores: Normalise line endings to LF (Python edits on Windows had written CRLF; .sh left as is while queues run)
+- 2026-11-05 21:20 `fabc19f` Gabriel Shores: Auto-sync training progress (21:20)
+- 2026-11-05 21:41 `4e24310` Gabriel Shores: Auto-eval: ppo_shield_linear_s0 raced (20 races x 5 laps, nominal + randomised)
+- 2026-11-06 06:43 `0c01c2f` Gabriel Shores: E27: on stock linear tyres PPO corners above the friction limit 9.7% of the time (5 s faster); autosync run list updated
+- 2026-11-06 06:43 `8b8504f` Gabriel Shores: Auto-sync training progress (06:43)
+- 2026-11-06 06:44 `01a827d` Gabriel Shores: Report: stock-tyre exploit (E27), seed-1 slip penalty with recovery 18/20
+- 2026-11-06 06:44 `0732c19` Gabriel Shores: E26: seed-1 slip penalty + stall recovery 18/20, 17/20 randomised
+- 2026-11-06 06:44 `1863c37` Gabriel Shores: E23: residual + shield training crashes 133 vs 995
+- 2026-11-06 06:46 `c51d157` Gabriel Shores: PROGRESS 34-35 (CRLF, machine sleep); results.md: E26 with recovery, E27 stock tyres, running list
+- 2026-11-06 07:04 `bf9e60d` Gabriel Shores: Auto-sync training progress (07:04)
+- 2026-11-06 07:53 `f4b2671` Gabriel Shores: E28: generalisation to unseen Track2 - shielded learned policies finish >= PID+APF and lap faster; report updated
+- 2026-11-06 07:54 `a96ef22` Gabriel Shores: seed_summary: slip-penalty and residual+shield recipes (fill in as seeds finish); make_videos map support + batch9
+- 2026-11-06 08:02 `691bb12` Gabriel Shores: Residual policy trained with the shield (E23), seed 1: trained and raced
+- 2026-11-06 08:04 `ccaabc3` Gabriel Shores: Auto-sync training progress (08:04)
+- 2026-11-06 08:32 `58e1a47` Gabriel Shores: Slip-penalty recipe (E26): ppo_shield_v2esc_slip_s0 raced with stall recovery
+- 2026-11-06 08:45 `ac9c33b` Gabriel Shores: Auto-sync training progress (08:45)
+- 2026-11-06 09:05 `78ef4da` Gabriel Shores: Auto-sync training progress (09:05)
+- 2026-11-06 09:08 `1ffdf53` Gabriel Shores: E23 seed 1 (16/20, most consistent recipe) and E26 seed 0 (11/20: slip penalty not a general fix); report, docs, clip 12; run hashes remapped after squash
+- 2026-11-06 09:25 `19f971e` Gabriel Shores: Auto-sync training progress (09:25)
+- 2026-11-06 09:45 `ae5c66b` Gabriel Shores: Auto-sync training progress (09:45)
+- 2026-11-06 10:42 `7108ae2` Gabriel Shores: Auto-sync training progress (10:42)
+- 2026-11-06 10:59 `0c64208` Gabriel Shores: Residual policy trained with the shield (E23), seed 2: trained and raced
+- 2026-11-06 11:02 `fd02888` Gabriel Shores: Auto-sync training progress (11:02)
+- 2026-11-06 13:58 `2cd60f7` Gabriel Shores: E23 seed 2 (17/20): residual + shield 16.0 +- 0.8 finished over 3 seeds, the most consistent recipe; report updated
+- 2026-11-06 14:13 `cc94237` Gabriel Shores: Auto-sync training progress (14:13)
+- 2026-11-06 14:22 `0c8a32d` Gabriel Shores: Slip-penalty recipe (E26): ppo_shield_v2esc_slip_s2 raced with stall recovery
+- 2026-11-06 14:33 `bc1b33f` Gabriel Shores: Auto-sync training progress (14:33)
+- 2026-11-06 14:44 `fb5d269` Gabriel Shores: E29: final controller = residual PPO trained with our shield (3 seeds x 50 races: 81% / 77% finished vs PID+APF 56% / 50%); E26 seed 2 (slip penalty dropped); Track2 seeds 1-2 19/20; report updated
+- 2026-11-06 14:45 `cb3a8d4` Gabriel Shores: train --residual_scale (how much the residual policy may add to the PID+APF base); evaluate/render read it back from args.json
+- 2026-11-06 14:46 `5f75a0e` Gabriel Shores: Lane J (E30): wider residual (scale 0.5) trained with the shield, seeds 0-1
+- 2026-11-06 14:47 `f2030ec` Gabriel Shores: results.md: running now (E30 wider residual, ablations)
+- 2026-11-06 15:26 `a0170e8` Gabriel Shores: Track2 on 3 seeds: final residual controller 18.3/20 in 31.2 s vs plain PPO + shield 16.7/20 in 37.5 s; stall-recovery ablation (barely matters for the residual policy)
+- 2026-11-06 15:27 `73b8a0d` Gabriel Shores: Lane K: seeds 1-2 of the additive-shield and residual baselines (3 seeds per learned controller)
+- 2026-11-06 15:28 `1e90e1a` Gabriel Shores: results.md: lane K running
+- 2026-11-06 20:12 `bf8a576` Gabriel Shores: Docs: residual PPO trained with our shield is the final controller (README status, quickstart, architecture, reproduce); training_efficiency shows residual scale
+- 2026-11-06 21:34 `66f87b6` Gabriel Shores: Wider residual (E30, --residual_scale 0.5) trained with the shield, seeds 0-1: trained and raced
+- 2026-11-06 21:36 `17b26f5` Gabriel Shores: PROGRESS 37: hung evaluation; venv python.exe is a launcher, workers are python3.11.exe
+- 2026-11-06 21:37 `e316332` Gabriel Shores: E30 seed 0: wider residual (scale 0.5) 19/20 and 18/20 finished, 0.10 collisions; halves grip use rather than raising it
+- 2026-11-06 21:50 `f88288c` Gabriel Shores: Baseline seed 1 (ppo_additive_s1): trained and raced on Singapore and Track2
+- 2026-11-06 21:53 `a106e77` Gabriel Shores: E30: wider residual (scale 0.5) helps seed 0 (19/20) but seed 1 slides again (14/20) - keep 0.3; E31: additive baseline seed 1 (13/20, no passes); report updated
+- 2026-11-06 21:53 `a57b0a9` Gabriel Shores: Lane L (E32): residual policy trained with the additive Eq. 2/3 shield (is it our shield or any shield?)
+- 2026-11-06 21:54 `4f3d7fc` Gabriel Shores: results.md: E32 running
+- 2026-11-06 22:09 `08ca89c` Gabriel Shores: feedback.md / design-decisions: final controller is residual PPO trained with our shield; how it differs from ResRace
+- 2026-11-06 22:10 `7be50e1` Gabriel Shores: design-decisions: lane K status
+- 2026-11-06 22:11 `fd5c010` Gabriel Shores: Seed-spread figure (races finished per training seed, every recipe); seed_summary adds the additive and residual baselines (E31)
+- 2026-11-06 22:12 `80cd0ad` Gabriel Shores: Report: Fig. 5 seed spread (races finished per training seed) supports the choice of final controller; still 4 pages
+- 2026-11-06 23:58 `df66b5f` Gabriel Shores: Baseline seed 1 (ppo_residual_s1): trained and raced on Singapore and Track2
+- 2026-11-07 00:02 `92f0393` Gabriel Shores: Residual policy trained with the additive shield (E32), seeds 0-1: trained and raced
+- 2026-11-08 07:02 `e713b65` Gabriel Shores: evaluate: zero-policy control for residual controllers, --mu_scale / --n_opp stress tests; lane M (E33)
+- 2026-11-08 07:06 `b2e0195` Gabriel Shores: Grip-use analysis: g-g per controller shows plain PPO meets the grip target with a sawtooth throttle; contact classifier
+- 2026-11-08 07:07 `84abb9a` Gabriel Shores: Baseline seed 2 (ppo_additive_s2): trained and raced on Singapore and Track2
+- 2026-11-08 07:16 `a79b4cd` Gabriel Shores: Shield option opp_both (opponents may brake or hold speed); contact classification of the final controller; lane N (E34)
+- 2026-11-08 07:25 `633bb6c` Gabriel Shores: Zero-policy control (E32): base + additive shield 0/20 (stacked APF fields), base + our shield 20/20
+- 2026-11-08 07:27 `28b58a2` Gabriel Shores: E32 (residual + additive shield fails; zero-policy control shows stacked APF fields) and E33 (contact classes) write-ups
+- 2026-11-08 07:27 `9c48381` Gabriel Shores: Stress test mu0.8 (E33): 6 controllers x 20 races
+- 2026-11-08 07:28 `fbcde25` Gabriel Shores: experiments: renumber contact analysis to E34 (E33 = stress tests, lane M)
+- 2026-11-08 07:32 `8ab45df` Gabriel Shores: Report: grip-use figure (target measures sawtooth throttle), our shield vs additive with the residual (zero-policy control), contact analysis; still 4 pages
+- 2026-11-08 07:52 `08bde2c` Gabriel Shores: results/feedback: E32 zero-policy control, grip use, contact classes, running lanes
+- 2026-11-08 07:52 `1ebac10` Gabriel Shores: Final controller with the two-hypothesis opponent check (E34), seed 0, 50 races
+- 2026-11-08 07:53 `a000b89` Gabriel Shores: evaluate --shield_mu (oracle friction for the shield) and lane O (E33b)
+- 2026-11-08 07:55 `8a73bd1` Gabriel Shores: Report: final recipe reaches a fast lap 2-4x sooner in training; additive training crashes over 3 seeds; tighter evaluation plan; 4 pages
+- 2026-11-08 07:55 `4acf265` Gabriel Shores: Stress test mu0.7 (E33): 6 controllers x 20 races
+- 2026-11-08 08:10 `0e1424b` Gabriel Shores: Shield: opp_rear and opp_relax variants of the two-hypothesis opponent check (E34); lane P
+- 2026-11-08 08:11 `fa14e5e` Gabriel Shores: Stress summary (E33): finish rate vs friction and opponents
+- 2026-11-08 08:14 `cb714d8` Gabriel Shores: Final controller with the two-hypothesis opponent check (E34), seed 1, 50 races
+- 2026-11-08 08:22 `8e5414b` Gabriel Shores: Stress test mu1.2 (E33): 6 controllers x 20 races
+- 2026-11-08 08:35 `b318752` Gabriel Shores: Final controller with the two-hypothesis opponent check (E34), seed 2, 50 races
+- 2026-11-08 08:47 `c801b37` Gabriel Shores: Stress test friction x0.8 with the shield told the true friction (E33b)
+- 2026-11-08 11:54 `a591db2` Gabriel Shores: evaluate: fail-fast process pool that reruns races lost to a killed worker, progress output (PROGRESS 38)
+- 2026-11-08 11:57 `7c1a7d6` Gabriel Shores: E33 stress write-up (x1.2, shield told the true friction lifts x0.8 from 31/60 to 50/60), E34 two-hypothesis check over 3 seeds (car contacts 60 -> 25, walls 2 -> 17), lanes Q/R restart lost jobs
+- 2026-11-08 11:59 `c5aa904` Gabriel Shores: Report: two-hypothesis opponent check over 3 seeds, low-friction stress test with the shield told the true friction; tighter negative results and evaluation plan; 4 pages
+- 2026-11-08 14:18 `25bdf35` Gabriel Shores: Shield option mu_est: online friction estimate from tyre saturation (E35), evaluate records the estimate; lane S
+- 2026-11-08 14:18 `4c8aeee` Gabriel Shores: Stress test friction x0.7 with the shield told the true friction (E33b)
+- 2026-11-08 14:18 `50deb52` Gabriel Shores: experiments: E35 online friction estimate (design, first check), running lanes
+- 2026-11-08 14:19 `3877bb6` Gabriel Shores: E33: x0.7 with the true friction (final 16/60 -> 40/60, PPO 7/20 -> 18/20); report and results updated, 4 pages
+- 2026-11-08 14:29 `04a8e0f` Gabriel Shores: Final controller with the relaxed two-hypothesis opponent check (E34b), seed 0, 50 races
+- 2026-11-08 14:40 `fdf9913` Gabriel Shores: Final controller with the relaxed two-hypothesis opponent check (E34b), seed 1, 50 races
+- 2026-11-08 14:50 `f4b8a5d` Gabriel Shores: Final controller with the relaxed two-hypothesis opponent check (E34b), seed 2, 50 races
+- 2026-11-08 15:02 `f0c22bd` Gabriel Shores: Shield with online friction estimate (E35): stress_mu0.8_muest
+- 2026-11-08 15:11 `2ff4679` Gabriel Shores: Shield with online friction estimate (E35): stress_mu0.7_muest
+- 2026-11-08 15:26 `9933382` Gabriel Shores: Shield with online friction estimate (E35): eval_muest
+- 2026-11-08 15:26 `03d75ed` Gabriel Shores: Stress test opp5 (E33): 6 controllers x 20 races
+- 2026-11-08 16:50 `111d320` Gabriel Shores: Stress test mu0.6 (E33): 6 controllers x 20 races
+- 2026-11-08 17:05 `ad40a56` Gabriel Shores: Stress test mu1.3 (E33): 6 controllers x 20 races
+- 2026-11-08 17:20 `f4424ea` Gabriel Shores: Baseline seed 2 (ppo_residual_s2): trained and raced on Singapore and Track2
+- 2026-11-09 10:01 `5f3fc76` Gabriel Shores: Keep the full history: crashed ppo_residual_s2 attempt restored, all 14 report versions archived, timeline of every commit, pre-squash commit list (PROGRESS 39)
+- 2026-11-09 10:04 `1aa8592` Gabriel Shores: Nov 8 jobs analysed (results/analysis/2026-11-09.md); overtake counter uses the real opponent count (PROGRESS 40); variants mu2 (smoother friction estimate) and oxmu (candidate final shield); lanes T and U; crashed run marked in the registry
+- 2026-11-09 10:05 `a12f2e0` Gabriel Shores: Dated updates: E31 residual baseline seed 2, E33 x0.6 / x1.3 / five opponents, E34b relaxed opponent check, E35 friction estimate results
+- 2026-11-09 10:06 `f167963` Gabriel Shores: Report: relaxed opponent check and online friction estimate results, plan updated; build script archives every report build (4 pages)
+- 2026-11-09 10:07 `0f1e70c` Gabriel Shores: feedback: grip-reach consistency now uses an estimated friction (E35), dated update
+- 2026-11-09 10:09 `8e24513` Gabriel Shores: Seed summary and Fig. 5 with three seeds of every baseline; previous generated tables kept in results/history; render: fixed-friction clips with the estimate on screen, never overwrites a clip; video batch10
+- 2026-11-09 10:12 `5816f36` Gabriel Shores: train: shield presets with the friction estimate and the relaxed opponent check, --mu_range; lane V (E37)
+- 2026-11-09 10:22 `b25d137` Gabriel Shores: Videos batch10: friction estimate and relaxed opponent check, same race before and after
+- 2026-11-09 10:24 `0210c79` Gabriel Shores: Stress test 1 opponent (E33), after the overtake-counter fix
+- 2026-11-09 10:30 `2d152f2` Gabriel Shores: E33 update: one-opponent stress test, traffic is what separates the controllers
+- 2026-11-09 10:31 `2fed4df` Gabriel Shores: E33: dated correction, PID+APF randomised 3-opponent count is 12/20
+- 2026-11-09 10:48 `f5fdc81` Gabriel Shores: Candidate final shield (E36): relaxed opponent check + friction estimate, 50 races
+- 2026-11-09 10:51 `58ad410` Gabriel Shores: Stress test 5 opponents rerun with passes counted on all cars (E33)
+- 2026-11-09 10:54 `2ee5a40` Gabriel Shores: Report: traffic stress result (1 vs 5 opponents); README links the PDF and its history; 4 pages

@@ -290,15 +290,16 @@ no learning finishes 20/20 without a collision (16/20 randomised) but laps at 42
 \textbf{What still fails.} 60 of the final controller's 62 non-finishes in 300 races are contacts with opponents.
 Of seed 0's 24, 15 are the ego cutting back in front of a car it has just passed. The shield's prediction lets every opponent
 brake at 6\,m/s$^2$, the worst case for a car ahead but the best case for a car just passed, which keeps its speed.
-Checking both (brake or hold speed) cuts car contacts from 60 to 25 in 300 races ($p = 6\cdot10^{-5}$)
-but adds 15 wall hits, where no action is safe under both and the fallback steers into the wall. Falling back
-to the braking-only check in that case keeps 256 of 300 finished (238 before) with 38 car contacts and 4 wall hits.
+Checking both (brake or hold speed) cuts car contacts from 60 to 25 ($p = 6\cdot10^{-5}$) but adds
+15 wall hits when nothing is safe under both. Falling back to braking-only then gives 256 of 300 finished (238
+before), 38 car contacts and 4 wall hits.
 
 \textbf{Outside the training friction.} At friction $\times$0.8 (trained on 0.85--1.15) the final controller
 finishes 52\% of races, PID+APF 50\%, PPO + shield 85\%. With the shield told the true friction it finishes 83\%
 ($p = 4\cdot10^{-4}$). At $\times$0.7 the true friction lifts it from 27\% to 67\% and PPO from 35\% to 90\%, so
 the friction model is the weak point. Estimating it online from tyre saturation gives 90\% at $\times$0.8 and
-53\% at $\times$0.7, level with the original in normal races.
+53\% at $\times$0.7, level with the original in normal races. With one opponent all controllers finish 85--100\%, with five PID+APF
+48\% and ours 77\%.
 
 \textbf{Why the tyre model matters.} On stock tyres the same recipe laps 5\,s faster by cornering above the
 friction limit 9.7\% of the time; with ours, 0\%.
