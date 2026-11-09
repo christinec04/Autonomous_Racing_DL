@@ -92,6 +92,7 @@ class ShieldConfig:
     mu_est: bool = False
     mu_est_rate: float = 0.5  # weight of a new reading at the limit
     mu_est_rise: float = 0.05  # weight of a below-limit reading that proves more grip
+    mu_est_med: int = 1  # E35c: a rise needs the median of the last k readings above the estimate (1 = off)
 
 
 def available_decel(cfg: ShieldConfig, v: float, yaw_rate: float, mu: float | None = None) -> float:
@@ -123,6 +124,7 @@ class APFShield:
         self.last = {}
         self.mu_hat = self.cfg.mu_scale  # friction estimate, as a fraction of nominal (E35)
         self._prev = None
+        self._recent = []
         self._set_mu(self.mu_hat)
 
     def _set_mu(self, scale):
@@ -146,10 +148,13 @@ class APFShield:
         alpha_r = -b + P["lr"] * r / v
         room = np.sqrt(max(1.0 - (ax / (self.mu_hat * P["mu"] * G)) ** 2, 0.0))
         at_limit = max(abs(alpha_f) * P["C_Sf"], abs(alpha_r) * P["C_Sr"]) >= 0.95 * room
+        self._recent = (self._recent + [m])[-cfg.mu_est_med:]
         if at_limit:
             self.mu_hat += cfg.mu_est_rate * (m - self.mu_hat)
-        elif m > self.mu_hat:
-            self.mu_hat += cfg.mu_est_rise * (m - self.mu_hat)
+        else:
+            m_rise = m if cfg.mu_est_med <= 1 else float(np.median(self._recent))
+            if m_rise > self.mu_hat:
+                self.mu_hat += cfg.mu_est_rise * (m_rise - self.mu_hat)
         self.mu_hat = float(np.clip(self.mu_hat, 0.5, 1.3))
         self._set_mu(self.mu_hat)
 

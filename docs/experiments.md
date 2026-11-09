@@ -601,6 +601,10 @@ from 95% to 50% with more cars, the final controller from 97% to 77%. With one o
 *Correction 2026-11-09:* the PID + APF 3-opponent randomised entry above should read 12, not 10
 (`results/final_v2_others.json`, seeds 10000-10019), so PID+APF falls from 98% to 60% with three cars.
 
+**Update 2026-11-09, five opponents rerun** (`results/stress_opp5_v2.json`, lane T). Finishes, car contacts and wall
+hits are identical race by race to the original `stress_opp5.json`, so the counter bug only touched the pass count:
+the final controller makes 5.7 passes per race with five opponents, not the 3.9 the old counter reported. The table
+above stands.
 
 ## E34. What still ends the final controller's races? (contact classification)
 `python -m scripts.classify_contacts` replays every car-contact DNF and classifies the contact at the contact step
@@ -685,6 +689,11 @@ told the true friction and 16 with the nominal model. Beating the oracle is plau
 low (single-axle saturation), so the shield keeps a margin the oracle does not. The main-protocol check of this
 version (`results/eval_mu2.json`) is running.
 
+**Update 2026-11-09, smoother estimate on the main protocol** (`results/eval_mu2.json`, lane T, 20 race seeds,
+same seeds as the original). Finished nominal / randomised of 60: original 48 / 50, first estimate 51 / 45,
+smoother estimate 49 / 52, 0 wall hits for all, lap +0.2 to 0.3 s. So the smoother estimate costs nothing in normal
+races and wins at x0.7 (47 vs 16 of 60).
+
 ## E36. Candidate final shield: relaxed opponent check + friction estimate (lane U)
 `ppo_residual_apf_rec_oxmu` = the final controller's shield with both fixes (E34b relaxed two-hypothesis opponent
 check, E35 friction estimate, first version), same three trained policies, `results/eval_oxmu.json` (50 race
@@ -700,6 +709,23 @@ seeds) and `results/stress_mu0.8_oxmu.json`:
 lap. Per seed 46/45, 45/42, 48/43 of 50. At x0.8 it finishes 55 / 60 (nominal model 31, estimate alone 54). The
 two fixes add up: the estimate also helps in normal races because randomised friction goes down to x0.85. x0.7 is
 running; lane V retrains the policy with this shield on during training (E37).
+
+**Update 2026-11-09, E36 at x0.7** (`results/stress_mu0.7_oxmu.json`, lane U). 41 / 60 (9, 20, 12), 6 car
+contacts but 12 wall hits, below the smoother estimate alone (47, 4 wall hits). The wall hits are not slow
+convergence at the start: the estimate falls below 0.72 within 5 to 17 readings (every 25 steps) in every race.
+Before each wall hit it climbs back to about 0.92 (true 0.70). Races that end in the wall spend 16% of their
+readings above 0.85, races that finish 1.5%; with the smoother estimate 5% and 1%. Many of these crashes come at
+the same point of a lap (x.17 laps done). The rise rule takes any single below-limit reading above the estimate as
+proof of more grip, and a reading is a finite difference of speed and slip angle, so noise can push it up on a
+stretch where no tyre saturates. Analysis: `results/analysis/2026-11-09b.md` (`scripts/analyze_nov9b.py`).
+
+## E36b / E35c. Combined shield with a steadier estimate (lanes W and X, running)
+- E36b (lane W): E36 with the smoother estimate (rate 0.2, rise 0.02), `ppo_residual_apf_rec_oxmu2`. x0.7, then
+  50 races main protocol, then x0.8.
+- E35c (lane X, after W): new option `mu_est_med` (shield.py, default 1 = unchanged): a rise needs the median of
+  the last 9 readings above the estimate, so one noisy reading cannot raise it. Tried with both rise rates at x0.7
+  (`ppo_residual_apf_rec_oxmed`, `_oxmu2med`), then 50 races main protocol for the smoother one. A one-race smoke
+  test at x0.7 kept the estimate between 0.61 and 0.72.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

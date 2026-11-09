@@ -111,7 +111,7 @@ Report versions: [2026-11-08_0732_8ab45df](../report/history/midterm_2026-11-08_
 - 15:26 `475f707` Shield with online friction estimate (E35): stress_mu0.7_muest (+2 more)
 - 17:20 `341f514` Baseline seed 2 (ppo_residual_s2): trained and raced on Singapore and Track2 (+2 more)
 
-## 2026-11-09 (7 commits)
+## 2026-11-09 (11 commits)
 
 Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf), [2026-11-09_1113_build](../report/history/midterm_2026-11-09_1113_build.pdf)
 
@@ -122,3 +122,7 @@ Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_10
 - 10:59 `3d42a35` Candidate final shield (E36) at x0.8
 - 11:09 `1a901fd` Smoother friction estimate (E35b) at x0.7
 - 11:12 `183ed4f` Run provenance remapped to the collapsed history (old hashes kept), PROGRESS 41, timeline and registry regenerated
+- 11:13 `6aee503` E36 combined shield (269/300 finished, no wall hit) and E35b smoother friction estimate (47/60 at x0.7); report PDF updated, 4 pages
+- 11:21 `b4a5109` Candidate final shield (E36) at x0.7
+- 11:23 `01ced5f` Smoother friction estimate (E35b), main protocol
+- 12:54 `09ad3e0` Lane W (E36b): combined shield with the smoother friction estimate

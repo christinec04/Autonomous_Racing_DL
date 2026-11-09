@@ -60,6 +60,11 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## Update 2026-11-09
 
+- Midday: the smoother estimate (E35b) is level with the original in normal races (101 vs 98 of 120). The combined
+  shield (E36) finishes 41 of 60 at x0.7 but with 12 wall hits: its estimate climbs back above the true friction
+  before them. Two fixes are running (E36b, E35c). Five-opponent rerun: same finishes, 5.7 passes per race.
+  Numbers: `results/analysis/2026-11-09b.md`.
+
 - Later the same day: both shield fixes together (E36) finish 269 of 300 races (original 238, p = 7e-4) with no
   wall hit and 30 car contacts (60), 0.5 s per lap slower. A smoother friction estimate (E35b) finishes 47 of 60 at
   x0.7, more than with the true friction told to the shield (40).
