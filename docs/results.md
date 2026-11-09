@@ -60,6 +60,10 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## Update 2026-11-09
 
+- Later the same day: both shield fixes together (E36) finish 269 of 300 races (original 238, p = 7e-4) with no
+  wall hit and 30 car contacts (60), 0.5 s per lap slower. A smoother friction estimate (E35b) finishes 47 of 60 at
+  x0.7, more than with the true friction told to the shield (40).
+
 - Relaxed two-hypothesis opponent check (E34b): 256 of 300 finished (original 238), car contacts 60 -> 38, wall hits
   2 -> 4. The plain two-hypothesis check reached the same finishes but with 17 wall hits.
 - Online friction estimate (E35): at x0.8 54 of 60 finished (nominal model 31, told the true friction 50); at x0.7 32

@@ -111,9 +111,9 @@ Report versions: [2026-11-08_0732_8ab45df](../report/history/midterm_2026-11-08_
 - 15:26 `475f707` Shield with online friction estimate (E35): stress_mu0.7_muest (+2 more)
 - 17:20 `341f514` Baseline seed 2 (ppo_residual_s2): trained and raced on Singapore and Track2 (+2 more)
 
-## 2026-11-09 (6 commits)
+## 2026-11-09 (7 commits)
 
-Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf)
+Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf), [2026-11-09_1113_build](../report/history/midterm_2026-11-09_1113_build.pdf)
 
 - 10:06 `5fd783a` Nov 8 jobs analysed (results/analysis/2026-11-09.md); overtake counter uses the real opponent count (PROGRE... (+3 more)
 - 10:22 `1465481` Seed summary and Fig. 5 with three seeds of every baseline; previous generated tables kept in results/histo... (+3 more)
@@ -121,3 +121,4 @@ Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_10
 - 10:56 `114b39a` Record all 254 commits before collapsing the history to ~90 (docs/presquash_history_2026-11-09.md) (+3 more)
 - 10:59 `3d42a35` Candidate final shield (E36) at x0.8
 - 11:09 `1a901fd` Smoother friction estimate (E35b) at x0.7
+- 11:12 `183ed4f` Run provenance remapped to the collapsed history (old hashes kept), PROGRESS 41, timeline and registry regenerated

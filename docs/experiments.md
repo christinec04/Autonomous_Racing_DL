@@ -678,6 +678,29 @@ between 0.78 and 1.15), so it is sometimes too optimistic right when it matters.
 at the limit weigh 0.2 instead of 0.5) is running in lane T, and the combination with the relaxed opponent check
 (E36) in lane U.
 
+**Update 2026-11-09, smoother estimate (E35b, lane T, `results/stress_mu0.7_mu2.json`).** Readings at the limit
+weigh 0.2 instead of 0.5, readings that prove more grip 0.02 instead of 0.05 (`ppo_residual_apf_rec_mu2`). At x0.7
+the final controller finishes **47 / 60** (15, 19, 13), against 32 with the first estimate, 40 when the shield is
+told the true friction and 16 with the nominal model. Beating the oracle is plausible: the estimate reads a little
+low (single-axle saturation), so the shield keeps a margin the oracle does not. The main-protocol check of this
+version (`results/eval_mu2.json`) is running.
+
+## E36. Candidate final shield: relaxed opponent check + friction estimate (lane U)
+`ppo_residual_apf_rec_oxmu` = the final controller's shield with both fixes (E34b relaxed two-hypothesis opponent
+check, E35 friction estimate, first version), same three trained policies, `results/eval_oxmu.json` (50 race
+seeds) and `results/stress_mu0.8_oxmu.json`:
+
+| 3 seeds x 50 races | finished nom / rand | car | wall | lap |
+|---|---|---|---|---|
+| original shield (E29) | 122 / 116 | 60 | 2 | 32.3 s |
+| relaxed opponent check (E34b) | 131 / 125 | 38 | 4 | 32.5 s |
+| relaxed check + friction estimate (E36) | **139 / 130** | **30** | **0** | 32.7 s |
+
+269 of 300 finished against 238 (Fisher p = 7e-4), no wall hit in 300 races, half the car contacts, for 0.5 s per
+lap. Per seed 46/45, 45/42, 48/43 of 50. At x0.8 it finishes 55 / 60 (nominal model 31, estimate alone 54). The
+two fixes add up: the estimate also helps in normal races because randomised friction goes down to x0.85. x0.7 is
+running; lane V retrains the policy with this shield on during training (E37).
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). `batch9` renders clip 12, slip-penalty PPO + our shield on
