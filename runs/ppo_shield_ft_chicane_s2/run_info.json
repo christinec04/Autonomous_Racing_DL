@@ -1,5 +1,5 @@
 {
- "git_commit": "e1f1aac",
+ "git_commit": "d6b3425",
  "git_dirty": [],
  "command": "python -m racing.train --init runs/ppo_shield_s2/model_stage3.zip --shield cond_fb_grip_esc --tire saturated_v2 --stages 4 --steps 500000 --n_envs 6 --seed 2 --out runs/ppo_shield_ft_chicane_s2",
  "status": "finished",
@@ -8,5 +8,6 @@
   4
  ],
  "steps_done": 500000,
- "finished": "2026-11-05 11:02:07"
+ "finished": "2026-11-05 11:02:07",
+ "git_commit_before_collapse_2026-11-09": "e1f1aac"
 }

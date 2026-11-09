@@ -1,5 +1,5 @@
 {
- "git_commit": "9d6689e",
+ "git_commit": "8eac04c",
  "git_dirty": [
   "racing/env.py",
   "racing/evaluate.py",
@@ -17,5 +17,6 @@
  ],
  "steps_done": 3500000,
  "finished": "2026-11-06 08:24:46",
- "git_commit_presquash": "7a45b58"
+ "git_commit_presquash": "7a45b58",
+ "git_commit_before_collapse_2026-11-09": "9d6689e"
 }

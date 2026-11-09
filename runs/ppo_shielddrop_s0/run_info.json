@@ -1,5 +1,5 @@
 {
- "git_commit": "0d04e46",
+ "git_commit": "f4ca1d0",
  "git_dirty": [
   "racing/evaluate.py",
   "racing/shield.py"
@@ -13,5 +13,6 @@
   3
  ],
  "steps_done": 3500000,
- "finished": "2026-11-05 13:54:47"
+ "finished": "2026-11-05 13:54:47",
+ "git_commit_before_collapse_2026-11-09": "0d04e46"
 }

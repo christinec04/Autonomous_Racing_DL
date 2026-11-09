@@ -311,3 +311,11 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     test (E33, lane M) crashed with an IndexError and the five-opponent test counted passes on the first three cars
     only (finish and collision numbers are unaffected). Fixed to use the race's opponent count. The original
     `results/stress_opp5.json` is kept; the reruns go to `results/stress_opp5_v2.json` and `results/stress_opp1_v2.json`.
+41. **History collapsed from 254 to 90 commits (user request, Nov 9).** Commits were grouped only within each day,
+    so every day keeps its share (Nov 4: 99 -> 35 plus Christine's initial commit unchanged, Nov 5: 57 -> 20, Nov 6:
+    44 -> 16, Nov 7: 1, Nov 8: 37 -> 13, Nov 9: 15 -> 4) and each new commit keeps the date of the last original in
+    its group. The final tree is byte-identical. Every new commit message lists the originals it contains, all 254
+    originals are listed in `docs/presquash_history_2026-11-09.md` and kept in the local tag `presquash-2026-11-09`.
+    The 30 `runs/*/run_info.json` now hold the new hash, the old one is kept as `git_commit_before_collapse_2026-11-09`.
+    `main` now carries everything (it was 136 commits behind `gabe-build`); a local post-commit hook pushes every
+    commit to both branches.

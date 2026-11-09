@@ -1,5 +1,5 @@
 {
- "git_commit": "b3af79a",
+ "git_commit": "5157d49",
  "git_dirty": [],
  "command": "python -m racing.train --shield off --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 1 --out runs/ppo_noshield_s1",
  "status": "finished",
@@ -10,5 +10,6 @@
   3
  ],
  "steps_done": 3500000,
- "finished": "2026-11-04 16:29:31"
+ "finished": "2026-11-04 16:29:31",
+ "git_commit_before_collapse_2026-11-09": "b3af79a"
 }

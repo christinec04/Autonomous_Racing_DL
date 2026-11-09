@@ -1,5 +1,5 @@
 {
- "git_commit": "a57b0a9",
+ "git_commit": "5a37f66",
  "git_dirty": [],
  "command": "python -m racing.train --residual --shield additive --tire saturated_v2 --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 0 --out runs/ppo_residual_additive_s0",
  "status": "finished",
@@ -10,5 +10,6 @@
   3
  ],
  "steps_done": 3500000,
- "finished": "2026-11-07 00:01:16"
+ "finished": "2026-11-07 00:01:16",
+ "git_commit_before_collapse_2026-11-09": "a57b0a9"
 }
