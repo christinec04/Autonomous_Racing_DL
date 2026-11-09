@@ -767,6 +767,21 @@ randomised) and finishes all 20 at x0.7, with the shield acting on 3.5% of steps
 is not enough, the E29 seed-1 policy also finishes 20 of 20 at x0.7. B seed 1 is being raced; lane Y trains
 seed 2 of A and B. Analysis: `results/analysis/2026-11-09c.md` (`scripts/analyze_nov9c.py`).
 
+**Update 2026-11-09 evening, B seed 1** (`results/*_ppo_residual_oxmu_widemu_s1.json`): 92 of 100 main protocol
+(7 car contacts, 0 wall hits, lap 33.5 s), 20 of 20 at x0.8, 19 of 20 at x0.7. Seeds 0 and 1 together, against the
+E29 policies of the same seeds raced with the same shield:
+
+| | main, of 200 | x0.8, of 40 | x0.7, of 40 | lap s |
+|---|---|---|---|---|
+| E29 policies | 178 | 39 | 29 | 32.6-33.1 |
+| E37 A (usual range) | 176 | 29 | 26 | 33.7-35.5 |
+| E37 B (wide range) | 188 (p = 0.11) | 35 (p = 0.20) | **39 (p = 0.003)** | 33.4-33.5 |
+
+Training on low friction is what helps at low friction; training with the new shield alone does not. B costs
+about 0.5 s per lap against E29 and leans on the shield less (3.5-6% of steps, 10-11% for E29). Seed 2 of A and B
+trains in lane Y. Clips 17 and 18 (`scripts/make_videos.py batch11`): race seed 10003 at x0.7, the E29 policy turns
+in tight at the chicane and hits the inside wall at 44 s, the E37 B policy takes a wider line at 4.5 m/s.
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). `batch9` renders clip 12, slip-penalty PPO + our shield on

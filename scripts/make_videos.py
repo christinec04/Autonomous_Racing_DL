@@ -30,6 +30,15 @@ def pair(ctrl, model, title, name, seed, seconds, **kw):
 
 if __name__ == "__main__":
     which = sys.argv[1]
+    if which == "batch11":  # E37: policy trained on a wide friction range vs the E29 policy, same x0.7 race, 28-46 s
+        for ctrl_model, title, name in (
+                ("runs/ppo_residual_shield_s0/model_stage3.zip", "Friction x0.7: E29 policy (trained on x0.85-1.15)",
+                 "17_mu07_e29_policy.mp4"),
+                ("runs/ppo_residual_oxmu_widemu_s0/model_stage3.zip", "Friction x0.7: E37 policy (trained on x0.65-1.15)",
+                 "18_mu07_e37_widemu_policy.mp4")):
+            env, fr = record("ppo_residual_apf_rec_oxmu", ctrl_model, 10003, 46, tire="saturated_v2", mu_scale=0.7)
+            print(name, "crash:", fr[-1]["crash"], "t_end:", fr[-1]["t"])
+            render(env, [f for f in fr if f["t"] >= 28.0], OUT / name, f"{title}  (seed 10003, from 28 s)")
     if which == "batch10":  # E35 friction estimate and E34b opponent check, same race before and after
         m0 = "runs/ppo_residual_shield_s0/model_stage3.zip"
         pair("ppo_residual_apf_rec", m0, "Friction x0.7, shield assumes normal grip", "13_mu07_shield_nominal_grip.mp4",

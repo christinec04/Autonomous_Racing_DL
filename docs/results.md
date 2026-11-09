@@ -60,6 +60,9 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## Update 2026-11-09
 
+- Late evening: the policy retrained on a wide friction range (E37 B, x0.65-1.15, 2 seeds) finishes 188 of 200
+  normal races (old policies 178) and 39 of 40 at x0.7 (29, p = 0.003), 0.5 s per lap slower. Seed 2 running.
+
 - Evening: the midday explanation of the x0.7 wall hits (estimate drifting up) was wrong, the estimate is correct
   right before the wall and jumps at the impact (correction in E36b / E35c). Shield variants are level on the main
   protocol (257-269 of 300); at x0.7 the smoother estimate helps (49 of 60 with a median gate, 4 wall hits).

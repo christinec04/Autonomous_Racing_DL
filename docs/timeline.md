@@ -111,9 +111,9 @@ Report versions: [2026-11-08_0732_8ab45df](../report/history/midterm_2026-11-08_
 - 15:26 `475f707` Shield with online friction estimate (E35): stress_mu0.7_muest (+2 more)
 - 17:20 `341f514` Baseline seed 2 (ppo_residual_s2): trained and raced on Singapore and Track2 (+2 more)
 
-## 2026-11-09 (21 commits)
+## 2026-11-09 (23 commits)
 
-Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf), [2026-11-09_1113_build](../report/history/midterm_2026-11-09_1113_build.pdf), [2026-11-09_1257_build](../report/history/midterm_2026-11-09_1257_build.pdf)
+Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf), [2026-11-09_1113_build](../report/history/midterm_2026-11-09_1113_build.pdf), [2026-11-09_1257_build](../report/history/midterm_2026-11-09_1257_build.pdf), [2026-11-09_1844_build](../report/history/midterm_2026-11-09_1844_build.pdf)
 
 - 10:06 `5fd783a` Nov 8 jobs analysed (results/analysis/2026-11-09.md); overtake counter uses the real opponent count (PROGRE... (+3 more)
 - 10:22 `1465481` Seed summary and Fig. 5 with three seeds of every baseline; previous generated tables kept in results/histo... (+3 more)
@@ -136,3 +136,5 @@ Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_10
 - 14:56 `b487d67` Median-gated smoother friction estimate (E35c), 50 races
 - 15:06 `2a6c7b5` E37: ppo_residual_oxmu_s1 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
 - 18:21 `f32ec85` E37: ppo_residual_oxmu_widemu_s0 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
+- 18:26 `82b6331` E36b/E35c results, correction of the midday x0.7 diagnosis (PROGRESS 42), E37 first results; lane Y queues E37 seed 2
+- 18:40 `df7a9e7` E37: ppo_residual_oxmu_widemu_s1 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
