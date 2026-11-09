@@ -291,7 +291,7 @@ no learning finishes 20/20 without a collision (16/20 randomised) but laps at 42
 Of seed 0's 24, 15 are the ego cutting back in front of a car it has just passed. The shield's prediction lets every opponent
 brake at 6\,m/s$^2$, the worst case for a car ahead but the best case for a car just passed, which keeps its speed.
 Checking both (brake or hold speed), with a braking-only fallback when nothing is safe under both, and the
-friction estimate below, 269 of 300 finish ($p = 7\cdot10^{-4}$) (238 before) with 30 car contacts (60) and no wall hit, 0.5\,s per lap slower.
+friction estimate below, 269 of 300 finish (238 before, $p = 7\cdot10^{-4}$) with 30 car contacts (60) and no wall hit, 0.5\,s per lap slower.
 
 \textbf{Outside the training friction.} At friction $\times$0.8 (trained on 0.85--1.15) the final controller
 finishes 52\% of races (PID+APF 50\%), 83\% with the shield told the true friction ($p = 4\cdot10^{-4}$); at

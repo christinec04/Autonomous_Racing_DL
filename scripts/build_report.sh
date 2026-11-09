@@ -6,7 +6,7 @@ cd "$(dirname "$0")/../report" || exit 1
 pages=$(../../.venv/Scripts/python -W ignore -c "import fitz; print(fitz.open('midterm.pdf').page_count)")
 echo "$pages pages"
 [ "$pages" -le 4 ] || { echo "over the 4-page limit, not archived"; exit 1; }
-stamp=$(date +%Y-%m-%d_%H%M)
+stamp=$(date +%Y-%m-%d_%H%M%S)  # seconds, so two builds in one minute do not overwrite each other
 cp midterm.tex history/midterm_${stamp}_build.tex
 cp midterm.pdf history/midterm_${stamp}_build.pdf
 cp midterm.pdf ~/Downloads/midterm_report_draft.pdf
