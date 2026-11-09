@@ -30,12 +30,15 @@ EGO, EGO_SHIELD, OPP, INK, SURF = "#2a78d6", "#e34948", "#8a8984", "#0b0b0b", "#
 L, W = DEFAULT_PARAMS["length"], DEFAULT_PARAMS["width"]
 
 
-def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturated", map_name="Singapore"):
+def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturated", map_name="Singapore", mu_scale=None):
     sh = SHIELD_FOR[controller]
+    extra = {}
+    if mu_scale is not None:  # as in the stress tests (evaluate --mu_scale): fixed friction, no lidar noise
+        extra = dict(randomize=True, mu_range=(mu_scale, mu_scale), lidar_noise=(0.0, 0.0))
     cfg = EnvConfig(n_opp=0 if solo else n_opp, random_start=not solo, shield=ShieldConfig(**sh),
                     episode_time=seconds, seed=seed, residual=controller.startswith("ppo_residual"), tire=tire,
                     recover=controller in RECOVER, map_name=map_name,
-                    residual_scale=residual_scale_for(model if isinstance(model, str) else None))
+                    residual_scale=residual_scale_for(model if isinstance(model, str) else None), **extra)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0)
@@ -50,7 +53,9 @@ def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturate
         st = env._states()
         frames.append(dict(t=info["t"], poses=st[:, [0, 1, 4]].copy(), v=float(st[0, 3]), lam=info["lambda"],
                            prog=info["progress"], crash=bool(term), passes=info["passes"],
-                           rec=bool(info.get("recovering", False))))
+                           rec=bool(info.get("recovering", False)),
+                           mu_hat=env.shield.mu_hat if cfg.shield.mu_est else None,
+                           mu=env.mu / DEFAULT_PARAMS["mu"]))
         if term or trunc:
             break
     return env, frames
@@ -102,6 +107,8 @@ def render(env, frames, out, title, follow=True, fps=25, view=14.0):
         if f.get("rec"):
             shield += "  (stall recovery)"
         hud.set_text(f"t {f['t']:5.1f} s   lap {lap}\nspeed {f['v']:4.1f} m/s\nshield {shield}"
+                     + (f"\ngrip est {f['mu_hat']:.2f} (true {f['mu']:.2f})" if f.get("mu_hat") is not None
+                        else (f"\ngrip {f['mu']:.2f}" if abs(f.get("mu", 1.0) - 1.0) > 0.01 else ""))
                      + ("\nCRASH" if f["crash"] else ""))
         return cars + [trail, hud]
 
@@ -111,6 +118,9 @@ def render(env, frames, out, title, follow=True, fps=25, view=14.0):
     fig.subplots_adjust(left=0.02, right=0.98, bottom=0.02, top=0.93)
     anim = animation.FuncAnimation(fig, update, frames=len(frames), blit=False)
     out = pathlib.Path(out).expanduser()
+    k = 2
+    while out.exists():  # never overwrite an earlier clip (PROGRESS 39)
+        out = out.with_name(f"{out.stem.split('__v')[0]}__v{k}{out.suffix}"); k += 1
     out.parent.mkdir(parents=True, exist_ok=True)
     # write to a temp file, then move into place only when complete (a half-written mp4 will not play)
     tmp = pathlib.Path(tempfile.gettempdir()) / ("render_" + out.name)

@@ -664,3 +664,11 @@ at the limit weigh 0.2 instead of 0.5) is running in lane T, and the combination
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). `batch9` renders clip 12, slip-penalty PPO + our shield on
 the unseen Track2 (seed 10004: no crash, 3 passes, shield active 3% of the time). Blue = ego, red = shield intervening, grey = opponents.
+
+**Update 2026-11-09, batch10** (same race seed before and after, final controller seed 0). The HUD shows the
+shield's friction estimate next to the true value.
+- 13 / 14: friction x0.7, seed 10018. Shield assuming normal grip crashes after 99 m. Shield estimating the grip
+  finishes the 25 s clip (130 m), its estimate reads 0.71 against the true 0.70 by 12 s.
+- 15 / 16: seed 10026, nominal. The original opponent check (opponents brake) hits a car after 83 m. The relaxed
+  two-hypothesis check (E34b) drives through (115 m in 20 s).
+

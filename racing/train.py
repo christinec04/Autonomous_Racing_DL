@@ -35,6 +35,10 @@ SHIELDS = {
     "cond_fb_grip": dict(mode="conditioned_fallback", reach="grip"),
     "cond_fb_fixed": dict(mode="conditioned_fallback", reach="fixed"),
     "cond_fb_grip_esc": dict(mode="conditioned_fallback", reach="grip", escape=True),  # + deadlock escape
+    # E37: + online friction estimate (E35); + relaxed two-hypothesis opponent check (E34b)
+    "cond_fb_grip_esc_mu": dict(mode="conditioned_fallback", reach="grip", escape=True, mu_est=True),
+    "cond_fb_grip_esc_oxmu": dict(mode="conditioned_fallback", reach="grip", escape=True, mu_est=True,
+                                  opp_both=True, opp_relax=True),
 }
 
 STAGES = {
@@ -168,6 +172,9 @@ def train(args):
     for stage in args.stages:
         cfg = make_cfg(stage, args.shield, args.seed, args.tire, not args.no_randomize, args.curvature_preview,
                        args.residual)
+        if args.mu_range:  # E37: friction randomisation range (default x0.85-1.15)
+            import dataclasses
+            cfg = dataclasses.replace(cfg, mu_range=tuple(args.mu_range))
         if args.residual_scale != 0.3:
             import dataclasses
             cfg = dataclasses.replace(cfg, residual_scale=args.residual_scale)
@@ -235,6 +242,7 @@ if __name__ == "__main__":
     ap.add_argument("--no_randomize", action="store_true")
     ap.add_argument("--curvature_preview", action="store_true")
     ap.add_argument("--residual", action="store_true")
+    ap.add_argument("--mu_range", type=float, nargs=2, default=None, help="friction randomisation range (default 0.85 1.15)")
     ap.add_argument("--residual_scale", type=float, default=0.3,
                     help="how much the residual policy may add to the PID+APF base (fraction of the action range)")
     ap.add_argument("--w3", type=float, default=None, help="intervention penalty weight (default 0.1)")

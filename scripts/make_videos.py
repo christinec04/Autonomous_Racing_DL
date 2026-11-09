@@ -22,8 +22,24 @@ def clip(ctrl, model, title, name, seconds=20, solo=False, tire="saturated", map
     p = render(env, fr, OUT / name, f"{title}  (seed {s})")
     print(f"{name}: seed={s} crash={fr[-1]['crash']} passes={score[1]} dist={fr[-1]['prog']:.0f} m shield_steps={np.mean([f['lam']>0 for f in fr]):.0%}")
 
+def pair(ctrl, model, title, name, seed, seconds, **kw):
+    """One fixed race seed (for before/after comparisons on the same race)."""
+    env, fr = record(ctrl, model, seed, seconds, **kw)
+    render(env, fr, OUT / name, f"{title}  (seed {seed})")
+    print(f"{name}: seed={seed} crash={fr[-1]['crash']} dist={fr[-1]['prog']:.0f} m shield_steps={np.mean([f['lam']>0 for f in fr]):.0%}")
+
 if __name__ == "__main__":
     which = sys.argv[1]
+    if which == "batch10":  # E35 friction estimate and E34b opponent check, same race before and after
+        m0 = "runs/ppo_residual_shield_s0/model_stage3.zip"
+        pair("ppo_residual_apf_rec", m0, "Friction x0.7, shield assumes normal grip", "13_mu07_shield_nominal_grip.mp4",
+             10018, 25, tire="saturated_v2", mu_scale=0.7)
+        pair("ppo_residual_apf_rec_mu", m0, "Friction x0.7, shield estimates the grip", "14_mu07_shield_estimates_grip.mp4",
+             10018, 25, tire="saturated_v2", mu_scale=0.7)
+        pair("ppo_residual_apf_rec", m0, "Original opponent check (opponents brake)", "15_cutin_original_check.mp4",
+             10026, 20, tire="saturated_v2")
+        pair("ppo_residual_apf_rec_ox", m0, "Opponents may brake or hold speed (relaxed)", "16_cutin_relaxed_check.mp4",
+             10026, 20, tire="saturated_v2")
     if which == "batch1":
         clip("ppo", "runs/ppo_noshield_s0/model_stage3.zip", "PPO, no shield (ablation): race", "01_ppo_noshield_race.mp4")
         clip("ppo", "runs/ppo_noshield_s0/model_stage3.zip", "PPO, no shield: solo hot lap", "02_ppo_noshield_solo_lap.mp4", seconds=34, solo=True)

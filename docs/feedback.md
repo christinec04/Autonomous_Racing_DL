@@ -136,6 +136,14 @@ traction control. With that, grip reach = `sqrt((mu g)^2 - (v yaw_rate)^2)`, con
 actually has. Finding so far: fixed 6 m/s^2 is more conservative and safer in traffic (12% vs 38% crashes in the
 traffic stress test); grip reach lets the car go further when it is safe to. The trained agent uses grip reach.
 
+**Update 2026-11-09 (E33, E35).** Grip reach uses mu, and so far mu was the nominal value even when the track was
+more slippery. The stress tests show this is where consistency matters most. At friction x0.8 the final controller
+finishes 31 of 60 races with the nominal mu but 50 of 60 when the shield is told the true mu. The shield now has an
+option to estimate mu itself (`ShieldConfig.mu_est`): once a tyre saturates, the measured acceleration / g is the
+friction, and the estimate sets both the predictor and the grip reach. With it the final controller finishes 54 of
+60 at x0.8 and 32 of 60 at x0.7 (16 with nominal mu), level with the original in normal races. So "the grip left"
+now means the grip the car has measured, not an assumed constant.
+
 > *w(d) in Eq. 3 depends only on obstacle distance and speed, never on the agent action, which does not match
 > "the APF steps in only when the policy action is unsafe".*
 

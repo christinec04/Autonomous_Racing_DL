@@ -1,0 +1,4 @@
+13_mu07_shield_nominal_grip.mp4: seed=10018 crash=True dist=99 m shield_steps=8%
+14_mu07_shield_estimates_grip.mp4: seed=10018 crash=False dist=130 m shield_steps=19%
+15_cutin_original_check.mp4: seed=10026 crash=True dist=83 m shield_steps=8%
+16_cutin_relaxed_check.mp4: seed=10026 crash=False dist=115 m shield_steps=9%

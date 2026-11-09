@@ -14,6 +14,8 @@ Solo laps every 50k steps, standing start. 'fast' = under 34 s (best classical s
 | `ppo_residual_additive_s1` | additive residual tyre=saturated_v2 | 3500k | 50k | - | 286 | 4845 (7091) | 34.56 |
 | `ppo_residual_s0` | off residual | 3500k | 50k | 350k | 259 | 995 (4141) | 29.80 |
 | `ppo_residual_s1` | off residual | 3500k | 50k | 450k | 240 | 1298 (4270) | 29.84 |
+| `ppo_residual_s2` | off residual | 3500k | 50k | 350k | 276 | 877 (4055) | 29.48 |
+| `ppo_residual_s2_attempt1_crashed` | off residual | 1920k | 50k | 350k | 276 | 587 (2321) | 29.64 |
 | `ppo_residual_shield_s0` | cond_fb_grip_esc residual tyre=saturated_v2 | 3500k | 50k | 200k | 1 | 133 (3568) | 31.40 |
 | `ppo_residual_shield_s1` | cond_fb_grip_esc residual tyre=saturated_v2 | 3500k | 50k | 250k | 0 | 81 (3545) | 31.52 |
 | `ppo_residual_shield_s2` | cond_fb_grip_esc residual tyre=saturated_v2 | 3500k | 50k | 200k | 0 | 120 (3571) | 31.36 |
