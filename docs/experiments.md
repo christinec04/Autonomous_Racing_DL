@@ -584,6 +584,24 @@ for all. With five opponents the final controller finishes as often as with thre
 overtake counter, which also undercounted passes with five opponents (PROGRESS 40). Both rerun in lane T
 (`results/stress_opp1_v2.json`, `stress_opp5_v2.json`); the original opp5 file is kept.
 
+**Update 2026-11-09, one opponent** (`results/stress_opp1_v2.json`, after the counter fix). Races finished of 20,
+nominal / randomised:
+
+| controller | 1 opponent | 3 opponents (E29 / E33 seeds) | 5 opponents |
+|---|---|---|---|
+| final controller, 3 seeds | 57 / 59 of 60 | 48 / 50 of 60 | 50 / 42 of 60 |
+| PPO + our shield, seed 0 | 17 / 17 | 19 / 16 | 13 / 13 |
+| PID + APF | 19 / 20 | 12 / 10 | 9 / 10 |
+| PPO + additive APF | 17 / 17 | 18 / 16 | 11 / 11 |
+
+Alone with one car, every controller finishes almost every race. Traffic is what separates them. PID+APF falls
+from 95% to 50% with more cars, the final controller from 97% to 77%. With one opponent the final controller laps at
+32 s, PID+APF at 41 s.
+
+*Correction 2026-11-09:* the PID + APF 3-opponent randomised entry above should read 12, not 10
+(`results/final_v2_others.json`, seeds 10000-10019), so PID+APF falls from 98% to 60% with three cars.
+
+
 ## E34. What still ends the final controller's races? (contact classification)
 `python -m scripts.classify_contacts` replays every car-contact DNF and classifies the contact at the contact step
 (`results/contacts.md`). Final controller seed 0, 50 race seeds, nominal + randomised: 24 contacts; the final

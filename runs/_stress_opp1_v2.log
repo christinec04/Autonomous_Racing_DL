@@ -1,0 +1,40 @@
+10/240 races
+20/240 races
+30/240 races
+40/240 races
+50/240 races
+60/240 races
+70/240 races
+80/240 races
+90/240 races
+100/240 races
+110/240 races
+120/240 races
+130/240 races
+140/240 races
+150/240 races
+160/240 races
+170/240 races
+180/240 races
+190/240 races
+200/240 races
+210/240 races
+220/240 races
+230/240 races
+240/240 races
+
+=== nominal ===
+pid_apf       finished 19/20 (stuck 0)  lap 41.35 (best 36.0)  coll/10laps 0.10 (wall 1, car 0)  passes/race 0.20 ot 4/5  shield 0.82  grip>90% 0.015 (>100% 0.000)  slip>15 0.004
+ppo_additive  finished 17/20 (stuck 0)  lap 42.1 (best 40.68)  coll/10laps 0.33 (wall 3, car 0)  passes/race 0.65 ot 13/16  shield 0.10  grip>90% 0.112 (>100% 0.000)  slip>15 0.016
+ppo_apf_rec@s0 finished 17/20 (stuck 0)  lap 33.01 (best 32.56)  coll/10laps 0.33 (wall 0, car 3)  passes/race 1.30 ot 26/29  shield 0.04  grip>90% 0.176 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec@trained finished 20/20 (stuck 0)  lap 31.85 (best 31.48)  coll/10laps 0.00 (wall 0, car 0)  passes/race 1.05 ot 21/23  shield 0.05  grip>90% 0.124 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec@trained_s1 finished 20/20 (stuck 0)  lap 32.07 (best 31.68)  coll/10laps 0.00 (wall 0, car 0)  passes/race 0.80 ot 16/17  shield 0.04  grip>90% 0.061 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec@trained_s2 finished 17/20 (stuck 0)  lap 32.13 (best 31.6)  coll/10laps 0.32 (wall 1, car 2)  passes/race 1.70 ot 34/39  shield 0.03  grip>90% 0.071 (>100% 0.000)  slip>15 0.001
+
+=== randomized ===
+pid_apf       finished 20/20 (stuck 0)  lap 41.35 (best 35.04)  coll/10laps 0.00 (wall 0, car 0)  passes/race 0.30 ot 6/7  shield 0.81  grip>90% 0.008 (>100% 0.000)  slip>15 0.000
+ppo_additive  finished 17/20 (stuck 0)  lap 41.79 (best 40.28)  coll/10laps 0.35 (wall 3, car 0)  passes/race 0.85 ot 17/18  shield 0.11  grip>90% 0.096 (>100% 0.002)  slip>15 0.005
+ppo_apf_rec@s0 finished 17/20 (stuck 0)  lap 33.45 (best 32.36)  coll/10laps 0.33 (wall 1, car 2)  passes/race 1.25 ot 25/27  shield 0.05  grip>90% 0.171 (>100% 0.000)  slip>15 0.011
+ppo_residual_apf_rec@trained finished 19/20 (stuck 0)  lap 31.91 (best 31.08)  coll/10laps 0.10 (wall 0, car 1)  passes/race 1.10 ot 22/23  shield 0.06  grip>90% 0.115 (>100% 0.000)  slip>15 0.001
+ppo_residual_apf_rec@trained_s1 finished 20/20 (stuck 0)  lap 32.1 (best 31.32)  coll/10laps 0.00 (wall 0, car 0)  passes/race 1.15 ot 23/25  shield 0.04  grip>90% 0.061 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec@trained_s2 finished 20/20 (stuck 0)  lap 32.16 (best 31.4)  coll/10laps 0.00 (wall 0, car 0)  passes/race 1.70 ot 34/39  shield 0.02  grip>90% 0.062 (>100% 0.001)  slip>15 0.001
