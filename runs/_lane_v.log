@@ -15,3 +15,6 @@
 18:16 eval_ppo_residual_oxmu_widemu_s0 done
 18:18 stress_mu0.8_ppo_residual_oxmu_widemu_s0 done
 18:21 stress_mu0.7_ppo_residual_oxmu_widemu_s0 done
+18:33 eval_ppo_residual_oxmu_widemu_s1 done
+18:36 stress_mu0.8_ppo_residual_oxmu_widemu_s1 done
+18:40 stress_mu0.7_ppo_residual_oxmu_widemu_s1 done
