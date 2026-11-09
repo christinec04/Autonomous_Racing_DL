@@ -133,7 +133,8 @@ SHIELD_FOR["ppo_apf_rec_mu"] = dict(SHIELD_FOR["ppo_apf_rec"], mu_est=True)
 SHIELD_FOR["ppo_residual_apf_rec_mu2"] = dict(SHIELD_FOR["ppo_residual_apf_rec_mu"], mu_est_rate=0.2, mu_est_rise=0.02)
 # E36: candidate final shield, relaxed two-hypothesis opponent check (E34b) + online friction estimate (E35)
 SHIELD_FOR["ppo_residual_apf_rec_oxmu"] = dict(SHIELD_FOR["ppo_residual_apf_rec_ox"], mu_est=True)
-RECOVER = {"ppo_residual_apf_rec_mu2", "ppo_residual_apf_rec_oxmu", "ppo_residual_apf_rec_mu", "ppo_apf_rec_mu", "ppo_residual_apf_rec_ox", "ppo_residual_apf_rec_or", "ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
+SHIELD_FOR["ppo_residual_apf_rec_oxmu2"] = dict(SHIELD_FOR["ppo_residual_apf_rec_oxmu"], mu_est_rate=0.2, mu_est_rise=0.02)
+RECOVER = {"ppo_residual_apf_rec_oxmu2", "ppo_residual_apf_rec_mu2", "ppo_residual_apf_rec_oxmu", "ppo_residual_apf_rec_mu", "ppo_apf_rec_mu", "ppo_residual_apf_rec_ox", "ppo_residual_apf_rec_or", "ppo_residual_apf_rec_ob", "ppo_apf_rec_ob", "ppo_apf_rec", "ppo_residual_apf_rec", "ppo_apf_rec_m1", "ppo_apf_rec_m2", "ppo_apf_rec_b25", "ppo_apf_rec_b18",
            "ppo_apf_rec_b25mu"}
 
 
