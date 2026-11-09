@@ -1,0 +1,40 @@
+10/300 races
+20/300 races
+30/300 races
+40/300 races
+50/300 races
+60/300 races
+70/300 races
+80/300 races
+90/300 races
+100/300 races
+110/300 races
+120/300 races
+130/300 races
+140/300 races
+150/300 races
+160/300 races
+170/300 races
+180/300 races
+190/300 races
+200/300 races
+210/300 races
+220/300 races
+230/300 races
+240/300 races
+250/300 races
+260/300 races
+270/300 races
+280/300 races
+290/300 races
+300/300 races
+
+=== nominal ===
+ppo_residual_apf_rec_oxmu2@trained finished 43/50 (stuck 0)  lap 32.46 (best 31.72)  coll/10laps 0.31 (wall 0, car 7)  passes/race 3.64 ot 182/198  shield 0.10  grip>90% 0.137 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec_oxmu2@trained_s1 finished 46/50 (stuck 0)  lap 32.45 (best 31.52)  coll/10laps 0.17 (wall 0, car 4)  passes/race 4.18 ot 209/221  shield 0.09  grip>90% 0.088 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec_oxmu2@trained_s2 finished 44/50 (stuck 0)  lap 32.51 (best 31.6)  coll/10laps 0.26 (wall 1, car 5)  passes/race 4.38 ot 219/224  shield 0.07  grip>90% 0.079 (>100% 0.000)  slip>15 0.000
+
+=== randomized ===
+ppo_residual_apf_rec_oxmu2@trained finished 40/50 (stuck 0)  lap 32.67 (best 31.0)  coll/10laps 0.45 (wall 1, car 9)  passes/race 3.48 ot 174/184  shield 0.12  grip>90% 0.134 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec_oxmu2@trained_s1 finished 41/50 (stuck 0)  lap 32.5 (best 30.84)  coll/10laps 0.41 (wall 1, car 8)  passes/race 3.86 ot 193/206  shield 0.10  grip>90% 0.094 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec_oxmu2@trained_s2 finished 43/50 (stuck 0)  lap 32.64 (best 31.28)  coll/10laps 0.31 (wall 0, car 7)  passes/race 4.08 ot 204/221  shield 0.07  grip>90% 0.086 (>100% 0.000)  slip>15 0.000
