@@ -782,6 +782,16 @@ about 0.5 s per lap against E29 and leans on the shield less (3.5-6% of steps, 1
 trains in lane Y. Clips 17 and 18 (`scripts/make_videos.py batch11`): race seed 10003 at x0.7, the E29 policy turns
 in tight at the chicane and hits the inside wall at 44 s, the E37 B policy takes a wider line at 4.5 m/s.
 
+## E38. Is it the friction range or the new shield? (lanes Z and AA, queued 2026-11-09 21:35)
+- Lane Z, control for E37 B: same wide range x0.65-1.15 but trained with the old shield (`cond_fb_grip_esc`, as
+  E29), seeds 0 and 1 (`runs/ppo_residual_widemu_s<seed>`), raced with the combined shield like E37 (50 races, x0.8,
+  x0.7). If it matches E37 B, the range does the work; if it falls back to E29, the new shield during training
+  matters once the range is wide. Starts when lane Y's trainings finish.
+- Lane AA, generalisation: E37 B seeds 0-2 against E29 seeds 0-2, both raced with the combined shield, on the
+  unseen Track2 (`results/eval_widemu_Track2.json`) and with five opponents (`results/stress_opp5_widemu.json`),
+  20 race seeds nominal + randomised. Starts after lane Y.
+
+
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
 renders to `~/Downloads/racing_videos/` (not committed). `batch9` renders clip 12, slip-penalty PPO + our shield on
