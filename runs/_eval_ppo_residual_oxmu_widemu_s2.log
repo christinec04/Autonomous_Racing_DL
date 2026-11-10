@@ -1,0 +1,16 @@
+10/100 races
+20/100 races
+30/100 races
+40/100 races
+50/100 races
+60/100 races
+70/100 races
+80/100 races
+90/100 races
+100/100 races
+
+=== nominal ===
+ppo_residual_apf_rec_oxmu@ppo_residual_oxmu_widemu_s2 finished 48/50 (stuck 0)  lap 33.05 (best 31.64)  coll/10laps 0.08 (wall 0, car 2)  passes/race 3.96 ot 198/212  shield 0.05  grip>90% 0.059 (>100% 0.000)  slip>15 0.000
+
+=== randomized ===
+ppo_residual_apf_rec_oxmu@ppo_residual_oxmu_widemu_s2 finished 47/50 (stuck 1)  lap 33.04 (best 30.84)  coll/10laps 0.08 (wall 0, car 2)  passes/race 3.88 ot 194/206  shield 0.06  grip>90% 0.068 (>100% 0.000)  slip>15 0.012

@@ -1,0 +1,14 @@
+{
+ "git_commit": "df7a9e7",
+ "git_dirty": [],
+ "command": "python -m racing.train --shield cond_fb_grip_esc_oxmu --residual --tire saturated_v2 --mu_range 0.65 1.15 --stages 1 2 3 --steps 1500000 1000000 1000000 --n_envs 7 --seed 2 --out runs/ppo_residual_oxmu_widemu_s2",
+ "status": "finished",
+ "started": "2026-11-09 18:43:11",
+ "stages_done": [
+  1,
+  2,
+  3
+ ],
+ "steps_done": 3500000,
+ "finished": "2026-11-09 22:03:46"
+}
