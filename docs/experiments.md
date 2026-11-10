@@ -788,6 +788,21 @@ E29, at x0.7 26.9% against 37.2%, and the E29 points outside the x0.7 circle (sl
 almost absent for B. Shield interventions 4.9% of steps against 10.2%, passes per race about the same (762 of 801
 attempts against 780 of 813). It gives up some lap time for margin rather than learning to rely on the shield.
 
+**Update 2026-11-09 23:10, three seeds** (lane Y added seed 2 of A and B; `results/analysis/2026-11-09d.md`,
+`scripts/analyze_nov9d.py`). All raced with the combined shield, E29 = the current final policies:
+
+| policies, 3 seeds | main, of 300 | car / wall | x0.8, of 60 | x0.7, of 60 | x0.7 wall | lap s | >90% grip | shield |
+|---|---|---|---|---|---|---|---|---|
+| E29 | 269 (91, 87, 91) | 30 / 0 | 55 | 41 (9, 20, 12) | 12 | 32.74 | 10.3% | 9.0% |
+| E37 A | 272 (94, 82, 96) | 20 / 1 | 48 | 44 | 7 | 34.29 | 9.1% | 7.5% |
+| E37 B | **283** (96, 92, 95) | **15 / 0** | 52 | **59** (20, 19, 20) | **0** | 33.30 | 5.9% | 5.1% |
+
+B against E29: main p = 0.049, x0.7 p = 9e-6, x0.8 p = 0.56 (level). No wall hit for B in 420 races. A against
+E29: p = 0.78 / 0.11 / 0.69, and 1.5 s per lap slower, so training with the new shield alone does nothing; the
+wide friction range is what helps. B is now the candidate final controller (residual PPO trained on x0.65-1.15
+with the combined shield, raced with it), at 0.56 s per lap slower than E29. Lanes Z (control: wide range, old
+shield) and AA (Track2, five opponents) decide it.
+
 ## E38. Is it the friction range or the new shield? (lanes Z and AA, queued 2026-11-09 21:35)
 - Lane Z, control for E37 B: same wide range x0.65-1.15 but trained with the old shield (`cond_fb_grip_esc`, as
   E29), seeds 0 and 1 (`runs/ppo_residual_widemu_s<seed>`), raced with the combined shield like E37 (50 races, x0.8,

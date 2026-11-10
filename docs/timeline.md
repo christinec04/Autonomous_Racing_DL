@@ -111,9 +111,9 @@ Report versions: [2026-11-08_0732_8ab45df](../report/history/midterm_2026-11-08_
 - 15:26 `475f707` Shield with online friction estimate (E35): stress_mu0.7_muest (+2 more)
 - 17:20 `341f514` Baseline seed 2 (ppo_residual_s2): trained and raced on Singapore and Track2 (+2 more)
 
-## 2026-11-09 (23 commits)
+## 2026-11-09 (30 commits)
 
-Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf), [2026-11-09_1113_build](../report/history/midterm_2026-11-09_1113_build.pdf), [2026-11-09_1257_build](../report/history/midterm_2026-11-09_1257_build.pdf), [2026-11-09_1844_build](../report/history/midterm_2026-11-09_1844_build.pdf)
+Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_1006_build.pdf), [2026-11-09_1054_build](../report/history/midterm_2026-11-09_1054_build.pdf), [2026-11-09_1113_build](../report/history/midterm_2026-11-09_1113_build.pdf), [2026-11-09_1257_build](../report/history/midterm_2026-11-09_1257_build.pdf), [2026-11-09_1844_build](../report/history/midterm_2026-11-09_1844_build.pdf), [2026-11-09_184524_build](../report/history/midterm_2026-11-09_184524_build.pdf), [2026-11-09_230622_build](../report/history/midterm_2026-11-09_230622_build.pdf)
 
 - 10:06 `5fd783a` Nov 8 jobs analysed (results/analysis/2026-11-09.md); overtake counter uses the real opponent count (PROGRE... (+3 more)
 - 10:22 `1465481` Seed summary and Fig. 5 with three seeds of every baseline; previous generated tables kept in results/histo... (+3 more)
@@ -138,3 +138,10 @@ Report versions: [2026-11-09_1006_build](../report/history/midterm_2026-11-09_10
 - 18:21 `f32ec85` E37: ppo_residual_oxmu_widemu_s0 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
 - 18:26 `82b6331` E36b/E35c results, correction of the midday x0.7 diagnosis (PROGRESS 42), E37 first results; lane Y queues E37 seed 2
 - 18:40 `df7a9e7` E37: ppo_residual_oxmu_widemu_s1 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
+- 18:44 `47b4595` E37 B (wide friction range) seed 1: 188/200 normal races, 39/40 at x0.7 over two seeds; clips 17-18; report rebuilt, 4 pages
+- 18:45 `b90caa0` Report wording fix; build archive names carry seconds so builds in the same minute are all kept
+- 21:31 `80b5304` Queue E38: wide-range control trained with the old shield (lane Z); E37 B on Track2 and with five opponents (lane AA)
+- 21:32 `b74e1ca` Stress summary: one-opponent row (after the counter fix) and a table of every shield friction model at x0.8/x0.7; previous table kept in results/history
+- 21:33 `d2447a2` E37 B g-g diagrams: wide-friction policy leaves more grip margin (5% vs 12% of time above 90%)
+- 22:24 `a6ad97f` E37: ppo_residual_oxmu_s2 trained with the candidate final shield and raced (50 races, x0.8, x0.7)
+- 22:51 `8032828` E37: ppo_residual_oxmu_widemu_s2 trained with the candidate final shield and raced (50 races, x0.8, x0.7)

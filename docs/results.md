@@ -60,6 +60,11 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 
 ## Update 2026-11-09
 
+- 23:10, three seeds: the wide-friction policy (E37 B) finishes 283 of 300 normal races (current final 269,
+  p = 0.049) and 59 of 60 at x0.7 (41, p = 9e-6), with no wall hit in 420 races and half the car contacts, 0.56 s per
+  lap slower. Retraining on the usual range (E37 A) changes nothing. B is the candidate final controller, pending
+  the control run and Track2. `results/analysis/2026-11-09d.md`.
+
 - Late evening: the policy retrained on a wide friction range (E37 B, x0.65-1.15, 2 seeds) finishes 188 of 200
   normal races (old policies 178) and 39 of 40 at x0.7 (29, p = 0.003), 0.5 s per lap slower. Seed 2 running.
 

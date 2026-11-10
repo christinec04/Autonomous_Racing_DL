@@ -296,8 +296,9 @@ friction estimate below, 269 of 300 finish (238 before, $p = 7\cdot10^{-4}$) wit
 \textbf{Outside the training friction.} At friction $\times$0.8 (trained on 0.85--1.15) the final controller
 finishes 52\% of races (PID+APF 50\%), 83\% with the shield told the true friction ($p = 4\cdot10^{-4}$); at
 $\times$0.7, 27\% and 67\%. Estimating the friction online from tyre saturation gives 90\% at $\times$0.8 and,
-smoothed, 78\% at $\times$0.7 at no cost in normal races. Retraining on $\times$0.65--1.15 (two seeds so far)
-finishes 94\% of normal races and 39 of 40 at $\times$0.7 (current policies 29, $p = 0.003$), 0.5\,s per lap slower. With one opponent all controllers finish 85--100\%, with five
+smoothed, 78\% at $\times$0.7 at no cost in normal races. Retraining on $\times$0.65--1.15 (three seeds)
+finishes 283 of 300 normal races (269, $p = 0.05$) and 59 of 60 at $\times$0.7 (41, $p = 9\cdot10^{-6}$), with
+no wall hit in 420 races, 0.6\,s per lap slower. With one opponent all controllers finish 85--100\%, with five
 PID+APF 48\%, ours 77\%.
 
 \textbf{Why the tyre model matters.} On stock tyres the same recipe laps 5\,s faster by cornering above the
@@ -315,7 +316,8 @@ shield (35\% of steps) and deadlock. Shield dropout gave a policy that is safe w
 \section{Plan to the Final Demo}
 \textbf{Remaining tasks and milestones} (final demo December 7):
 \begin{itemize}
-\item \emph{Nov 13--20:} third seed of the wide-friction policy (running), then pick the final policy; report cornering grip instead of
+\item \emph{Nov 13--20:} test the wide-friction policy on the second track and against a control trained with the old shield
+(running), then fix the final controller; report cornering grip instead of
 the grip target.
 \item \emph{Nov 21--27:} test the three-seed baselines on both tracks; stress tests of the final shield (friction,
 number of opponents).
