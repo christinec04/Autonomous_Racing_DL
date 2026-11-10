@@ -20,15 +20,15 @@ REP = pathlib.Path(__file__).resolve().parent.parent / "report"
 TMP = REP / "docx_build"
 
 
-def main():
+def main(name="midterm", downloads="midterm_report_draft.docx"):
     TMP.mkdir(exist_ok=True)
     for f in (REP / "figs").glob("*.pdf"):
         fitz.open(f)[0].get_pixmap(dpi=220).save(TMP / f"{f.stem}.png")
-    pdf = fitz.open(REP / "midterm.pdf")
+    pdf = fitz.open(REP / f"{name}.pdf")
     cap = pdf[0].search_for("Fig. 1.")[0]
     pdf[0].get_pixmap(clip=fitz.Rect(cap.x0 - 1, 212, 568, cap.y0 - 2), dpi=250).save(TMP / "architecture.png")
 
-    tex = (REP / "midterm.tex").read_text(encoding="utf-8")
+    tex = (REP / f"{name}.tex").read_text(encoding="utf-8")
     tex = re.sub(r"\\begin\{tikzpicture\}.*?\\end\{tikzpicture\}",
                  lambda m: r"\includegraphics[width=\columnwidth]{architecture.png}", tex, flags=re.S)
     tex = re.sub(r"\\includegraphics(\[[^\]]*\])?\{([^}]+)\.pdf\}", r"\\includegraphics\1{\2.png}", tex)
@@ -43,16 +43,17 @@ def main():
     tex = tex[:bib.start()] + refs + "\n" + tex[bib.end():]
     (TMP / "midterm_docx.tex").write_text(tex, encoding="utf-8")
 
-    out = REP / "midterm.docx"
+    out = REP / f"{name}.docx"
     pypandoc.convert_file(str(TMP / "midterm_docx.tex"), "docx", outputfile=str(out),
                           extra_args=[f"--resource-path={TMP}", "--number-sections"])
     ieee_format(out)  # two columns, Times 10 pt, IEEE headings and captions (scripts/ieee_docx.py)
     stamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
-    shutil.copy(out, REP / "history" / f"midterm_{stamp}_build.docx")
-    shutil.copy(out, pathlib.Path.home() / "Downloads" / "midterm_report_draft.docx")
+    shutil.copy(out, REP / "history" / f"{name}_{stamp}_build.docx")
+    shutil.copy(out, pathlib.Path.home() / "Downloads" / downloads)
     shutil.rmtree(TMP)
-    print(out, f"archived history/midterm_{stamp}_build.docx")
+    print(out, f"archived history/{name}_{stamp}_build.docx")
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main(*sys.argv[1:3])  # e.g. reduced_scope_draft reduced_scope_draft.docx
