@@ -844,6 +844,15 @@ shield) and AA (Track2, five opponents) decide it.
   `results/stress_mu1.3_widemu.json.partial.jsonl`, which the rerun reuses. On restart (`scripts/queue_lane_ac.sh`,
   updated): seed 0 trains stage 3 only into `runs/ppo_residual_widemu_s0_from_stage2`; seed 1 redoes stages 2-3
   from stage 1 into `runs/ppo_residual_widemu_s1_from_stage1_retry`. The stopped folders are kept.
+- **Restarted 2026-11-10 14:39** (user: "keep going"). x1.3 resumed from its 46 saved races.
+- **Result 2026-11-10, friction x0.6 (lane AB, `results/stress_mu0.6_widemu.json`):** below the range either
+  policy was trained on (E37 B starts at x0.65), both fail most races: E37 B 22 of 60, E29 24 of 60 (p = 0.85). Wall
+  hits end most races (30 vs 25 races with a wall hit), with the shield active 27-33% of steps and the tyres past
+  their limit 8% of the time. Seed 2 of both recipes finishes almost nothing (2/20 and 1/20). The wide-range
+  training buys margin inside its range (59/60 at x0.7) but not below it. The shield's online friction estimate
+  (part of the combined shield) reads about 0.58-0.60 within a few seconds of the start, so the shield knows the
+  grip; the races still end at walls. Why is not traced yet: candidates are the base PID+APF speed profile, which
+  plans with nominal grip, and a shield that can no longer find a safe action at this grip (shield active 27-33%).
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

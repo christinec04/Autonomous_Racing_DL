@@ -1,5 +1,5 @@
 """E38 lane AA: E37 B (wide friction range, seeds 0-2) vs E29 (seeds 0-2), both raced with the combined shield,
-on the unseen Track2 and with five opponents. 20 race seeds x nominal + randomised per policy.
+on the unseen Track2, with five and one opponents and at friction x0.6 and x1.3 (lane AB). 20 race seeds x nominal + randomised per policy.
 Writes results/analysis/2026-11-10.md.
 """
 import json
@@ -16,11 +16,16 @@ def say(s=""):
     lines.append(s)
 
 
-say("# Analysis 2026-11-10: E37 B vs E29 on Track2 and with five opponents (combined shield)")
+say("# Analysis 2026-11-10: E37 B vs E29 on Track2 and under stress (combined shield)")
 say()
 say("| setting | policies | finished | races with wall hit | races with car contact | passes / race | lap (s) | shield active | above 90% grip |")
 say("|---|---|---|---|---|---|---|---|---|")
-for f, label in (("eval_widemu_Track2", "Track2"), ("stress_opp5_widemu", "5 opponents")):
+SETS = (("eval_widemu_Track2", "Track2"), ("stress_opp5_widemu", "5 opponents"), ("stress_mu0.6_widemu", "friction x0.6"),
+        ("stress_mu1.3_widemu", "friction x1.3"), ("stress_opp1_widemu", "1 opponent"))
+for f, label in SETS:
+    if not pathlib.Path(f"results/{f}.json").exists():
+        say(f"| {label} | (not run yet) | | | | | | | |")
+        continue
     races = json.load(open(f"results/{f}.json"))["races"]
     groups = {"E29": [r for r in races if "@trained" in r["controller"]],
               "E37 B": [r for r in races if "@widemu" in r["controller"]]}

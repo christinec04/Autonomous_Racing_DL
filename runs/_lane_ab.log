@@ -3,3 +3,6 @@
 12:25 stress_mu1.3_widemu start
 14:19 paused on user request (processes suspended, not killed; progress kept in memory)
 14:20 stopped on user request to free memory (lane scripts and processes ended)
+14:39 restarted on user request
+14:39 stress_mu0.6_widemu exists, skipped
+14:39 stress_mu1.3_widemu start
