@@ -15,8 +15,10 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import json
+import os
 import pathlib
 import sys
+import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from concurrent.futures.process import BrokenProcessPool
 
@@ -292,10 +294,51 @@ def check_targets(summary, ours="ppo_apf", ref="pid_apf"):
     return out
 
 
-def run_all(jobs, procs, tries=3):
-    """Race all jobs in parallel, results in job order. multiprocessing.Pool waits forever when a worker is killed
-    (e.g. in a low-memory episode, PROGRESS.md problem 38). This pool fails fast instead and the missing races rerun."""
+def _job_key(job):
+    """What identifies a race inside one evaluation: controller label, race seed, randomised or not."""
+    return [job[6], job[2], job[3]]
+
+
+def _load_partial(partial, header, jobs):
+    """Races saved by an earlier, interrupted run of the same command (PROGRESS.md problem 43). A partial file
+    from a different command is moved aside, never mixed in."""
     res = [None] * len(jobs)
+    p = pathlib.Path(partial)
+    if not p.exists():
+        return res
+    lines = p.read_text().splitlines()
+    if not lines or json.loads(lines[0]).get("header") != header:
+        aside = p.with_name(p.name + f".mismatch_{time.strftime('%Y%m%d_%H%M%S')}")
+        p.rename(aside)
+        print(f"partial results from a different command moved to {aside}", file=sys.stderr, flush=True)
+        return res
+    index = {json.dumps(_job_key(j)): i for i, j in enumerate(jobs)}
+    for line in lines[1:]:
+        try:
+            rec = json.loads(line)
+        except json.JSONDecodeError:  # last line cut off by the crash
+            continue
+        i = index.get(json.dumps(rec["key"]))
+        if i is not None:
+            res[i] = rec["race"]
+    n = sum(r is not None for r in res)
+    print(f"resuming: {n}/{len(jobs)} races already saved in {p}", file=sys.stderr, flush=True)
+    return res
+
+
+def run_all(jobs, procs, tries=3, partial=None, header=None):
+    """Race all jobs in parallel, results in job order. multiprocessing.Pool waits forever when a worker is killed
+    (e.g. in a low-memory episode, PROGRESS.md problem 38). This pool fails fast instead and the missing races rerun.
+    With `partial`, every finished race is appended to that file at once, and races already in it are not rerun, so
+    a crash of the whole machine loses at most the races in flight (problem 43)."""
+    res = _load_partial(partial, header, jobs) if partial else [None] * len(jobs)
+    pf = None
+    if partial:
+        new = not pathlib.Path(partial).exists()
+        pf = open(partial, "a")
+        if new:
+            pf.write(json.dumps({"header": header}) + "\n")
+            pf.flush()
     for _ in range(tries):
         todo = [i for i, r in enumerate(res) if r is None]
         if not todo:
@@ -305,11 +348,17 @@ def run_all(jobs, procs, tries=3):
                 futs = {ex.submit(run_race, jobs[i]): i for i in todo}
                 for f in as_completed(futs):
                     res[futs[f]] = f.result()
+                    if pf:
+                        pf.write(json.dumps({"key": _job_key(jobs[futs[f]]), "race": res[futs[f]]}) + "\n")
+                        pf.flush()
+                        os.fsync(pf.fileno())
                     done = sum(r is not None for r in res)
                     if done % 10 == 0 or done == len(jobs):
                         print(f"{done}/{len(jobs)} races", file=sys.stderr, flush=True)
         except BrokenProcessPool:
             print(f"a worker died, rerunning {sum(r is None for r in res)} races", file=sys.stderr, flush=True)
+    if pf:
+        pf.close()
     if any(r is None for r in res):
         raise RuntimeError("races still missing after retries")
     return res
@@ -340,8 +389,11 @@ if __name__ == "__main__":
             for seed in range(args.first, args.first + args.races):
                 jobs.append((base if base in SHIELD_FOR else c, models.get(c), 10_000 + seed, randomize, args.laps, None, c,
                              args.tire, args.map, extra))
-    res = run_all(jobs, args.procs)
     pathlib.Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+    partial = args.out + ".partial.jsonl"
+    header = dict(controllers=args.controllers, models=args.models, races=args.races, first=args.first, laps=args.laps,
+                  tire=args.tire, map=args.map, mu_scale=args.mu_scale, shield_mu=args.shield_mu, n_opp=args.n_opp)
+    res = run_all(jobs, args.procs, partial=partial, header=header)
     report = {}
     for randomize in conds:
         R = [r for r in res if r["randomize"] == randomize]
@@ -355,4 +407,6 @@ if __name__ == "__main__":
                   f" (wall {s['wall']}, car {s['car']})  passes/race {s['passes_per_race']:.2f}"
                   f" ot {s['overtake_successes']}/{s['overtake_attempts']}  shield {s['shield_freq']:.2f}"
                   f"  grip>90% {s['grip_above_90']:.3f} (>100% {s['grip_above_100']:.3f})  slip>15 {s['slip_above_15']:.3f}")
-    json.dump(dict(map=args.map, mu_scale=args.mu_scale, n_opp=args.n_opp, report=report, races=res), open(args.out, "w"))
+    with open(args.out, "w") as f:
+        json.dump(dict(map=args.map, mu_scale=args.mu_scale, n_opp=args.n_opp, report=report, races=res), f)
+    os.remove(partial)  # everything in it is now in args.out
