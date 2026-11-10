@@ -1,0 +1,23 @@
+fine-tuning runs/ppo_residual_widemu_s0/model_stage1.zip (vecnorm loaded)
+== stage 2: 1000000 steps, shield=cond_fb_grip_esc
+[50001] eval shielded clean=True lap=32.15999999999949 lam=0.01 | unshielded clean=True lap=32.11999999999949 prog=199
+[100002] eval shielded clean=True lap=32.559999999999484 lam=0.02 | unshielded clean=True lap=32.39999999999949 prog=199
+[150003] eval shielded clean=True lap=32.919999999999476 lam=0.01 | unshielded clean=True lap=32.83999999999948 prog=199
+[200004] eval shielded clean=True lap=32.75999999999948 lam=0.01 | unshielded clean=True lap=32.71999999999948 prog=199
+[250005] eval shielded clean=True lap=32.75999999999948 lam=0.01 | unshielded clean=True lap=32.67999999999948 prog=199
+[300006] eval shielded clean=True lap=33.23999999999947 lam=0.02 | unshielded clean=True lap=33.15999999999947 prog=199
+[350000] eval shielded clean=True lap=32.999999999999474 lam=0.01 | unshielded clean=True lap=32.87999999999948 prog=199
+[400001] eval shielded clean=True lap=33.07999999999947 lam=0.02 | unshielded clean=True lap=33.03999999999947 prog=199
+[450002] eval shielded clean=True lap=33.35999999999947 lam=0.01 | unshielded clean=True lap=33.27999999999947 prog=199
+[500003] eval shielded clean=True lap=33.07999999999947 lam=0.01 | unshielded clean=True lap=32.999999999999474 prog=199
+[550004] eval shielded clean=True lap=33.03999999999947 lam=0.01 | unshielded clean=True lap=32.999999999999474 prog=199
+[600005] eval shielded clean=True lap=32.87999999999948 lam=0.01 | unshielded clean=True lap=32.79999999999948 prog=199
+[650006] eval shielded clean=True lap=32.919999999999476 lam=0.01 | unshielded clean=True lap=32.75999999999948 prog=199
+[700000] eval shielded clean=True lap=32.919999999999476 lam=0.02 | unshielded clean=True lap=32.83999999999948 prog=199
+[750001] eval shielded clean=True lap=33.03999999999947 lam=0.02 | unshielded clean=True lap=32.919999999999476 prog=199
+[800002] eval shielded clean=True lap=33.11999999999947 lam=0.02 | unshielded clean=True lap=32.999999999999474 prog=199
+[850003] eval shielded clean=True lap=32.999999999999474 lam=0.03 | unshielded clean=True lap=32.83999999999948 prog=199
+[900004] eval shielded clean=True lap=33.07999999999947 lam=0.02 | unshielded clean=True lap=32.959999999999475 prog=199
+[950005] eval shielded clean=True lap=32.79999999999948 lam=0.04 | unshielded clean=True lap=32.559999999999484 prog=199
+[1000006] eval shielded clean=True lap=32.59999999999948 lam=0.04 | unshielded clean=True lap=32.35999999999949 prog=199
+== stage 3: 1000000 steps, shield=cond_fb_grip_esc

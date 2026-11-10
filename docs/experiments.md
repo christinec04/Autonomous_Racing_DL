@@ -838,6 +838,12 @@ shield) and AA (Track2, five opponents) decide it.
   (34.9 vs 34.1 s), with the shield active 5.5% of steps vs 10.1% and above 90% grip 6.1% vs 11.0% of the time.
   Same pattern as at x0.7: the wide-friction policy leaves margin, and in heavy traffic that margin turns into
   fewer contacts. Analysis: `results/analysis/2026-11-10.md`.
+- **Stopped 2026-11-10 ~12:15 (user request, to free memory):** seed 0 had just saved stage 2
+  (`runs/ppo_residual_widemu_s0_from_stage1/model_stage2.zip`); seed 1 was at 960k of 1M stage-2 steps, not saved.
+  Lane AB had finished x0.6 (`results/stress_mu0.6_widemu.json`) and saved 46 races of x1.3 in
+  `results/stress_mu1.3_widemu.json.partial.jsonl`, which the rerun reuses. On restart (`scripts/queue_lane_ac.sh`,
+  updated): seed 0 trains stage 3 only into `runs/ppo_residual_widemu_s0_from_stage2`; seed 1 redoes stages 2-3
+  from stage 1 into `runs/ppo_residual_widemu_s1_from_stage1_retry`. The stopped folders are kept.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

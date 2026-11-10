@@ -1,0 +1,33 @@
+{
+ "shield": "cond_fb_grip_esc",
+ "stages": [
+  2,
+  3
+ ],
+ "steps": [
+  1000000,
+  1000000
+ ],
+ "seed": 0,
+ "n_envs": 7,
+ "n_steps": 512,
+ "batch": 1024,
+ "lr": 0.0003,
+ "gamma": 0.99,
+ "ent": 0.0,
+ "eval_every": 50000,
+ "tire": "saturated_v2",
+ "no_randomize": false,
+ "curvature_preview": false,
+ "residual": true,
+ "mu_range": [
+  0.65,
+  1.15
+ ],
+ "residual_scale": 0.3,
+ "w3": null,
+ "w6": 0.0,
+ "shield_prob": null,
+ "init": "runs/ppo_residual_widemu_s0/model_stage1.zip",
+ "out": "runs/ppo_residual_widemu_s0_from_stage1"
+}

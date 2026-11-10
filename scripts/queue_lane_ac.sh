@@ -11,14 +11,15 @@ cd "$(dirname "$0")/.."
 PY=../.venv/Scripts/python
 LOG=runs/_lane_ac.log
 push() { for i in 1 2 3 4 5; do git push -q origin HEAD:main HEAD:gabe-build > /dev/null 2>&1 && return 0; sleep 30; done; }
-train() {  # crashed_run seed
-  new=$1_from_stage1
-  [ -f runs/$new/model_stage3.zip ] && return
-  echo "$(date +%H:%M) $new train start (stages 2-3 from runs/$1/model_stage1.zip)" >> $LOG
-  $PY -m racing.train --shield cond_fb_grip_esc --residual --tire saturated_v2 --mu_range 0.65 1.15 \
-    --init runs/$1/model_stage1.zip --stages 2 3 --steps 1000000 1000000 --n_envs 7 --seed $2 \
-    --out runs/$new > runs/$new.log 2>&1
-  echo "$(date +%H:%M) $new train done" >> $LOG
+# 2026-11-10 12:15 update: stopped on user request to free memory. Seed 0 had saved stage 2 and continues with
+# stage 3 only (runs/ppo_residual_widemu_s0_from_stage2). Seed 1 stopped at 960k of its 1M stage-2 steps, unsaved,
+# so it redoes stages 2-3 from stage 1 in a new folder (runs/ppo_residual_widemu_s1_from_stage1_retry); the stopped
+# attempts stay as they are.
+train() {  # init_model stages steps seed out
+  [ -f runs/$5/model_stage3.zip ] && return
+  echo "$(date +%H:%M) $5 train start (stages $2 from $1)" >> $LOG
+  $PY -m racing.train --shield cond_fb_grip_esc --residual --tire saturated_v2 --mu_range 0.65 1.15     --init $1 --stages $2 --steps $3 --n_envs 7 --seed $4 --out runs/$5 > runs/$5.log 2>&1
+  echo "$(date +%H:%M) $5 train done" >> $LOG
 }
 race() {  # run
   C=ppo_residual_apf_rec_oxmu@$1; M="$C=runs/$1/model_stage3.zip"
@@ -34,10 +35,10 @@ race() {  # run
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" > /dev/null 2>&1; push
 }
-train ppo_residual_widemu_s0 0 &
+train runs/ppo_residual_widemu_s0_from_stage1/model_stage2.zip "3" "1000000" 0 ppo_residual_widemu_s0_from_stage2 &
 sleep 60
-train ppo_residual_widemu_s1 1 &
+train runs/ppo_residual_widemu_s1/model_stage1.zip "2 3" "1000000 1000000" 1 ppo_residual_widemu_s1_from_stage1_retry &
 wait
-race ppo_residual_widemu_s0_from_stage1
-race ppo_residual_widemu_s1_from_stage1
+race ppo_residual_widemu_s0_from_stage2
+race ppo_residual_widemu_s1_from_stage1_retry
 echo "$(date +%H:%M) all done" >> $LOG
