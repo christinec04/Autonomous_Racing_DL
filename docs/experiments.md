@@ -814,8 +814,9 @@ shield) and AA (Track2, five opponents) decide it.
 - Lane AB (queued 2026-11-10 09:20, after AA): the remaining stress settings for the same comparison, friction
   x0.6 and x1.3 and one opponent (`results/stress_mu0.6_widemu.json`, `stress_mu1.3_widemu.json`,
   `stress_opp1_widemu.json`).
-- Note 2026-11-10: the laptop slept overnight, so lanes Z and AA paused from about 23:30 to 09:10 and resumed on
-  their own (lane Z training at 1.15M of 3.5M steps at 09:12).
+- Note 2026-11-10: the laptop slept overnight, so lanes Z and AA paused and resumed on their own around 09:10.
+  The pause start is estimated, not logged: lane Z was at 1.15M of 3.5M steps at 09:12, about one hour of training
+  after its 22:05 start, and Track2 went from 50 to 80 of 240 races between 23:06 and 09:12.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
