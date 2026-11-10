@@ -4,3 +4,4 @@
 10:23 laptop crash killed stress_opp5_widemu at 210/240 races (nothing saved; log kept as runs/_stress_opp5_widemu_crashed_2026-11-10.log); restarted 11:13
 11:13 eval_widemu_Track2 exists, skipped
 11:13 stress_opp5_widemu start
+12:01 stress_opp5_widemu done
