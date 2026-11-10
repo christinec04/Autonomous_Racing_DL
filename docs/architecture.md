@@ -143,6 +143,7 @@ mean lambda, g-g utilisation from the true velocity-vector acceleration, share o
 | `shield_prob` | 1.0 | probability the shield is on in an episode (shield dropout) |
 | `curvature_preview` | False | add 10 centerline curvatures 1-20 m ahead to the observation |
 | `residual`, `residual_scale` | False, 0.3 | ResRace-style: action = PID+APF base + scale x policy |
+| `base_mu` | "true" | friction the classical base controllers (residual base, stall recovery, PID+APF / Pure Pursuit baselines) plan their speed profile with: `true` = the simulator's actual friction (privileged; every result before E39), `nominal`, or `estimate` = the shield's online estimate (E39, PROGRESS 44) |
 | `tcs` | True | traction control on all cars |
 | `tire` | "saturated" | "saturated" (friction circle), "saturated_v2" (+ post-spin slip-angle fixes, used for the final comparison) or "linear" (stock F1TENTH) |
 | `w6_slip` | 0.0 | optional penalty per step for body slip beyond 0.15 rad |
