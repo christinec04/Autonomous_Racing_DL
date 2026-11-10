@@ -782,6 +782,12 @@ about 0.5 s per lap against E29 and leans on the shield less (3.5-6% of steps, 1
 trains in lane Y. Clips 17 and 18 (`scripts/make_videos.py batch11`): race seed 10003 at x0.7, the E29 policy turns
 in tight at the chicane and hits the inside wall at 44 s, the E37 B policy takes a wider line at 4.5 m/s.
 
+**Update 2026-11-09 night, how B drives** (`results/gg_e37.png`, `scripts/gg_e37.py`, seeds 0+1, combined shield).
+B leaves more margin: in nominal races it is above 90% of the friction limit 5.3% of the time against 12.4% for
+E29, at x0.7 26.9% against 37.2%, and the E29 points outside the x0.7 circle (slides after a lost corner) are
+almost absent for B. Shield interventions 4.9% of steps against 10.2%, passes per race about the same (762 of 801
+attempts against 780 of 813). It gives up some lap time for margin rather than learning to rely on the shield.
+
 ## E38. Is it the friction range or the new shield? (lanes Z and AA, queued 2026-11-09 21:35)
 - Lane Z, control for E37 B: same wide range x0.65-1.15 but trained with the old shield (`cond_fb_grip_esc`, as
   E29), seeds 0 and 1 (`runs/ppo_residual_widemu_s<seed>`), raced with the combined shield like E37 (50 races, x0.8,
