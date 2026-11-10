@@ -51,7 +51,7 @@ def main():
             rows.setdefault(k, []).append(rate(R, cs))
     opp = {}
     for n in (1, 3, 5):
-        R = nominal if n == 3 else load(f"results/stress_opp{n}.json", False)
+        R = nominal if n == 3 else (load(f"results/stress_opp{n}_v2.json", False) or load(f"results/stress_opp{n}.json", False))
         if R:
             opp[n] = {k: rate(R, cs) for k, (_, cs) in CTRL.items()}
     oracle = {}
@@ -81,6 +81,18 @@ def main():
         for mu, d in oracle.items():
             i = mus.index(mu)
             md.append(f"| x{mu} | {rows['final'][i][0]:.0%} | {d['final'][0]:.0%} | {rows['ppo'][i][0]:.0%} | {d['ppo'][0]:.0%} |")
+    variants = [("nominal model", ""), ("true friction (oracle)", "_oracle"), ("estimate (E35)", "_muest"),
+                ("smoother estimate (E35b)", "_mu2"), ("relaxed check + estimate (E36)", "_oxmu"),
+                ("relaxed check + smoother estimate (E36b)", "_oxmu2"), ("E36b + median gate (E35c)", "_oxmu2med")]
+    md += ["", "Final controller (E29 policies, 3 seeds) with each shield friction model, races finished of 60:", "",
+           "| shield | x0.8 | x0.7 |", "|---|---|---|"]
+    for name, suf in variants:
+        cells = []
+        for mu in (0.8, 0.7):
+            R = load(f"results/stress_mu{mu}{suf}.json")
+            R = [r for r in R if "residual" in r["controller"]] if R else None
+            cells.append(f"{sum(not r['dnf'] and not r['stuck'] for r in R)} ({sum(r['wall'] for r in R)} wall)" if R else "-")
+        md.append(f"| {name} | " + " | ".join(cells) + " |")
     open("results/stress.md", "w", encoding="utf-8", newline="\n").write("\n".join(md) + "\n")
     print("\n".join(md))
 
