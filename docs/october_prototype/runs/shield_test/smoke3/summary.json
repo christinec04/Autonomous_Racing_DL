@@ -1,0 +1,23 @@
+{
+  "rtf": 2.0520054691430833,
+  "configs": {
+    "road/none/1.00": {
+      "episodes": 1,
+      "crashes": 1,
+      "times": [],
+      "intervention": 0.0,
+      "grip_cmd_p95": 0.7526,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/none/1.00": {
+      "episodes": 1,
+      "crashes": 1,
+      "times": [],
+      "intervention": 0.0,
+      "grip_cmd_p95": 5.704,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    }
+  }
+}

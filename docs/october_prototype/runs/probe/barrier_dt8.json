@@ -1,0 +1,36 @@
+{
+  "dt_ms": 8.0,
+  "mu_track_py": 1.6,
+  "mu_world": 1.6,
+  "fds_world": 0.0,
+  "v30": {
+    "impact_speed": null,
+    "body_lat_min": -6.416973008872989,
+    "wall_lat": -7.76,
+    "tunnelled": false,
+    "lat_end": -2.867266292400455,
+    "speed_end": 39.66998629868953,
+    "up_end": 0.9999815949125254,
+    "z_end": 0.24267842433996395
+  },
+  "v50": {
+    "impact_speed": null,
+    "body_lat_min": -6.44970813102066,
+    "wall_lat": -7.76,
+    "tunnelled": false,
+    "lat_end": 1.8948210318760985,
+    "speed_end": 54.69941905154919,
+    "up_end": 0.9999912691037374,
+    "z_end": 0.2273051474158256
+  },
+  "v70": {
+    "impact_speed": null,
+    "body_lat_min": -6.459563023923321,
+    "wall_lat": -7.76,
+    "tunnelled": false,
+    "lat_end": 6.247407499398044,
+    "speed_end": 66.50161845686662,
+    "up_end": 0.999994602002244,
+    "z_end": 0.2103417112150535
+  }
+}

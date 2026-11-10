@@ -1,0 +1,16 @@
+{
+  "ckpt": "C:\\Users\\shore\\robotics\\racing_proposal\\runs\\rl\\sim_none\\model.zip",
+  "shield": "none",
+  "episodes": 10,
+  "opponents": 0,
+  "laps_completed": 0,
+  "lap_time_mean": null,
+  "lap_time_best": null,
+  "crashes": 9,
+  "crashes_per_km": 1.8651303518879268,
+  "km": 4.825399999999999,
+  "car_collisions": 0,
+  "int_rate": 0.0,
+  "overtakes_net": 0,
+  "mean_speed": 20.95818512589143
+}

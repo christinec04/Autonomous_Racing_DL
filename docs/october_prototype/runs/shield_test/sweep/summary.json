@@ -1,0 +1,181 @@
+{
+  "rtf": 2.9487213597772834,
+  "configs": {
+    "road/none/1.00": {
+      "episodes": 4,
+      "crashes": 0,
+      "times": [
+        87.184,
+        100.848,
+        91.176,
+        81.824
+      ],
+      "intervention": 0.0,
+      "grip_cmd_p95": 0.31925,
+      "crash_rate": 0.0,
+      "mean_lap_time": 90.258
+    },
+    "road/none/1.30": {
+      "episodes": 4,
+      "crashes": 0,
+      "times": [
+        63.512,
+        82.632,
+        79.76,
+        69.696
+      ],
+      "intervention": 0.0,
+      "grip_cmd_p95": 0.524775,
+      "crash_rate": 0.0,
+      "mean_lap_time": 73.9
+    },
+    "road/geometric/1.00": {
+      "episodes": 4,
+      "crashes": 0,
+      "times": [
+        87.168,
+        100.864,
+        92.736,
+        84.2
+      ],
+      "intervention": 0.035425,
+      "grip_cmd_p95": 0.372575,
+      "crash_rate": 0.0,
+      "mean_lap_time": 91.242
+    },
+    "road/geometric/1.30": {
+      "episodes": 4,
+      "crashes": 0,
+      "times": [
+        63.504,
+        84.168,
+        79.8,
+        69.776
+      ],
+      "intervention": 0.01225,
+      "grip_cmd_p95": 0.525725,
+      "crash_rate": 0.0,
+      "mean_lap_time": 74.312
+    },
+    "road/friction/1.00": {
+      "episodes": 4,
+      "crashes": 0,
+      "times": [
+        87.136,
+        100.84,
+        91.152,
+        81.8
+      ],
+      "intervention": 0.0,
+      "grip_cmd_p95": 0.3191,
+      "crash_rate": 0.0,
+      "mean_lap_time": 90.232
+    },
+    "road/friction/1.30": {
+      "episodes": 4,
+      "crashes": 0,
+      "times": [
+        63.512,
+        82.656,
+        79.736,
+        69.744
+      ],
+      "intervention": 5e-05,
+      "grip_cmd_p95": 0.5247,
+      "crash_rate": 0.0,
+      "mean_lap_time": 73.912
+    },
+    "race/none/1.00": {
+      "episodes": 4,
+      "crashes": 2,
+      "times": [
+        94.304,
+        93.848
+      ],
+      "intervention": 0.0,
+      "grip_cmd_p95": 1.7367,
+      "crash_rate": 0.5,
+      "mean_lap_time": 94.076
+    },
+    "race/none/1.15": {
+      "episodes": 4,
+      "crashes": 4,
+      "times": [],
+      "intervention": 0.0,
+      "grip_cmd_p95": 3.1639500000000003,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/none/1.30": {
+      "episodes": 4,
+      "crashes": 4,
+      "times": [],
+      "intervention": 0.0,
+      "grip_cmd_p95": 4.093625,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/geometric/1.00": {
+      "episodes": 4,
+      "crashes": 3,
+      "times": [
+        96.752
+      ],
+      "intervention": 0.035124999999999997,
+      "grip_cmd_p95": 1.59805,
+      "crash_rate": 0.75,
+      "mean_lap_time": 96.752
+    },
+    "race/geometric/1.15": {
+      "episodes": 4,
+      "crashes": 4,
+      "times": [],
+      "intervention": 0.083675,
+      "grip_cmd_p95": 3.2623250000000006,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/geometric/1.30": {
+      "episodes": 4,
+      "crashes": 4,
+      "times": [],
+      "intervention": 0.04635,
+      "grip_cmd_p95": 4.0762,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/friction/1.00": {
+      "episodes": 4,
+      "crashes": 4,
+      "times": [],
+      "intervention": 0.17017500000000002,
+      "grip_cmd_p95": 1.673125,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/friction/1.15": {
+      "episodes": 4,
+      "crashes": 1,
+      "times": [
+        91.008,
+        97.064,
+        93.816
+      ],
+      "intervention": 0.40495,
+      "grip_cmd_p95": 2.555125,
+      "crash_rate": 0.25,
+      "mean_lap_time": 93.96266666666668
+    },
+    "race/friction/1.30": {
+      "episodes": 4,
+      "crashes": 3,
+      "times": [
+        94.608
+      ],
+      "intervention": 0.44039999999999996,
+      "grip_cmd_p95": 2.49035,
+      "crash_rate": 0.75,
+      "mean_lap_time": 94.608
+    }
+  }
+}

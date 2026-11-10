@@ -1,0 +1,59 @@
+{
+  "rtf": 2.7111756872833075,
+  "configs": {
+    "race/none/1.00": {
+      "episodes": 1,
+      "crashes": 1,
+      "times": [],
+      "intervention": 0.0,
+      "grip_cmd_p95": 1.6641,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/none/1.30": {
+      "episodes": 1,
+      "crashes": 1,
+      "times": [],
+      "intervention": 0.0,
+      "grip_cmd_p95": 1.178,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/geometric/1.00": {
+      "episodes": 1,
+      "crashes": 1,
+      "times": [],
+      "intervention": 0.1662,
+      "grip_cmd_p95": 2.3702,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/geometric/1.30": {
+      "episodes": 1,
+      "crashes": 1,
+      "times": [],
+      "intervention": 0.3714,
+      "grip_cmd_p95": 1.3554,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/friction/1.00": {
+      "episodes": 1,
+      "crashes": 1,
+      "times": [],
+      "intervention": 0.0878,
+      "grip_cmd_p95": 1.3772,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    },
+    "race/friction/1.30": {
+      "episodes": 1,
+      "crashes": 1,
+      "times": [],
+      "intervention": 0.1818,
+      "grip_cmd_p95": 1.3133,
+      "crash_rate": 1.0,
+      "mean_lap_time": null
+    }
+  }
+}

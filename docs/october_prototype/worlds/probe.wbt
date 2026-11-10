@@ -1,0 +1,39 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "../protos/RaceCar.proto"
+
+WorldInfo {
+  title "RaceCar physics probe"
+  basicTimeStep 8
+  contactProperties [
+    ContactProperties { material1 "asphalt" material2 "slick" coulombFriction [ 1.6 ] }
+  ]
+}
+Viewpoint {
+  orientation -0.3 0.3 0.9 1.7
+  position 0 -60 40
+  near 1
+  far 4000
+  follow "ego"
+}
+DEF GROUND Solid {
+  translation 0 0 0
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.16 0.17 0.19 roughness 1 metalness 0 }
+      geometry Plane { size 6000 6000 }
+    }
+  ]
+  name "ground"
+  contactMaterial "asphalt"
+  boundingObject Plane { size 6000 6000 }
+  locked TRUE
+}
+DEF EGO RaceCar {
+  translation 0 0 0.36
+  rotation 0 0 1 0
+  name "ego"
+  color 0.95 0.35 0.02
+  controller "race_probe"
+  controllerArgs [ ]
+}

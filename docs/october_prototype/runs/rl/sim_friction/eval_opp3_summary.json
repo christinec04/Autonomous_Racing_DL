@@ -1,0 +1,16 @@
+{
+  "ckpt": "C:\\Users\\shore\\robotics\\racing_proposal\\runs\\rl\\sim_friction\\model.zip",
+  "shield": "friction",
+  "episodes": 10,
+  "opponents": 3,
+  "laps_completed": 2,
+  "lap_time_mean": 96.815,
+  "lap_time_best": 94.08,
+  "crashes": 8,
+  "crashes_per_km": 0.8368813616059755,
+  "km": 9.559299999999999,
+  "car_collisions": 6,
+  "int_rate": 0.25454816582165224,
+  "overtakes_net": 1,
+  "mean_speed": 21.739850134208172
+}

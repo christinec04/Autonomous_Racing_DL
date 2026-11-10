@@ -1,0 +1,16 @@
+{
+  "steps": 166377,
+  "episodes": 78,
+  "chunk": 1,
+  "wall_s": 2100.0175034999847,
+  "args": {
+    "mode": "train",
+    "run": "wb_friction",
+    "shield": "friction",
+    "minutes": "35",
+    "steps": "3000000",
+    "opp_after": "150000",
+    "threads": "4",
+    "seed": "0"
+  }
+}

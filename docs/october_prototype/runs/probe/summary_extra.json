@@ -1,0 +1,66 @@
+{
+  "dt_ms": 8.0,
+  "mu_track_py": 1.6,
+  "mu_world": 1.6,
+  "fds_world": 0.0,
+  "t_0_100_s": 5.976000000000004,
+  "t_0_200_s": 10.847999999999692,
+  "v_top_ms": 71.11493529755593,
+  "accel_max_ms2": 10.723417856630444,
+  "accel_noaero_t_0_100_s": 5.808000000000004,
+  "accel_noaero_t_0_200_s": 12.31999999999953,
+  "accel_noaero_v_top_ms": 176.9273637832626,
+  "accel_noaero_accel_max_ms2": 8.680934849395264,
+  "variant_asym": {
+    "mu_world": 1.6,
+    "slide_y0_b0": {
+      "world_dir_deg": 0,
+      "decel": 29.717755231077494,
+      "decel_over_mu_g": 1.8933330295028983,
+      "force_vs_minus_v_deg": 0.00010803459326780285,
+      "world_ax": -29.717755231056195,
+      "world_ay": 3.557790662961436e-05
+    },
+    "slide_y0_b45": {
+      "world_dir_deg": 45,
+      "decel": 17.803021626220954,
+      "decel_over_mu_g": 1.1342394002434348,
+      "force_vs_minus_v_deg": -30.756117227172496,
+      "world_ax": -8.25134737550107,
+      "world_ay": -15.775387333200495
+    },
+    "slide_y0_b90": {
+      "world_dir_deg": 90,
+      "decel": 24.512623691839412,
+      "decel_over_mu_g": 1.5617114992252428,
+      "force_vs_minus_v_deg": 0.2671045288604148,
+      "world_ax": -0.0711459593672438,
+      "world_ay": -24.51252044385058
+    },
+    "slide_y45_b0": {
+      "world_dir_deg": 45,
+      "decel": 38.43821512728975,
+      "decel_over_mu_g": 2.44891788527585,
+      "force_vs_minus_v_deg": 4.967716904502595e-09,
+      "world_ax": -27.179922559248567,
+      "world_ay": -27.179922587179263
+    },
+    "slide_y30_b0": {
+      "world_dir_deg": 30,
+      "decel": 23.751961482350406,
+      "decel_over_mu_g": 1.5132493299152907,
+      "force_vs_minus_v_deg": 35.23627048042155,
+      "world_ax": -23.75104200939839,
+      "world_ay": -0.20899216935150108
+    },
+    "slide_y45_b45": {
+      "world_dir_deg": 90,
+      "decel": 22.337382211711855,
+      "decel_over_mu_g": 1.4231257780142619,
+      "force_vs_minus_v_deg": -27.461267150902415,
+      "world_ax": 5.508036527359745,
+      "world_ay": -21.64763676906493
+    }
+  },
+  "rtf": 13.825384463784214
+}

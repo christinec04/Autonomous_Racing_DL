@@ -1,0 +1,84 @@
+#VRML_SIM R2025a utf8
+# Open wheel style race car on the generic Webots Car (Ackermann) model.
+# 860 kg with wheels, 450 kW electric drive, slick tyres via contactMaterial "slick".
+# Aerodynamic drag and downforce are not modelled by Webots, the controllers add them with Supervisor addForce.
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/abstract/Car.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/abstract/VehicleWheel.proto"
+
+PROTO RaceCar [
+  field SFVec3f    translation    0 0 0.35
+  field SFRotation rotation       0 0 1 0
+  field SFString   name           "race car"
+  field SFString   controller     "<generic>"
+  field MFString   controllerArgs []
+  field SFColor    color          0.9 0.3 0.05
+  field SFBool     synchronization TRUE
+  field MFNode     sensorsSlotFront  []
+  field MFNode     sensorsSlotCenter []
+]
+{
+  Car {
+    translation IS translation
+    rotation IS rotation
+    name IS name
+    model "race car"
+    controller IS controller
+    controllerArgs IS controllerArgs
+    supervisor TRUE
+    synchronization IS synchronization
+    trackFront 1.6
+    trackRear 1.6
+    wheelbase 3.0
+    minSteeringAngle -0.45
+    maxSteeringAngle 0.45
+    suspensionFrontSpringConstant 120000
+    suspensionFrontDampingConstant 6000
+    suspensionRearSpringConstant 120000
+    suspensionRearDampingConstant 6000
+    wheelsDampingConstant 0.5
+    type "propulsion"
+    engineType "electric"
+    engineSound ""
+    # 400 only reached about 6.5 m/s2 of brake decel, 2000 lets full brake saturate the slicks
+    brakeCoefficient 2000
+    time0To100 2.6
+    maxVelocity 85
+    engineMaxTorque 600
+    engineMaxPower 450000
+    # 85 m/s on 0.33 m tyres through a 7:1 ratio is about 17200 motor rpm, the 4500 default capped the car at 22 m/s
+    engineMinRPM 0
+    engineMaxRPM 18000
+    gearRatio [-7 7]
+    wheelFrontRight VehicleWheel { name "front right wheel" tireRadius 0.33 thickness 0.32 rimRadius 0.22 contactMaterial "slick" physics DEF RACE_WHEEL Physics { density -1 mass 15 } }
+    wheelFrontLeft  VehicleWheel { name "front left wheel" wheelSide TRUE tireRadius 0.33 thickness 0.32 rimRadius 0.22 contactMaterial "slick" physics USE RACE_WHEEL }
+    wheelRearRight  VehicleWheel { name "rear right wheel" tireRadius 0.33 thickness 0.36 rimRadius 0.22 contactMaterial "slick" physics USE RACE_WHEEL }
+    wheelRearLeft   VehicleWheel { name "rear left wheel" wheelSide TRUE tireRadius 0.33 thickness 0.36 rimRadius 0.22 contactMaterial "slick" physics USE RACE_WHEEL }
+    extensionSlot [
+      Pose {
+        translation 3.55 0 0.2
+        children IS sensorsSlotFront
+      }
+      Pose {
+        translation 1.5 0 0.1
+        children IS sensorsSlotCenter
+      }
+      DEF BODY Pose {
+        translation 1.4 0 0.08
+        children [
+          Shape { appearance DEF PAINT PBRAppearance { baseColor IS color roughness 0.3 metalness 0.3 } geometry Box { size 3.6 0.75 0.42 } }
+          Pose { translation 1.95 0 -0.08 children [ Shape { appearance USE PAINT geometry Box { size 0.9 0.5 0.22 } } ] }
+          Pose { translation 0.25 0.62 -0.04 children [ Shape { appearance USE PAINT geometry Box { size 1.7 0.5 0.32 } } ] }
+          Pose { translation 0.25 -0.62 -0.04 children [ Shape { appearance USE PAINT geometry Box { size 1.7 0.5 0.32 } } ] }
+          Pose { translation 0.1 0 0.3 children [ Shape { appearance PBRAppearance { baseColor 0.05 0.05 0.06 roughness 0.6 metalness 0 } geometry Box { size 0.9 0.42 0.2 } } ] }
+          Pose { translation 2.25 0 -0.18 children [ Shape { appearance PBRAppearance { baseColor 0.08 0.08 0.09 roughness 0.6 metalness 0 } geometry Box { size 0.5 1.9 0.05 } } ] }
+          Pose { translation -1.55 0 0.55 children [ Shape { appearance PBRAppearance { baseColor 0.08 0.08 0.09 roughness 0.6 metalness 0 } geometry Box { size 0.45 1.0 0.04 } } ] }
+          Pose { translation -1.55 0.47 0.35 children [ Shape { appearance USE PAINT geometry Box { size 0.5 0.03 0.45 } } ] }
+          Pose { translation -1.55 -0.47 0.35 children [ Shape { appearance USE PAINT geometry Box { size 0.5 0.03 0.45 } } ] }
+        ]
+      }
+    ]
+    boundingObject Pose { translation 1.5 0 0.12 children [ Box { size 4.4 1.8 0.5 } ] }
+    physics Physics { density -1 mass 800 centerOfMass [ 1.5 0 -0.05 ] }
+  }
+}

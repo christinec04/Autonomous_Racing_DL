@@ -1,0 +1,16 @@
+{
+  "steps": 500000,
+  "episodes": 1348,
+  "chunk": 1,
+  "wall_s": 861.1223697662354,
+  "args": {
+    "mode": "train",
+    "run": "sim_none",
+    "minutes": "30",
+    "steps": "500000",
+    "opp_after": "300000",
+    "shield": "none",
+    "threads": "2",
+    "seed": "0"
+  }
+}

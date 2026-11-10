@@ -1,0 +1,14 @@
+{
+  "dt_ms": 16.0,
+  "mu_track_py": 1.6,
+  "mu_world": 1.6,
+  "fds_world": 0.0,
+  "sim_s": 60.0,
+  "wall_s": 9.191816568374634,
+  "rtf": 6.527545404510792,
+  "ego_progress_m": 999.198912837586,
+  "ego_up_end": 0.9999759712943088,
+  "lidar_points": 180,
+  "lidar_hits_last": 163,
+  "lidar_hit_mean": 148.6
+}

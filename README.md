@@ -103,6 +103,7 @@ Full from-scratch reproduction: [docs/reproduce.md](docs/reproduce.md).
 
 ## Documentation
 
+- [docs/background.md](docs/background.md): the project before this repo: course, proposal, the professor's follow-up asks, the October Webots prototype ([archive](docs/october_prototype/README.md)), simulator survey, why F1TENTH Gym
 - [docs/results.md](docs/results.md): current results, what works and what does not (living page)
 - [docs/architecture.md](docs/architecture.md): how the pieces fit, with every parameter value
 - [docs/feedback.md](docs/feedback.md): each proposal comment -> what changed -> evidence

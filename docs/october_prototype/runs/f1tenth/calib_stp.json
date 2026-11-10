@@ -1,0 +1,159 @@
+{
+ "brake": [
+  {
+   "v": 20.0,
+   "cmd": 5.0,
+   "decel": 4.974999999999894,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 20.0,
+   "cmd": 10.0,
+   "decel": 9.949999999999788,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 20.0,
+   "cmd": 14.0,
+   "decel": 13.929999999999948,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 20.0,
+   "cmd": 18.0,
+   "decel": 15.617520000000145,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 20.0,
+   "cmd": 25.0,
+   "decel": 15.617520000000145,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 40.0,
+   "cmd": 5.0,
+   "decel": 4.975000000000778,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 40.0,
+   "cmd": 10.0,
+   "decel": 9.949999999999788,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 40.0,
+   "cmd": 14.0,
+   "decel": 13.929999999999602,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 40.0,
+   "cmd": 18.0,
+   "decel": 15.617520000000154,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  },
+  {
+   "v": 40.0,
+   "cmd": 25.0,
+   "decel": 15.617520000000154,
+   "min_wheel_ratio": null,
+   "yaw_rate_max": 0.0
+  }
+ ],
+ "skidpad": [
+  {
+   "v": 15.0,
+   "ay_peak": 13.19335874707799,
+   "ay_peak_over_mu_g": 0.8405554757312684,
+   "delta_at_peak": 0.19895999999999997,
+   "beta_at_peak_deg": 0.5370174518364417,
+   "K_US": 0.00014485634691736838,
+   "spin_at_delta": null
+  },
+  {
+   "v": 30.0,
+   "ay_peak": 14.86193839623737,
+   "ay_peak_over_mu_g": 0.9468615186185887,
+   "delta_at_peak": 0.11167999999999999,
+   "beta_at_peak_deg": -5.359615708462106,
+   "K_US": 0.0006383343426707789,
+   "spin_at_delta": null
+  },
+  {
+   "v": 45.0,
+   "ay_peak": 14.939032009097748,
+   "ay_peak_over_mu_g": 0.9517731912014364,
+   "delta_at_peak": 0.08039999999999999,
+   "beta_at_peak_deg": -6.403099087653805,
+   "K_US": 0.0010067236020475218,
+   "spin_at_delta": null
+  }
+ ],
+ "combined": [
+  {
+   "v": 30.0,
+   "ay0": 6.932649512209934,
+   "brake_cmd": 4.0,
+   "ay_mean": 10.87049512054766,
+   "decel": 4.713517550127466,
+   "beta_max_deg": 3.5982268995970923,
+   "combined_over_mu_g": 0.7548683675098109
+  },
+  {
+   "v": 30.0,
+   "ay0": 6.195303250079983,
+   "brake_cmd": 8.0,
+   "ay_mean": 10.82266055837079,
+   "decel": 8.936679965409116,
+   "beta_max_deg": 7.239693836459225,
+   "combined_over_mu_g": 0.8942063781477615
+  },
+  {
+   "v": 30.0,
+   "ay0": 4.682160312088924,
+   "brake_cmd": 12.0,
+   "ay_mean": 8.700349558722374,
+   "decel": 13.023991024528268,
+   "beta_max_deg": 14.309350649811861,
+   "combined_over_mu_g": 0.9978789556596336
+  },
+  {
+   "v": 30.0,
+   "ay0": 0.09770646374146509,
+   "brake_cmd": 18.0,
+   "ay_mean": 0.057922742189194874,
+   "decel": 15.416068882551883,
+   "beta_max_deg": 13.310715442040891,
+   "combined_over_mu_g": 0.9821723814110019
+  }
+ ],
+ "throttle": [
+  {
+   "v": 5.0,
+   "accel": 9.42945361920005
+  },
+  {
+   "v": 15.0,
+   "accel": 9.429453619200189
+  },
+  {
+   "v": 30.0,
+   "accel": 9.427111937569606
+  },
+  {
+   "v": 50.0,
+   "accel": 9.284985856530852
+  }
+ ]
+}

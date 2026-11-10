@@ -1,0 +1,11 @@
+ep,completed,lap_time,crash,steps,progress,int_rate,overtakes
+0,0,,barrier,63,32.1,0.0,0
+1,0,,barrier,387,205.9,0.0,0
+2,0,,barrier,29,13.7,0.0,0
+3,0,,barrier,38,16.5,0.0,0
+4,0,,barrier,1054,748.3,0.0,0
+5,0,,car,24,24.4,0.0,0
+6,0,,barrier,306,215.6,0.0,0
+7,0,,car,183,190.8,0.0,0
+8,0,,stuck,130,17.4,0.0,0
+9,0,,car,31,28.4,0.0,0

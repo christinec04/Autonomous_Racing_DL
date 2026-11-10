@@ -1,0 +1,2781 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/road/protos/Road.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/buildings/protos/SimpleBuilding.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/traffic/protos/StreetLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/vehicles/protos/bmw/BmwX5.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/devices/sick/protos/SickLms291.proto"
+
+WorldInfo {
+  info [
+    "APF shielded deep reinforcement learning for autonomous racing"
+    "Ego BMW X5 is driven by a PPO policy, the artificial potential field shield overrides unsafe actions."
+  ]
+  title "Singapore styled street circuit"
+  basicTimeStep 16
+  lineScale 1
+}
+DEF VIEW Viewpoint {
+  orientation 0 0 1 0
+  position 0 0 30
+  near 1
+  far 3000
+}
+TexturedBackground {
+  texture "dusk"
+  luminosity 0.55
+}
+TexturedBackgroundLight {
+  texture "dusk"
+  luminosity 1.3
+  castShadows FALSE
+}
+DEF GROUND Solid {
+  translation 0 0 -0.02
+  children [
+    Shape {
+      appearance PBRAppearance { baseColor 0.16 0.17 0.19 roughness 1 metalness 0 }
+      geometry Plane { size 1400 1100 }
+    }
+  ]
+  boundingObject Plane { size 1400 1100 }
+  locked TRUE
+}
+DEF TRACK Road {
+  name "street circuit"
+  width 14.0
+  numberOfLanes 1
+  lines [ ]
+  roadBorderHeight 0.2
+  roadBorderWidth [ 1.6 ]
+  rightBarrier TRUE
+  leftBarrier TRUE
+  wayPoints [ -276 -150 0.01, -270 -150 0.01, -264 -150 0.01, -258 -150 0.01, -252 -150 0.01, -246 -150 0.01, -240 -150 0.01, -234 -150 0.01, -228 -150 0.01, -222 -150 0.01, -216 -150 0.01, -210 -150 0.01, -204 -150 0.01, -198 -150 0.01, -192 -150 0.01, -186 -150 0.01, -180 -150 0.01, -174 -150 0.01, -168 -150 0.01, -162 -150 0.01, -156 -150 0.01, -150 -150 0.01, -144 -150 0.01, -138 -150 0.01, -132 -150 0.01, -126 -150 0.01, -120 -150 0.01, -114 -150 0.01, -108 -150 0.01, -102 -150 0.01, -96 -150 0.01, -90 -150 0.01, -84 -150 0.01, -78 -150 0.01, -72 -150 0.01, -66 -150 0.01, -60 -150 0.01, -54 -150 0.01, -48 -150 0.01, -42 -150 0.01, -36 -150 0.01, -30 -150 0.01, -24 -150 0.01, -18 -150 0.01, -12 -150 0.01, -6.001 -150 0.01, -0.0007005 -150 0.01, 5.999 -150 0.01, 12 -150 0.01, 18 -150 0.01, 23.97 -149.4 0.01, 29.85 -148.2 0.01, 35.52 -146.3 0.01, 40.89 -143.6 0.01, 45.87 -140.3 0.01, 50.39 -136.4 0.01, 54.44 -131.9 0.01, 58.19 -127.3 0.01, 61.94 -122.6 0.01, 65.68 -117.9 0.01, 68.95 -112.9 0.01, 71.22 -107.3 0.01, 72.04 -101.4 0.01, 71.11 -95.49 0.01, 68.63 -90.04 0.01, 65.07 -85.21 0.01, 60.9 -80.9 0.01, 56.66 -76.66 0.01, 52.79 -72.08 0.01, 50.05 -66.77 0.01, 49.75 -60.85 0.01, 52.58 -55.63 0.01, 57.14 -51.75 0.01, 62.37 -48.82 0.01, 67.73 -46.13 0.01, 73.1 -43.45 0.01, 78.46 -40.77 0.01, 83.83 -38.08 0.01, 89.2 -35.4 0.01, 94.56 -32.72 0.01, 99.94 -30.05 0.01, 105.4 -27.6 0.01, 111 -25.47 0.01, 116.7 -23.68 0.01, 122.6 -22.25 0.01, 128.5 -21.16 0.01, 134.4 -20.44 0.01, 140.4 -20.06 0.01, 146.4 -20 0.01, 152.4 -20 0.01, 158.4 -20 0.01, 164.4 -20 0.01, 170.4 -20 0.01, 176.4 -20 0.01, 182.4 -20 0.01, 188.4 -20 0.01, 194.4 -20 0.01, 200.4 -20 0.01, 206.4 -20 0.01, 212.4 -20 0.01, 218.4 -20 0.01, 224.4 -20 0.01, 230.4 -20 0.01, 236.4 -20 0.01, 242.4 -20 0.01, 248.4 -20 0.01, 254.4 -20 0.01, 260.4 -20 0.01, 266.4 -20 0.01, 272.4 -20 0.01, 278.4 -19.94 0.01, 284.4 -19.27 0.01, 290.2 -17.74 0.01, 295.6 -15.26 0.01, 300.5 -11.84 0.01, 304.8 -7.623 0.01, 308.3 -2.788 0.01, 311.2 2.466 0.01, 313.9 7.832 0.01, 316.6 13.2 0.01, 319.3 18.57 0.01, 321.6 24.11 0.01, 322.6 29.99 0.01, 321.6 35.85 0.01, 318 40.59 0.01, 312.9 43.73 0.01, 307.3 45.68 0.01, 301.4 47.14 0.01, 295.6 48.6 0.01, 289.8 50.05 0.01, 284 51.51 0.01, 278.2 52.96 0.01, 272.3 54.43 0.01, 266.7 56.4 0.01, 261.4 59.29 0.01, 256.9 63.24 0.01, 253.5 68.14 0.01, 251.3 73.71 0.01, 250.2 79.6 0.01, 250 85.6 0.01, 250 91.6 0.01, 250 97.6 0.01, 250 103.6 0.01, 250 109.6 0.01, 250 115.6 0.01, 250 121.6 0.01, 250 127.6 0.01, 249.3 133.5 0.01, 247.4 139.2 0.01, 243.9 144.1 0.01, 239 147.5 0.01, 233.3 149.3 0.01, 227.4 150 0.01, 221.4 150 0.01, 215.4 150 0.01, 209.4 150 0.01, 203.4 150 0.01, 197.4 150 0.01, 191.4 150 0.01, 185.4 150 0.01, 179.4 150 0.01, 173.4 150 0.01, 167.4 150 0.01, 161.4 150 0.01, 155.4 150 0.01, 149.4 150 0.01, 143.4 150 0.01, 137.4 149.5 0.01, 131.6 147.8 0.01, 126.6 144.6 0.01, 122.9 139.9 0.01, 120.9 134.3 0.01, 120.1 128.3 0.01, 120 122.3 0.01, 120 116.3 0.01, 119.8 110.3 0.01, 118.8 104.4 0.01, 116.4 98.96 0.01, 112.3 94.55 0.01, 107.1 91.71 0.01, 101.3 90.33 0.01, 95.27 90 0.01, 89.27 90 0.01, 83.27 90 0.01, 77.27 90 0.01, 71.27 90 0.01, 65.27 90 0.01, 59.28 90.26 0.01, 53.43 91.53 0.01, 48.09 94.22 0.01, 43.94 98.5 0.01, 41.37 103.9 0.01, 40.21 109.8 0.01, 40 115.8 0.01, 40 121.8 0.01, 40 127.8 0.01, 40 133.8 0.01, 39.84 139.8 0.01, 38.76 145.7 0.01, 36.32 151.1 0.01, 32.27 155.5 0.01, 27 158.3 0.01, 21.17 159.7 0.01, 15.18 160 0.01, 9.184 160 0.01, 3.184 160 0.01, -2.816 160 0.01, -8.816 160 0.01, -14.82 160 0.01, -20.82 160 0.01, -26.82 160 0.01, -32.82 160 0.01, -38.82 160 0.01, -44.82 160 0.01, -50.82 160 0.01, -56.82 160 0.01, -62.82 160 0.01, -68.82 160 0.01, -74.82 160 0.01, -80.82 160 0.01, -86.82 160 0.01, -92.82 160 0.01, -98.81 159.9 0.01, -104.8 159.1 0.01, -110.5 157.3 0.01, -115.7 154.4 0.01, -120.2 150.5 0.01, -123.8 145.7 0.01, -126.4 140.3 0.01, -128.5 134.6 0.01, -130.3 129 0.01, -132.2 123.3 0.01, -134.4 117.7 0.01, -137.4 112.5 0.01, -141.4 108 0.01, -146.1 104.4 0.01, -151.6 101.9 0.01, -157.4 100.5 0.01, -163.4 100 0.01, -169.4 100 0.01, -175.4 100 0.01, -181.4 100 0.01, -187.4 100 0.01, -193.4 100 0.01, -199.4 100 0.01, -205.4 100 0.01, -211.4 100 0.01, -217.4 100 0.01, -223.4 100.7 0.01, -229 102.5 0.01, -233.9 105.9 0.01, -237.4 110.8 0.01, -239.3 116.5 0.01, -240 122.4 0.01, -240 128.4 0.01, -240 134.4 0.01, -240 140.4 0.01, -240 146.4 0.01, -240.5 152.4 0.01, -242.1 158.2 0.01, -245.3 163.2 0.01, -250 167 0.01, -255.6 169.1 0.01, -261.5 169.9 0.01, -267.5 170 0.01, -273.5 170 0.01, -279.5 170 0.01, -285.5 170 0.01, -291.5 170 0.01, -297.5 170 0.01, -303.5 170 0.01, -309.5 169.9 0.01, -315.4 168.8 0.01, -320.9 166.5 0.01, -325.3 162.5 0.01, -328.2 157.3 0.01, -329.6 151.5 0.01, -330 145.5 0.01, -330 139.5 0.01, -330 133.5 0.01, -330 127.5 0.01, -330 121.5 0.01, -330 115.5 0.01, -330 109.5 0.01, -330 103.5 0.01, -330 97.47 0.01, -330 91.47 0.01, -330 85.47 0.01, -330 79.47 0.01, -330 73.47 0.01, -330 67.47 0.01, -329.9 61.47 0.01, -329.1 55.54 0.01, -327 49.95 0.01, -323.2 45.28 0.01, -318.2 42.13 0.01, -312.4 40.5 0.01, -306.4 40 0.01, -300.4 40 0.01, -294.4 40 0.01, -288.4 40 0.01, -282.4 40 0.01, -276.4 40 0.01, -270.4 39.86 0.01, -264.5 38.82 0.01, -259.1 36.42 0.01, -254.6 32.43 0.01, -251.7 27.19 0.01, -250.3 21.37 0.01, -250 15.38 0.01, -250 9.383 0.01, -250 3.383 0.01, -250 -2.617 0.01, -250 -8.617 0.01, -250 -14.62 0.01, -250.2 -20.61 0.01, -251.5 -26.47 0.01, -254.2 -31.82 0.01, -258.4 -36 0.01, -263.8 -38.6 0.01, -269.7 -39.78 0.01, -275.7 -40 0.01, -281.7 -40 0.01, -287.7 -40 0.01, -293.7 -40 0.01, -299.7 -40 0.01, -305.7 -40 0.01, -311.6 -40.38 0.01, -317.4 -41.97 0.01, -322.2 -45.5 0.01, -324.7 -50.9 0.01, -324.9 -56.88 0.01, -323.8 -62.77 0.01, -322.2 -68.56 0.01, -320.6 -74.35 0.01, -319.1 -80.13 0.01, -317.5 -85.92 0.01, -315.9 -91.71 0.01, -314.3 -97.5 0.01, -312.7 -103.3 0.01, -311.2 -109.1 0.01, -309.6 -114.9 0.01, -308 -120.7 0.01, -306.4 -126.4 0.01, -304.5 -132.1 0.01, -301.8 -137.4 0.01, -298 -142.1 0.01, -293.3 -145.8 0.01, -287.8 -148.3 0.01, -282 -149.6 0.01, -276 -150 0.01 ]
+  splineSubdivision -1
+}
+DEF START_LINE Pose {
+  translation -72 -150 0.025
+  rotation 0 0 1 0
+  children [ Shape { appearance PBRAppearance { baseColor 1 1 1 roughness 1 metalness 0 } geometry Box { size 0.8 14.0 0.01 } castShadows FALSE } ]
+}
+DEF KERBS Group {
+  children [
+    Pose { translation -275.9 -143.8 0.02 rotation 0 0 1 -0.01061 children [ DEF KERB0 Shape { appearance PBRAppearance { baseColor 0.95 0.95 0.95 roughness 0.9 metalness 0 } geometry Box { size 2.3 1.5 0.05 } castShadows FALSE } ] }
+    Pose { translation 19.57 -143.6 0.02 rotation 0 0 1 0.06867 children [ USE KERB0 ] }
+    Pose { translation 21.33 -143.5 0.02 rotation 0 0 1 0.1049 children [ DEF KERB1 Shape { appearance PBRAppearance { baseColor 0.85 0.05 0.05 roughness 0.9 metalness 0 } geometry Box { size 2.3 1.5 0.05 } castShadows FALSE } ] }
+    Pose { translation 23.09 -143.3 0.02 rotation 0 0 1 0.1424 children [ USE KERB0 ] }
+    Pose { translation 24.82 -143 0.02 rotation 0 0 1 0.1813 children [ USE KERB1 ] }
+    Pose { translation 26.53 -142.6 0.02 rotation 0 0 1 0.2223 children [ USE KERB0 ] }
+    Pose { translation 28.21 -142.2 0.02 rotation 0 0 1 0.2643 children [ USE KERB1 ] }
+    Pose { translation 29.88 -141.7 0.02 rotation 0 0 1 0.3063 children [ USE KERB0 ] }
+    Pose { translation 31.52 -141.2 0.02 rotation 0 0 1 0.3498 children [ USE KERB1 ] }
+    Pose { translation 33.12 -140.5 0.02 rotation 0 0 1 0.3943 children [ USE KERB0 ] }
+    Pose { translation 34.7 -139.8 0.02 rotation 0 0 1 0.4383 children [ USE KERB1 ] }
+    Pose { translation 36.24 -139.1 0.02 rotation 0 0 1 0.4824 children [ USE KERB0 ] }
+    Pose { translation 37.75 -138.2 0.02 rotation 0 0 1 0.527 children [ USE KERB1 ] }
+    Pose { translation 39.22 -137.3 0.02 rotation 0 0 1 0.5708 children [ USE KERB0 ] }
+    Pose { translation 40.66 -136.4 0.02 rotation 0 0 1 0.6131 children [ USE KERB1 ] }
+    Pose { translation 42.06 -135.3 0.02 rotation 0 0 1 0.6556 children [ USE KERB0 ] }
+    Pose { translation 43.42 -134.3 0.02 rotation 0 0 1 0.6972 children [ USE KERB1 ] }
+    Pose { translation 44.74 -133.1 0.02 rotation 0 0 1 0.7366 children [ USE KERB0 ] }
+    Pose { translation 46.02 -131.9 0.02 rotation 0 0 1 0.7747 children [ USE KERB1 ] }
+    Pose { translation 47.26 -130.6 0.02 rotation 0 0 1 0.8116 children [ USE KERB0 ] }
+    Pose { translation 59.55 -115.6 0.02 rotation 0 0 1 0.8995 children [ USE KERB0 ] }
+    Pose { translation 60.7 -114.1 0.02 rotation 0 0 1 0.9229 children [ USE KERB1 ] }
+    Pose { translation 61.71 -112.7 0.02 rotation 0 0 1 0.9673 children [ USE KERB0 ] }
+    Pose { translation 62.63 -111.3 0.02 rotation 0 0 1 1.019 children [ USE KERB1 ] }
+    Pose { translation 63.44 -109.9 0.02 rotation 0 0 1 1.078 children [ USE KERB0 ] }
+    Pose { translation 64.15 -108.5 0.02 rotation 0 0 1 1.144 children [ USE KERB1 ] }
+    Pose { translation 64.74 -107.1 0.02 rotation 0 0 1 1.218 children [ USE KERB0 ] }
+    Pose { translation 65.2 -105.6 0.02 rotation 0 0 1 1.298 children [ USE KERB1 ] }
+    Pose { translation 65.53 -104.2 0.02 rotation 0 0 1 1.386 children [ USE KERB0 ] }
+    Pose { translation 65.73 -102.8 0.02 rotation 0 0 1 1.481 children [ USE KERB1 ] }
+    Pose { translation 65.79 -101.4 0.02 rotation 0 0 1 1.579 children [ USE KERB0 ] }
+    Pose { translation 65.71 -100.1 0.02 rotation 0 0 1 1.678 children [ USE KERB1 ] }
+    Pose { translation 65.49 -98.69 0.02 rotation 0 0 1 1.776 children [ USE KERB0 ] }
+    Pose { translation 65.14 -97.33 0.02 rotation 0 0 1 1.87 children [ USE KERB1 ] }
+    Pose { translation 64.64 -95.97 0.02 rotation 0 0 1 1.959 children [ USE KERB0 ] }
+    Pose { translation 64.02 -94.61 0.02 rotation 0 0 1 2.039 children [ USE KERB1 ] }
+    Pose { translation 63.27 -93.26 0.02 rotation 0 0 1 2.112 children [ USE KERB0 ] }
+    Pose { translation 62.4 -91.92 0.02 rotation 0 0 1 2.177 children [ USE KERB1 ] }
+    Pose { translation 61.43 -90.61 0.02 rotation 0 0 1 2.236 children [ USE KERB0 ] }
+    Pose { translation 60.36 -89.32 0.02 rotation 0 0 1 2.287 children [ USE KERB1 ] }
+    Pose { translation 59.2 -88.05 0.02 rotation 0 0 1 2.331 children [ USE KERB0 ] }
+    Pose { translation 61.15 -72.31 0.02 rotation 0 0 1 2.34 children [ USE KERB1 ] }
+    Pose { translation 59.95 -71.03 0.02 rotation 0 0 1 2.302 children [ USE KERB0 ] }
+    Pose { translation 58.87 -69.77 0.02 rotation 0 0 1 2.247 children [ USE KERB1 ] }
+    Pose { translation 57.91 -68.5 0.02 rotation 0 0 1 2.181 children [ USE KERB0 ] }
+    Pose { translation 57.1 -67.25 0.02 rotation 0 0 1 2.1 children [ USE KERB1 ] }
+    Pose { translation 56.47 -66.05 0.02 rotation 0 0 1 1.997 children [ USE KERB0 ] }
+    Pose { translation 56.03 -64.93 0.02 rotation 0 0 1 1.87 children [ USE KERB1 ] }
+    Pose { translation 55.79 -63.94 0.02 rotation 0 0 1 1.713 children [ USE KERB0 ] }
+    Pose { translation 55.73 -63.07 0.02 rotation 0 0 1 1.533 children [ USE KERB1 ] }
+    Pose { translation 55.84 -62.28 0.02 rotation 0 0 1 1.34 children [ USE KERB0 ] }
+    Pose { translation 56.11 -61.49 0.02 rotation 0 0 1 1.154 children [ USE KERB1 ] }
+    Pose { translation 56.59 -60.64 0.02 rotation 0 0 1 0.9904 children [ USE KERB0 ] }
+    Pose { translation 57.3 -59.73 0.02 rotation 0 0 1 0.8552 children [ USE KERB1 ] }
+    Pose { translation 58.23 -58.79 0.02 rotation 0 0 1 0.7469 children [ USE KERB0 ] }
+    Pose { translation 59.34 -57.86 0.02 rotation 0 0 1 0.6596 children [ USE KERB1 ] }
+    Pose { translation 60.61 -56.95 0.02 rotation 0 0 1 0.5897 children [ USE KERB0 ] }
+    Pose { translation 62.01 -56.08 0.02 rotation 0 0 1 0.5333 children [ USE KERB1 ] }
+    Pose { translation 63.51 -55.24 0.02 rotation 0 0 1 0.4883 children [ USE KERB0 ] }
+    Pose { translation 65.17 -54.4 0.02 rotation 0 0 1 0.4663 children [ USE KERB1 ] }
+    Pose { translation 66.95 -53.51 0.02 rotation 0 0 1 0.4636 children [ USE KERB0 ] }
+    Pose { translation 276.3 -13.75 0.02 rotation 0 0 1 0.01452 children [ USE KERB1 ] }
+    Pose { translation 278.1 -13.7 0.02 rotation 0 0 1 0.04731 children [ USE KERB0 ] }
+    Pose { translation 279.9 -13.58 0.02 rotation 0 0 1 0.08886 children [ USE KERB1 ] }
+    Pose { translation 281.6 -13.39 0.02 rotation 0 0 1 0.1338 children [ USE KERB0 ] }
+    Pose { translation 283.2 -13.13 0.02 rotation 0 0 1 0.1819 children [ USE KERB1 ] }
+    Pose { translation 284.9 -12.78 0.02 rotation 0 0 1 0.2317 children [ USE KERB0 ] }
+    Pose { translation 286.5 -12.36 0.02 rotation 0 0 1 0.2844 children [ USE KERB1 ] }
+    Pose { translation 288.1 -11.85 0.02 rotation 0 0 1 0.3402 children [ USE KERB0 ] }
+    Pose { translation 289.6 -11.26 0.02 rotation 0 0 1 0.3971 children [ USE KERB1 ] }
+    Pose { translation 291.1 -10.59 0.02 rotation 0 0 1 0.4564 children [ USE KERB0 ] }
+    Pose { translation 292.5 -9.825 0.02 rotation 0 0 1 0.5164 children [ USE KERB1 ] }
+    Pose { translation 293.9 -8.983 0.02 rotation 0 0 1 0.5767 children [ USE KERB0 ] }
+    Pose { translation 295.3 -8.057 0.02 rotation 0 0 1 0.6371 children [ USE KERB1 ] }
+    Pose { translation 296.5 -7.048 0.02 rotation 0 0 1 0.696 children [ USE KERB0 ] }
+    Pose { translation 297.8 -5.962 0.02 rotation 0 0 1 0.7542 children [ USE KERB1 ] }
+    Pose { translation 298.9 -4.795 0.02 rotation 0 0 1 0.8094 children [ USE KERB0 ] }
+    Pose { translation 300 -3.561 0.02 rotation 0 0 1 0.8632 children [ USE KERB1 ] }
+    Pose { translation 301.1 -2.256 0.02 rotation 0 0 1 0.9147 children [ USE KERB0 ] }
+    Pose { translation 302.1 -0.8823 0.02 rotation 0 0 1 0.9623 children [ USE KERB1 ] }
+    Pose { translation 303.1 0.5505 0.02 rotation 0 0 1 1.007 children [ USE KERB0 ] }
+    Pose { translation 304 2.035 0.02 rotation 0 0 1 1.05 children [ USE KERB1 ] }
+    Pose { translation 304.8 3.587 0.02 rotation 0 0 1 1.087 children [ USE KERB0 ] }
+    Pose { translation 312.8 19.57 0.02 rotation 0 0 1 1.107 children [ USE KERB1 ] }
+    Pose { translation 313.7 21.3 0.02 rotation 0 0 1 1.119 children [ USE KERB0 ] }
+    Pose { translation 314.4 22.91 0.02 rotation 0 0 1 1.154 children [ USE KERB1 ] }
+    Pose { translation 315.1 24.45 0.02 rotation 0 0 1 1.206 children [ USE KERB0 ] }
+    Pose { translation 315.6 25.97 0.02 rotation 0 0 1 1.268 children [ USE KERB1 ] }
+    Pose { translation 316 27.45 0.02 rotation 0 0 1 1.343 children [ USE KERB0 ] }
+    Pose { translation 316.3 28.86 0.02 rotation 0 0 1 1.432 children [ USE KERB1 ] }
+    Pose { translation 316.4 30.17 0.02 rotation 0 0 1 1.542 children [ USE KERB0 ] }
+    Pose { translation 316.4 31.36 0.02 rotation 0 0 1 1.672 children [ USE KERB1 ] }
+    Pose { translation 316.2 32.41 0.02 rotation 0 0 1 1.82 children [ USE KERB0 ] }
+    Pose { translation 315.9 33.36 0.02 rotation 0 0 1 1.98 children [ USE KERB1 ] }
+    Pose { translation 315.4 34.23 0.02 rotation 0 0 1 2.142 children [ USE KERB0 ] }
+    Pose { translation 314.8 35.05 0.02 rotation 0 0 1 2.296 children [ USE KERB1 ] }
+    Pose { translation 313.9 35.86 0.02 rotation 0 0 1 2.43 children [ USE KERB0 ] }
+    Pose { translation 312.9 36.64 0.02 rotation 0 0 1 2.544 children [ USE KERB1 ] }
+    Pose { translation 311.7 37.36 0.02 rotation 0 0 1 2.639 children [ USE KERB0 ] }
+    Pose { translation 310.4 38.03 0.02 rotation 0 0 1 2.718 children [ USE KERB1 ] }
+    Pose { translation 308.9 38.63 0.02 rotation 0 0 1 2.783 children [ USE KERB0 ] }
+    Pose { translation 307.3 39.17 0.02 rotation 0 0 1 2.838 children [ USE KERB1 ] }
+    Pose { translation 305.6 39.65 0.02 rotation 0 0 1 2.878 children [ USE KERB0 ] }
+    Pose { translation 303.8 40.11 0.02 rotation 0 0 1 2.895 children [ USE KERB1 ] }
+    Pose { translation 275.8 59.99 0.02 rotation 0 0 1 2.894 children [ USE KERB1 ] }
+    Pose { translation 274 60.45 0.02 rotation 0 0 1 2.873 children [ USE KERB0 ] }
+    Pose { translation 272.3 60.94 0.02 rotation 0 0 1 2.831 children [ USE KERB1 ] }
+    Pose { translation 270.7 61.5 0.02 rotation 0 0 1 2.782 children [ USE KERB0 ] }
+    Pose { translation 269.2 62.13 0.02 rotation 0 0 1 2.729 children [ USE KERB1 ] }
+    Pose { translation 267.7 62.82 0.02 rotation 0 0 1 2.67 children [ USE KERB0 ] }
+    Pose { translation 266.3 63.59 0.02 rotation 0 0 1 2.606 children [ USE KERB1 ] }
+    Pose { translation 265 64.43 0.02 rotation 0 0 1 2.536 children [ USE KERB0 ] }
+    Pose { translation 263.8 65.35 0.02 rotation 0 0 1 2.462 children [ USE KERB1 ] }
+    Pose { translation 262.6 66.35 0.02 rotation 0 0 1 2.385 children [ USE KERB0 ] }
+    Pose { translation 261.6 67.42 0.02 rotation 0 0 1 2.304 children [ USE KERB1 ] }
+    Pose { translation 260.6 68.56 0.02 rotation 0 0 1 2.222 children [ USE KERB0 ] }
+    Pose { translation 259.8 69.78 0.02 rotation 0 0 1 2.14 children [ USE KERB1 ] }
+    Pose { translation 259 71.07 0.02 rotation 0 0 1 2.06 children [ USE KERB0 ] }
+    Pose { translation 258.3 72.45 0.02 rotation 0 0 1 1.983 children [ USE KERB1 ] }
+    Pose { translation 257.8 73.88 0.02 rotation 0 0 1 1.91 children [ USE KERB0 ] }
+    Pose { translation 257.3 75.39 0.02 rotation 0 0 1 1.843 children [ USE KERB1 ] }
+    Pose { translation 256.9 76.95 0.02 rotation 0 0 1 1.781 children [ USE KERB0 ] }
+    Pose { translation 256.6 78.57 0.02 rotation 0 0 1 1.723 children [ USE KERB1 ] }
+    Pose { translation 256.4 80.22 0.02 rotation 0 0 1 1.67 children [ USE KERB0 ] }
+    Pose { translation 256.3 81.92 0.02 rotation 0 0 1 1.623 children [ USE KERB1 ] }
+    Pose { translation 256.3 83.69 0.02 rotation 0 0 1 1.587 children [ USE KERB0 ] }
+    Pose { translation 243.8 123.6 0.02 rotation 0 0 1 1.571 children [ USE KERB0 ] }
+    Pose { translation 243.8 125.5 0.02 rotation 0 0 1 1.578 children [ USE KERB1 ] }
+    Pose { translation 243.7 127.4 0.02 rotation 0 0 1 1.607 children [ USE KERB0 ] }
+    Pose { translation 243.6 129.1 0.02 rotation 0 0 1 1.656 children [ USE KERB1 ] }
+    Pose { translation 243.4 130.7 0.02 rotation 0 0 1 1.713 children [ USE KERB0 ] }
+    Pose { translation 243.2 132.3 0.02 rotation 0 0 1 1.777 children [ USE KERB1 ] }
+    Pose { translation 242.8 133.8 0.02 rotation 0 0 1 1.851 children [ USE KERB0 ] }
+    Pose { translation 242.3 135.2 0.02 rotation 0 0 1 1.936 children [ USE KERB1 ] }
+    Pose { translation 241.8 136.5 0.02 rotation 0 0 1 2.03 children [ USE KERB0 ] }
+    Pose { translation 241.1 137.6 0.02 rotation 0 0 1 2.134 children [ USE KERB1 ] }
+    Pose { translation 240.4 138.7 0.02 rotation 0 0 1 2.246 children [ USE KERB0 ] }
+    Pose { translation 239.5 139.6 0.02 rotation 0 0 1 2.363 children [ USE KERB1 ] }
+    Pose { translation 238.6 140.5 0.02 rotation 0 0 1 2.479 children [ USE KERB0 ] }
+    Pose { translation 237.5 141.2 0.02 rotation 0 0 1 2.591 children [ USE KERB1 ] }
+    Pose { translation 236.3 141.9 0.02 rotation 0 0 1 2.695 children [ USE KERB0 ] }
+    Pose { translation 235 142.4 0.02 rotation 0 0 1 2.787 children [ USE KERB1 ] }
+    Pose { translation 233.6 142.9 0.02 rotation 0 0 1 2.87 children [ USE KERB0 ] }
+    Pose { translation 232.1 143.2 0.02 rotation 0 0 1 2.943 children [ USE KERB1 ] }
+    Pose { translation 230.5 143.5 0.02 rotation 0 0 1 3.007 children [ USE KERB0 ] }
+    Pose { translation 228.9 143.6 0.02 rotation 0 0 1 3.063 children [ USE KERB1 ] }
+    Pose { translation 227.2 143.7 0.02 rotation 0 0 1 3.109 children [ USE KERB0 ] }
+    Pose { translation 225.3 143.8 0.02 rotation 0 0 1 3.136 children [ USE KERB1 ] }
+    Pose { translation 223.4 143.8 0.02 rotation 0 0 1 3.142 children [ USE KERB0 ] }
+    Pose { translation 145.4 143.8 0.02 rotation 0 0 1 -3.14 children [ USE KERB1 ] }
+    Pose { translation 143.5 143.7 0.02 rotation 0 0 1 -3.122 children [ USE KERB0 ] }
+    Pose { translation 141.7 143.7 0.02 rotation 0 0 1 -3.081 children [ USE KERB1 ] }
+    Pose { translation 140.1 143.5 0.02 rotation 0 0 1 -3.027 children [ USE KERB0 ] }
+    Pose { translation 138.5 143.3 0.02 rotation 0 0 1 -2.967 children [ USE KERB1 ] }
+    Pose { translation 136.9 143 0.02 rotation 0 0 1 -2.898 children [ USE KERB0 ] }
+    Pose { translation 135.5 142.6 0.02 rotation 0 0 1 -2.818 children [ USE KERB1 ] }
+    Pose { translation 134.1 142.1 0.02 rotation 0 0 1 -2.73 children [ USE KERB0 ] }
+    Pose { translation 132.9 141.5 0.02 rotation 0 0 1 -2.629 children [ USE KERB1 ] }
+    Pose { translation 131.8 140.8 0.02 rotation 0 0 1 -2.52 children [ USE KERB0 ] }
+    Pose { translation 130.8 139.9 0.02 rotation 0 0 1 -2.405 children [ USE KERB1 ] }
+    Pose { translation 129.9 139 0.02 rotation 0 0 1 -2.288 children [ USE KERB0 ] }
+    Pose { translation 129.1 138 0.02 rotation 0 0 1 -2.174 children [ USE KERB1 ] }
+    Pose { translation 128.4 136.9 0.02 rotation 0 0 1 -2.067 children [ USE KERB0 ] }
+    Pose { translation 127.8 135.6 0.02 rotation 0 0 1 -1.969 children [ USE KERB1 ] }
+    Pose { translation 127.4 134.3 0.02 rotation 0 0 1 -1.88 children [ USE KERB0 ] }
+    Pose { translation 127 132.8 0.02 rotation 0 0 1 -1.803 children [ USE KERB1 ] }
+    Pose { translation 126.6 131.3 0.02 rotation 0 0 1 -1.735 children [ USE KERB0 ] }
+    Pose { translation 126.4 129.7 0.02 rotation 0 0 1 -1.675 children [ USE KERB1 ] }
+    Pose { translation 126.3 128 0.02 rotation 0 0 1 -1.624 children [ USE KERB0 ] }
+    Pose { translation 126.3 126.2 0.02 rotation 0 0 1 -1.586 children [ USE KERB1 ] }
+    Pose { translation 113.8 114.4 0.02 rotation 0 0 1 -1.579 children [ USE KERB1 ] }
+    Pose { translation 113.7 112.6 0.02 rotation 0 0 1 -1.609 children [ USE KERB0 ] }
+    Pose { translation 113.6 110.9 0.02 rotation 0 0 1 -1.659 children [ USE KERB1 ] }
+    Pose { translation 113.4 109.2 0.02 rotation 0 0 1 -1.716 children [ USE KERB0 ] }
+    Pose { translation 113.2 107.7 0.02 rotation 0 0 1 -1.78 children [ USE KERB1 ] }
+    Pose { translation 112.8 106.2 0.02 rotation 0 0 1 -1.854 children [ USE KERB0 ] }
+    Pose { translation 112.3 104.8 0.02 rotation 0 0 1 -1.939 children [ USE KERB1 ] }
+    Pose { translation 111.8 103.5 0.02 rotation 0 0 1 -2.035 children [ USE KERB0 ] }
+    Pose { translation 111.1 102.3 0.02 rotation 0 0 1 -2.139 children [ USE KERB1 ] }
+    Pose { translation 110.3 101.3 0.02 rotation 0 0 1 -2.252 children [ USE KERB0 ] }
+    Pose { translation 109.5 100.3 0.02 rotation 0 0 1 -2.368 children [ USE KERB1 ] }
+    Pose { translation 108.5 99.49 0.02 rotation 0 0 1 -2.484 children [ USE KERB0 ] }
+    Pose { translation 107.4 98.76 0.02 rotation 0 0 1 -2.595 children [ USE KERB1 ] }
+    Pose { translation 106.3 98.12 0.02 rotation 0 0 1 -2.699 children [ USE KERB0 ] }
+    Pose { translation 104.9 97.58 0.02 rotation 0 0 1 -2.792 children [ USE KERB1 ] }
+    Pose { translation 103.5 97.13 0.02 rotation 0 0 1 -2.874 children [ USE KERB0 ] }
+    Pose { translation 102 96.78 0.02 rotation 0 0 1 -2.946 children [ USE KERB1 ] }
+    Pose { translation 100.4 96.52 0.02 rotation 0 0 1 -3.01 children [ USE KERB0 ] }
+    Pose { translation 98.79 96.35 0.02 rotation 0 0 1 -3.065 children [ USE KERB1 ] }
+    Pose { translation 97.08 96.27 0.02 rotation 0 0 1 -3.111 children [ USE KERB0 ] }
+    Pose { translation 95.24 96.25 0.02 rotation 0 0 1 -3.137 children [ USE KERB1 ] }
+    Pose { translation 65.28 96.25 0.02 rotation 0 0 1 3.14 children [ USE KERB0 ] }
+    Pose { translation 63.4 96.26 0.02 rotation 0 0 1 3.121 children [ USE KERB1 ] }
+    Pose { translation 61.67 96.32 0.02 rotation 0 0 1 3.078 children [ USE KERB0 ] }
+    Pose { translation 60.01 96.47 0.02 rotation 0 0 1 3.025 children [ USE KERB1 ] }
+    Pose { translation 58.4 96.7 0.02 rotation 0 0 1 2.965 children [ USE KERB0 ] }
+    Pose { translation 56.88 97.02 0.02 rotation 0 0 1 2.894 children [ USE KERB1 ] }
+    Pose { translation 55.44 97.45 0.02 rotation 0 0 1 2.814 children [ USE KERB0 ] }
+    Pose { translation 54.09 97.96 0.02 rotation 0 0 1 2.725 children [ USE KERB1 ] }
+    Pose { translation 52.86 98.58 0.02 rotation 0 0 1 2.625 children [ USE KERB0 ] }
+    Pose { translation 51.76 99.28 0.02 rotation 0 0 1 2.515 children [ USE KERB1 ] }
+    Pose { translation 50.77 100.1 0.02 rotation 0 0 1 2.4 children [ USE KERB0 ] }
+    Pose { translation 49.88 101 0.02 rotation 0 0 1 2.283 children [ USE KERB1 ] }
+    Pose { translation 49.1 102 0.02 rotation 0 0 1 2.169 children [ USE KERB0 ] }
+    Pose { translation 48.41 103.2 0.02 rotation 0 0 1 2.062 children [ USE KERB1 ] }
+    Pose { translation 47.82 104.4 0.02 rotation 0 0 1 1.965 children [ USE KERB0 ] }
+    Pose { translation 47.33 105.8 0.02 rotation 0 0 1 1.877 children [ USE KERB1 ] }
+    Pose { translation 46.94 107.3 0.02 rotation 0 0 1 1.8 children [ USE KERB0 ] }
+    Pose { translation 46.63 108.8 0.02 rotation 0 0 1 1.732 children [ USE KERB1 ] }
+    Pose { translation 46.42 110.4 0.02 rotation 0 0 1 1.673 children [ USE KERB0 ] }
+    Pose { translation 46.3 112.1 0.02 rotation 0 0 1 1.622 children [ USE KERB1 ] }
+    Pose { translation 46.25 113.9 0.02 rotation 0 0 1 1.585 children [ USE KERB0 ] }
+    Pose { translation 46.25 115.8 0.02 rotation 0 0 1 1.571 children [ USE KERB1 ] }
+    Pose { translation 33.75 133.8 0.02 rotation 0 0 1 1.571 children [ USE KERB0 ] }
+    Pose { translation 33.75 135.7 0.02 rotation 0 0 1 1.58 children [ USE KERB1 ] }
+    Pose { translation 33.72 137.5 0.02 rotation 0 0 1 1.611 children [ USE KERB0 ] }
+    Pose { translation 33.61 139.2 0.02 rotation 0 0 1 1.661 children [ USE KERB1 ] }
+    Pose { translation 33.42 140.8 0.02 rotation 0 0 1 1.718 children [ USE KERB0 ] }
+    Pose { translation 33.14 142.4 0.02 rotation 0 0 1 1.783 children [ USE KERB1 ] }
+    Pose { translation 32.77 143.9 0.02 rotation 0 0 1 1.858 children [ USE KERB0 ] }
+    Pose { translation 32.3 145.3 0.02 rotation 0 0 1 1.943 children [ USE KERB1 ] }
+    Pose { translation 31.73 146.6 0.02 rotation 0 0 1 2.04 children [ USE KERB0 ] }
+    Pose { translation 31.07 147.7 0.02 rotation 0 0 1 2.144 children [ USE KERB1 ] }
+    Pose { translation 30.31 148.8 0.02 rotation 0 0 1 2.257 children [ USE KERB0 ] }
+    Pose { translation 29.45 149.7 0.02 rotation 0 0 1 2.373 children [ USE KERB1 ] }
+    Pose { translation 28.48 150.5 0.02 rotation 0 0 1 2.489 children [ USE KERB0 ] }
+    Pose { translation 27.39 151.3 0.02 rotation 0 0 1 2.6 children [ USE KERB1 ] }
+    Pose { translation 26.2 151.9 0.02 rotation 0 0 1 2.703 children [ USE KERB0 ] }
+    Pose { translation 24.88 152.4 0.02 rotation 0 0 1 2.796 children [ USE KERB1 ] }
+    Pose { translation 23.46 152.9 0.02 rotation 0 0 1 2.877 children [ USE KERB0 ] }
+    Pose { translation 21.95 153.2 0.02 rotation 0 0 1 2.949 children [ USE KERB1 ] }
+    Pose { translation 20.37 153.5 0.02 rotation 0 0 1 3.012 children [ USE KERB0 ] }
+    Pose { translation 18.71 153.7 0.02 rotation 0 0 1 3.067 children [ USE KERB1 ] }
+    Pose { translation 17 153.7 0.02 rotation 0 0 1 3.113 children [ USE KERB0 ] }
+    Pose { translation 15.16 153.8 0.02 rotation 0 0 1 3.137 children [ USE KERB1 ] }
+    Pose { translation -96.69 153.7 0.02 rotation 0 0 1 -3.121 children [ USE KERB1 ] }
+    Pose { translation -98.44 153.7 0.02 rotation 0 0 1 -3.082 children [ USE KERB0 ] }
+    Pose { translation -100.1 153.5 0.02 rotation 0 0 1 -3.035 children [ USE KERB1 ] }
+    Pose { translation -101.8 153.3 0.02 rotation 0 0 1 -2.985 children [ USE KERB0 ] }
+    Pose { translation -103.4 153 0.02 rotation 0 0 1 -2.93 children [ USE KERB1 ] }
+    Pose { translation -105 152.6 0.02 rotation 0 0 1 -2.871 children [ USE KERB0 ] }
+    Pose { translation -106.6 152.2 0.02 rotation 0 0 1 -2.808 children [ USE KERB1 ] }
+    Pose { translation -108 151.6 0.02 rotation 0 0 1 -2.741 children [ USE KERB0 ] }
+    Pose { translation -109.5 150.9 0.02 rotation 0 0 1 -2.671 children [ USE KERB1 ] }
+    Pose { translation -110.8 150.2 0.02 rotation 0 0 1 -2.599 children [ USE KERB0 ] }
+    Pose { translation -112.1 149.3 0.02 rotation 0 0 1 -2.525 children [ USE KERB1 ] }
+    Pose { translation -113.3 148.4 0.02 rotation 0 0 1 -2.452 children [ USE KERB0 ] }
+    Pose { translation -114.5 147.4 0.02 rotation 0 0 1 -2.379 children [ USE KERB1 ] }
+    Pose { translation -115.6 146.3 0.02 rotation 0 0 1 -2.309 children [ USE KERB0 ] }
+    Pose { translation -116.6 145.1 0.02 rotation 0 0 1 -2.241 children [ USE KERB1 ] }
+    Pose { translation -117.5 143.8 0.02 rotation 0 0 1 -2.177 children [ USE KERB0 ] }
+    Pose { translation -118.4 142.4 0.02 rotation 0 0 1 -2.118 children [ USE KERB1 ] }
+    Pose { translation -119.2 141 0.02 rotation 0 0 1 -2.062 children [ USE KERB0 ] }
+    Pose { translation -120 139.5 0.02 rotation 0 0 1 -2.009 children [ USE KERB1 ] }
+    Pose { translation -120.7 137.9 0.02 rotation 0 0 1 -1.963 children [ USE KERB0 ] }
+    Pose { translation -121.3 136.3 0.02 rotation 0 0 1 -1.921 children [ USE KERB1 ] }
+    Pose { translation -121.9 134.5 0.02 rotation 0 0 1 -1.897 children [ USE KERB0 ] }
+    Pose { translation -138.2 125.3 0.02 rotation 0 0 1 -1.899 children [ USE KERB1 ] }
+    Pose { translation -138.8 123.5 0.02 rotation 0 0 1 -1.925 children [ USE KERB0 ] }
+    Pose { translation -139.4 121.9 0.02 rotation 0 0 1 -1.967 children [ USE KERB1 ] }
+    Pose { translation -140.1 120.4 0.02 rotation 0 0 1 -2.015 children [ USE KERB0 ] }
+    Pose { translation -140.8 118.9 0.02 rotation 0 0 1 -2.068 children [ USE KERB1 ] }
+    Pose { translation -141.7 117.4 0.02 rotation 0 0 1 -2.123 children [ USE KERB0 ] }
+    Pose { translation -142.6 116.1 0.02 rotation 0 0 1 -2.184 children [ USE KERB1 ] }
+    Pose { translation -143.5 114.8 0.02 rotation 0 0 1 -2.248 children [ USE KERB0 ] }
+    Pose { translation -144.5 113.6 0.02 rotation 0 0 1 -2.316 children [ USE KERB1 ] }
+    Pose { translation -145.6 112.5 0.02 rotation 0 0 1 -2.387 children [ USE KERB0 ] }
+    Pose { translation -146.8 111.5 0.02 rotation 0 0 1 -2.46 children [ USE KERB1 ] }
+    Pose { translation -148 110.6 0.02 rotation 0 0 1 -2.534 children [ USE KERB0 ] }
+    Pose { translation -149.3 109.7 0.02 rotation 0 0 1 -2.607 children [ USE KERB1 ] }
+    Pose { translation -150.7 109 0.02 rotation 0 0 1 -2.679 children [ USE KERB0 ] }
+    Pose { translation -152.1 108.3 0.02 rotation 0 0 1 -2.748 children [ USE KERB1 ] }
+    Pose { translation -153.6 107.8 0.02 rotation 0 0 1 -2.815 children [ USE KERB0 ] }
+    Pose { translation -155.1 107.3 0.02 rotation 0 0 1 -2.878 children [ USE KERB1 ] }
+    Pose { translation -156.7 106.9 0.02 rotation 0 0 1 -2.936 children [ USE KERB0 ] }
+    Pose { translation -158.4 106.7 0.02 rotation 0 0 1 -2.99 children [ USE KERB1 ] }
+    Pose { translation -160 106.4 0.02 rotation 0 0 1 -3.04 children [ USE KERB0 ] }
+    Pose { translation -161.7 106.3 0.02 rotation 0 0 1 -3.087 children [ USE KERB1 ] }
+    Pose { translation -163.5 106.3 0.02 rotation 0 0 1 -3.124 children [ USE KERB0 ] }
+    Pose { translation -213.4 106.2 0.02 rotation 0 0 1 3.142 children [ USE KERB1 ] }
+    Pose { translation -215.4 106.2 0.02 rotation 0 0 1 3.136 children [ USE KERB0 ] }
+    Pose { translation -217.2 106.3 0.02 rotation 0 0 1 3.109 children [ USE KERB1 ] }
+    Pose { translation -218.9 106.4 0.02 rotation 0 0 1 3.062 children [ USE KERB0 ] }
+    Pose { translation -220.5 106.5 0.02 rotation 0 0 1 3.006 children [ USE KERB1 ] }
+    Pose { translation -222.1 106.8 0.02 rotation 0 0 1 2.942 children [ USE KERB0 ] }
+    Pose { translation -223.6 107.2 0.02 rotation 0 0 1 2.869 children [ USE KERB1 ] }
+    Pose { translation -225 107.6 0.02 rotation 0 0 1 2.786 children [ USE KERB0 ] }
+    Pose { translation -226.3 108.2 0.02 rotation 0 0 1 2.693 children [ USE KERB1 ] }
+    Pose { translation -227.5 108.8 0.02 rotation 0 0 1 2.589 children [ USE KERB0 ] }
+    Pose { translation -228.6 109.5 0.02 rotation 0 0 1 2.477 children [ USE KERB1 ] }
+    Pose { translation -229.5 110.4 0.02 rotation 0 0 1 2.361 children [ USE KERB0 ] }
+    Pose { translation -230.4 111.3 0.02 rotation 0 0 1 2.244 children [ USE KERB1 ] }
+    Pose { translation -231.1 112.4 0.02 rotation 0 0 1 2.132 children [ USE KERB0 ] }
+    Pose { translation -231.8 113.6 0.02 rotation 0 0 1 2.028 children [ USE KERB1 ] }
+    Pose { translation -232.4 114.9 0.02 rotation 0 0 1 1.934 children [ USE KERB0 ] }
+    Pose { translation -232.8 116.3 0.02 rotation 0 0 1 1.85 children [ USE KERB1 ] }
+    Pose { translation -233.2 117.8 0.02 rotation 0 0 1 1.776 children [ USE KERB0 ] }
+    Pose { translation -233.4 119.3 0.02 rotation 0 0 1 1.712 children [ USE KERB1 ] }
+    Pose { translation -233.6 121 0.02 rotation 0 0 1 1.655 children [ USE KERB0 ] }
+    Pose { translation -233.7 122.7 0.02 rotation 0 0 1 1.607 children [ USE KERB1 ] }
+    Pose { translation -233.8 124.5 0.02 rotation 0 0 1 1.578 children [ USE KERB0 ] }
+    Pose { translation -233.8 126.4 0.02 rotation 0 0 1 1.571 children [ USE KERB1 ] }
+    Pose { translation -246.2 144.4 0.02 rotation 0 0 1 1.572 children [ USE KERB0 ] }
+    Pose { translation -246.3 146.3 0.02 rotation 0 0 1 1.588 children [ USE KERB1 ] }
+    Pose { translation -246.3 148.1 0.02 rotation 0 0 1 1.627 children [ USE KERB0 ] }
+    Pose { translation -246.4 149.8 0.02 rotation 0 0 1 1.679 children [ USE KERB1 ] }
+    Pose { translation -246.7 151.4 0.02 rotation 0 0 1 1.739 children [ USE KERB0 ] }
+    Pose { translation -247 152.9 0.02 rotation 0 0 1 1.807 children [ USE KERB1 ] }
+    Pose { translation -247.4 154.4 0.02 rotation 0 0 1 1.885 children [ USE KERB0 ] }
+    Pose { translation -247.9 155.7 0.02 rotation 0 0 1 1.974 children [ USE KERB1 ] }
+    Pose { translation -248.5 157 0.02 rotation 0 0 1 2.074 children [ USE KERB0 ] }
+    Pose { translation -249.2 158.1 0.02 rotation 0 0 1 2.181 children [ USE KERB1 ] }
+    Pose { translation -250 159.1 0.02 rotation 0 0 1 2.296 children [ USE KERB0 ] }
+    Pose { translation -250.9 160 0.02 rotation 0 0 1 2.412 children [ USE KERB1 ] }
+    Pose { translation -251.9 160.8 0.02 rotation 0 0 1 2.527 children [ USE KERB0 ] }
+    Pose { translation -253 161.5 0.02 rotation 0 0 1 2.635 children [ USE KERB1 ] }
+    Pose { translation -254.2 162.1 0.02 rotation 0 0 1 2.735 children [ USE KERB0 ] }
+    Pose { translation -255.6 162.6 0.02 rotation 0 0 1 2.824 children [ USE KERB1 ] }
+    Pose { translation -257 163 0.02 rotation 0 0 1 2.902 children [ USE KERB0 ] }
+    Pose { translation -258.6 163.3 0.02 rotation 0 0 1 2.971 children [ USE KERB1 ] }
+    Pose { translation -260.2 163.6 0.02 rotation 0 0 1 3.031 children [ USE KERB0 ] }
+    Pose { translation -261.8 163.7 0.02 rotation 0 0 1 3.084 children [ USE KERB1 ] }
+    Pose { translation -263.6 163.7 0.02 rotation 0 0 1 3.124 children [ USE KERB0 ] }
+    Pose { translation -265.5 163.8 0.02 rotation 0 0 1 3.14 children [ USE KERB1 ] }
+    Pose { translation -303.5 163.8 0.02 rotation 0 0 1 3.142 children [ USE KERB0 ] }
+    Pose { translation -305.4 163.8 0.02 rotation 0 0 1 -3.135 children [ USE KERB1 ] }
+    Pose { translation -307.3 163.7 0.02 rotation 0 0 1 -3.107 children [ USE KERB0 ] }
+    Pose { translation -309 163.6 0.02 rotation 0 0 1 -3.06 children [ USE KERB1 ] }
+    Pose { translation -310.6 163.5 0.02 rotation 0 0 1 -3.003 children [ USE KERB0 ] }
+    Pose { translation -312.2 163.2 0.02 rotation 0 0 1 -2.939 children [ USE KERB1 ] }
+    Pose { translation -313.7 162.8 0.02 rotation 0 0 1 -2.866 children [ USE KERB0 ] }
+    Pose { translation -315.1 162.4 0.02 rotation 0 0 1 -2.781 children [ USE KERB1 ] }
+    Pose { translation -316.4 161.8 0.02 rotation 0 0 1 -2.688 children [ USE KERB0 ] }
+    Pose { translation -317.6 161.2 0.02 rotation 0 0 1 -2.584 children [ USE KERB1 ] }
+    Pose { translation -318.6 160.4 0.02 rotation 0 0 1 -2.473 children [ USE KERB0 ] }
+    Pose { translation -319.6 159.6 0.02 rotation 0 0 1 -2.356 children [ USE KERB1 ] }
+    Pose { translation -320.4 158.6 0.02 rotation 0 0 1 -2.239 children [ USE KERB0 ] }
+    Pose { translation -321.2 157.6 0.02 rotation 0 0 1 -2.127 children [ USE KERB1 ] }
+    Pose { translation -321.8 156.4 0.02 rotation 0 0 1 -2.023 children [ USE KERB0 ] }
+    Pose { translation -322.4 155.1 0.02 rotation 0 0 1 -1.93 children [ USE KERB1 ] }
+    Pose { translation -322.8 153.7 0.02 rotation 0 0 1 -1.846 children [ USE KERB0 ] }
+    Pose { translation -323.2 152.2 0.02 rotation 0 0 1 -1.773 children [ USE KERB1 ] }
+    Pose { translation -323.5 150.6 0.02 rotation 0 0 1 -1.709 children [ USE KERB0 ] }
+    Pose { translation -323.6 149 0.02 rotation 0 0 1 -1.652 children [ USE KERB1 ] }
+    Pose { translation -323.7 147.3 0.02 rotation 0 0 1 -1.605 children [ USE KERB0 ] }
+    Pose { translation -323.8 145.4 0.02 rotation 0 0 1 -1.577 children [ USE KERB1 ] }
+    Pose { translation -323.8 143.5 0.02 rotation 0 0 1 -1.571 children [ USE KERB0 ] }
+    Pose { translation -323.8 65.48 0.02 rotation 0 0 1 -1.569 children [ USE KERB1 ] }
+    Pose { translation -323.7 63.58 0.02 rotation 0 0 1 -1.553 children [ USE KERB0 ] }
+    Pose { translation -323.7 61.83 0.02 rotation 0 0 1 -1.513 children [ USE KERB1 ] }
+    Pose { translation -323.6 60.17 0.02 rotation 0 0 1 -1.46 children [ USE KERB0 ] }
+    Pose { translation -323.3 58.57 0.02 rotation 0 0 1 -1.399 children [ USE KERB1 ] }
+    Pose { translation -323 57.03 0.02 rotation 0 0 1 -1.331 children [ USE KERB0 ] }
+    Pose { translation -322.6 55.57 0.02 rotation 0 0 1 -1.253 children [ USE KERB1 ] }
+    Pose { translation -322.1 54.22 0.02 rotation 0 0 1 -1.164 children [ USE KERB0 ] }
+    Pose { translation -321.5 52.99 0.02 rotation 0 0 1 -1.063 children [ USE KERB1 ] }
+    Pose { translation -320.8 51.87 0.02 rotation 0 0 1 -0.9553 children [ USE KERB0 ] }
+    Pose { translation -320 50.86 0.02 rotation 0 0 1 -0.8408 children [ USE KERB1 ] }
+    Pose { translation -319.1 49.97 0.02 rotation 0 0 1 -0.724 children [ USE KERB0 ] }
+    Pose { translation -318.1 49.17 0.02 rotation 0 0 1 -0.6097 children [ USE KERB1 ] }
+    Pose { translation -317 48.48 0.02 rotation 0 0 1 -0.502 children [ USE KERB0 ] }
+    Pose { translation -315.7 47.88 0.02 rotation 0 0 1 -0.4029 children [ USE KERB1 ] }
+    Pose { translation -314.4 47.38 0.02 rotation 0 0 1 -0.3138 children [ USE KERB0 ] }
+    Pose { translation -312.9 46.97 0.02 rotation 0 0 1 -0.2361 children [ USE KERB1 ] }
+    Pose { translation -311.4 46.66 0.02 rotation 0 0 1 -0.168 children [ USE KERB0 ] }
+    Pose { translation -309.7 46.44 0.02 rotation 0 0 1 -0.1078 children [ USE KERB1 ] }
+    Pose { translation -308.1 46.31 0.02 rotation 0 0 1 -0.0555 children [ USE KERB0 ] }
+    Pose { translation -306.3 46.25 0.02 rotation 0 0 1 -0.01677 children [ USE KERB1 ] }
+    Pose { translation -304.4 46.25 0.02 rotation 0 0 1 -0.001079 children [ USE KERB0 ] }
+    Pose { translation -276.4 33.75 0.02 rotation 0 0 1 0 children [ USE KERB0 ] }
+    Pose { translation -274.5 33.75 0.02 rotation 0 0 1 -0.007208 children [ USE KERB1 ] }
+    Pose { translation -272.7 33.73 0.02 rotation 0 0 1 -0.0362 children [ USE KERB0 ] }
+    Pose { translation -271 33.63 0.02 rotation 0 0 1 -0.08462 children [ USE KERB1 ] }
+    Pose { translation -269.3 33.45 0.02 rotation 0 0 1 -0.1416 children [ USE KERB0 ] }
+    Pose { translation -267.7 33.17 0.02 rotation 0 0 1 -0.2056 children [ USE KERB1 ] }
+    Pose { translation -266.3 32.81 0.02 rotation 0 0 1 -0.2794 children [ USE KERB0 ] }
+    Pose { translation -264.9 32.35 0.02 rotation 0 0 1 -0.364 children [ USE KERB1 ] }
+    Pose { translation -263.6 31.79 0.02 rotation 0 0 1 -0.4581 children [ USE KERB0 ] }
+    Pose { translation -262.4 31.14 0.02 rotation 0 0 1 -0.5621 children [ USE KERB1 ] }
+    Pose { translation -261.3 30.39 0.02 rotation 0 0 1 -0.6743 children [ USE KERB0 ] }
+    Pose { translation -260.4 29.54 0.02 rotation 0 0 1 -0.7906 children [ USE KERB1 ] }
+    Pose { translation -259.5 28.58 0.02 rotation 0 0 1 -0.9068 children [ USE KERB0 ] }
+    Pose { translation -258.8 27.51 0.02 rotation 0 0 1 -1.019 children [ USE KERB1 ] }
+    Pose { translation -258.2 26.32 0.02 rotation 0 0 1 -1.123 children [ USE KERB0 ] }
+    Pose { translation -257.6 25.02 0.02 rotation 0 0 1 -1.216 children [ USE KERB1 ] }
+    Pose { translation -257.2 23.61 0.02 rotation 0 0 1 -1.299 children [ USE KERB0 ] }
+    Pose { translation -256.8 22.1 0.02 rotation 0 0 1 -1.371 children [ USE KERB1 ] }
+    Pose { translation -256.5 20.52 0.02 rotation 0 0 1 -1.435 children [ USE KERB0 ] }
+    Pose { translation -256.4 18.88 0.02 rotation 0 0 1 -1.491 children [ USE KERB1 ] }
+    Pose { translation -256.3 17.18 0.02 rotation 0 0 1 -1.538 children [ USE KERB0 ] }
+    Pose { translation -256.2 15.35 0.02 rotation 0 0 1 -1.565 children [ USE KERB1 ] }
+    Pose { translation -256.2 13.38 0.02 rotation 0 0 1 -1.571 children [ USE KERB0 ] }
+    Pose { translation -256.2 -14.61 0.02 rotation 0 0 1 -1.572 children [ USE KERB0 ] }
+    Pose { translation -256.3 -16.5 0.02 rotation 0 0 1 -1.59 children [ USE KERB1 ] }
+    Pose { translation -256.3 -18.24 0.02 rotation 0 0 1 -1.631 children [ USE KERB0 ] }
+    Pose { translation -256.5 -19.9 0.02 rotation 0 0 1 -1.684 children [ USE KERB1 ] }
+    Pose { translation -256.7 -21.51 0.02 rotation 0 0 1 -1.745 children [ USE KERB0 ] }
+    Pose { translation -257 -23.04 0.02 rotation 0 0 1 -1.814 children [ USE KERB1 ] }
+    Pose { translation -257.4 -24.49 0.02 rotation 0 0 1 -1.893 children [ USE KERB0 ] }
+    Pose { translation -257.9 -25.84 0.02 rotation 0 0 1 -1.982 children [ USE KERB1 ] }
+    Pose { translation -258.5 -27.07 0.02 rotation 0 0 1 -2.082 children [ USE KERB0 ] }
+    Pose { translation -259.2 -28.18 0.02 rotation 0 0 1 -2.191 children [ USE KERB1 ] }
+    Pose { translation -260 -29.18 0.02 rotation 0 0 1 -2.306 children [ USE KERB0 ] }
+    Pose { translation -260.9 -30.07 0.02 rotation 0 0 1 -2.423 children [ USE KERB1 ] }
+    Pose { translation -262 -30.86 0.02 rotation 0 0 1 -2.537 children [ USE KERB0 ] }
+    Pose { translation -263.1 -31.55 0.02 rotation 0 0 1 -2.644 children [ USE KERB1 ] }
+    Pose { translation -264.3 -32.15 0.02 rotation 0 0 1 -2.743 children [ USE KERB0 ] }
+    Pose { translation -265.7 -32.64 0.02 rotation 0 0 1 -2.831 children [ USE KERB1 ] }
+    Pose { translation -267.2 -33.04 0.02 rotation 0 0 1 -2.909 children [ USE KERB0 ] }
+    Pose { translation -268.7 -33.35 0.02 rotation 0 0 1 -2.977 children [ USE KERB1 ] }
+    Pose { translation -270.3 -33.57 0.02 rotation 0 0 1 -3.037 children [ USE KERB0 ] }
+    Pose { translation -272 -33.7 0.02 rotation 0 0 1 -3.088 children [ USE KERB1 ] }
+    Pose { translation -273.8 -33.75 0.02 rotation 0 0 1 -3.126 children [ USE KERB0 ] }
+    Pose { translation -275.7 -33.75 0.02 rotation 0 0 1 -3.141 children [ USE KERB1 ] }
+    Pose { translation -303.7 -46.25 0.02 rotation 0 0 1 3.142 children [ USE KERB1 ] }
+    Pose { translation -305.6 -46.25 0.02 rotation 0 0 1 -3.134 children [ USE KERB0 ] }
+    Pose { translation -307.4 -46.28 0.02 rotation 0 0 1 -3.104 children [ USE KERB1 ] }
+    Pose { translation -309.1 -46.38 0.02 rotation 0 0 1 -3.054 children [ USE KERB0 ] }
+    Pose { translation -310.7 -46.56 0.02 rotation 0 0 1 -2.993 children [ USE KERB1 ] }
+    Pose { translation -312.2 -46.84 0.02 rotation 0 0 1 -2.92 children [ USE KERB0 ] }
+    Pose { translation -313.6 -47.21 0.02 rotation 0 0 1 -2.829 children [ USE KERB1 ] }
+    Pose { translation -314.8 -47.67 0.02 rotation 0 0 1 -2.719 children [ USE KERB0 ] }
+    Pose { translation -315.9 -48.21 0.02 rotation 0 0 1 -2.586 children [ USE KERB1 ] }
+    Pose { translation -316.7 -48.8 0.02 rotation 0 0 1 -2.428 children [ USE KERB0 ] }
+    Pose { translation -317.3 -49.45 0.02 rotation 0 0 1 -2.255 children [ USE KERB1 ] }
+    Pose { translation -317.9 -50.2 0.02 rotation 0 0 1 -2.081 children [ USE KERB0 ] }
+    Pose { translation -318.3 -51.09 0.02 rotation 0 0 1 -1.916 children [ USE KERB1 ] }
+    Pose { translation -318.5 -52.16 0.02 rotation 0 0 1 -1.773 children [ USE KERB0 ] }
+    Pose { translation -318.7 -53.41 0.02 rotation 0 0 1 -1.655 children [ USE KERB1 ] }
+    Pose { translation -318.7 -54.8 0.02 rotation 0 0 1 -1.558 children [ USE KERB0 ] }
+    Pose { translation -318.7 -56.3 0.02 rotation 0 0 1 -1.478 children [ USE KERB1 ] }
+    Pose { translation -318.5 -57.88 0.02 rotation 0 0 1 -1.413 children [ USE KERB0 ] }
+    Pose { translation -318.1 -59.51 0.02 rotation 0 0 1 -1.359 children [ USE KERB1 ] }
+    Pose { translation -317.7 -61.22 0.02 rotation 0 0 1 -1.321 children [ USE KERB0 ] }
+    Pose { translation -317.2 -63.06 0.02 rotation 0 0 1 -1.306 children [ USE KERB1 ] }
+    Pose { translation -300.4 -124.8 0.02 rotation 0 0 1 -1.298 children [ USE KERB1 ] }
+    Pose { translation -299.9 -126.5 0.02 rotation 0 0 1 -1.27 children [ USE KERB0 ] }
+    Pose { translation -299.4 -128.1 0.02 rotation 0 0 1 -1.226 children [ USE KERB1 ] }
+    Pose { translation -298.8 -129.7 0.02 rotation 0 0 1 -1.176 children [ USE KERB0 ] }
+    Pose { translation -298.1 -131.2 0.02 rotation 0 0 1 -1.121 children [ USE KERB1 ] }
+    Pose { translation -297.3 -132.7 0.02 rotation 0 0 1 -1.062 children [ USE KERB0 ] }
+    Pose { translation -296.5 -134.1 0.02 rotation 0 0 1 -0.9979 children [ USE KERB1 ] }
+    Pose { translation -295.6 -135.3 0.02 rotation 0 0 1 -0.929 children [ USE KERB0 ] }
+    Pose { translation -294.6 -136.5 0.02 rotation 0 0 1 -0.8561 children [ USE KERB1 ] }
+    Pose { translation -293.6 -137.7 0.02 rotation 0 0 1 -0.7791 children [ USE KERB0 ] }
+    Pose { translation -292.5 -138.7 0.02 rotation 0 0 1 -0.7008 children [ USE KERB1 ] }
+    Pose { translation -291.3 -139.6 0.02 rotation 0 0 1 -0.6208 children [ USE KERB0 ] }
+    Pose { translation -290.1 -140.4 0.02 rotation 0 0 1 -0.5411 children [ USE KERB1 ] }
+    Pose { translation -288.7 -141.2 0.02 rotation 0 0 1 -0.4646 children [ USE KERB0 ] }
+    Pose { translation -287.3 -141.8 0.02 rotation 0 0 1 -0.3904 children [ USE KERB1 ] }
+    Pose { translation -285.9 -142.3 0.02 rotation 0 0 1 -0.3205 children [ USE KERB0 ] }
+    Pose { translation -284.3 -142.8 0.02 rotation 0 0 1 -0.2557 children [ USE KERB1 ] }
+    Pose { translation -282.7 -143.1 0.02 rotation 0 0 1 -0.195 children [ USE KERB0 ] }
+    Pose { translation -281.1 -143.4 0.02 rotation 0 0 1 -0.1395 children [ USE KERB1 ] }
+    Pose { translation -279.4 -143.6 0.02 rotation 0 0 1 -0.08942 children [ USE KERB0 ] }
+    Pose { translation -277.7 -143.7 0.02 rotation 0 0 1 -0.04331 children [ USE KERB1 ] }
+  ]
+}
+DEF WAYPOINTS Group {
+  children [
+    Pose { translation -276 -150 0.03 children [ DEF WP Shape { appearance PBRAppearance { baseColor 0.2 0.8 1 emissiveColor 0.2 0.8 1 roughness 1 metalness 0 } geometry Cylinder { height 0.02 radius 0.3 } castShadows FALSE } ] }
+    Pose { translation -266 -150 0.03 children [ USE WP ] }
+    Pose { translation -256 -150 0.03 children [ USE WP ] }
+    Pose { translation -246 -150 0.03 children [ USE WP ] }
+    Pose { translation -236 -150 0.03 children [ USE WP ] }
+    Pose { translation -226 -150 0.03 children [ USE WP ] }
+    Pose { translation -216 -150 0.03 children [ USE WP ] }
+    Pose { translation -206 -150 0.03 children [ USE WP ] }
+    Pose { translation -196 -150 0.03 children [ USE WP ] }
+    Pose { translation -186 -150 0.03 children [ USE WP ] }
+    Pose { translation -176 -150 0.03 children [ USE WP ] }
+    Pose { translation -166 -150 0.03 children [ USE WP ] }
+    Pose { translation -156 -150 0.03 children [ USE WP ] }
+    Pose { translation -146 -150 0.03 children [ USE WP ] }
+    Pose { translation -136 -150 0.03 children [ USE WP ] }
+    Pose { translation -126 -150 0.03 children [ USE WP ] }
+    Pose { translation -116 -150 0.03 children [ USE WP ] }
+    Pose { translation -106 -150 0.03 children [ USE WP ] }
+    Pose { translation -96 -150 0.03 children [ USE WP ] }
+    Pose { translation -86 -150 0.03 children [ USE WP ] }
+    Pose { translation -76 -150 0.03 children [ USE WP ] }
+    Pose { translation -66 -150 0.03 children [ USE WP ] }
+    Pose { translation -56 -150 0.03 children [ USE WP ] }
+    Pose { translation -46 -150 0.03 children [ USE WP ] }
+    Pose { translation -36 -150 0.03 children [ USE WP ] }
+    Pose { translation -26 -150 0.03 children [ USE WP ] }
+    Pose { translation -16 -150 0.03 children [ USE WP ] }
+    Pose { translation -6.001 -150 0.03 children [ USE WP ] }
+    Pose { translation 3.999 -150 0.03 children [ USE WP ] }
+    Pose { translation 14 -150 0.03 children [ USE WP ] }
+    Pose { translation 23.97 -149.4 0.03 children [ USE WP ] }
+    Pose { translation 33.66 -147 0.03 children [ USE WP ] }
+    Pose { translation 42.6 -142.6 0.03 children [ USE WP ] }
+    Pose { translation 50.39 -136.4 0.03 children [ USE WP ] }
+    Pose { translation 56.94 -128.8 0.03 children [ USE WP ] }
+    Pose { translation 63.19 -121 0.03 children [ USE WP ] }
+    Pose { translation 68.95 -112.9 0.03 children [ USE WP ] }
+    Pose { translation 71.95 -103.4 0.03 children [ USE WP ] }
+    Pose { translation 70.43 -93.61 0.03 children [ USE WP ] }
+    Pose { translation 65.07 -85.21 0.03 children [ USE WP ] }
+    Pose { translation 58.07 -78.07 0.03 children [ USE WP ] }
+    Pose { translation 51.7 -70.4 0.03 children [ USE WP ] }
+    Pose { translation 49.75 -60.85 0.03 children [ USE WP ] }
+    Pose { translation 55.51 -52.92 0.03 children [ USE WP ] }
+    Pose { translation 64.15 -47.92 0.03 children [ USE WP ] }
+    Pose { translation 73.1 -43.45 0.03 children [ USE WP ] }
+    Pose { translation 82.04 -38.98 0.03 children [ USE WP ] }
+    Pose { translation 90.99 -34.51 0.03 children [ USE WP ] }
+    Pose { translation 99.94 -30.05 0.03 children [ USE WP ] }
+    Pose { translation 109.1 -26.14 0.03 children [ USE WP ] }
+    Pose { translation 118.7 -23.17 0.03 children [ USE WP ] }
+    Pose { translation 128.5 -21.16 0.03 children [ USE WP ] }
+    Pose { translation 138.4 -20.15 0.03 children [ USE WP ] }
+    Pose { translation 148.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 158.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 168.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 178.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 188.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 198.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 208.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 218.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 228.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 238.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 248.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 258.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 268.4 -20 0.03 children [ USE WP ] }
+    Pose { translation 278.4 -19.94 0.03 children [ USE WP ] }
+    Pose { translation 288.3 -18.36 0.03 children [ USE WP ] }
+    Pose { translation 297.3 -14.22 0.03 children [ USE WP ] }
+    Pose { translation 304.8 -7.623 0.03 children [ USE WP ] }
+    Pose { translation 310.3 0.6805 0.03 children [ USE WP ] }
+    Pose { translation 314.8 9.621 0.03 children [ USE WP ] }
+    Pose { translation 319.3 18.57 0.03 children [ USE WP ] }
+    Pose { translation 322.5 28 0.03 children [ USE WP ] }
+    Pose { translation 320.7 37.61 0.03 children [ USE WP ] }
+    Pose { translation 312.9 43.73 0.03 children [ USE WP ] }
+    Pose { translation 303.4 46.66 0.03 children [ USE WP ] }
+    Pose { translation 293.7 49.08 0.03 children [ USE WP ] }
+    Pose { translation 284 51.51 0.03 children [ USE WP ] }
+    Pose { translation 274.3 53.93 0.03 children [ USE WP ] }
+    Pose { translation 264.9 57.25 0.03 children [ USE WP ] }
+    Pose { translation 256.9 63.24 0.03 children [ USE WP ] }
+    Pose { translation 251.9 71.8 0.03 children [ USE WP ] }
+    Pose { translation 250.1 81.6 0.03 children [ USE WP ] }
+    Pose { translation 250 91.6 0.03 children [ USE WP ] }
+    Pose { translation 250 101.6 0.03 children [ USE WP ] }
+    Pose { translation 250 111.6 0.03 children [ USE WP ] }
+    Pose { translation 250 121.6 0.03 children [ USE WP ] }
+    Pose { translation 249.6 131.6 0.03 children [ USE WP ] }
+    Pose { translation 246.4 141 0.03 children [ USE WP ] }
+    Pose { translation 239 147.5 0.03 children [ USE WP ] }
+    Pose { translation 229.4 149.9 0.03 children [ USE WP ] }
+    Pose { translation 219.4 150 0.03 children [ USE WP ] }
+    Pose { translation 209.4 150 0.03 children [ USE WP ] }
+    Pose { translation 199.4 150 0.03 children [ USE WP ] }
+    Pose { translation 189.4 150 0.03 children [ USE WP ] }
+    Pose { translation 179.4 150 0.03 children [ USE WP ] }
+    Pose { translation 169.4 150 0.03 children [ USE WP ] }
+    Pose { translation 159.4 150 0.03 children [ USE WP ] }
+    Pose { translation 149.4 150 0.03 children [ USE WP ] }
+    Pose { translation 139.4 149.8 0.03 children [ USE WP ] }
+    Pose { translation 129.9 146.9 0.03 children [ USE WP ] }
+    Pose { translation 122.9 139.9 0.03 children [ USE WP ] }
+    Pose { translation 120.2 130.3 0.03 children [ USE WP ] }
+    Pose { translation 120 120.3 0.03 children [ USE WP ] }
+    Pose { translation 119.8 110.3 0.03 children [ USE WP ] }
+    Pose { translation 117.3 100.7 0.03 children [ USE WP ] }
+    Pose { translation 110.7 93.42 0.03 children [ USE WP ] }
+    Pose { translation 101.3 90.33 0.03 children [ USE WP ] }
+    Pose { translation 91.27 90 0.03 children [ USE WP ] }
+    Pose { translation 81.27 90 0.03 children [ USE WP ] }
+    Pose { translation 71.27 90 0.03 children [ USE WP ] }
+    Pose { translation 61.27 90.08 0.03 children [ USE WP ] }
+    Pose { translation 51.56 92.25 0.03 children [ USE WP ] }
+    Pose { translation 43.94 98.5 0.03 children [ USE WP ] }
+    Pose { translation 40.46 107.8 0.03 children [ USE WP ] }
+    Pose { translation 40 117.8 0.03 children [ USE WP ] }
+    Pose { translation 40 127.8 0.03 children [ USE WP ] }
+    Pose { translation 39.97 137.8 0.03 children [ USE WP ] }
+    Pose { translation 38.12 147.6 0.03 children [ USE WP ] }
+    Pose { translation 32.27 155.5 0.03 children [ USE WP ] }
+    Pose { translation 23.15 159.4 0.03 children [ USE WP ] }
+    Pose { translation 13.18 160 0.03 children [ USE WP ] }
+    Pose { translation 3.184 160 0.03 children [ USE WP ] }
+    Pose { translation -6.816 160 0.03 children [ USE WP ] }
+    Pose { translation -16.82 160 0.03 children [ USE WP ] }
+    Pose { translation -26.82 160 0.03 children [ USE WP ] }
+    Pose { translation -36.82 160 0.03 children [ USE WP ] }
+    Pose { translation -46.82 160 0.03 children [ USE WP ] }
+    Pose { translation -56.82 160 0.03 children [ USE WP ] }
+    Pose { translation -66.82 160 0.03 children [ USE WP ] }
+    Pose { translation -76.82 160 0.03 children [ USE WP ] }
+    Pose { translation -86.82 160 0.03 children [ USE WP ] }
+    Pose { translation -96.82 160 0.03 children [ USE WP ] }
+    Pose { translation -106.7 158.7 0.03 children [ USE WP ] }
+    Pose { translation -115.7 154.4 0.03 children [ USE WP ] }
+    Pose { translation -122.7 147.3 0.03 children [ USE WP ] }
+    Pose { translation -127.2 138.4 0.03 children [ USE WP ] }
+    Pose { translation -130.3 129 0.03 children [ USE WP ] }
+    Pose { translation -133.6 119.5 0.03 children [ USE WP ] }
+    Pose { translation -138.7 110.9 0.03 children [ USE WP ] }
+    Pose { translation -146.1 104.4 0.03 children [ USE WP ] }
+    Pose { translation -155.5 100.8 0.03 children [ USE WP ] }
+    Pose { translation -165.4 100 0.03 children [ USE WP ] }
+    Pose { translation -175.4 100 0.03 children [ USE WP ] }
+    Pose { translation -185.4 100 0.03 children [ USE WP ] }
+    Pose { translation -195.4 100 0.03 children [ USE WP ] }
+    Pose { translation -205.4 100 0.03 children [ USE WP ] }
+    Pose { translation -215.4 100 0.03 children [ USE WP ] }
+    Pose { translation -225.3 101.1 0.03 children [ USE WP ] }
+    Pose { translation -233.9 105.9 0.03 children [ USE WP ] }
+    Pose { translation -238.8 114.5 0.03 children [ USE WP ] }
+    Pose { translation -240 124.4 0.03 children [ USE WP ] }
+    Pose { translation -240 134.4 0.03 children [ USE WP ] }
+    Pose { translation -240 144.4 0.03 children [ USE WP ] }
+    Pose { translation -240.9 154.4 0.03 children [ USE WP ] }
+    Pose { translation -245.3 163.2 0.03 children [ USE WP ] }
+    Pose { translation -253.6 168.5 0.03 children [ USE WP ] }
+    Pose { translation -263.5 170 0.03 children [ USE WP ] }
+    Pose { translation -273.5 170 0.03 children [ USE WP ] }
+    Pose { translation -283.5 170 0.03 children [ USE WP ] }
+    Pose { translation -293.5 170 0.03 children [ USE WP ] }
+    Pose { translation -303.5 170 0.03 children [ USE WP ] }
+    Pose { translation -313.4 169.3 0.03 children [ USE WP ] }
+    Pose { translation -322.5 165.3 0.03 children [ USE WP ] }
+    Pose { translation -328.2 157.3 0.03 children [ USE WP ] }
+    Pose { translation -330 147.5 0.03 children [ USE WP ] }
+    Pose { translation -330 137.5 0.03 children [ USE WP ] }
+    Pose { translation -330 127.5 0.03 children [ USE WP ] }
+    Pose { translation -330 117.5 0.03 children [ USE WP ] }
+    Pose { translation -330 107.5 0.03 children [ USE WP ] }
+    Pose { translation -330 97.47 0.03 children [ USE WP ] }
+    Pose { translation -330 87.47 0.03 children [ USE WP ] }
+    Pose { translation -330 77.47 0.03 children [ USE WP ] }
+    Pose { translation -330 67.47 0.03 children [ USE WP ] }
+    Pose { translation -329.5 57.5 0.03 children [ USE WP ] }
+    Pose { translation -325.9 48.26 0.03 children [ USE WP ] }
+    Pose { translation -318.2 42.13 0.03 children [ USE WP ] }
+    Pose { translation -308.4 40.07 0.03 children [ USE WP ] }
+    Pose { translation -298.4 40 0.03 children [ USE WP ] }
+    Pose { translation -288.4 40 0.03 children [ USE WP ] }
+    Pose { translation -278.4 40 0.03 children [ USE WP ] }
+    Pose { translation -268.4 39.63 0.03 children [ USE WP ] }
+    Pose { translation -259.1 36.42 0.03 children [ USE WP ] }
+    Pose { translation -252.5 29.03 0.03 children [ USE WP ] }
+    Pose { translation -250.1 19.38 0.03 children [ USE WP ] }
+    Pose { translation -250 9.383 0.03 children [ USE WP ] }
+    Pose { translation -250 -0.6166 0.03 children [ USE WP ] }
+    Pose { translation -250 -10.62 0.03 children [ USE WP ] }
+    Pose { translation -250.2 -20.61 0.03 children [ USE WP ] }
+    Pose { translation -253.1 -30.13 0.03 children [ USE WP ] }
+    Pose { translation -260.1 -37.04 0.03 children [ USE WP ] }
+    Pose { translation -269.7 -39.78 0.03 children [ USE WP ] }
+    Pose { translation -279.7 -40 0.03 children [ USE WP ] }
+    Pose { translation -289.7 -40 0.03 children [ USE WP ] }
+    Pose { translation -299.7 -40 0.03 children [ USE WP ] }
+    Pose { translation -309.7 -40.15 0.03 children [ USE WP ] }
+    Pose { translation -319.2 -42.9 0.03 children [ USE WP ] }
+    Pose { translation -324.7 -50.9 0.03 children [ USE WP ] }
+    Pose { translation -324.3 -60.82 0.03 children [ USE WP ] }
+    Pose { translation -321.7 -70.49 0.03 children [ USE WP ] }
+    Pose { translation -319.1 -80.13 0.03 children [ USE WP ] }
+    Pose { translation -316.4 -89.78 0.03 children [ USE WP ] }
+    Pose { translation -313.8 -99.43 0.03 children [ USE WP ] }
+    Pose { translation -311.2 -109.1 0.03 children [ USE WP ] }
+    Pose { translation -308.5 -118.7 0.03 children [ USE WP ] }
+    Pose { translation -305.9 -128.4 0.03 children [ USE WP ] }
+    Pose { translation -301.8 -137.4 0.03 children [ USE WP ] }
+    Pose { translation -294.9 -144.7 0.03 children [ USE WP ] }
+    Pose { translation -285.9 -148.8 0.03 children [ USE WP ] }
+  ]
+}
+DEF EGO BmwX5 {
+  translation -12 -150.6 0.4
+  rotation 0 0 1 0
+  color 0.95 0.35 0.02
+  name "ego"
+  completeInterior FALSE
+  controller "ego_shielded_ppo"
+  sensorsSlotFront [
+    SickLms291 { translation 0.06 0 0 name "lidar2d" }
+  ]
+  sensorsSlotCenter [
+    GPS { }
+    InertialUnit { }
+  ]
+}
+DEF OPP_1 BmwX5 {
+  translation -0.0007005 -146.7 0.4
+  rotation 0 0 1 0
+  color 0.05 0.2 0.85
+  name "opp_1"
+  completeInterior FALSE
+  controller "pid_lane_follow"
+}
+DEF OPP_2 BmwX5 {
+  translation 24.31 -151.8 0.4
+  rotation 0 0 1 0.1424
+  color 0.45 0.1 0.75
+  name "opp_2"
+  completeInterior FALSE
+  controller "pid_lane_follow"
+}
+DEF OPP_3 BmwX5 {
+  translation 43.8 -140.8 0.4
+  rotation 0 0 1 0.6131
+  color 0.85 0.87 0.9
+  name "opp_3"
+  completeInterior FALSE
+  controller "pid_lane_follow"
+}
+DEF OPP_4 BmwX5 {
+  translation -38 -148 0.4
+  rotation 0 0 1 0
+  color 0.9 0.75 0.05
+  name "opp_4"
+  completeInterior FALSE
+  controller "pid_lane_follow"
+}
+StreetLight {
+  translation -52 -159.6 0
+  rotation 0 0 1 1.571
+  name "street light 0"
+  intensity 45
+}
+StreetLight {
+  translation -20 -140.4 0
+  rotation 0 0 1 -1.571
+  name "street light 1"
+  intensity 45
+}
+StreetLight {
+  translation 12 -159.6 0
+  rotation 0 0 1 1.571
+  name "street light 2"
+  intensity 45
+}
+StreetLight {
+  translation 34.69 -136.1 0
+  rotation 0 0 1 -1.088
+  name "street light 3"
+  intensity 45
+}
+StreetLight {
+  translation 69.44 -128.6 0
+  rotation 0 0 1 2.467
+  name "street light 4"
+  intensity 45
+}
+SimpleBuilding {
+  translation -418.1 -249.2 0
+  name "block 0"
+  floorNumber 7
+  corners [ 12.98 11.77, 12.98 -11.77, -12.98 -11.77, -12.98 11.77 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -412.7 -201.6 0
+  name "block 1"
+  floorNumber 14
+  corners [ 14.83 12.11, 14.83 -12.11, -14.83 -12.11, -14.83 12.11 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -418.6 -165.2 0
+  name "block 2"
+  floorNumber 14
+  corners [ 12.07 15.64, 12.07 -15.64, -12.07 -15.64, -12.07 15.64 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -417.8 -122.7 0
+  name "block 3"
+  floorNumber 37
+  corners [ 12.45 15.34, 12.45 -15.34, -12.45 -15.34, -12.45 15.34 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -413.2 -79.3 0
+  name "block 4"
+  floorNumber 6
+  corners [ 12.94 12.24, 12.94 -12.24, -12.94 -12.24, -12.94 12.24 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -412.4 -33.46 0
+  name "block 5"
+  floorNumber 6
+  corners [ 15.71 15.2, 15.71 -15.2, -15.71 -15.2, -15.71 15.2 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -414.4 4.494 0
+  name "block 6"
+  floorNumber 6
+  corners [ 14.83 11.98, 14.83 -11.98, -14.83 -11.98, -14.83 11.98 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -416.4 45.87 0
+  name "block 7"
+  floorNumber 7
+  corners [ 12.3 14.99, 12.3 -14.99, -12.3 -14.99, -12.3 14.99 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -412 90.15 0
+  name "block 8"
+  floorNumber 5
+  corners [ 14.24 14.5, 14.24 -14.5, -14.24 -14.5, -14.24 14.5 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -416.7 129.6 0
+  name "block 9"
+  floorNumber 8
+  corners [ 14.16 12.38, 14.16 -12.38, -14.16 -12.38, -14.16 12.38 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -414.9 171.6 0
+  name "block 10"
+  floorNumber 14
+  corners [ 12.62 15.2, 12.62 -15.2, -12.62 -15.2, -12.62 15.2 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -415.3 218.9 0
+  name "block 11"
+  floorNumber 4
+  corners [ 11.61 15.67, 11.61 -15.67, -11.61 -15.67, -11.61 15.67 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -417.1 254.7 0
+  name "block 12"
+  floorNumber 15
+  corners [ 15.82 12.43, 15.82 -12.43, -15.82 -12.43, -15.82 12.43 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -375.4 -247.4 0
+  name "block 13"
+  floorNumber 45
+  corners [ 11.76 14.26, 11.76 -14.26, -11.76 -14.26, -11.76 14.26 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -371.5 -205.7 0
+  name "block 14"
+  floorNumber 7
+  corners [ 11.96 13.22, 11.96 -13.22, -11.96 -13.22, -11.96 13.22 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -370.3 -163.3 0
+  name "block 15"
+  floorNumber 6
+  corners [ 11.05 11.22, 11.05 -11.22, -11.05 -11.22, -11.05 11.22 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -373.4 -120.5 0
+  name "block 16"
+  floorNumber 4
+  corners [ 12.04 15.58, 12.04 -15.58, -12.04 -15.58, -12.04 15.58 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -372.1 -77.24 0
+  name "block 17"
+  floorNumber 19
+  corners [ 15.85 14.03, 15.85 -14.03, -15.85 -14.03, -15.85 14.03 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -375.4 -39.72 0
+  name "block 18"
+  floorNumber 46
+  corners [ 15.17 12.46, 15.17 -12.46, -15.17 -12.46, -15.17 12.46 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -374.2 3.935 0
+  name "block 19"
+  floorNumber 5
+  corners [ 13.05 11.18, 13.05 -11.18, -13.05 -11.18, -13.05 11.18 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -370.9 50.65 0
+  name "block 20"
+  floorNumber 5
+  corners [ 13.49 11.16, 13.49 -11.16, -13.49 -11.16, -13.49 11.16 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -376.3 87.85 0
+  name "block 21"
+  floorNumber 6
+  corners [ 15.35 11.71, 15.35 -11.71, -15.35 -11.71, -15.35 11.71 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -377.1 132.6 0
+  name "block 22"
+  floorNumber 27
+  corners [ 15.81 14.26, 15.81 -14.26, -15.81 -14.26, -15.81 14.26 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -374.9 173.4 0
+  name "block 23"
+  floorNumber 31
+  corners [ 15.65 13.86, 15.65 -13.86, -15.65 -13.86, -15.65 13.86 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -375.6 215.8 0
+  name "block 24"
+  floorNumber 5
+  corners [ 15.5 12.58, 15.5 -12.58, -15.5 -12.58, -15.5 12.58 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -371.6 260.4 0
+  name "block 25"
+  floorNumber 14
+  corners [ 12.69 12.96, 12.69 -12.96, -12.69 -12.96, -12.69 12.96 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -330.7 -249.6 0
+  name "block 26"
+  floorNumber 27
+  corners [ 15.49 11.64, 15.49 -11.64, -15.49 -11.64, -15.49 11.64 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -334.7 -202.9 0
+  name "block 27"
+  floorNumber 32
+  corners [ 13.85 14.73, 13.85 -14.73, -13.85 -14.73, -13.85 14.73 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -336 -158.6 0
+  name "block 28"
+  floorNumber 7
+  corners [ 11.07 15.38, 11.07 -15.38, -11.07 -15.38, -11.07 15.38 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -332.1 8.918 0
+  name "block 29"
+  floorNumber 8
+  corners [ 14.04 11.69, 14.04 -11.69, -14.04 -11.69, -14.04 11.69 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -332.7 217.7 0
+  name "block 30"
+  floorNumber 46
+  corners [ 13.22 14.14, 13.22 -14.14, -13.22 -14.14, -13.22 14.14 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -328.6 257.8 0
+  name "block 31"
+  floorNumber 5
+  corners [ 11.59 13.79, 11.59 -13.79, -11.59 -13.79, -11.59 13.79 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -288.3 -247.4 0
+  name "block 32"
+  floorNumber 26
+  corners [ 15.3 12.29, 15.3 -12.29, -15.3 -12.29, -15.3 12.29 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -292.7 -202.8 0
+  name "block 33"
+  floorNumber 19
+  corners [ 11.6 11.55, 11.6 -11.55, -11.6 -11.55, -11.6 11.55 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -290.5 6.94 0
+  name "block 34"
+  floorNumber 20
+  corners [ 12.96 12.26, 12.96 -12.26, -12.96 -12.26, -12.96 12.26 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -292.6 93.22 0
+  name "block 35"
+  floorNumber 8
+  corners [ 12.86 13.88, 12.86 -13.88, -12.86 -13.88, -12.86 13.88 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -293.4 133.2 0
+  name "block 36"
+  floorNumber 5
+  corners [ 15.52 12.65, 15.52 -12.65, -15.52 -12.65, -15.52 12.65 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -293.3 214.9 0
+  name "block 37"
+  floorNumber 7
+  corners [ 15.06 11.49, 15.06 -11.49, -15.06 -11.49, -15.06 11.49 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -289.4 261.5 0
+  name "block 38"
+  floorNumber 7
+  corners [ 14.8 15.84, 14.8 -15.84, -14.8 -15.84, -14.8 15.84 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -244.9 -248.2 0
+  name "block 39"
+  floorNumber 16
+  corners [ 14.93 14.3, 14.93 -14.3, -14.93 -14.3, -14.93 14.3 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -250.1 -204.1 0
+  name "block 40"
+  floorNumber 18
+  corners [ 12.11 12.84, 12.11 -12.84, -12.11 -12.84, -12.11 12.84 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -250 -74.82 0
+  name "block 41"
+  floorNumber 16
+  corners [ 13.29 13.81, 13.29 -13.81, -13.29 -13.81, -13.29 13.81 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -247.8 213.3 0
+  name "block 42"
+  floorNumber 4
+  corners [ 11.48 11.16, 11.48 -11.16, -11.48 -11.16, -11.48 11.16 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -251.5 261.9 0
+  name "block 43"
+  floorNumber 12
+  corners [ 12.45 15.45, 12.45 -15.45, -12.45 -15.45, -12.45 15.45 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -206.7 -249 0
+  name "block 44"
+  floorNumber 4
+  corners [ 14.55 11.41, 14.55 -11.41, -14.55 -11.41, -14.55 11.41 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -203 -206.8 0
+  name "block 45"
+  floorNumber 8
+  corners [ 13.06 12.08, 13.06 -12.08, -13.06 -12.08, -13.06 12.08 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -209.5 -74.16 0
+  name "block 46"
+  floorNumber 5
+  corners [ 12.39 14.38, 12.39 -14.38, -12.39 -14.38, -12.39 14.38 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -208.7 -33.21 0
+  name "block 47"
+  floorNumber 17
+  corners [ 15.12 12.16, 15.12 -12.16, -15.12 -12.16, -15.12 12.16 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -205.7 9.084 0
+  name "block 48"
+  floorNumber 38
+  corners [ 13.26 14.66, 13.26 -14.66, -13.26 -14.66, -13.26 14.66 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -203.2 50.67 0
+  name "block 49"
+  floorNumber 15
+  corners [ 13.94 11.54, 13.94 -11.54, -13.94 -11.54, -13.94 11.54 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -205.3 176.3 0
+  name "block 50"
+  floorNumber 11
+  corners [ 13.39 15.17, 13.39 -15.17, -13.39 -15.17, -13.39 15.17 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -202.9 219.1 0
+  name "block 51"
+  floorNumber 18
+  corners [ 14.29 14.49, 14.29 -14.49, -14.29 -14.49, -14.29 14.49 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -202.1 256.8 0
+  name "block 52"
+  floorNumber 18
+  corners [ 11.41 14.57, 11.41 -14.57, -11.41 -14.57, -11.41 14.57 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -163.2 -248 0
+  name "block 53"
+  floorNumber 12
+  corners [ 12 11.36, 12 -11.36, -12 -11.36, -12 11.36 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -165.5 -203.9 0
+  name "block 54"
+  floorNumber 11
+  corners [ 15.44 15.12, 15.44 -15.12, -15.44 -15.12, -15.44 15.12 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -166 -76.09 0
+  name "block 55"
+  floorNumber 20
+  corners [ 12.72 15.91, 12.72 -15.91, -12.72 -15.91, -12.72 15.91 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -164.8 -38.62 0
+  name "block 56"
+  floorNumber 18
+  corners [ 13.47 11.32, 13.47 -11.32, -13.47 -11.32, -13.47 11.32 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -163.5 4.263 0
+  name "block 57"
+  floorNumber 5
+  corners [ 12.04 14.52, 12.04 -14.52, -12.04 -14.52, -12.04 14.52 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -164.2 47.5 0
+  name "block 58"
+  floorNumber 46
+  corners [ 15.86 12.66, 15.86 -12.66, -15.86 -12.66, -15.86 12.66 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -162.9 174.9 0
+  name "block 59"
+  floorNumber 19
+  corners [ 12.56 15.68, 12.56 -15.68, -12.56 -15.68, -12.56 15.68 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -162.4 219.5 0
+  name "block 60"
+  floorNumber 11
+  corners [ 12.27 12.08, 12.27 -12.08, -12.27 -12.08, -12.27 12.08 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -165.3 257.6 0
+  name "block 61"
+  floorNumber 4
+  corners [ 15.95 11.83, 15.95 -11.83, -15.95 -11.83, -15.95 11.83 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -119.6 -247.5 0
+  name "block 62"
+  floorNumber 4
+  corners [ 15.35 13.91, 15.35 -13.91, -15.35 -13.91, -15.35 13.91 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -119.2 -206.6 0
+  name "block 63"
+  floorNumber 12
+  corners [ 14.59 11.14, 14.59 -11.14, -14.59 -11.14, -14.59 11.14 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -124.6 -80.28 0
+  name "block 64"
+  floorNumber 10
+  corners [ 15.78 15.76, 15.78 -15.76, -15.78 -15.76, -15.78 15.76 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -118.8 -34.37 0
+  name "block 65"
+  floorNumber 5
+  corners [ 14.34 15.22, 14.34 -15.22, -14.34 -15.22, -14.34 15.22 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -124.9 5.83 0
+  name "block 66"
+  floorNumber 7
+  corners [ 13.73 13.7, 13.73 -13.7, -13.73 -13.7, -13.73 13.7 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -125.7 51.35 0
+  name "block 67"
+  floorNumber 6
+  corners [ 11.91 12.79, 11.91 -12.79, -11.91 -12.79, -11.91 12.79 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -123.6 217.5 0
+  name "block 68"
+  floorNumber 35
+  corners [ 12.61 13.71, 12.61 -13.71, -12.61 -13.71, -12.61 13.71 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -120.2 257.1 0
+  name "block 69"
+  floorNumber 15
+  corners [ 11.7 12.88, 11.7 -12.88, -11.7 -12.88, -11.7 12.88 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -80.43 -248.9 0
+  name "block 70"
+  floorNumber 16
+  corners [ 11.15 14.92, 11.15 -14.92, -11.15 -14.92, -11.15 14.92 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -83.08 -205.6 0
+  name "block 71"
+  floorNumber 20
+  corners [ 13.79 15.47, 13.79 -15.47, -13.79 -15.47, -13.79 15.47 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -79.32 -77.03 0
+  name "block 72"
+  floorNumber 6
+  corners [ 11.67 14.03, 11.67 -14.03, -11.67 -14.03, -11.67 14.03 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -78.92 -38.64 0
+  name "block 73"
+  floorNumber 19
+  corners [ 12.73 14.38, 12.73 -14.38, -12.73 -14.38, -12.73 14.38 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -81.94 4.681 0
+  name "block 74"
+  floorNumber 5
+  corners [ 13.69 13.72, 13.69 -13.72, -13.69 -13.72, -13.69 13.72 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -80.23 44.96 0
+  name "block 75"
+  floorNumber 30
+  corners [ 15.42 13.98, 15.42 -13.98, -15.42 -13.98, -15.42 13.98 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -78.31 90.78 0
+  name "block 76"
+  floorNumber 28
+  corners [ 11.26 15.1, 11.26 -15.1, -11.26 -15.1, -11.26 15.1 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -82.33 215.8 0
+  name "block 77"
+  floorNumber 30
+  corners [ 12.41 14.45, 12.41 -14.45, -12.41 -14.45, -12.41 14.45 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -76.65 254.4 0
+  name "block 78"
+  floorNumber 37
+  corners [ 12.73 14.02, 12.73 -14.02, -12.73 -14.02, -12.73 14.02 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -40.4 -244.6 0
+  name "block 79"
+  floorNumber 5
+  corners [ 15 14.94, 15 -14.94, -15 -14.94, -15 14.94 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -36.58 -206.4 0
+  name "block 80"
+  floorNumber 11
+  corners [ 11.86 14.58, 11.86 -14.58, -11.86 -14.58, -11.86 14.58 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -36.96 -77.92 0
+  name "block 81"
+  floorNumber 7
+  corners [ 13.75 14.45, 13.75 -14.45, -13.75 -14.45, -13.75 14.45 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -34.87 -32.28 0
+  name "block 82"
+  floorNumber 12
+  corners [ 13.59 13.57, 13.59 -13.57, -13.59 -13.57, -13.59 13.57 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -37.32 6.64 0
+  name "block 83"
+  floorNumber 4
+  corners [ 14.12 14.01, 14.12 -14.01, -14.12 -14.01, -14.12 14.01 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -39.82 49.15 0
+  name "block 84"
+  floorNumber 30
+  corners [ 14.87 13.96, 14.87 -13.96, -14.87 -13.96, -14.87 13.96 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -39.1 89.66 0
+  name "block 85"
+  floorNumber 46
+  corners [ 15.93 13.26, 15.93 -13.26, -15.93 -13.26, -15.93 13.26 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -38.39 214.7 0
+  name "block 86"
+  floorNumber 6
+  corners [ 12.52 12.58, 12.52 -12.58, -12.52 -12.58, -12.52 12.58 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation -40.33 257.9 0
+  name "block 87"
+  floorNumber 15
+  corners [ 12.46 12.84, 12.46 -12.84, -12.46 -12.84, -12.46 12.84 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 6.907 -243.6 0
+  name "block 88"
+  floorNumber 4
+  corners [ 12.64 15.17, 12.64 -15.17, -12.64 -15.17, -12.64 15.17 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 0.2635 -208 0
+  name "block 89"
+  floorNumber 18
+  corners [ 15.34 11.01, 15.34 -11.01, -15.34 -11.01, -15.34 11.01 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 0.7124 -75.67 0
+  name "block 90"
+  floorNumber 5
+  corners [ 11.48 11.28, 11.48 -11.28, -11.48 -11.28, -11.48 11.28 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 5.471 -39.65 0
+  name "block 91"
+  floorNumber 20
+  corners [ 12.11 12.87, 12.11 -12.87, -12.11 -12.87, -12.11 12.87 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 0.004532 4.909 0
+  name "block 92"
+  floorNumber 19
+  corners [ 14.8 13.86, 14.8 -13.86, -14.8 -13.86, -14.8 13.86 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 4.422 44.73 0
+  name "block 93"
+  floorNumber 10
+  corners [ 11.79 13.24, 11.79 -13.24, -11.79 -13.24, -11.79 13.24 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 2.288 87.01 0
+  name "block 94"
+  floorNumber 16
+  corners [ 13.28 14.69, 13.28 -14.69, -13.28 -14.69, -13.28 14.69 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 4.074 212.6 0
+  name "block 95"
+  floorNumber 5
+  corners [ 13.44 15.93, 13.44 -15.93, -13.44 -15.93, -13.44 15.93 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 6.843 255.3 0
+  name "block 96"
+  floorNumber 18
+  corners [ 13.14 11.62, 13.14 -11.62, -13.14 -11.62, -13.14 11.62 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 47.04 -244.6 0
+  name "block 97"
+  floorNumber 18
+  corners [ 12.19 11.92, 12.19 -11.92, -12.19 -11.92, -12.19 11.92 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 49.39 -204.5 0
+  name "block 98"
+  floorNumber 10
+  corners [ 13.66 14.33, 13.66 -14.33, -13.66 -14.33, -13.66 14.33 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 47.93 4.783 0
+  name "block 99"
+  floorNumber 10
+  corners [ 13.54 14.78, 13.54 -14.78, -13.54 -14.78, -13.54 14.78 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 48.38 47.48 0
+  name "block 100"
+  floorNumber 43
+  corners [ 13.96 14.47, 13.96 -14.47, -13.96 -14.47, -13.96 14.47 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 48.35 217.3 0
+  name "block 101"
+  floorNumber 13
+  corners [ 11.18 11.56, 11.18 -11.56, -11.18 -11.56, -11.18 11.56 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 45.78 258.3 0
+  name "block 102"
+  floorNumber 5
+  corners [ 13.72 11.82, 13.72 -11.82, -13.72 -11.82, -13.72 11.82 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 90.37 -248.2 0
+  name "block 103"
+  floorNumber 8
+  corners [ 11.07 13.41, 11.07 -13.41, -11.07 -13.41, -11.07 13.41 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 88.62 -202.3 0
+  name "block 104"
+  floorNumber 11
+  corners [ 15.58 12.69, 15.58 -12.69, -15.58 -12.69, -15.58 12.69 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 86.01 -165.2 0
+  name "block 105"
+  floorNumber 16
+  corners [ 15.31 12.69, 15.31 -12.69, -15.31 -12.69, -15.31 12.69 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 87.42 8.55 0
+  name "block 106"
+  floorNumber 5
+  corners [ 15.59 11.54, 15.59 -11.54, -15.59 -11.54, -15.59 11.54 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 87.65 50.91 0
+  name "block 107"
+  floorNumber 8
+  corners [ 13.63 15.28, 13.63 -15.28, -13.63 -15.28, -13.63 15.28 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 87.19 132.5 0
+  name "block 108"
+  floorNumber 29
+  corners [ 15.41 12.43, 15.41 -12.43, -15.41 -12.43, -15.41 12.43 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 88.11 171.5 0
+  name "block 109"
+  floorNumber 20
+  corners [ 15.66 11.81, 15.66 -11.81, -15.66 -11.81, -15.66 11.81 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 85.03 213.5 0
+  name "block 110"
+  floorNumber 4
+  corners [ 15.04 13.81, 15.04 -13.81, -15.04 -13.81, -15.04 13.81 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 86.45 254.6 0
+  name "block 111"
+  floorNumber 14
+  corners [ 13.3 11.47, 13.3 -11.47, -13.3 -11.47, -13.3 11.47 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 132.6 -243.8 0
+  name "block 112"
+  floorNumber 14
+  corners [ 11.94 15.06, 11.94 -15.06, -11.94 -15.06, -11.94 15.06 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 133.3 -207.9 0
+  name "block 113"
+  floorNumber 7
+  corners [ 12.99 13.99, 12.99 -13.99, -12.99 -13.99, -12.99 13.99 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 133.1 -163.3 0
+  name "block 114"
+  floorNumber 33
+  corners [ 14.54 11.95, 14.54 -11.95, -14.54 -11.95, -14.54 11.95 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 133.6 -122.7 0
+  name "block 115"
+  floorNumber 8
+  corners [ 14.66 15.66, 14.66 -15.66, -14.66 -15.66, -14.66 15.66 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 133.5 -79.42 0
+  name "block 116"
+  floorNumber 16
+  corners [ 14.05 15.07, 14.05 -15.07, -14.05 -15.07, -14.05 15.07 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 127.2 49.68 0
+  name "block 117"
+  floorNumber 45
+  corners [ 12.28 13.19, 12.28 -13.19, -12.28 -13.19, -12.28 13.19 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 126.3 213.8 0
+  name "block 118"
+  floorNumber 7
+  corners [ 12.21 13.66, 12.21 -13.66, -12.21 -13.66, -12.21 13.66 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 129.1 256.7 0
+  name "block 119"
+  floorNumber 19
+  corners [ 12.04 14.23, 12.04 -14.23, -12.04 -14.23, -12.04 14.23 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 174.2 -245.6 0
+  name "block 120"
+  floorNumber 15
+  corners [ 14.73 15.19, 14.73 -15.19, -14.73 -15.19, -14.73 15.19 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 174.1 -200.1 0
+  name "block 121"
+  floorNumber 16
+  corners [ 11.29 12.87, 11.29 -12.87, -11.29 -12.87, -11.29 12.87 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 174.4 -164 0
+  name "block 122"
+  floorNumber 5
+  corners [ 13.19 12.99, 13.19 -12.99, -13.19 -12.99, -13.19 12.99 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 171.8 -116.1 0
+  name "block 123"
+  floorNumber 40
+  corners [ 14.83 14.59, 14.83 -14.59, -14.83 -14.59, -14.83 14.59 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 170.9 -75.66 0
+  name "block 124"
+  floorNumber 8
+  corners [ 11.51 14.83, 11.51 -14.83, -11.51 -14.83, -11.51 14.83 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 169.6 50.13 0
+  name "block 125"
+  floorNumber 4
+  corners [ 13.16 12.35, 13.16 -12.35, -13.16 -12.35, -13.16 12.35 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 169.1 89.26 0
+  name "block 126"
+  floorNumber 11
+  corners [ 15.02 14.95, 15.02 -14.95, -15.02 -14.95, -15.02 14.95 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 170.1 214.7 0
+  name "block 127"
+  floorNumber 19
+  corners [ 13.85 11.89, 13.85 -11.89, -13.85 -11.89, -13.85 11.89 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 169.9 254.8 0
+  name "block 128"
+  floorNumber 4
+  corners [ 13.48 14, 13.48 -14, -13.48 -14, -13.48 14 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 213.5 -246.3 0
+  name "block 129"
+  floorNumber 41
+  corners [ 14.15 13.88, 14.15 -13.88, -14.15 -13.88, -14.15 13.88 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 211.4 -201.2 0
+  name "block 130"
+  floorNumber 8
+  corners [ 15.38 14.39, 15.38 -14.39, -15.38 -14.39, -15.38 14.39 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 215.2 -159.1 0
+  name "block 131"
+  floorNumber 18
+  corners [ 14.49 12.48, 14.49 -12.48, -14.49 -12.48, -14.49 12.48 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 213.1 -119.7 0
+  name "block 132"
+  floorNumber 8
+  corners [ 14.78 12.67, 14.78 -12.67, -14.78 -12.67, -14.78 12.67 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 213 -75.22 0
+  name "block 133"
+  floorNumber 19
+  corners [ 12.74 12.1, 12.74 -12.1, -12.74 -12.1, -12.74 12.1 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 216.9 51.14 0
+  name "block 134"
+  floorNumber 34
+  corners [ 14.95 14.75, 14.95 -14.75, -14.95 -14.75, -14.95 14.75 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 214.1 215.7 0
+  name "block 135"
+  floorNumber 6
+  corners [ 11.81 12.73, 11.81 -12.73, -11.81 -12.73, -11.81 12.73 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 214.5 258.5 0
+  name "block 136"
+  floorNumber 17
+  corners [ 13.33 13.2, 13.33 -13.2, -13.33 -13.2, -13.33 13.2 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 253 -244.8 0
+  name "block 137"
+  floorNumber 8
+  corners [ 13.04 15.26, 13.04 -15.26, -13.04 -15.26, -13.04 15.26 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 255.7 -201.6 0
+  name "block 138"
+  floorNumber 5
+  corners [ 14.55 15.15, 14.55 -15.15, -14.55 -15.15, -14.55 15.15 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 257.8 -158.6 0
+  name "block 139"
+  floorNumber 14
+  corners [ 11.95 13.04, 11.95 -13.04, -11.95 -13.04, -11.95 13.04 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 259.4 -117.6 0
+  name "block 140"
+  floorNumber 13
+  corners [ 14 12.68, 14 -12.68, -14 -12.68, -14 12.68 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 257.5 -74.62 0
+  name "block 141"
+  floorNumber 8
+  corners [ 15.12 15.29, 15.12 -15.29, -15.12 -15.29, -15.12 15.29 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 255.8 175.9 0
+  name "block 142"
+  floorNumber 6
+  corners [ 11.56 12.58, 11.56 -12.58, -11.56 -12.58, -11.56 12.58 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 257.2 212.5 0
+  name "block 143"
+  floorNumber 10
+  corners [ 11.02 15.96, 11.02 -15.96, -11.02 -15.96, -11.02 15.96 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 256.2 254.5 0
+  name "block 144"
+  floorNumber 18
+  corners [ 12.3 13.97, 12.3 -13.97, -12.3 -13.97, -12.3 13.97 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 300.3 -249.5 0
+  name "block 145"
+  floorNumber 17
+  corners [ 13.08 13.53, 13.08 -13.53, -13.08 -13.53, -13.08 13.53 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 298.5 -203.9 0
+  name "block 146"
+  floorNumber 6
+  corners [ 14.37 13.9, 14.37 -13.9, -14.37 -13.9, -14.37 13.9 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 298.8 -162.1 0
+  name "block 147"
+  floorNumber 8
+  corners [ 11.16 11.74, 11.16 -11.74, -11.16 -11.74, -11.16 11.74 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 300.8 -123.2 0
+  name "block 148"
+  floorNumber 19
+  corners [ 12.07 13.1, 12.07 -13.1, -12.07 -13.1, -12.07 13.1 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 298.7 -81.06 0
+  name "block 149"
+  floorNumber 20
+  corners [ 15.32 14.36, 15.32 -14.36, -15.32 -14.36, -15.32 14.36 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 299.6 87.71 0
+  name "block 150"
+  floorNumber 11
+  corners [ 11.4 15.34, 11.4 -15.34, -11.4 -15.34, -11.4 15.34 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 297.1 131.6 0
+  name "block 151"
+  floorNumber 5
+  corners [ 12.43 15.34, 12.43 -15.34, -12.43 -15.34, -12.43 15.34 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 297.1 173.6 0
+  name "block 152"
+  floorNumber 14
+  corners [ 14.76 13.57, 14.76 -13.57, -14.76 -13.57, -14.76 13.57 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 300 219.8 0
+  name "block 153"
+  floorNumber 8
+  corners [ 12.36 15.09, 12.36 -15.09, -12.36 -15.09, -12.36 15.09 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 300.9 256.6 0
+  name "block 154"
+  floorNumber 6
+  corners [ 11.71 12.84, 11.71 -12.84, -11.71 -12.84, -11.71 12.84 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 343.6 -246.2 0
+  name "block 155"
+  floorNumber 8
+  corners [ 13.75 13.99, 13.75 -13.99, -13.75 -13.99, -13.75 13.99 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 341 -205.2 0
+  name "block 156"
+  floorNumber 19
+  corners [ 14.31 12.98, 14.31 -12.98, -14.31 -12.98, -14.31 12.98 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 337.8 -159.3 0
+  name "block 157"
+  floorNumber 5
+  corners [ 11.76 15.86, 11.76 -15.86, -11.76 -15.86, -11.76 15.86 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 343.4 -123.1 0
+  name "block 158"
+  floorNumber 5
+  corners [ 14.98 12.46, 14.98 -12.46, -14.98 -12.46, -14.98 12.46 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 342.1 -80.32 0
+  name "block 159"
+  floorNumber 4
+  corners [ 14.59 13.87, 14.59 -13.87, -14.59 -13.87, -14.59 13.87 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 339 -38.25 0
+  name "block 160"
+  floorNumber 5
+  corners [ 15.32 12.5, 15.32 -12.5, -15.32 -12.5, -15.32 12.5 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 336.5 88.05 0
+  name "block 161"
+  floorNumber 10
+  corners [ 14.73 14.19, 14.73 -14.19, -14.73 -14.19, -14.73 14.19 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 338.3 133.1 0
+  name "block 162"
+  floorNumber 7
+  corners [ 12.8 15.88, 12.8 -15.88, -12.8 -15.88, -12.8 15.88 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 343.8 172.3 0
+  name "block 163"
+  floorNumber 7
+  corners [ 14.44 13.43, 14.44 -13.43, -14.44 -13.43, -14.44 13.43 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 340.8 219 0
+  name "block 164"
+  floorNumber 5
+  corners [ 14.2 15.77, 14.2 -15.77, -14.2 -15.77, -14.2 15.77 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 342.6 258.3 0
+  name "block 165"
+  floorNumber 13
+  corners [ 12.64 11.65, 12.64 -11.65, -12.64 -11.65, -12.64 11.65 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 380.9 -245.6 0
+  name "block 166"
+  floorNumber 6
+  corners [ 12.05 12.16, 12.05 -12.16, -12.05 -12.16, -12.05 12.16 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 384.6 -206 0
+  name "block 167"
+  floorNumber 17
+  corners [ 12.34 11.67, 12.34 -11.67, -12.34 -11.67, -12.34 11.67 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 378.8 -160.8 0
+  name "block 168"
+  floorNumber 39
+  corners [ 11.52 13.53, 11.52 -13.53, -11.52 -13.53, -11.52 13.53 ]
+  wallType "glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 383.3 -123 0
+  name "block 169"
+  floorNumber 12
+  corners [ 15.27 13.17, 15.27 -13.17, -15.27 -13.17, -15.27 13.17 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 383.3 -80.75 0
+  name "block 170"
+  floorNumber 7
+  corners [ 14.56 15.33, 14.56 -15.33, -14.56 -15.33, -14.56 15.33 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 380.3 -36.72 0
+  name "block 171"
+  floorNumber 16
+  corners [ 13.45 15.28, 13.45 -15.28, -13.45 -15.28, -13.45 15.28 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 385.1 6.188 0
+  name "block 172"
+  floorNumber 8
+  corners [ 14.67 15.72, 14.67 -15.72, -14.67 -15.72, -14.67 15.72 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 382.5 44.91 0
+  name "block 173"
+  floorNumber 8
+  corners [ 14.92 15.34, 14.92 -15.34, -14.92 -15.34, -14.92 15.34 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 384.3 90.23 0
+  name "block 174"
+  floorNumber 12
+  corners [ 15.77 15.81, 15.77 -15.81, -15.77 -15.81, -15.77 15.81 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 381.5 133.4 0
+  name "block 175"
+  floorNumber 6
+  corners [ 13.04 15.29, 13.04 -15.29, -13.04 -15.29, -13.04 15.29 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 381.9 176.1 0
+  name "block 176"
+  floorNumber 4
+  corners [ 15.73 11.67, 15.73 -11.67, -15.73 -11.67, -15.73 11.67 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 379.8 218 0
+  name "block 177"
+  floorNumber 10
+  corners [ 12.28 15.15, 12.28 -15.15, -12.28 -15.15, -12.28 15.15 ]
+  wallType "blue glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 381.5 259.1 0
+  name "block 178"
+  floorNumber 17
+  corners [ 11.01 14.97, 11.01 -14.97, -11.01 -14.97, -11.01 14.97 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 424.6 -246.6 0
+  name "block 179"
+  floorNumber 39
+  corners [ 15.87 14.67, 15.87 -14.67, -15.87 -14.67, -15.87 14.67 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 425.5 -201.8 0
+  name "block 180"
+  floorNumber 45
+  corners [ 13.52 14.39, 13.52 -14.39, -13.52 -14.39, -13.52 14.39 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 424.9 -161.9 0
+  name "block 181"
+  floorNumber 16
+  corners [ 14.82 14.13, 14.82 -14.13, -14.82 -14.13, -14.82 14.13 ]
+  wallType "windowed building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 421.3 -122.6 0
+  name "block 182"
+  floorNumber 20
+  corners [ 12.02 11.78, 12.02 -11.78, -12.02 -11.78, -12.02 11.78 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 427.4 -81.61 0
+  name "block 183"
+  floorNumber 37
+  corners [ 13.29 11.04, 13.29 -11.04, -13.29 -11.04, -13.29 11.04 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 423.4 -33.87 0
+  name "block 184"
+  floorNumber 16
+  corners [ 12 14.38, 12 -14.38, -12 -14.38, -12 14.38 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 422.4 3.131 0
+  name "block 185"
+  floorNumber 5
+  corners [ 15.75 11.02, 15.75 -11.02, -15.75 -11.02, -15.75 11.02 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 426.6 50.87 0
+  name "block 186"
+  floorNumber 7
+  corners [ 13.94 12.65, 13.94 -12.65, -13.94 -12.65, -13.94 12.65 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 420.5 88.35 0
+  name "block 187"
+  floorNumber 40
+  corners [ 13.63 13.17, 13.63 -13.17, -13.63 -13.17, -13.63 13.17 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 421 128.2 0
+  name "block 188"
+  floorNumber 30
+  corners [ 11.88 12.6, 11.88 -12.6, -11.88 -12.6, -11.88 12.6 ]
+  wallType "glass highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 424.2 176.8 0
+  name "block 189"
+  floorNumber 4
+  corners [ 12.52 12.46, 12.52 -12.46, -12.52 -12.46, -12.52 12.46 ]
+  wallType "highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 424.7 216.5 0
+  name "block 190"
+  floorNumber 10
+  corners [ 12.08 13.81, 12.08 -13.81, -12.08 -13.81, -12.08 13.81 ]
+  wallType "gray glass building"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+SimpleBuilding {
+  translation 422.6 258.6 0
+  name "block 191"
+  floorNumber 12
+  corners [ 11.19 11.89, 11.19 -11.89, -11.19 -11.89, -11.19 11.89 ]
+  wallType "transparent highrise"
+  roofShape "flat roof"
+  roofType "bitumen"
+  enableBoundingObject FALSE
+}
+DEF APF_OVERLAY Group {
+  children [
+    Transform { translation 0.9993 -146.7 0.035 rotation 0 0 1 0 scale 11.0 3.6 1 children [ Shape { appearance PBRAppearance { baseColor 0.55 0.15 0.65 emissiveColor 0.55 0.15 0.65 transparency 0.8 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation 0.9993 -146.7 0.041 rotation 0 0 1 0 scale 7.6 2.6 1 children [ Shape { appearance PBRAppearance { baseColor 0.95 0.15 0.4 emissiveColor 0.95 0.15 0.4 transparency 0.74 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation 0.9993 -146.7 0.047 rotation 0 0 1 0 scale 4.4 1.7 1 children [ Shape { appearance PBRAppearance { baseColor 1 0.55 0.15 emissiveColor 1 0.55 0.15 transparency 0.66 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation 25.3 -151.7 0.035 rotation 0 0 1 0.1424 scale 11.0 3.6 1 children [ Shape { appearance PBRAppearance { baseColor 0.55 0.15 0.65 emissiveColor 0.55 0.15 0.65 transparency 0.8 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation 25.3 -151.7 0.041 rotation 0 0 1 0.1424 scale 7.6 2.6 1 children [ Shape { appearance PBRAppearance { baseColor 0.95 0.15 0.4 emissiveColor 0.95 0.15 0.4 transparency 0.74 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation 25.3 -151.7 0.047 rotation 0 0 1 0.1424 scale 4.4 1.7 1 children [ Shape { appearance PBRAppearance { baseColor 1 0.55 0.15 emissiveColor 1 0.55 0.15 transparency 0.66 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation 44.62 -140.3 0.035 rotation 0 0 1 0.6131 scale 11.0 3.6 1 children [ Shape { appearance PBRAppearance { baseColor 0.55 0.15 0.65 emissiveColor 0.55 0.15 0.65 transparency 0.8 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation 44.62 -140.3 0.041 rotation 0 0 1 0.6131 scale 7.6 2.6 1 children [ Shape { appearance PBRAppearance { baseColor 0.95 0.15 0.4 emissiveColor 0.95 0.15 0.4 transparency 0.74 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation 44.62 -140.3 0.047 rotation 0 0 1 0.6131 scale 4.4 1.7 1 children [ Shape { appearance PBRAppearance { baseColor 1 0.55 0.15 emissiveColor 1 0.55 0.15 transparency 0.66 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation -37 -148 0.035 rotation 0 0 1 0 scale 11.0 3.6 1 children [ Shape { appearance PBRAppearance { baseColor 0.55 0.15 0.65 emissiveColor 0.55 0.15 0.65 transparency 0.8 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation -37 -148 0.041 rotation 0 0 1 0 scale 7.6 2.6 1 children [ Shape { appearance PBRAppearance { baseColor 0.95 0.15 0.4 emissiveColor 0.95 0.15 0.4 transparency 0.74 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Transform { translation -37 -148 0.047 rotation 0 0 1 0 scale 4.4 1.7 1 children [ Shape { appearance PBRAppearance { baseColor 1 0.55 0.15 emissiveColor 1 0.55 0.15 transparency 0.66 roughness 1 metalness 0 } geometry Cylinder { height 0.004 radius 1 subdivision 48 } castShadows FALSE } ] }
+    Shape {
+      appearance PBRAppearance { baseColor 1 0.1 0.2 emissiveColor 1 0.1 0.2 transparency 0.78 roughness 1 metalness 0 }
+      geometry IndexedFaceSet { coord Coordinate { point [ -72 -156.9 0.03, -70 -156.9 0.03, -68 -156.9 0.03, -66 -156.9 0.03, -64 -156.9 0.03, -62 -156.9 0.03, -60 -156.9 0.03, -58 -156.9 0.03, -56 -156.9 0.03, -54 -156.9 0.03, -52 -156.9 0.03, -50 -156.9 0.03, -48 -156.9 0.03, -46 -156.9 0.03, -44 -156.9 0.03, -42 -156.9 0.03, -40 -156.9 0.03, -38 -156.9 0.03, -36 -156.9 0.03, -34 -156.9 0.03, -32 -156.9 0.03, -30 -156.9 0.03, -28 -156.9 0.03, -26 -156.9 0.03, -24 -156.9 0.03, -22 -156.9 0.03, -20 -156.9 0.03, -18 -156.9 0.03, -16 -156.9 0.03, -14 -156.9 0.03, -12 -156.9 0.03, -10 -156.9 0.03, -8.001 -156.9 0.03, -6.001 -156.9 0.03, -4.001 -156.9 0.03, -2.001 -156.9 0.03, -0.0007005 -156.9 0.03, 1.999 -156.9 0.03, 3.999 -156.9 0.03, 5.999 -156.9 0.03, 7.999 -156.9 0.03, 9.999 -156.9 0.03, 12 -156.9 0.03, 14 -156.9 0.03, 16.06 -156.9 0.03, 18.23 -156.9 0.03, 20.47 -156.8 0.03, 22.72 -156.6 0.03, 24.96 -156.3 0.03, 27.2 -156 0.03, 29.44 -155.5 0.03, 31.66 -155 0.03, 33.86 -154.3 0.03, 36.04 -153.6 0.03, 38.19 -152.7 0.03, 40.3 -151.8 0.03, 42.37 -150.8 0.03, 44.39 -149.7 0.03, 46.35 -148.4 0.03, 48.26 -147.2 0.03, 50.11 -145.8 0.03, 51.89 -144.4 0.03, 53.6 -142.9 0.03, 55.25 -141.3 0.03, 56.83 -139.7 0.03, 58.35 -138.1 0.03, 59.79 -136.4 0.03, 61.12 -134.7 0.03, 62.37 -133.2 0.03, 63.62 -131.6 0.03, 64.87 -130 0.03, 66.12 -128.5 0.03, 67.37 -126.9 0.03, 68.62 -125.4 0.03, 69.88 -123.8 0.03, 71.22 -122.1 0.03, -72 -154.6 0.03, -70 -154.6 0.03, -68 -154.6 0.03, -66 -154.6 0.03, -64 -154.6 0.03, -62 -154.6 0.03, -60 -154.6 0.03, -58 -154.6 0.03, -56 -154.6 0.03, -54 -154.6 0.03, -52 -154.6 0.03, -50 -154.6 0.03, -48 -154.6 0.03, -46 -154.6 0.03, -44 -154.6 0.03, -42 -154.6 0.03, -40 -154.6 0.03, -38 -154.6 0.03, -36 -154.6 0.03, -34 -154.6 0.03, -32 -154.6 0.03, -30 -154.6 0.03, -28 -154.6 0.03, -26 -154.6 0.03, -24 -154.6 0.03, -22 -154.6 0.03, -20 -154.6 0.03, -18 -154.6 0.03, -16 -154.6 0.03, -14 -154.6 0.03, -12 -154.6 0.03, -10 -154.6 0.03, -8.001 -154.6 0.03, -6.001 -154.6 0.03, -4.001 -154.6 0.03, -2.001 -154.6 0.03, -0.0007005 -154.6 0.03, 1.999 -154.6 0.03, 3.999 -154.6 0.03, 5.999 -154.6 0.03, 7.999 -154.6 0.03, 9.999 -154.6 0.03, 12 -154.6 0.03, 14 -154.6 0.03, 16.05 -154.6 0.03, 18.19 -154.6 0.03, 20.39 -154.5 0.03, 22.59 -154.3 0.03, 24.78 -154 0.03, 26.97 -153.6 0.03, 29.16 -153.2 0.03, 31.34 -152.7 0.03, 33.49 -152.1 0.03, 35.61 -151.4 0.03, 37.71 -150.6 0.03, 39.77 -149.7 0.03, 41.79 -148.7 0.03, 43.76 -147.6 0.03, 45.68 -146.5 0.03, 47.54 -145.2 0.03, 49.34 -143.9 0.03, 51.09 -142.6 0.03, 52.76 -141.1 0.03, 54.38 -139.6 0.03, 55.93 -138.1 0.03, 57.42 -136.5 0.03, 58.83 -134.9 0.03, 60.14 -133.3 0.03, 61.4 -131.7 0.03, 62.65 -130.1 0.03, 63.89 -128.6 0.03, 65.14 -127 0.03, 66.39 -125.4 0.03, 67.64 -123.9 0.03, 68.9 -122.3 0.03, 70.22 -120.7 0.03, ] } coordIndex [ 0 1 77 76 -1 1 2 78 77 -1 2 3 79 78 -1 3 4 80 79 -1 4 5 81 80 -1 5 6 82 81 -1 6 7 83 82 -1 7 8 84 83 -1 8 9 85 84 -1 9 10 86 85 -1 10 11 87 86 -1 11 12 88 87 -1 12 13 89 88 -1 13 14 90 89 -1 14 15 91 90 -1 15 16 92 91 -1 16 17 93 92 -1 17 18 94 93 -1 18 19 95 94 -1 19 20 96 95 -1 20 21 97 96 -1 21 22 98 97 -1 22 23 99 98 -1 23 24 100 99 -1 24 25 101 100 -1 25 26 102 101 -1 26 27 103 102 -1 27 28 104 103 -1 28 29 105 104 -1 29 30 106 105 -1 30 31 107 106 -1 31 32 108 107 -1 32 33 109 108 -1 33 34 110 109 -1 34 35 111 110 -1 35 36 112 111 -1 36 37 113 112 -1 37 38 114 113 -1 38 39 115 114 -1 39 40 116 115 -1 40 41 117 116 -1 41 42 118 117 -1 42 43 119 118 -1 43 44 120 119 -1 44 45 121 120 -1 45 46 122 121 -1 46 47 123 122 -1 47 48 124 123 -1 48 49 125 124 -1 49 50 126 125 -1 50 51 127 126 -1 51 52 128 127 -1 52 53 129 128 -1 53 54 130 129 -1 54 55 131 130 -1 55 56 132 131 -1 56 57 133 132 -1 57 58 134 133 -1 58 59 135 134 -1 59 60 136 135 -1 60 61 137 136 -1 61 62 138 137 -1 62 63 139 138 -1 63 64 140 139 -1 64 65 141 140 -1 65 66 142 141 -1 66 67 143 142 -1 67 68 144 143 -1 68 69 145 144 -1 69 70 146 145 -1 70 71 147 146 -1 71 72 148 147 -1 72 73 149 148 -1 73 74 150 149 -1 74 75 151 150 -1 ] }
+      castShadows FALSE
+    }
+
+    Shape {
+      appearance PBRAppearance { baseColor 1 0.1 0.2 emissiveColor 1 0.1 0.2 transparency 0.78 roughness 1 metalness 0 }
+      geometry IndexedFaceSet { coord Coordinate { point [ -72 -143.1 0.03, -70 -143.1 0.03, -68 -143.1 0.03, -66 -143.1 0.03, -64 -143.1 0.03, -62 -143.1 0.03, -60 -143.1 0.03, -58 -143.1 0.03, -56 -143.1 0.03, -54 -143.1 0.03, -52 -143.1 0.03, -50 -143.1 0.03, -48 -143.1 0.03, -46 -143.1 0.03, -44 -143.1 0.03, -42 -143.1 0.03, -40 -143.1 0.03, -38 -143.1 0.03, -36 -143.1 0.03, -34 -143.1 0.03, -32 -143.1 0.03, -30 -143.1 0.03, -28 -143.1 0.03, -26 -143.1 0.03, -24 -143.1 0.03, -22 -143.1 0.03, -20 -143.1 0.03, -18 -143.1 0.03, -16 -143.1 0.03, -14 -143.1 0.03, -12 -143.1 0.03, -10 -143.1 0.03, -8.001 -143.1 0.03, -6.001 -143.1 0.03, -4.001 -143.1 0.03, -2.001 -143.1 0.03, -0.0007005 -143.1 0.03, 1.999 -143.1 0.03, 3.999 -143.1 0.03, 5.999 -143.1 0.03, 7.999 -143.1 0.03, 9.999 -143.1 0.03, 12 -143.1 0.03, 14 -143.1 0.03, 15.94 -143.1 0.03, 17.76 -143 0.03, 19.52 -142.9 0.03, 21.26 -142.8 0.03, 22.99 -142.6 0.03, 24.69 -142.3 0.03, 26.37 -141.9 0.03, 28.03 -141.5 0.03, 29.67 -141.1 0.03, 31.28 -140.5 0.03, 32.85 -139.9 0.03, 34.4 -139.2 0.03, 35.92 -138.5 0.03, 37.4 -137.6 0.03, 38.84 -136.8 0.03, 40.26 -135.8 0.03, 41.63 -134.8 0.03, 42.97 -133.7 0.03, 44.27 -132.6 0.03, 45.53 -131.4 0.03, 46.75 -130.2 0.03, 47.93 -128.9 0.03, 49.09 -127.5 0.03, 50.28 -126 0.03, 51.52 -124.5 0.03, 52.77 -122.9 0.03, 54.02 -121.4 0.03, 55.27 -119.8 0.03, 56.52 -118.2 0.03, 57.76 -116.7 0.03, 59 -115.1 0.03, 60.14 -113.7 0.03, -72 -145.4 0.03, -70 -145.4 0.03, -68 -145.4 0.03, -66 -145.4 0.03, -64 -145.4 0.03, -62 -145.4 0.03, -60 -145.4 0.03, -58 -145.4 0.03, -56 -145.4 0.03, -54 -145.4 0.03, -52 -145.4 0.03, -50 -145.4 0.03, -48 -145.4 0.03, -46 -145.4 0.03, -44 -145.4 0.03, -42 -145.4 0.03, -40 -145.4 0.03, -38 -145.4 0.03, -36 -145.4 0.03, -34 -145.4 0.03, -32 -145.4 0.03, -30 -145.4 0.03, -28 -145.4 0.03, -26 -145.4 0.03, -24 -145.4 0.03, -22 -145.4 0.03, -20 -145.4 0.03, -18 -145.4 0.03, -16 -145.4 0.03, -14 -145.4 0.03, -12 -145.4 0.03, -10 -145.4 0.03, -8.001 -145.4 0.03, -6.001 -145.4 0.03, -4.001 -145.4 0.03, -2.001 -145.4 0.03, -0.0007005 -145.4 0.03, 1.999 -145.4 0.03, 3.999 -145.4 0.03, 5.999 -145.4 0.03, 7.999 -145.4 0.03, 9.999 -145.4 0.03, 12 -145.4 0.03, 14 -145.4 0.03, 15.95 -145.4 0.03, 17.81 -145.4 0.03, 19.61 -145.3 0.03, 21.39 -145.1 0.03, 23.16 -144.9 0.03, 24.92 -144.6 0.03, 26.65 -144.2 0.03, 28.36 -143.8 0.03, 30.05 -143.3 0.03, 31.71 -142.7 0.03, 33.33 -142.1 0.03, 34.93 -141.3 0.03, 36.5 -140.5 0.03, 38.03 -139.7 0.03, 39.52 -138.7 0.03, 40.98 -137.7 0.03, 42.39 -136.7 0.03, 43.77 -135.5 0.03, 45.11 -134.3 0.03, 46.4 -133.1 0.03, 47.66 -131.8 0.03, 48.87 -130.4 0.03, 50.05 -129 0.03, 51.25 -127.5 0.03, 52.49 -125.9 0.03, 53.74 -124.4 0.03, 54.99 -122.8 0.03, 56.24 -121.3 0.03, 57.49 -119.7 0.03, 58.74 -118.1 0.03, 59.98 -116.6 0.03, 61.13 -115.1 0.03, ] } coordIndex [ 0 1 77 76 -1 1 2 78 77 -1 2 3 79 78 -1 3 4 80 79 -1 4 5 81 80 -1 5 6 82 81 -1 6 7 83 82 -1 7 8 84 83 -1 8 9 85 84 -1 9 10 86 85 -1 10 11 87 86 -1 11 12 88 87 -1 12 13 89 88 -1 13 14 90 89 -1 14 15 91 90 -1 15 16 92 91 -1 16 17 93 92 -1 17 18 94 93 -1 18 19 95 94 -1 19 20 96 95 -1 20 21 97 96 -1 21 22 98 97 -1 22 23 99 98 -1 23 24 100 99 -1 24 25 101 100 -1 25 26 102 101 -1 26 27 103 102 -1 27 28 104 103 -1 28 29 105 104 -1 29 30 106 105 -1 30 31 107 106 -1 31 32 108 107 -1 32 33 109 108 -1 33 34 110 109 -1 34 35 111 110 -1 35 36 112 111 -1 36 37 113 112 -1 37 38 114 113 -1 38 39 115 114 -1 39 40 116 115 -1 40 41 117 116 -1 41 42 118 117 -1 42 43 119 118 -1 43 44 120 119 -1 44 45 121 120 -1 45 46 122 121 -1 46 47 123 122 -1 47 48 124 123 -1 48 49 125 124 -1 49 50 126 125 -1 50 51 127 126 -1 51 52 128 127 -1 52 53 129 128 -1 53 54 130 129 -1 54 55 131 130 -1 55 56 132 131 -1 56 57 133 132 -1 57 58 134 133 -1 58 59 135 134 -1 59 60 136 135 -1 60 61 137 136 -1 61 62 138 137 -1 62 63 139 138 -1 63 64 140 139 -1 64 65 141 140 -1 65 66 142 141 -1 66 67 143 142 -1 67 68 144 143 -1 68 69 145 144 -1 69 70 146 145 -1 70 71 147 146 -1 71 72 148 147 -1 72 73 149 148 -1 73 74 150 149 -1 74 75 151 150 -1 ] }
+      castShadows FALSE
+    }
+
+    Pose { translation -5.741 -147.9 2.5 rotation -0.3907 0.9205 0 1.5708 children [ Shape { appearance PBRAppearance { baseColor 1 0.77 0.1 emissiveColor 1 0.77 0.1 roughness 1 metalness 0 } geometry Cylinder { height 13.6 radius 0.2 } castShadows FALSE } ] }
+    Pose { translation 1.163 -145 2.5 rotation -0.3907 0.9205 0 1.5708 children [ Shape { appearance PBRAppearance { baseColor 1 0.77 0.1 emissiveColor 1 0.77 0.1 roughness 1 metalness 0 } geometry Cone { height 1.4 bottomRadius 0.52 } castShadows FALSE } ] }
+
+    Pose { translation 0.492 -148 2.5 rotation 0.9289 -0.3704 0 1.5708 children [ Shape { appearance PBRAppearance { baseColor 1 0.15 0.3 emissiveColor 1 0.15 0.3 roughness 1 metalness 0 } geometry Cylinder { height 7.1 radius 0.2 } castShadows FALSE } ] }
+    Pose { translation -1.082 -152 2.5 rotation 0.9289 -0.3704 0 1.5708 children [ Shape { appearance PBRAppearance { baseColor 1 0.15 0.3 emissiveColor 1 0.15 0.3 roughness 1 metalness 0 } geometry Cone { height 1.4 bottomRadius 0.52 } castShadows FALSE } ] }
+
+    Pose { translation -7.565 -151.4 2.5 rotation 0.1875 0.9823 0 1.5708 children [ Shape { appearance PBRAppearance { baseColor 0.15 1 0.55 emissiveColor 0.15 1 0.55 roughness 1 metalness 0 } geometry Cylinder { height 9.032 radius 0.26 } castShadows FALSE } ] }
+    Pose { translation -2.235 -152.5 2.5 rotation 0.1875 0.9823 0 1.5708 children [ Shape { appearance PBRAppearance { baseColor 0.15 1 0.55 emissiveColor 0.15 1 0.55 roughness 1 metalness 0 } geometry Cone { height 1.82 bottomRadius 0.676 } castShadows FALSE } ] }
+
+    Shape {
+      appearance Appearance { material Material { diffuseColor 0.3 0.85 1 emissiveColor 0.3 0.85 1 } }
+      geometry IndexedLineSet { coord Coordinate { point [ -8.101 -150.6 0.75, -8.101 -157.1 0.75, -7.76 -157.1 0.75, -7.421 -157.1 0.75, -7.084 -157 0.75, -6.697 -157.2 0.75, -6.354 -157.1 0.75, -6.015 -157 0.75, -5.592 -157.1 0.75, -5.152 -157.2 0.75, -4.809 -157.1 0.75, -4.351 -157.1 0.75, -3.88 -157.1 0.75, -3.398 -157.1 0.75, -2.909 -157 0.75, -2.246 -157.1 0.75, -1.56 -157.1 0.75, -0.855 -157.1 0.75, -0.1349 -157.1 0.75, 0.7985 -157.1 0.75, 1.963 -157.1 0.75, 3.158 -157.1 0.75, 4.596 -157.1 0.75, 6.288 -157 0.75, 8.704 -157.1 0.75, 11.63 -157 0.75, 15.81 -157 0.75, 21.24 -156.8 0.75, 26.72 -156.1 0.75, 31.68 -154.8 0.75, 23.61 -152.3 0.75, 25.9 -150.6 0.75, 31.84 -148.5 0.75, 31.68 -146.4 0.75, 31.41 -144.3 0.75, 31.03 -142.3 0.75, 2.766 -147.7 0.75, 0.9344 -147.7 0.75, -0.3986 -147.6 0.75, -0.7923 -147.3 0.75, -0.9726 -147 0.75, -0.956 -146.5 0.75, -0.972 -146 0.75, 2.417 -143 0.75, 1.419 -142.9 0.75, 0.4455 -142.9 0.75, -0.4993 -143 0.75, -1.242 -143 0.75, -1.807 -142.8 0.75, -2.517 -142.9 0.75, -3.063 -142.8 0.75, -3.601 -142.8 0.75, -4.128 -142.8 0.75, -4.643 -142.8 0.75, -5.144 -142.9 0.75, -5.629 -143 0.75, -6.03 -142.9 0.75, -6.437 -142.8 0.75, -6.888 -142.9 0.75, -7.291 -142.9 0.75, -7.695 -142.9 0.75, -8.101 -142.8 0.75, ] } coordIndex [ 0 1 -1 0 2 -1 0 3 -1 0 4 -1 0 5 -1 0 6 -1 0 7 -1 0 8 -1 0 9 -1 0 10 -1 0 11 -1 0 12 -1 0 13 -1 0 14 -1 0 15 -1 0 16 -1 0 17 -1 0 18 -1 0 19 -1 0 20 -1 0 21 -1 0 22 -1 0 23 -1 0 24 -1 0 25 -1 0 26 -1 0 27 -1 0 28 -1 0 29 -1 0 30 -1 0 31 -1 0 32 -1 0 33 -1 0 34 -1 0 35 -1 0 36 -1 0 37 -1 0 38 -1 0 39 -1 0 40 -1 0 41 -1 0 42 -1 0 43 -1 0 44 -1 0 45 -1 0 46 -1 0 47 -1 0 48 -1 0 49 -1 0 50 -1 0 51 -1 0 52 -1 0 53 -1 0 54 -1 0 55 -1 0 56 -1 0 57 -1 0 58 -1 0 59 -1 0 60 -1 0 61 -1 ] }
+      castShadows FALSE
+    }
+
+  ]
+}
+DEF SUPERVISOR Robot {
+  name "gym_env_bridge"
+  controller "shot_supervisor"
+  supervisor TRUE
+}
