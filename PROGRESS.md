@@ -325,3 +325,11 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     impact reading gave it. The last readings before each wall show a correct estimate. The midday text stays in
     `docs/experiments.md` with a dated correction under it, and the median-gated estimate built on it (E35c) is
     kept as a tested idea that did not help on its own.
+43. **The laptop crashed mid-experiment (Nov 10, ~10:23).** The machine went down and then took a long series of
+    failed boots before Windows came back (the user reports this happens repeatedly; the cause is not known yet and
+    is being looked at separately). All three running lanes died. What was saved survived: lane Z's stage-1 models,
+    the finished Track2 evaluation. What was in memory was lost: the second stage of two trainings (~800k steps
+    each) and 210 of 240 five-opponent races, because `racing/evaluate.py` writes its JSON only at the end. Recovery
+    (lane AC) continues training from the saved stage 1 into new `_from_stage1` folders instead of restarting, and
+    the crashed folders and partial logs are kept (E38). Lesson: long evaluations should save partial results as
+    they go, so a crash costs minutes, not hours.

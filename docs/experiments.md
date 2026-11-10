@@ -817,6 +817,21 @@ shield) and AA (Track2, five opponents) decide it.
 - Note 2026-11-10: the laptop slept overnight, so lanes Z and AA paused and resumed on their own around 09:10.
   The pause start is estimated, not logged: lane Z was at 1.15M of 3.5M steps at 09:12, about one hour of training
   after its 22:05 start, and Track2 went from 50 to 80 of 240 races between 23:06 and 09:12.
+- **Result 2026-11-10, Track2 (unseen track, lane AA, `results/eval_widemu_Track2.json`):** E37 B finishes 110 of
+  120 races (3 seeds x 20 race seeds x nominal + randomised), E29 106 of 120 (Fisher p = 0.52, no real difference).
+  Wall hits 1 vs 2, laps about the same (31.7-33.4 s vs 31.4-33.1 s), shield active 4-9% of steps vs 8-14%, time
+  above 90% grip 4-10% vs 7-12%. So the wide-friction policy keeps its lead in grip margin on a track it never
+  saw, and does not lose anything there, but Track2 at normal friction does not separate the two.
+- **Crash 2026-11-10 ~10:23:** the laptop went down (PROGRESS 43) and killed all three lanes. Lane Z had saved
+  stage 1 (1.5M steps) of both trainings and was at 2.3M of 3.5M (stage 2 not saved). Lane AA was at 210 of 240
+  races of `stress_opp5_widemu`, which saves only at the end, so those races are lost (log kept as
+  `runs/_stress_opp5_widemu_crashed_2026-11-10.log`). Lane AB had not started.
+- **Recovery (lane AC, `scripts/queue_lane_ac.sh`, started 11:13):** with the report due Nov 13, stages 2-3 are
+  trained from the saved stage-1 model (`--init`, which restores the policy, the Adam state and the reward
+  normalisation; same constant learning rate) into new folders `runs/ppo_residual_widemu_s<seed>_from_stage1`. The
+  crashed folders stay as they were. Differences from an uninterrupted run: the random state at the start of stage
+  2, and step counts in the new logs restart at 0 (add 1.5M). Results are reported under the `_from_stage1` names.
+  Lanes AA (five opponents, from scratch) and AB (x0.6, x1.3, one opponent) were restarted unchanged.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
