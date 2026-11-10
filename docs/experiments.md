@@ -851,8 +851,28 @@ shield) and AA (Track2, five opponents) decide it.
   their limit 8% of the time. Seed 2 of both recipes finishes almost nothing (2/20 and 1/20). The wide-range
   training buys margin inside its range (59/60 at x0.7) but not below it. The shield's online friction estimate
   (part of the combined shield) reads about 0.58-0.60 within a few seconds of the start, so the shield knows the
-  grip; the races still end at walls. Why is not traced yet: candidates are the base PID+APF speed profile, which
-  plans with nominal grip, and a shield that can no longer find a safe action at this grip (shield active 27-33%).
+  grip; the races still end at walls. Why is not traced yet. (Correction, same afternoon: an earlier draft of this
+  bullet said the base PID+APF speed profile plans with nominal grip. It plans with the *true* friction, see E39.)
+
+## E39. Does the base controller's friction knowledge carry the stress results? (lane AD, queued 2026-11-10)
+- **Finding (PROGRESS 44):** since the first build, the classical base controllers have been given the car's true
+  friction: the residual policy's PID base (`racing/env.py`), the stall-recovery PID, and the Pure Pursuit and
+  PID+APF baselines (`racing/evaluate.py`) all build their grip-limited speed profile from `env.mu`, the friction
+  the simulator actually uses. Plain PPO does not see it. At nominal friction this changes nothing (true = nominal).
+  In randomised races (x0.85-1.15) and in the friction stress tests the base slows down for low grip by itself,
+  using knowledge a real car would not have, while the shield had to assume or estimate the friction.
+- **Option:** `EnvConfig.base_mu` / `evaluate --base_mu` = `true` (default, all earlier results), `nominal`, or
+  `estimate` (the shield's online estimate; the profile is recomputed when it moves by more than 0.02). With the
+  default the code reproduces the old races exactly (checked race by race). For PID+APF there is no estimate, so
+  only `nominal` is run; its `true` reference is `results/stress_mu{0.6,0.7,0.8}.json`.
+- **Smoke test (2 races, 1 lap, x0.7, E37 B seed 0):** both races finish in every mode; the shield is active 10% of
+  steps with `true`, 24% with `nominal` and 10% with `estimate`. So the estimate should recover what the base loses.
+- **Lane AD** (`scripts/queue_lane_ad.sh`, after lane AB): E29 and E37 B policies (3 seeds each, combined shield)
+  at x0.7, x0.8 and x0.6 with `nominal` and `estimate`, plus PID+APF with `nominal`; 20 race seeds each,
+  `results/stress_mu<m>_base<mode>.json`. Compare with the `true` runs of E37/E38.
+- **What it decides:** if `estimate` matches `true`, the stress results stand with an honest base (and the report
+  should say the base uses the estimate). If `nominal` collapses, the report must state that the base used the
+  true friction in the stress tests.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and

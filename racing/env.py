@@ -12,7 +12,7 @@ from dataclasses import dataclass, field, asdict
 import gymnasium as gym
 import numpy as np
 
-from .controllers import PIDFollower, PurePursuit
+from .controllers import PIDFollower, PurePursuit, curvature_speed_profile
 from .shield import APFShield, ShieldConfig, BEAM_ANG
 from .tires import set_tire_model, set_traction_control
 from .sim import DEFAULT_PARAMS, Centerline, make_f110, set_scan_flags
@@ -20,6 +20,17 @@ from .sim import DEFAULT_PARAMS, Centerline, make_f110, set_scan_flags
 S_MAX = DEFAULT_PARAMS["s_max"]
 N_LIDAR_OBS = 60
 LIDAR_CLIP = 10.0
+
+
+_PROFILES = {}
+
+
+def _profile(cl, mu, v_cap=20.0):
+    """Grip-limited speed profile, cached by track and friction rounded to 0.005 (E39 base_mu="estimate")."""
+    key = (id(cl), round(mu / 0.005))
+    if key not in _PROFILES:
+        _PROFILES[key] = curvature_speed_profile(cl, round(mu / 0.005) * 0.005, v_cap)
+    return _PROFILES[key]
 
 
 @dataclass
@@ -57,6 +68,11 @@ class EnvConfig:
     # recover_hdg off the track direction (or within 0.5 m of the edge), take over: reverse with the steering that
     # swings the nose back toward the track direction, then follow the centerline forward, then hand back.
     # Every recovery command still goes through the shield.
+    # E39: what friction the classical base controllers (residual base PID, stall-recovery PID, and in evaluate.py the
+    # Pure Pursuit / PID+APF baselines) plan their speed profile with. "true" = the car's actual friction (as built
+    # on Nov 4: privileged knowledge a real car would not have), "nominal" = the nominal value, "estimate" = the
+    # shield's online friction estimate (needs ShieldConfig.mu_est; the profile is recomputed when it moves by > 0.02).
+    base_mu: str = "true"
     recover: bool = False
     recover_window: float = 1.5
     recover_dist: float = 0.3
@@ -162,6 +178,16 @@ class RaceEnv(gym.Env):
         return np.concatenate(parts).astype(np.float32)
 
     # --------------------------------------------------------------- gym API
+    def base_mu(self):
+        """Friction the classical base controllers plan with (EnvConfig.base_mu, E39)."""
+        if self.cfg.base_mu == "true":
+            return self.mu
+        if self.cfg.base_mu == "nominal":
+            return DEFAULT_PARAMS["mu"]
+        if self.cfg.base_mu == "estimate":
+            return DEFAULT_PARAMS["mu"] * self.shield.mu_hat
+        raise ValueError(self.cfg.base_mu)
+
     def reset(self, seed=None, options=None):
         if seed is not None:
             self.rng = np.random.default_rng(seed)
@@ -216,7 +242,8 @@ class RaceEnv(gym.Env):
         self.shield.reset()
         self.shield_on = c.shield_prob >= 1.0 or self.rng.random() < c.shield_prob
         if c.residual:
-            self.base_pid = PIDFollower(self.cl, c.control_dt, speed_scale=0.85, mu=self.mu)
+            self.base_pid = PIDFollower(self.cl, c.control_dt, speed_scale=0.85, mu=self.base_mu())
+            self._base_mu_used = self.base_mu()
             self.base_apf.reset()
         self.pass_state = {i: {"ahead_since": None, "rewarded": False} for i in range(1, self.n)}
         self.scan = self.sim.unwrapped.sim.agent_scans[0].copy()
@@ -236,7 +263,7 @@ class RaceEnv(gym.Env):
         if self.rec_phase == "rev":
             if abs(h) < 0.15 or self.t - self.rec_t0 >= c.recover_rev_time:
                 self.rec_phase, self.rec_t0 = "fwd", self.t
-                self.rec_pid = PIDFollower(self.cl, c.control_dt, mu=self.mu)
+                self.rec_pid = PIDFollower(self.cl, c.control_dt, mu=self.base_mu())
             else:
                 # reversing (v < 0) turns the nose the opposite way to the steering, so steer toward the error
                 return np.array([np.sign(h) * S_MAX, -1.0])
@@ -271,6 +298,9 @@ class RaceEnv(gym.Env):
         opps_world = [(st[i, 0], st[i, 1], st[i, 4], st[i, 3], st[i, 5]) for i in range(1, self.n)]
         if c.residual:
             e = st[0]
+            if c.base_mu == "estimate" and abs(self.base_mu() - self._base_mu_used) > 0.02 * DEFAULT_PARAMS["mu"]:
+                self._base_mu_used = self.base_mu()
+                self.base_pid.profile = _profile(self.cl, self._base_mu_used) * 0.85
             base = np.array(self.base_pid.act(e[0], e[1], e[4], e[3]))
             base, _, _ = self.base_apf(base, e.copy(), None, self.scan, near, opps_world)
             act = np.clip(np.asarray(action, float), -1, 1)

@@ -78,10 +78,10 @@ class OvertakeTracker:
 
 def make_controller(name, env, model_path=None, model=None):
     if name == "pure_pursuit":
-        pp = PurePursuit(env.cl, speed_scale=0.85, mu=env.mu)
+        pp = PurePursuit(env.cl, speed_scale=0.85, mu=env.base_mu())  # E39: true friction unless --base_mu
         return lambda obs: env.to_normalized(pp.act(*_ego(env)))
     if name == "pid_apf":
-        pid = PIDFollower(env.cl, env.cfg.control_dt, speed_scale=0.85, mu=env.mu)
+        pid = PIDFollower(env.cl, env.cfg.control_dt, speed_scale=0.85, mu=env.base_mu())
         return lambda obs: env.to_normalized(pid.act(*_ego(env)))
     if name.startswith("ppo") and model_path == "zero":
         # control: residual controllers with the policy output fixed at 0 (base controller + shield only)
@@ -176,7 +176,8 @@ def run_race(job):
     cfg = EnvConfig(curvature_preview=preview, n_opp=n_opp, opp_speed=(0.5, 0.75), random_start=True, randomize=randomize,
                     shield=ShieldConfig(**sh), episode_time=laps * 70.0, seed=seed,
                     residual=ctrl.startswith("ppo_residual"), tire=tire, recover=ctrl in RECOVER,
-                    map_name=map_name, residual_scale=residual_scale_for(model_path), **env_extra)
+                    map_name=map_name, residual_scale=residual_scale_for(model_path),
+                    base_mu=extra.get("base_mu", "true"), **env_extra)
     env = RaceEnv(cfg)
     rng = np.random.default_rng(seed)
     opts = dict(s_ego=3.0, opp_gaps=list(np.cumsum(rng.uniform(5.0, 15.0, 3))),
@@ -377,12 +378,17 @@ if __name__ == "__main__":
     ap.add_argument("--mu_scale", type=float, default=None, help="race once at this fixed friction scale (stress test)")
     ap.add_argument("--shield_mu", action="store_true", help="with --mu_scale: the shield's predictor knows the friction")
     ap.add_argument("--n_opp", type=int, default=3, help="number of opponents (stress test)")
+    ap.add_argument("--base_mu", default="true", choices=["true", "nominal", "estimate"],
+                    help="friction the classical base controllers plan with (E39); the baselines have no estimate, "
+                         "so for them 'estimate' acts as 'nominal' (their shield has no friction estimate)")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     models = dict(m.split("=", 1) for m in args.models)
     jobs = []
     conds = (True,) if args.mu_scale is not None else (False, True)
     extra = dict(n_opp=args.n_opp, mu_scale=args.mu_scale, shield_mu=args.shield_mu)
+    if args.base_mu != "true":  # only when set, so the partial-file header and jobs of older commands are unchanged
+        extra["base_mu"] = args.base_mu
     for randomize in conds:
         for c in args.controllers:
             base = c.split("@")[0]
@@ -393,6 +399,8 @@ if __name__ == "__main__":
     partial = args.out + ".partial.jsonl"
     header = dict(controllers=args.controllers, models=args.models, races=args.races, first=args.first, laps=args.laps,
                   tire=args.tire, map=args.map, mu_scale=args.mu_scale, shield_mu=args.shield_mu, n_opp=args.n_opp)
+    if args.base_mu != "true":
+        header["base_mu"] = args.base_mu
     res = run_all(jobs, args.procs, partial=partial, header=header)
     report = {}
     for randomize in conds:
@@ -408,5 +416,6 @@ if __name__ == "__main__":
                   f" ot {s['overtake_successes']}/{s['overtake_attempts']}  shield {s['shield_freq']:.2f}"
                   f"  grip>90% {s['grip_above_90']:.3f} (>100% {s['grip_above_100']:.3f})  slip>15 {s['slip_above_15']:.3f}")
     with open(args.out, "w") as f:
-        json.dump(dict(map=args.map, mu_scale=args.mu_scale, n_opp=args.n_opp, report=report, races=res), f)
+        json.dump(dict(map=args.map, mu_scale=args.mu_scale, n_opp=args.n_opp, base_mu=args.base_mu, report=report,
+                       races=res), f)
     os.remove(partial)  # everything in it is now in args.out

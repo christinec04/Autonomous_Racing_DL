@@ -333,3 +333,11 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     (lane AC) continues training from the saved stage 1 into new `_from_stage1` folders instead of restarting, and
     the crashed folders and partial logs are kept (E38). Lesson: long evaluations should save partial results as
     they go, so a crash costs minutes, not hours.
+44. **The base controllers knew the true friction (found Nov 10).** While tracing the x0.6 failures, the residual
+    policy's PID base turned out to build its speed profile from `env.mu`, the friction the simulator actually
+    uses, and so do the stall-recovery PID and the Pure Pursuit / PID+APF baselines. It has been so since the first
+    build (Nov 4). At nominal friction it makes no difference; in randomised races and friction stress tests the
+    base slows for low grip using knowledge a real car would not have. Nothing was hidden, it was just never
+    written down, and the shield-centred write-ups ("the shield assumes nominal friction") read as if no part of
+    the controller knew it. New option `base_mu` (true / nominal / estimate), default unchanged and checked to
+    reproduce old races exactly; E39 (lane AD) measures how much the stress results depend on it.
