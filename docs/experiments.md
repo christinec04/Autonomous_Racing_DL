@@ -853,6 +853,10 @@ shield) and AA (Track2, five opponents) decide it.
   (part of the combined shield) reads about 0.58-0.60 within a few seconds of the start, so the shield knows the
   grip; the races still end at walls. Why is not traced yet. (Correction, same afternoon: an earlier draft of this
   bullet said the base PID+APF speed profile plans with nominal grip. It plans with the *true* friction, see E39.)
+- **Result 2026-11-10, friction x1.3 (lane AB, `results/stress_mu1.3_widemu.json`, 46 of its 120 races from the
+  pre-stop checkpoint):** E37 B 56 of 60, E29 48 of 60 (p = 0.06, borderline). No wall hits for either; races with
+  a car contact 4 vs 12. With more grip than trained for, both use under 1% of it above 90%, so the failures are
+  traffic, and the wide-friction policy again has fewer contacts (as with five opponents). Laps 32.7 vs 32.0 s.
 
 ## E39. Does the base controller's friction knowledge carry the stress results? (lane AD, queued 2026-11-10)
 - **Finding (PROGRESS 44):** since the first build, the classical base controllers have been given the car's true
