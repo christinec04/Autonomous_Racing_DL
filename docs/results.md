@@ -51,6 +51,16 @@ Numbers are seed 0, nominal, 20 races x 5 laps unless noted.
 | Missed grip target | the final controller spends 8.8% of the race above 90% of mu g (target 10%) | the target measures throttle style, not cornering (row above); report cornering grip instead |
 | Training efficiency (steps to first clean lap) unchanged | 150-200k with or without the shield (3 seeds each); the shield's gain is in crashes during training (above) | - |
 
+## Update 2026-11-10
+
+- The laptop crashed at about 10:23 and killed the running lanes (PROGRESS 43). Saved work survived; the E38
+  trainings continue from their saved stage 1 (lane AC) and evaluations now save every race as it finishes.
+- E37 B (wide friction range) vs E29, both with the combined shield ([analysis](../results/analysis/2026-11-10.md)):
+  unseen Track2 110 vs 106 of 120 (p = 0.52, no difference); five opponents 112 vs 101 of 120 (p = 0.04), car
+  contact in 7 vs 16 races. E37 B uses the shield about half as often and stays above 90% grip about half as long.
+- Running: lane AC (E38 control, trainings then races, ~14:30), lane AB (x0.6, x1.3, one opponent).
+- Background on the project before this repo: [background.md](background.md).
+
 ## Running now (2026-11-09)
 
 - Lane T (`scripts/queue_lane_t.sh`): one and five opponent stress tests after the counter fix (PROGRESS 40),

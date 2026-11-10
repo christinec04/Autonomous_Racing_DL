@@ -832,6 +832,12 @@ shield) and AA (Track2, five opponents) decide it.
   crashed folders stay as they were. Differences from an uninterrupted run: the random state at the start of stage
   2, and step counts in the new logs restart at 0 (add 1.5M). Results are reported under the `_from_stage1` names.
   Lanes AA (five opponents, from scratch) and AB (x0.6, x1.3, one opponent) were restarted unchanged.
+- **Result 2026-11-10, five opponents (lane AA rerun, `results/stress_opp5_widemu.json`):** E37 B finishes 112 of
+  120 races, E29 101 of 120 (Fisher p = 0.04). The difference is car contact: races with a car contact 7 vs 16,
+  races with a wall hit 0 vs 1. E37 B passes slightly fewer cars (5.8 vs 6.0 per race) and laps 0.7 s slower
+  (34.9 vs 34.1 s), with the shield active 5.5% of steps vs 10.1% and above 90% grip 6.1% vs 11.0% of the time.
+  Same pattern as at x0.7: the wide-friction policy leaves margin, and in heavy traffic that margin turns into
+  fewer contacts. Analysis: `results/analysis/2026-11-10.md`.
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
