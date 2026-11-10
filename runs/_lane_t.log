@@ -1,0 +1,26 @@
+10:04 stress_opp1_v2 start
+10:24 stress_opp1_v2 done
+10:25 stress_opp5_v2 start
+10:51 stress_opp5_v2 done
+10:51 stress_mu0.7_mu2 start
+11:09 stress_mu0.7_mu2 done
+To https://github.com/christinec04/Autonomous_Racing_DL
+ ! [rejected]        gabe-build -> gabe-build (non-fast-forward)
+error: failed to push some refs to 'https://github.com/christinec04/Autonomous_Racing_DL'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+To https://github.com/christinec04/Autonomous_Racing_DL
+ ! [rejected]        gabe-build -> gabe-build (non-fast-forward)
+error: failed to push some refs to 'https://github.com/christinec04/Autonomous_Racing_DL'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+11:10 eval_mu2 start
+11:23 eval_mu2 done
+To https://github.com/christinec04/Autonomous_Racing_DL
+ ! [remote rejected] gabe-build -> gabe-build (cannot lock ref 'refs/heads/gabe-build': is at 01ced5fa35409edbf479d77f168533c5e3ee60b5 but expected b4a5109fa946811a5b4e882f7eb35e00662c89d3)
+error: failed to push some refs to 'https://github.com/christinec04/Autonomous_Racing_DL'
+11:24 all done

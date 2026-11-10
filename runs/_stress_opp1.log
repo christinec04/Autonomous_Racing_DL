@@ -1,0 +1,31 @@
+concurrent.futures.process._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\concurrent\futures\process.py", line 261, in _process_worker
+    r = call_item.fn(*call_item.args, **call_item.kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\shore\gabe\Autonomous_Racing_DL\racing\evaluate.py", line 203, in run_race
+    ot.update(info["t"], info["progress"], info["lat"], v * np.cos(info["hdg_err"]), info["opp_prog"],
+  File "C:\Users\shore\gabe\Autonomous_Racing_DL\racing\evaluate.py", line 54, in update
+    g = (prog - opp_prog[i] + L / 2) % L - L / 2  # + = ego ahead
+                ~~~~~~~~^^^
+IndexError: index 1 is out of bounds for axis 0 with size 1
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\shore\gabe\Autonomous_Racing_DL\racing\evaluate.py", line 336, in <module>
+    res = run_all(jobs, args.procs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\shore\gabe\Autonomous_Racing_DL\racing\evaluate.py", line 300, in run_all
+    res[futs[f]] = f.result()
+                   ^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+IndexError: index 1 is out of bounds for axis 0 with size 1

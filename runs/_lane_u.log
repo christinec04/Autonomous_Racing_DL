@@ -1,0 +1,18 @@
+10:04 eval_oxmu start
+10:48 eval_oxmu done
+10:48 stress_mu0.8_oxmu start
+10:59 stress_mu0.8_oxmu done
+To https://github.com/christinec04/Autonomous_Racing_DL
+ ! [rejected]        gabe-build -> gabe-build (non-fast-forward)
+error: failed to push some refs to 'https://github.com/christinec04/Autonomous_Racing_DL'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+fatal: unable to access 'https://github.com/christinec04/Autonomous_Racing_DL/': Could not resolve host: github.com
+11:09 stress_mu0.7_oxmu start
+11:21 stress_mu0.7_oxmu done
+To https://github.com/christinec04/Autonomous_Racing_DL
+ ! [remote rejected] gabe-build -> gabe-build (cannot lock ref 'refs/heads/gabe-build': is at b4a5109fa946811a5b4e882f7eb35e00662c89d3 but expected 6aee503cc7b13ee704c47f3f523622737bf56ef1)
+error: failed to push some refs to 'https://github.com/christinec04/Autonomous_Racing_DL'
+11:21 all done

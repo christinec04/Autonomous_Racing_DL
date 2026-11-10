@@ -1,0 +1,20 @@
+10/120 races
+20/120 races
+30/120 races
+40/120 races
+50/120 races
+60/120 races
+70/120 races
+80/120 races
+90/120 races
+100/120 races
+110/120 races
+120/120 races
+
+=== randomized ===
+pid_apf       finished 17/20 (stuck 0)  lap 41.86 (best 33.32)  coll/10laps 0.34 (wall 0, car 3)  passes/race 1.05 ot 21/42  shield 0.95  grip>90% 0.001 (>100% 0.000)  slip>15 0.000
+ppo_additive  finished 17/20 (stuck 0)  lap 45.3 (best 40.4)  coll/10laps 0.31 (wall 3, car 0)  passes/race 0.35 ot 7/9  shield 0.07  grip>90% 0.001 (>100% 0.000)  slip>15 0.044
+ppo_apf_rec@s0 finished 20/20 (stuck 0)  lap 36.55 (best 32.28)  coll/10laps 0.00 (wall 0, car 0)  passes/race 1.85 ot 37/58  shield 0.03  grip>90% 0.003 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec@trained finished 17/20 (stuck 0)  lap 31.23 (best 30.48)  coll/10laps 0.34 (wall 0, car 3)  passes/race 3.65 ot 73/74  shield 0.11  grip>90% 0.007 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec@trained_s1 finished 17/20 (stuck 0)  lap 31.7 (best 30.36)  coll/10laps 0.34 (wall 0, car 3)  passes/race 3.20 ot 64/70  shield 0.09  grip>90% 0.003 (>100% 0.000)  slip>15 0.000
+ppo_residual_apf_rec@trained_s2 finished 18/20 (stuck 0)  lap 31.76 (best 30.6)  coll/10laps 0.22 (wall 0, car 2)  passes/race 3.70 ot 74/77  shield 0.06  grip>90% 0.002 (>100% 0.000)  slip>15 0.000

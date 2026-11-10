@@ -1,0 +1,10 @@
+13:53 stress_mu0.7_oxmed start
+14:03 stress_mu0.7_oxmed done
+14:03 stress_mu0.7_oxmu2med start
+14:13 stress_mu0.7_oxmu2med done
+14:13 eval_oxmu2med start
+14:56 eval_oxmu2med done
+To https://github.com/christinec04/Autonomous_Racing_DL
+ ! [remote rejected] gabe-build -> gabe-build (cannot lock ref 'refs/heads/gabe-build': is at b487d6767072d099ae44a2974c41cbc7ae6314e6 but expected 1351e6c8708da1be48708ae6150e2758d3e768cb)
+error: failed to push some refs to 'https://github.com/christinec04/Autonomous_Racing_DL'
+14:57 all done
