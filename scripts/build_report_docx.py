@@ -1,7 +1,8 @@
 """Word version of the mid-term report, made from report/midterm.tex and the compiled report/midterm.pdf.
 
 Figures: the PDF figures become PNGs, the TikZ architecture diagram is cropped from the compiled PDF (page 1, above
-the Fig. 1 caption). Then pandoc (pypandoc_binary) converts the LaTeX to report/midterm.docx, a copy is archived in
+the Fig. 1 caption). Then pandoc (pypandoc_binary) converts the LaTeX to report/midterm.docx and scripts/ieee_docx.py gives it the IEEE
+conference layout (two columns, Times 10 pt, IEEE headings and captions), a copy is archived in
 report/history/ next to the PDF builds and one goes to ~/Downloads/midterm_report_draft.docx.
 Run after scripts/build_report.sh:  python scripts/build_report_docx.py
 """
@@ -12,6 +13,8 @@ import shutil
 
 import fitz
 import pypandoc
+
+from ieee_docx import ieee_format
 
 REP = pathlib.Path(__file__).resolve().parent.parent / "report"
 TMP = REP / "docx_build"
@@ -43,6 +46,7 @@ def main():
     out = REP / "midterm.docx"
     pypandoc.convert_file(str(TMP / "midterm_docx.tex"), "docx", outputfile=str(out),
                           extra_args=[f"--resource-path={TMP}", "--number-sections"])
+    ieee_format(out)  # two columns, Times 10 pt, IEEE headings and captions (scripts/ieee_docx.py)
     stamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
     shutil.copy(out, REP / "history" / f"midterm_{stamp}_build.docx")
     shutil.copy(out, pathlib.Path.home() / "Downloads" / "midterm_report_draft.docx")
