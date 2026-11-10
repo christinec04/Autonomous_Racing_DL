@@ -811,7 +811,11 @@ shield) and AA (Track2, five opponents) decide it.
 - Lane AA, generalisation: E37 B seeds 0-2 against E29 seeds 0-2, both raced with the combined shield, on the
   unseen Track2 (`results/eval_widemu_Track2.json`) and with five opponents (`results/stress_opp5_widemu.json`),
   20 race seeds nominal + randomised. Starts after lane Y.
-
+- Lane AB (queued 2026-11-10 09:20, after AA): the remaining stress settings for the same comparison, friction
+  x0.6 and x1.3 and one opponent (`results/stress_mu0.6_widemu.json`, `stress_mu1.3_widemu.json`,
+  `stress_opp1_widemu.json`).
+- Note 2026-11-10: the laptop slept overnight, so lanes Z and AA paused from about 23:30 to 09:10 and resumed on
+  their own (lane Z training at 1.15M of 3.5M steps at 09:12).
 
 ## Videos
 `python -m scripts.make_videos batch1|batch2|batch3` picks the seed with no crash and the most passes in 20 s and
