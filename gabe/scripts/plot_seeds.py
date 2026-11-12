@@ -20,11 +20,10 @@ INK, MUTED, GRID = "#1f2328", "#6e7781", "#d8dee4"
 
 
 def main(reduced=False):
-    """reduced=True: the reduced-scope draft's version (PPO + our shield is the method, bold; residual = variant)."""
+    """reduced=True: the reduced-scope draft's version: only the three PPO recipes it reports (9 training runs)."""
     rows = ROWS
     if reduced:
-        rows = [r for r in ROWS if r[0] not in ("PPO + our shield", "Residual + our shield (final)")]
-        rows += [("Residual + our shield (variant)", ROWS[-1][1]), ("PPO + our shield (ours)", ROWS[-2][1])]
+        rows = [ROWS[0], ROWS[1], ("PPO + our shield (ours)", ROWS[4][1])]
     races = [r for f in CANONICAL if pathlib.Path(f).exists() for r in json.load(open(f)).get("races", [])]
     S = {rz: summarize([r for r in races if r["randomize"] == rz]) for rz in (False, True)}
     pid = S[False].get("pid_apf", {}).get("finished")
