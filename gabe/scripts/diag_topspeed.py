@@ -11,8 +11,7 @@ from stable_baselines3 import PPO
 
 for path in sys.argv[1:] or ["runs/ppo_shield_s0/model_stage3.zip"]:
     m = PPO.load(path, device="cpu")
-    env = RaceEnv(EnvConfig(n_opp=0, shield=ShieldConfig(mode="conditioned_fallback", reach="grip"), episode_time=90,
-                            curvature_preview=m.observation_space.shape[0] > 77))
+    env = RaceEnv(EnvConfig(n_opp=0, shield=ShieldConfig(mode="conditioned_fallback", reach="grip"), episode_time=90))
     obs, _ = env.reset(seed=0, options={"s_ego": 3.0})
     L = env.cl.length
     rows, t_lap = [], None

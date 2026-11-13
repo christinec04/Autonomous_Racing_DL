@@ -57,9 +57,9 @@ if __name__ == "__main__":
         clip("ppo_apf", "runs/ppo_shield_s0/model_stage3.zip", "PPO + APF shield (ours): race (red = shield intervening)", "04_ppo_shield_race.mp4")
         clip("ppo_apf", "runs/ppo_shield_s0/model_stage3.zip", "PPO + APF shield: solo hot lap", "05_ppo_shield_solo_lap.mp4", seconds=34, solo=True)
     elif which == "batch4":
-        clip("ppo_residual_apf", "runs/ppo_residual_s0/model_stage3.zip", "Residual PPO + our shield: race (red = shield intervening)", "07_ppo_residual_shield_race.mp4")
+        clip("ppo_residual_apf_rec", "runs/ppo_residual_shield_s0/model_stage3.zip", "Residual PPO + our shield: race (red = shield intervening)", "07_ppo_residual_shield_race.mp4", tire="saturated_v2")
     elif which == "batch5":
-        clip("ppo_apf_esc", "runs/ppo_shield_s0/model_stage3.zip", "PPO + final shield (deadlock escape): race (red = shield)", "08_ppo_final_shield_race.mp4", tire="saturated_v2")
+        clip("ppo_apf_rec", "runs/ppo_shield_s0/model_stage3.zip", "PPO + our shield (escape + stall recovery): race (red = shield)", "08_ppo_final_shield_race.mp4", tire="saturated_v2")
     elif which == "batch7":
         # stall recovery in the chicane: seed 2 policy, race seed 10006 (stuck without recovery), from 14 s
         env, fr = record("ppo_apf_rec", "runs/ppo_shield_s2/model_stage3.zip", 10006, 34, tire="saturated_v2")

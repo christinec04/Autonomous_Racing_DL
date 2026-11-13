@@ -1,4 +1,4 @@
-"""Thin layer over F1TENTH Gym: our map, vehicle params, track geometry."""
+"""Thin layer over F1TENTH Gym with our tracks, the vehicle parameters and the track geometry."""
 from __future__ import annotations
 
 import pathlib
@@ -7,19 +7,11 @@ import gymnasium as gym
 import numpy as np
 
 import f1tenth_gym.envs.track.track as _track_mod
+from f1tenth_gym.envs import base_classes as _bc
+from f1tenth_gym.envs.collision_models import get_vertices as _get_vertices
+from f1tenth_gym.envs.laser_models import ray_cast as _ray_cast
 
 MAPS_DIR = pathlib.Path(__file__).resolve().parents[1] / "maps"
-
-
-def _find_track_dir(name: str) -> pathlib.Path:
-    d = MAPS_DIR / name
-    if not d.exists():
-        raise FileNotFoundError(f"map {name} not found in {MAPS_DIR}; run python -m racing.track_gen")
-    return d
-
-
-# Point F1TENTH Gym at our local maps instead of downloading.
-_track_mod.find_track_dir = _find_track_dir
 
 DEFAULT_PARAMS = {
     "mu": 1.0489, "C_Sf": 4.718, "C_Sr": 5.4562, "lf": 0.15875, "lr": 0.17145,
@@ -30,8 +22,19 @@ DEFAULT_PARAMS = {
 G = 9.81
 
 
+def _find_track_dir(name: str) -> pathlib.Path:
+    d = MAPS_DIR / name
+    if not d.exists():
+        raise FileNotFoundError(f"map {name} not found in {MAPS_DIR}, run python -m racing.track_gen")
+    return d
+
+
+# load tracks from maps/ instead of downloading them
+_track_mod.find_track_dir = _find_track_dir
+
+
 class Centerline:
-    """Closed centerline with arc-length projection (Frenet s, d, heading)."""
+    """Closed centerline with projection onto arc length s, lateral offset d and heading."""
 
     def __init__(self, xy: np.ndarray):
         self.xy = xy
@@ -50,7 +53,10 @@ class Centerline:
         return cls(a[:, :2])
 
     def project(self, x: float, y: float, hint: int | None = None, window: int = 80):
-        """Return (index, s, signed lateral offset d [left +], heading)."""
+        """Returns (index, s, lateral offset with left positive, heading).
+
+        With a hint, only points near that index are searched.
+        """
         n = len(self.xy)
         if hint is None:
             idx = np.arange(n)
@@ -73,11 +79,7 @@ class Centerline:
         return np.array([x, y, h])
 
 
-def make_f110(num_agents: int, params: dict | None = None, timestep: float = 0.01, seed: int = 0,
-              map_name: str = "Singapore"):
-    p = dict(DEFAULT_PARAMS)
-    if params:
-        p.update(params)
+def make_f110(num_agents: int, timestep: float = 0.01, seed: int = 0, map_name: str = "Singapore"):
     return gym.make(
         "f1tenth_gym:f1tenth-v0",
         config={
@@ -85,31 +87,23 @@ def make_f110(num_agents: int, params: dict | None = None, timestep: float = 0.0
             "integrator": "rk4", "model": "st",
             "control_input": ["speed", "steering_angle"],
             "observation_config": {"type": "original"},
-            "params": p, "seed": seed, "reset_config": {"type": "cl_grid_static"},
+            "params": dict(DEFAULT_PARAMS), "seed": seed, "reset_config": {"type": "cl_grid_static"},
         },
     )
 
 
-# ---------------------------------------------------------------------------
-# Speed patches for F1TENTH Gym (behaviour-preserving for what we use).
-# 1. Only compute a car's lidar scan when flagged (_scan_now). Ego scans every
-#    physics step (wall collision is detected from the scan via iTTC);
-#    opponents scan once per control step.
-# 2. Ray-cast other cars into a scan only when flagged (_rays_now), and skip
-#    cars that are behind the lidar's field of view or beyond range. Upstream
-#    loops over the whole scan for cars behind the car (index wrap-around).
-# ---------------------------------------------------------------------------
-from f1tenth_gym.envs import base_classes as _bc  # noqa: E402
-from f1tenth_gym.envs.laser_models import ray_cast as _ray_cast  # noqa: E402
-from f1tenth_gym.envs.collision_models import get_vertices as _get_vertices  # noqa: E402
-
+# Speed patches for F1TENTH Gym that do not change the results.
+# 1. A car computes its lidar scan only when flagged. The ego scans on every physics step, because wall
+#    collisions are detected from the scan, and the opponents scan once per control step.
+# 2. Other cars are ray-cast into a scan only when flagged, and cars behind the lidar or out of range are
+#    skipped. The stock code loops over the whole scan for a car behind.
 _orig_update_pose = _bc.RaceCar.update_pose
 
 
 def _update_pose(self, raw_steer, vel):
     if getattr(self, "_scan_now", True):
         return _orig_update_pose(self, raw_steer, vel)
-    # same as upstream but without the scan
+    # the stock update without the scan
     if self.steer_buffer.shape[0] < self.steer_buffer_size:
         steer = 0.0
         self.steer_buffer = np.append(raw_steer, self.steer_buffer)
@@ -138,8 +132,8 @@ def _update_scan(self, agent_scans, agent_index):
         if dist > 30.0:
             continue
         rel = (np.arctan2(dy, dx) - pose[2] + np.pi) % (2 * np.pi) - np.pi
-        if dist > 0.8 and abs(rel) > 2.35 + 0.6 / dist:  # fully behind the 270 deg fov
-            continue
+        if dist > 0.8 and abs(rel) > 2.35 + 0.6 / dist:
+            continue  # fully behind the 270 deg field of view
         verts = _get_vertices(op, self.params["length"], self.params["width"])
         scan = _ray_cast(pose, scan, self.scan_angles, verts)
     agent_scans[agent_index] = scan
@@ -166,8 +160,7 @@ _bc.Simulator.step = _sim_step
 
 
 def set_scan_flags(env, last_substep: bool):
-    """Ego: scan every substep, ray-cast cars only on the last. Opponents: last substep only."""
-    agents = env.unwrapped.sim.agents
-    for i, a in enumerate(agents):
+    """The ego scans every substep and ray-casts cars on the last one. Opponents do both on the last one."""
+    for i, a in enumerate(env.unwrapped.sim.agents):
         a._scan_now = (i == 0) or last_substep
         a._rays_now = (i == 0) and last_substep

@@ -1,10 +1,8 @@
-"""Render short top-down race replays to MP4.
+"""Renders short top-down race videos to MP4.
 
-  python -m racing.render --controller ppo_apf --model runs/ppo_shield_s0/model_stage3.zip \
-      --seed 10003 --seconds 20 --out ~/Downloads/racing_videos/ppo_shield_race.mp4
+  python -m racing.render --controller ppo_apf_rec --model runs/ppo_shield_s0/model_stage3.zip --out race.mp4
 
-Ego = blue; opponents = grey. The ego turns red on steps where the shield intervened
-(lambda > 0). HUD: time, speed, lap, shield state.
+The ego is blue and the opponents are grey. The ego turns red while the shield intervenes.
 """
 from __future__ import annotations
 
@@ -33,7 +31,7 @@ L, W = DEFAULT_PARAMS["length"], DEFAULT_PARAMS["width"]
 def record(controller, model, seed, seconds, n_opp=3, solo=False, tire="saturated", map_name="Singapore", mu_scale=None):
     sh = SHIELD_FOR[controller]
     extra = {}
-    if mu_scale is not None:  # as in the stress tests (evaluate --mu_scale): fixed friction, no lidar noise
+    if mu_scale is not None:  # fixed friction and no lidar noise, as in the stress tests
         extra = dict(randomize=True, mu_range=(mu_scale, mu_scale), lidar_noise=(0.0, 0.0))
     cfg = EnvConfig(n_opp=0 if solo else n_opp, random_start=not solo, shield=ShieldConfig(**sh),
                     episode_time=seconds, seed=seed, residual=controller.startswith("ppo_residual"), tire=tire,
@@ -79,7 +77,8 @@ def render(env, frames, out, title, follow=True, fps=25, view=14.0):
     ax.set_facecolor("#2b2b2b")
     ax.imshow(np.where(img > 128, 235, 43), cmap="gray", vmin=0, vmax=255, extent=extent, origin="upper")
     ax.plot(env.cl.xy[:, 0], env.cl.xy[:, 1], color="#c3c2b7", lw=0.6, ls=(0, (4, 4)))
-    ax.set_xticks([]); ax.set_yticks([])
+    ax.set_xticks([])
+    ax.set_yticks([])
     for s in ax.spines.values():
         s.set_visible(False)
     trail, = ax.plot([], [], color=EGO, lw=1.5, alpha=0.6)
@@ -97,11 +96,13 @@ def render(env, frames, out, title, follow=True, fps=25, view=14.0):
         for i, c in enumerate(cars):
             c.set_xy(car_poly(*f["poses"][i]))
         cars[0].set_facecolor(EGO_SHIELD if f["lam"] > 0 else EGO)
-        xs.append(f["poses"][0, 0]); ys.append(f["poses"][0, 1])
+        xs.append(f["poses"][0, 0])
+        ys.append(f["poses"][0, 1])
         trail.set_data(xs[-150:], ys[-150:])
         if follow:
             x, y = f["poses"][0, :2]
-            ax.set_xlim(x - view, x + view); ax.set_ylim(y - view, y + view)
+            ax.set_xlim(x - view, x + view)
+            ax.set_ylim(y - view, y + view)
         lap = int(f["prog"] // env.cl.length) + 1
         shield = "INTERVENING" if f["lam"] > 0 else "-"
         if f.get("rec"):
@@ -113,22 +114,24 @@ def render(env, frames, out, title, follow=True, fps=25, view=14.0):
         return cars + [trail, hud]
 
     if not follow:
-        ax.set_xlim(extent[0], extent[1]); ax.set_ylim(extent[2], extent[3])
+        ax.set_xlim(extent[0], extent[1])
+        ax.set_ylim(extent[2], extent[3])
     ax.set_aspect("equal")
     fig.subplots_adjust(left=0.02, right=0.98, bottom=0.02, top=0.93)
     anim = animation.FuncAnimation(fig, update, frames=len(frames), blit=False)
     out = pathlib.Path(out).expanduser()
     k = 2
-    while out.exists():  # never overwrite an earlier clip (PROGRESS 39)
-        out = out.with_name(f"{out.stem.split('__v')[0]}__v{k}{out.suffix}"); k += 1
+    while out.exists():  # never overwrite an earlier video
+        out = out.with_name(f"{out.stem.split('__v')[0]}__v{k}{out.suffix}")
+        k += 1
     out.parent.mkdir(parents=True, exist_ok=True)
-    # write to a temp file, then move into place only when complete (a half-written mp4 will not play)
+    # write to a temporary file and move it into place only when it is complete
     tmp = pathlib.Path(tempfile.gettempdir()) / ("render_" + out.name)
     writer = animation.FFMpegWriter(fps=fps, codec="libx264", bitrate=1200,
                                     extra_args=["-pix_fmt", "yuv420p", "-profile:v", "main", "-movflags", "+faststart"])
     anim.save(str(tmp), writer=writer)
     plt.close(fig)
-    # verify it decodes before publishing
+    # check that the video decodes
     import subprocess
     r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(tmp)],
                        capture_output=True, text=True)

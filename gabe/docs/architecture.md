@@ -46,7 +46,7 @@ flowchart LR
 | 2 nearest opponents: relative x, y, relative vx, vy (ego frame), present flag | 10 | / 10 |
 | previous (post-shield) action | 2 | normalised |
 
-Optional `curvature_preview=True` adds 10 centerline curvatures 1-20 m ahead (not used in the main runs).
+Variants that were tried and dropped (curvature preview E18, shield dropout E10, chicane fine-tuning E22, the E24-E35 tuning variants) were removed from the code on Nov 13 (PROGRESS 45); commit c981b8d still has them.
 
 **Action:** 2 values in [-1, 1] -> steering = a0 * 0.4189 rad, target speed = 1 + (a1 + 1) / 2 * 15 m/s.
 
@@ -66,8 +66,7 @@ profile (0.85 mu g on curvature, 6 m/s^2 accel/brake passes). Gap keeping: if an
 sigma ~ U(0, 0.05) m on the ego scan.
 
 **Curriculum** (`racing/train.py`): stage 1 solo, random start (1.5M steps); stage 2 three opponents at 0.45-0.6 of
-the profile (1M); stage 3 opponents at 0.5-0.85 with random grid gaps (1M). Stage 4 (fine-tuning only, E22):
-opponents at 0.45-0.8, half the episodes start from rest just before the chicane (`hotspot_prob` 0.5).
+the profile (1M); stage 3 opponents at 0.5-0.85 with random grid gaps (1M).
 
 ## Shield (`racing/shield.py`, `racing/predict.py`)
 
@@ -140,8 +139,6 @@ mean lambda, g-g utilisation from the true velocity-vector acceleration, share o
 | `randomize`, `mu_range`, `lidar_noise` | False, (0.85, 1.15), (0, 0.05) | domain randomisation |
 | `w1_speed` ... `w5_pass` | 0.002, 0.1, 0.1, 10, 2 | reward weights (Eq. 1) |
 | `shield` | `ShieldConfig()` | see below |
-| `shield_prob` | 1.0 | probability the shield is on in an episode (shield dropout) |
-| `curvature_preview` | False | add 10 centerline curvatures 1-20 m ahead to the observation |
 | `residual`, `residual_scale` | False, 0.3 | ResRace-style: action = PID+APF base + scale x policy |
 | `base_mu` | "true" | friction the classical base controllers (residual base, stall recovery, PID+APF / Pure Pursuit baselines) plan their speed profile with: `true` = the simulator's actual friction (privileged; every result before E39), `nominal`, or `estimate` = the shield's online estimate (E39, PROGRESS 44) |
 | `tcs` | True | traction control on all cars |
@@ -149,22 +146,21 @@ mean lambda, g-g utilisation from the true velocity-vector acceleration, share o
 | `w6_slip` | 0.0 | optional penalty per step for body slip beyond 0.15 rad |
 | `recover`, `recover_window`, `recover_dist`, `recover_hdg` | False, 1.5 s, 0.3 m, 0.35 rad | stall recovery trigger (E21) |
 | `recover_rev_time`, `recover_fwd_time` | 1.5 s, 1.0 s | reverse phase, then centerline-following phase |
-| `hotspot_prob`, `hotspot_s`, `hotspot_d`, `hotspot_hdg` | 0.0, (55, 90) m, 0.6 m, 0.3 rad | fine-tuning starts before the chicane (stage 4, E22) |
 
 `ShieldConfig` (`racing/shield.py`): `mode` (off / additive / conditioned / conditioned_fallback), `reach`
 (fixed / grip), `a_brake_fixed` 6.0, `d_min` 0.30, `d_crit` 0.05, `k_steer` 2.0, `k_speed` 2.0, `opp_a` 0.6,
 `opp_b` 0.15, `smooth` 0.5, `c_safe` 0.05, `commit_time` 0.04, `max_pred_time` 3.0, `blend_levels`
 (0.25, 0.5, 0.75, 1.0), `beam_stride` 3, `beta_max` 0.35, `use_map` True, `backup_lookahead` 1.2, `opp_brake` 6.0, `escape` False (deadlock escape, E19), `escape_tol` 0.02, `escape_v` 0.5,
-`allow_reverse` False (let negative target speeds through; used by the stall recovery), `c_safe_v` 0 (extra
-margin per m/s), `mu_scale` 1.0 (friction the predictor assumes, fraction of nominal; E24).
+`allow_reverse` False (let negative target speeds through; used by the stall recovery), `mu_scale` 1.0 (friction
+the predictor assumes, fraction of nominal), `opp_both` / `opp_relax` False (two-hypothesis opponent check, E34),
+`mu_est` False with `mu_est_rate` 0.5 and `mu_est_rise` 0.05 (online friction estimate, E35).
 
-`python -m racing.train` flags: `--shield {off, additive, cond_fb_grip, cond_fb_fixed, cond_fb_grip_esc}`, `--w6`, `--stages`, `--steps`
+`python -m racing.train` flags: `--shield {off, additive, cond_fb_grip, cond_fb_grip_esc, cond_fb_grip_esc_oxmu}`, `--w6`, `--stages`, `--steps`
 (per stage), `--seed`, `--n_envs`, `--n_steps`, `--batch`, `--lr`, `--gamma`, `--ent`, `--eval_every`, `--tire`,
-`--no_randomize`, `--curvature_preview`, `--residual`, `--w3`, `--shield_prob p1 p2 p3`, `--init <model.zip>`
-(fine-tune from a checkpoint), `--out`.
+`--residual`, `--residual_scale`, `--mu_range lo hi`, `--init <model.zip>` (continue from a checkpoint), `--out`.
 
-`python -m racing.evaluate` flags: `--controllers` (pure_pursuit, pid_apf, ppo, ppo_apf, ppo_residual,
-ppo_residual_apf, ppo_additive, ppo_apf_esc, ppo_residual_apf_esc, ppo_apf_rec, ppo_residual_apf_rec, and the E24 variants ppo_apf_rec_m1 / _m2 / _b25 / _b18 / _b25mu; append `@label` to race the same controller type with different models),
+`python -m racing.evaluate` flags: `--controllers` (pure_pursuit, pid_apf, ppo, ppo_additive, ppo_apf, ppo_apf_rec,
+ppo_residual, ppo_residual_apf_rec, ppo_residual_apf_rec_oxmu; append `@label` to race the same controller type with different models),
 `--models label=path ...`, `--races`, `--first`, `--laps`, `--procs`, `--tire`, `--out`. The final controller is
 `ppo_residual_apf_rec` (residual policy trained with the escape shield, raced with it and the stall recovery) with
 `--tire saturated_v2`; `ppo_apf_rec` is the same shield setup for plain PPO. The residual scale a model was trained

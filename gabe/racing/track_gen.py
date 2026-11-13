@@ -1,18 +1,15 @@
-"""Generate the race tracks: the Singapore-inspired (Marina Bay style) street circuit and Track2.
+"""Builds the race tracks, the Singapore-inspired street circuit and Track2.
 
-Marina Bay is a tight street circuit: many ~90 degree corners, a chicane
-after the main straight, one long back straight and a slow hairpin. We keep
-that character, scaled to a 1:10 F1TENTH car (~120 m lap).
+Marina Bay is a tight street circuit with many 90 degree corners, a chicane after the main straight,
+one long back straight and a slow hairpin. Our track keeps that character, scaled for a 1/10 car.
+Track2 is a second track with long straights, a fast sweeper and a tight hairpin, used only to test
+how well a policy generalises.
 
-Outputs (in maps/Singapore/):
-  Singapore_map.png / Singapore_map.yaml  occupancy grid for F1TENTH Gym
-  Singapore_centerline.csv                x, y, w_left, w_right
+Each track is written to maps/<name>/ as an occupancy grid for F1TENTH Gym (<name>_map.png and
+<name>_map.yaml) and a centerline (<name>_centerline.csv with x, y, w_left, w_right).
 
-Track2 (maps/Track2/, same file layout) is a second, unseen test track with a different character: long straights,
-a fast sweeper and a tight hairpin. Used only to test generalisation (EnvConfig.map_name / evaluate --map).
-
-  python -m racing.track_gen            # all tracks
-  python -m racing.track_gen Track2     # one track
+  python -m racing.track_gen            builds all tracks
+  python -m racing.track_gen Track2     builds one track
 """
 from __future__ import annotations
 
@@ -22,12 +19,12 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import distance_transform_edt
 
-TRACK_WIDTH = 2.8      # m, wide enough for side-by-side 1:10 cars
+TRACK_WIDTH = 2.8      # m, wide enough for two cars side by side
 RESOLUTION = 0.05      # m / pixel
 CORNER_RADIUS = 3.0    # m, default fillet radius
 MARGIN = 3.0           # m around the track
 
-# Corner vertices, counter-clockwise. (x, y, fillet radius or None for default)
+# corner points, counter-clockwise, as (x, y, corner radius or None for the default)
 VERTICES = [
     (0.0, 0.0, None),    # start / finish straight (pit straight)
     (34.0, 0.0, 2.2),    # T1  left  (chicane entry)
@@ -50,9 +47,8 @@ VERTICES = [
     (-6.0, 4.0, 3.0),    # T19 left onto main straight
 ]
 
-# Track2: unseen generalisation track, counter-clockwise. Long main straight (~55 m), fast left sweeper (two
-# 45 deg corners, r = 10 m), 90 deg corners, a tight right-right hairpin (r = 2.5 m, legs 6 m apart), a ~30 m back
-# straight and a medium left onto the main straight.
+# Track2, counter-clockwise, with a 55 m main straight, a fast left sweeper, 90 deg corners, a tight hairpin
+# and a 30 m back straight
 VERTICES_TRACK2 = [
     (0.0, 0.0, None),    # start / finish straight
     (60.0, 0.0, 10.0),   # T1 fast sweeper, first half (left)
@@ -81,9 +77,9 @@ def _fillet_polyline(verts: list[tuple[float, float, float | None]], ds: float =
         b = p_next - p
         la, lb = np.linalg.norm(a), np.linalg.norm(b)
         ua, ub = a / la, b / lb
-        theta = np.arccos(np.clip(np.dot(ua, ub), -1, 1))  # interior angle
+        theta = np.arccos(np.clip(np.dot(ua, ub), -1, 1))  # angle inside the corner
         r = radii[i]
-        t = r / np.tan(theta / 2)  # tangent length
+        t = r / np.tan(theta / 2)  # distance from the corner point to where the arc starts
         t = min(t, 0.45 * la, 0.45 * lb)
         r = t * np.tan(theta / 2)
         start = p + ua * t
@@ -113,8 +109,8 @@ def build(out_dir: pathlib.Path, name: str = "Singapore", vertices: list | None 
     w = int(np.ceil((xmax - xmin) / RESOLUTION))
     h = int(np.ceil((ymax - ymin) / RESOLUTION))
 
-    # rasterize centerline, then free space = within TRACK_WIDTH/2 of it
-    mask = np.ones((h, w), dtype=bool)  # True = not centerline
+    # draw the centerline, then mark everything within half the track width of it as free
+    mask = np.ones((h, w), dtype=bool)
     dense = _fillet_polyline(vertices, ds=RESOLUTION / 2)
     cols = ((dense[:, 0] - xmin) / RESOLUTION).astype(int)
     rows = ((dense[:, 1] - ymin) / RESOLUTION).astype(int)
@@ -122,7 +118,7 @@ def build(out_dir: pathlib.Path, name: str = "Singapore", vertices: list | None 
     dist = distance_transform_edt(mask) * RESOLUTION
     free = dist <= TRACK_WIDTH / 2
     img = np.where(free, 255, 0).astype(np.uint8)
-    # image row 0 is the top (max y): flip vertically
+    # image row 0 is the top of the map, so flip vertically
     img = img[::-1]
 
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -139,7 +135,7 @@ def build(out_dir: pathlib.Path, name: str = "Singapore", vertices: list | None 
         np.savetxt(f, np.column_stack([center, wl, wl]), delimiter=",", fmt="%.4f",
                    header="x_m, y_m, w_tr_left_m, w_tr_right_m")
 
-    # sanity: closest approach between non-neighbouring centerline points
+    # check that distant parts of the track do not touch
     seg_len = 0.1
     idx = np.arange(len(center))
     d = np.linalg.norm(center[:, None] - center[None], axis=-1)

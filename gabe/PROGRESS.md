@@ -341,3 +341,12 @@ Videos (not in the repo): `~/Downloads/racing_videos/`, rendered with `python -m
     written down, and the shield-centred write-ups ("the shield assumes nominal friction") read as if no part of
     the controller knew it. New option `base_mu` (true / nominal / estimate), default unchanged and checked to
     reproduce old races exactly; E39 (lane AD) measures how much the stress results depend on it.
+45. **Code cleanup for submission (Nov 13).** `racing/` was simplified: shorter comments, one statement per line,
+    and the variants that were tried and dropped were removed (curvature preview E18, shield dropout E10, chicane
+    fine-tuning stage 4 E22, the zero-policy control, the E24 margin and slip variants, the E34-E35 variants other
+    than the combined `oxmu` shield, `--w3`, `--no_randomize`). The two friction-circle tyre models now share one
+    function. Kept: everything the reported results and the final candidates use. Checked by racing 52 races
+    (every kept controller, nominal and randomised, friction and opponent stress options) and 33 env rollouts
+    (every training shield, residual and slip penalty) before and after: byte-identical output. The maps rebuild
+    identically and the 28 tests pass. Old lane scripts that name removed variants no longer run; commit c981b8d
+    has the code they ran with.
